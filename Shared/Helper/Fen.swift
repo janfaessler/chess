@@ -9,7 +9,13 @@ import Foundation
 
 public class Fen {
     
-    public static func load(_ fen:String) -> Position {
+    static let StartSetup = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    
+    static func loadStartingPosition() -> Position {
+        return load(StartSetup)
+    }
+    
+    static func load(_ fen:String) -> Position {
         let parts = fen.split(separator: " ")
         let figures = getFigures(String(parts[0]))
         let colorToMove = getNextMove(String(parts[1]))

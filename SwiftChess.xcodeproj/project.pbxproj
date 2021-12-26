@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		614FFC6A277780130082F892 /* MoveIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC69277780130082F892 /* MoveIndicatorView.swift */; };
+		614FFC6B277780130082F892 /* MoveIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC69277780130082F892 /* MoveIndicatorView.swift */; };
+		614FFC6D277786560082F892 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC6C277786560082F892 /* Move.swift */; };
+		614FFC6E277786560082F892 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC6C277786560082F892 /* Move.swift */; };
 		6177238D274284FF00169D3D /* SwiftChessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61772362274284FE00169D3D /* SwiftChessApp.swift */; };
 		6177238E274284FF00169D3D /* SwiftChessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61772362274284FE00169D3D /* SwiftChessApp.swift */; };
 		6177238F274284FF00169D3D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61772363274284FE00169D3D /* ContentView.swift */; };
@@ -34,6 +38,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		614FFC69277780130082F892 /* MoveIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveIndicatorView.swift; sourceTree = "<group>"; };
+		614FFC6C277786560082F892 /* Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
 		61772362274284FE00169D3D /* SwiftChessApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftChessApp.swift; sourceTree = "<group>"; };
 		61772363274284FE00169D3D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		61772365274284FF00169D3D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -115,6 +121,7 @@
 				617723A327429C9300169D3D /* BoardBackgroundView.swift */,
 				617723A62742ABB800169D3D /* FigureView.swift */,
 				61812E262767FDA900616866 /* BoardView.swift */,
+				614FFC69277780130082F892 /* MoveIndicatorView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -125,6 +132,7 @@
 				61812E202767F0A900616866 /* Figure.swift */,
 				61812E232767F42000616866 /* Board.swift */,
 				61812E3427681E8100616866 /* Position.swift */,
+				614FFC6C277786560082F892 /* Move.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -191,7 +199,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1310;
-				LastUpgradeCheck = 1310;
+				LastUpgradeCheck = 1320;
 				TargetAttributes = {
 					61772369274284FF00169D3D = {
 						CreatedOnToolsVersion = 13.1;
@@ -247,12 +255,14 @@
 				61812E3527681E8100616866 /* Position.swift in Sources */,
 				61812E3227681DFC00616866 /* Fen.swift in Sources */,
 				6177238D274284FF00169D3D /* SwiftChessApp.swift in Sources */,
+				614FFC6D277786560082F892 /* Move.swift in Sources */,
 				61812E212767F0A900616866 /* Figure.swift in Sources */,
 				61812E2B2768078E00616866 /* PieceType.swift in Sources */,
 				61812E242767F42000616866 /* Board.swift in Sources */,
 				61812E2E276807E600616866 /* PieceColor.swift in Sources */,
 				617723A72742ABB800169D3D /* FigureView.swift in Sources */,
 				617723A427429C9300169D3D /* BoardBackgroundView.swift in Sources */,
+				614FFC6A277780130082F892 /* MoveIndicatorView.swift in Sources */,
 				61812E272767FDA900616866 /* BoardView.swift in Sources */,
 				6177238F274284FF00169D3D /* ContentView.swift in Sources */,
 			);
@@ -265,12 +275,14 @@
 				61812E3627681E8100616866 /* Position.swift in Sources */,
 				61812E3327681DFC00616866 /* Fen.swift in Sources */,
 				6177238E274284FF00169D3D /* SwiftChessApp.swift in Sources */,
+				614FFC6E277786560082F892 /* Move.swift in Sources */,
 				61812E222767F0A900616866 /* Figure.swift in Sources */,
 				61812E2C2768078E00616866 /* PieceType.swift in Sources */,
 				61812E252767F42000616866 /* Board.swift in Sources */,
 				61812E2F276807E600616866 /* PieceColor.swift in Sources */,
 				617723A82742ABB800169D3D /* FigureView.swift in Sources */,
 				617723A527429C9300169D3D /* BoardBackgroundView.swift in Sources */,
+				614FFC6B277780130082F892 /* MoveIndicatorView.swift in Sources */,
 				61812E282767FDA900616866 /* BoardView.swift in Sources */,
 				61772390274284FF00169D3D /* ContentView.swift in Sources */,
 			);
@@ -455,6 +467,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -481,6 +494,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;

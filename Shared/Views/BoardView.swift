@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BoardView: View {
     let fieldSize:CGFloat
-    @ObservedObject var model =  Board()
+    @ObservedObject var model = Board()
     
     init(_ size:CGFloat) {
         fieldSize = size
@@ -18,9 +18,16 @@ struct BoardView: View {
     
     var body: some View {
         ZStack (alignment: .topLeading) {
-            BoardBackgroundView(light: Color(red: 0.8, green: 0.8, blue: 0.5), dark: .brown, size: fieldSize)
+            BoardBackgroundView(light: Color(red: 0.8, green: 0.8, blue: 0.5), dark: .brown, size: fieldSize).onTapGesture {
+                model.clearFocus()
+            }
+
             ForEach(model.figures) { figure in
                 FigureView(size: fieldSize, figure: figure, board: model)
+            }
+            
+            ForEach(model.getLegalMoves()) { move in
+                MoveIndicatorView(move, fieldSize)
             }
         }
     }

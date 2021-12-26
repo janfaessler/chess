@@ -32,35 +32,23 @@ struct FigureView: View {
                     .onChanged(onDragChanged)
                     .onEnded(onDragEnd)
                 )
+            .onTapGesture {
+                board.setFocus(figure)
+            }
     }
     
     func onDragChanged(_ gesture: DragGesture.Value) {
+        board.clearFocus()
         setOffset(x: gesture.translation.width, y: gesture.translation.height)
     }
     
     func onDragEnd(_ gesture: _ChangedGesture<DragGesture>.Value) {
         let row = getRow(gesture.translation.height)
         let file = getFile(gesture.translation.width)
-        
-        if (isMovePossible(row, file)) {
-            moveTo(row, file)
-        }
-        
+        let move = Move(figure.row + row, figure.file + file)
+
+        board.move(figure: figure, target: move)
         resetOffset()
-    }
-    
-    func isMovePossible(_ row: Int, _ file: Int) -> Bool {
-        return isInBoard(row, file) && board.IsMoveLegal(peace: figure, toRow: row, toFile: file)
-    }
-    
-    func moveTo(_ row: Int, _ file: Int) {
-        figure.move(row: row, file: file)
-        board.move(figure: figure, toRow: row, toFile: file)
-    }
-    
-    func isInBoard(_ rowDelta: Int, _ fileData: Int) -> Bool {
-        let range = 1...8
-        return range ~= (figure.row + rowDelta) && range ~= (figure.file + fileData)
     }
 
     func getRow(_ height:CGFloat) -> Int {
