@@ -5,7 +5,6 @@
 //  Created by Jan Fässler on 13.12.21.
 //
 
-import SwiftUI
 import Foundation
 
 class Figure : Identifiable, ObservableObject {
@@ -13,6 +12,7 @@ class Figure : Identifiable, ObservableObject {
     
     let type:PieceType
     let color:PieceColor
+    var moved:Bool = false
         
     @Published var row:Int = 0
     @Published var file:Int = 0
@@ -27,6 +27,7 @@ class Figure : Identifiable, ObservableObject {
     func move(to:Move) {
         self.row =  to.row
         self.file = to.file
+        self.moved = true
     }
     
     func getPossibleMoves() -> [Move] {
@@ -57,15 +58,23 @@ class Figure : Identifiable, ObservableObject {
     private func getPawnMoves() -> [Move] {
         switch color {
             case.black:
-                var moves = [Move(row-1, file-1),Move(row-1, file),Move(row-1, file+1)]
+                let moveType = row == 2 ? MoveType.Promotion : MoveType.Normal
+                var moves = [
+                    Move(row-1, file-1,piece: PieceType.pawn, type: moveType),
+                    Move(row-1, file, piece: PieceType.pawn, type:moveType),
+                    Move(row-1, file+1, piece: PieceType.pawn, type:moveType)]
                 if row == 7 {
-                    moves.append(Move(row-2, file))
+                    moves.append(Move(row-2, file, piece: PieceType.pawn, type: MoveType.Double))
                 }
                 return moves
             case .white:
-                var moves = [Move(row+1, file-1),Move(row+1, file),Move(row+1, file+1)]
+                let moveType = row == 7 ? MoveType.Promotion : MoveType.Normal
+                var moves = [
+                    Move(row+1, file-1, piece: PieceType.pawn, type: moveType),
+                    Move(row+1, file, piece: PieceType.pawn, type: moveType),
+                    Move(row+1, file+1, piece: PieceType.pawn, type: moveType)]
                 if row == 2 {
-                    moves.append(Move(row+2, file))
+                    moves.append(Move(row+2, file, piece: PieceType.pawn, type: MoveType.Double))
                 }
                 return moves
         }
@@ -76,7 +85,7 @@ class Figure : Identifiable, ObservableObject {
         for r in 1...8 {
             for f in 1...8 {
                 if !(row == r && file == f) && (row-r == file-f || row+file == r+f) {
-                    moves.append(Move(r, f))
+                    moves.append(Move(r, f, piece: PieceType.bishop))
                 }
             }
         }
@@ -85,14 +94,14 @@ class Figure : Identifiable, ObservableObject {
     
     private func getKnightMoves() -> [Move] {
         let moves = [
-            Move(row+1, file+2),
-            Move(row+1, file-2),
-            Move(row-1, file+2),
-            Move(row-1, file-2),
-            Move(row+2, file+1),
-            Move(row+2, file-1),
-            Move(row-2, file+1),
-            Move(row-2, file-1)
+            Move(row+1, file+2, piece: PieceType.knight),
+            Move(row+1, file-2, piece: PieceType.knight),
+            Move(row-1, file+2, piece: PieceType.knight),
+            Move(row-1, file-2, piece: PieceType.knight),
+            Move(row+2, file+1, piece: PieceType.knight),
+            Move(row+2, file-1, piece: PieceType.knight),
+            Move(row-2, file+1, piece: PieceType.knight),
+            Move(row-2, file-1, piece: PieceType.knight)
         ]
         return moves.filter({ move in inBoard(move) })
     }
@@ -102,7 +111,7 @@ class Figure : Identifiable, ObservableObject {
         for r in 1...8 {
             for f in 1...8 {
                 if !(row == r && file == f) && (r == row || f==file) {
-                    moves.append(Move(r, f))
+                    moves.append(Move(r, f, piece: PieceType.rook))
                 }
             }
         }
@@ -114,7 +123,7 @@ class Figure : Identifiable, ObservableObject {
         for r in 1...8 {
             for f in 1...8 {
                 if !(row == r && file == f) && (r == row || f == file || row-r == file-f || row+file == r+f) {
-                    moves.append(Move(r, f))
+                    moves.append(Move(r, f, piece: PieceType.queen))
                 }
             }
         }
@@ -122,16 +131,22 @@ class Figure : Identifiable, ObservableObject {
     }
     
     private func getKingMoves() -> [Move] {
-        let moves = [
-            Move(row+1, file+1),
-            Move(row, file+1),
-            Move(row+1, file),
-            Move(row-1, file-1),
-            Move(row, file-1),
-            Move(row-1, file),
-            Move(row-1, file+1),
-            Move(row+1, file-1)
+        var moves = [
+            Move(row+1, file+1, piece: PieceType.king),
+            Move(row, file+1, piece: PieceType.king),
+            Move(row+1, file, piece: PieceType.king),
+            Move(row-1, file-1, piece: PieceType.king),
+            Move(row, file-1, piece: PieceType.king),
+            Move(row-1, file, piece: PieceType.king),
+            Move(row-1, file+1, piece: PieceType.king),
+            Move(row+1, file-1, piece: PieceType.king)
         ]
+        if (!moved) {
+            moves.append(contentsOf: [
+                Move(row+2, file, piece: PieceType.king, type: MoveType.Castle),
+                Move(row-2, file, piece: PieceType.king, type: MoveType.Castle)
+            ])
+        }
         return moves.filter({ move in inBoard(move) })
     }
     

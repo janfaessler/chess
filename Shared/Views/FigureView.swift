@@ -45,9 +45,9 @@ struct FigureView: View {
     func onDragEnd(_ gesture: _ChangedGesture<DragGesture>.Value) {
         let row = getRow(gesture.translation.height)
         let file = getFile(gesture.translation.width)
-        let move = Move(figure.row + row, figure.file + file)
+        let move = Move(figure.row + row, figure.file + file, piece: figure.type)
 
-        board.move(figure: figure, target: move)
+        board.move(figure: figure, move: move)
         resetOffset()
     }
 

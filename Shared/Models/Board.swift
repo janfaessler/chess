@@ -4,7 +4,6 @@
 //
 //  Created by Jan Fässler on 13.12.21.
 //
-
 import SwiftUI
 
 class Board : ObservableObject {
@@ -14,14 +13,16 @@ class Board : ObservableObject {
     
     private var figuresDict:[Int:[Int:Figure]] = [:]
     private var colorToMove:PieceColor = .white
-    
-    func move(figure: Figure, target:Move) {
-        if IsMoveLegal(piece: figure, target: target) {
-            captureFigureAt(row: target.row, file: target.file)
-            figure.move(to: target)
-            // Todo: Promotion
+    private var moves: [Move] = []
+    private var enPassantIsPossible:Bool = false
+
+    func move(figure: Figure, move:Move) {
+        if IsMoveLegal(piece: figure, target: move) {
+            doCaptures(figure, move)
+            doMove(figure, move)
             recreateFiguresCache()
             colorToMove = colorToMove == .black ? .white : .black
+            moves += [move]
         }
     }
     
@@ -65,6 +66,26 @@ class Board : ObservableObject {
         return true
     }
     
+    func doCaptures(_ figure: Figure, _ move: Move) {
+        let notSameFile = figure.file != move.file
+        if figure.type == PieceType.pawn && notSameFile && figuresDict[move.row]?[move.file] == nil {
+            captureFigureAt(row: figure.row, file: move.file)
+        } else {
+            captureFigureAt(row: move.row, file: move.file)
+        }
+    }
+    
+    func doMove(_ figure: Figure, _ move: Move) {
+        enPassantIsPossible = figure.type == PieceType.pawn && abs(move.row - figure.row) == 2
+        figure.move(to: move)
+        if figure.type == PieceType.pawn && (move.row == 1 || move.row == 8) {
+            // Todo: Promotion Choice
+            let promotedPiece = PieceType.queen
+            figures.remove(at: figures.firstIndex(where: { $0 == figure })!)
+            figures.append(Figure(type: promotedPiece, color: figure.color, row: move.row, file: move.file))
+        }
+    }
+    
     private func captureFigureAt(row: Int, file: Int) {
         let figureAtTarget = figuresDict[row]?[file];
         if figureAtTarget != nil {
@@ -91,11 +112,26 @@ class Board : ObservableObject {
     }
     
     private func isLegalPawnMove(_ forPiece: Figure, _ move: Move) -> Bool {
-        if figuresDict[move.row]?[move.file] != nil {
-            return forPiece.file != move.file && abs(forPiece.file-move.file) <= 1
-        }
-        let possibleMoves = forPiece.getPossibleMoves()
-        return possibleMoves.contains(where:{ m in m == move}) && abs(move.row - forPiece.row) <= 2 && move.file == forPiece.file
+        let lastMove = moves.last
+        
+        let moveIsPossible = forPiece.getPossibleMoves().contains(where:{ $0 == move })
+        let targetSquareIsEmpty = figuresDict[move.row]?[move.file] == nil
+        let squareBeforeStartIsEmpty = figuresDict[forPiece.color == PieceColor.white ? forPiece.row+1 : forPiece.row-1]?[forPiece.file] == nil
+        let noFileChange = move.file == forPiece.file
+        let movedOnce = abs(move.row - forPiece.row) == 1
+        let movedTwice = abs(move.row - forPiece.row) == 2
+        let lastMoveToLeft =  lastMove?.row == forPiece.row && lastMove!.file - forPiece.file == -1
+        let lastMoveToRight = lastMove?.row == forPiece.row && lastMove!.file - forPiece.file == 1
+        let figureToCaptureOnLeft = figuresDict[forPiece.color == PieceColor.white ? forPiece.row+1 : forPiece.row-1]?[forPiece.file - 1] != nil
+        let figureToCaptureOnRight = figuresDict[forPiece.color == PieceColor.white ? forPiece.row+1 : forPiece.row-1]?[forPiece.file + 1] != nil
+        let canEnPassantToLeft = movedOnce && enPassantIsPossible && lastMoveToLeft && move.file - forPiece.file == -1
+        let canEnPassantToRight = movedOnce && enPassantIsPossible && lastMoveToRight && move.file - forPiece.file == 1
+
+        let canMoveOnce = movedOnce && noFileChange && targetSquareIsEmpty
+        let canMoveTwice = !forPiece.moved && movedTwice && noFileChange && targetSquareIsEmpty && squareBeforeStartIsEmpty
+        let canCapture = movedOnce && (figureToCaptureOnLeft || figureToCaptureOnRight || canEnPassantToLeft || canEnPassantToRight)
+        
+        return moveIsPossible && (canMoveOnce || canMoveTwice || canCapture)
     }
     
     private func islegalKingMove(_ piece:Figure, _ move:Move) -> Bool {
@@ -110,7 +146,7 @@ class Board : ObservableObject {
         }
         
         let possiblePeaceMoves = piece.getPossibleMoves()
-        return possiblePeaceMoves.contains(where:{ m in m == move})
+        return possiblePeaceMoves.contains(where:{$0 == move})
     }
     
     private func getIntersectingPiece(_ piece: Figure, _ move: Move) -> Figure? {
