@@ -34,4 +34,33 @@ public struct Move:Identifiable{
     static func == (l:Move, r:Move) -> Bool {
         return l.row == r.row && l.file == r.file
     }
+    
+    func info() -> String {
+        let fileName = Character(UnicodeScalar(file+96) ?? UnicodeScalar(0))
+        if (type == .Castle) {
+            if (file == 7) {
+                return "O-O"
+            }
+            return "O-O-0"
+        }
+        return "\(ident())\(fileName)\(row)";
+    }
+    
+    func ident() -> String {
+        switch piece {
+            case .pawn:
+                return ""
+            case .bishop:
+                return "B"
+            case .knight:
+                return "K"
+            case .rook:
+                return "R"
+            case .queen:
+                return "Q"
+            case .king:
+                return "K"
+        }
+    }
+
 }

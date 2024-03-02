@@ -5,8 +5,12 @@
 //  Created by Jan Fässler on 13.12.21.
 //
 import SwiftUI
+import os
 
 class Board : ObservableObject {
+    
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "board")
+
     
     @Published var figures:[Figure] = []
     @Published var focus:Figure?
@@ -17,12 +21,15 @@ class Board : ObservableObject {
     private var enPassantIsPossible:Bool = false
 
     func move(figure: Figure, move:Move) {
+        let move = figure.enrichMove(move: move) ?? move;
+
         if IsMoveLegal(piece: figure, target: move) {
             doCaptures(figure, move)
             doMove(figure, move)
             recreateFiguresCache()
             colorToMove = colorToMove == .black ? .white : .black
             moves += [move]
+            logger.log("\(move.info())")
         }
     }
     
@@ -52,14 +59,17 @@ class Board : ObservableObject {
     
     private func IsMoveLegal(piece: Figure, target:Move) -> Bool {
         if piece.color != colorToMove {
+            logger.warning("wrong color")
             return false
         }
         
         if !isMoveInBoard(target) {
+            logger.warning("not in board")
             return false
         }
         
         if !isMovePossible(target, forPiece: piece) {
+            logger.warning("not possible")
             return false
         }
         
@@ -83,6 +93,24 @@ class Board : ObservableObject {
             let promotedPiece = PieceType.queen
             figures.remove(at: figures.firstIndex(where: { $0 == figure })!)
             figures.append(Figure(type: promotedPiece, color: figure.color, row: move.row, file: move.file))
+        }
+        if figure.type == .king && move.type == .Castle {
+            if move.file == 3 {
+                guard let rook = figuresDict[figure.row]?[1] else {
+                    logger.error("rook not found")
+                    return
+                }
+                doMove(rook, Move(move.row, 4, piece: .rook, type: .Castle))
+                
+            } else if move.file == 7 {
+                guard let rook = figuresDict[figure.row]?[8] else {
+                    logger.error("rook not found")
+                    return
+                }
+                doMove(rook, Move(move.row, 6, piece: .rook, type: .Castle))
+                
+            }
+            
         }
     }
     
@@ -120,7 +148,7 @@ class Board : ObservableObject {
         let noFileChange = move.file == forPiece.file
         let movedOnce = abs(move.row - forPiece.row) == 1
         let movedTwice = abs(move.row - forPiece.row) == 2
-        let lastMoveToLeft =  lastMove?.row == forPiece.row && lastMove!.file - forPiece.file == -1
+        let lastMoveToLeft = lastMove?.row == forPiece.row && lastMove!.file - forPiece.file == -1
         let lastMoveToRight = lastMove?.row == forPiece.row && lastMove!.file - forPiece.file == 1
         let figureToCaptureOnLeft = figuresDict[forPiece.color == PieceColor.white ? forPiece.row+1 : forPiece.row-1]?[forPiece.file - 1] != nil
         let figureToCaptureOnRight = figuresDict[forPiece.color == PieceColor.white ? forPiece.row+1 : forPiece.row-1]?[forPiece.file + 1] != nil
@@ -131,12 +159,23 @@ class Board : ObservableObject {
         let canMoveTwice = !forPiece.moved && movedTwice && noFileChange && targetSquareIsEmpty && squareBeforeStartIsEmpty
         let canCapture = movedOnce && (figureToCaptureOnLeft || figureToCaptureOnRight || canEnPassantToLeft || canEnPassantToRight)
         
-        return moveIsPossible && (canMoveOnce || canMoveTwice || canCapture)
+        return  moveIsPossible && (canMoveOnce || canMoveTwice || canCapture)
     }
     
     private func islegalKingMove(_ piece:Figure, _ move:Move) -> Bool {
-        // ToDo: Castle
-        return isLegalMove(piece, move)
+        let isLegalMove =  isLegalMove(piece, move)
+        
+        let isCastle = move.type == .Castle
+        let isLongCastle = isCastle && move.file == Figure.longCastleKingPosition
+        let isKingMovingThroughChek = isFieldInCheck(move.row, isLongCastle ? move.file + 1 : move.file - 1)
+        let isKingLandingInCheck = isFieldInCheck(move.row, move.file)
+        
+        return isLegalMove && !isKingLandingInCheck && !isKingMovingThroughChek
+    }
+    
+    private func isFieldInCheck(_ row: Int, _ file: Int) -> Bool {
+        // Todo: determine whether king is in check
+        return false
     }
     
     private func isLegalMove(_ piece: Figure, _ move: Move) -> Bool {

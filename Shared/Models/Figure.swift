@@ -10,6 +10,9 @@ import Foundation
 class Figure : Identifiable, ObservableObject {
     let id:String = UUID().uuidString
     
+    static let longCastleKingPosition = 3
+    static let shortCastleKingPosition = 7
+    
     let type:PieceType
     let color:PieceColor
     var moved:Bool = false
@@ -17,12 +20,14 @@ class Figure : Identifiable, ObservableObject {
     @Published var row:Int = 0
     @Published var file:Int = 0
     
-    init(type:PieceType, color: PieceColor, row:Int, file:Int) {
+
+    init(type:PieceType, color: PieceColor, row:Int, file:Int) {	
         self.type = type
         self.color = color
         self.row = row
         self.file = file
     }
+
     
     func move(to:Move) {
         self.row =  to.row
@@ -45,6 +50,19 @@ class Figure : Identifiable, ObservableObject {
             case .king:
                 return getKingMoves()
         }
+    }
+    
+    func enrichMove(move: Move) -> Move? {
+        
+        if move.piece == .king && moved == false && move.file < Figure.longCastleKingPosition {
+            return Move(move.row, Figure.longCastleKingPosition, piece: .king, type: .Castle)
+        }
+        if move.piece == .king && moved == false && move.file > Figure.shortCastleKingPosition {
+            return Move(move.row, Figure.shortCastleKingPosition, piece: .king, type: .Castle)
+        }
+        
+        let moves = getPossibleMoves();
+        return moves.first(where:{ $0 == move })
     }
     
     static func == (l:Figure, r:Figure) -> Bool {
@@ -143,8 +161,8 @@ class Figure : Identifiable, ObservableObject {
         ]
         if (!moved) {
             moves.append(contentsOf: [
-                Move(row+2, file, piece: PieceType.king, type: MoveType.Castle),
-                Move(row-2, file, piece: PieceType.king, type: MoveType.Castle)
+                Move(row, Figure.longCastleKingPosition, piece: PieceType.king, type: MoveType.Castle),
+                Move(row, Figure.shortCastleKingPosition, piece: PieceType.king, type: MoveType.Castle)
             ])
         }
         return moves.filter({ move in inBoard(move) })
