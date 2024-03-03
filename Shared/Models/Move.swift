@@ -36,7 +36,9 @@ public struct Move:Identifiable{
     }
     
     func info() -> String {
-        let fileName = Character(UnicodeScalar(file+96) ?? UnicodeScalar(0))
+        guard let scalar = UnicodeScalar(file+96) else { return "XXX" }
+        let fileName = Character(scalar)
+        
         if (type == .Castle) {
             if (file == 7) {
                 return "O-O"

@@ -95,21 +95,7 @@ class Board : ObservableObject {
             figures.append(Figure(type: promotedPiece, color: figure.color, row: move.row, file: move.file))
         }
         if figure.type == .king && move.type == .Castle {
-            if move.file == 3 {
-                guard let rook = figuresDict[figure.row]?[1] else {
-                    logger.error("rook not found")
-                    return
-                }
-                doMove(rook, Move(move.row, 4, piece: .rook, type: .Castle))
-                
-            } else if move.file == 7 {
-                guard let rook = figuresDict[figure.row]?[8] else {
-                    logger.error("rook not found")
-                    return
-                }
-                doMove(rook, Move(move.row, 6, piece: .rook, type: .Castle))
-                
-            }
+            moveRookForCastling(move, figure)
             
         }
     }
@@ -167,6 +153,7 @@ class Board : ObservableObject {
         
         let isCastle = move.type == .Castle
         let isLongCastle = isCastle && move.file == Figure.longCastleKingPosition
+        let isKingStartingPositionInCheck = isFieldInCheck(piece.row, piece.file)
         let isKingMovingThroughChek = isFieldInCheck(move.row, isLongCastle ? move.file + 1 : move.file - 1)
         let isKingLandingInCheck = isFieldInCheck(move.row, move.file)
         
@@ -174,8 +161,9 @@ class Board : ObservableObject {
     }
     
     private func isFieldInCheck(_ row: Int, _ file: Int) -> Bool {
-        // Todo: determine whether king is in check
-        return false
+        let inCheck = figures.contains(where: { piece in piece.color != colorToMove && isLegalMove(piece, Move(row, file, piece: piece.type))})
+        logger.info("inCheck: \(inCheck) (\(row):\(file))")
+        return inCheck
     }
     
     private func isLegalMove(_ piece: Figure, _ move: Move) -> Bool {
@@ -186,6 +174,24 @@ class Board : ObservableObject {
         
         let possiblePeaceMoves = piece.getPossibleMoves()
         return possiblePeaceMoves.contains(where:{$0 == move})
+    }
+    
+    private func moveRookForCastling(_ move: Move, _ figure: Figure) {
+        if move.file == Figure.longCastleKingPosition {
+            guard let rook = figuresDict[figure.row]?[1] else {
+                logger.error("rook not found")
+                return
+            }
+            doMove(rook, Move(move.row, 4, piece: .rook, type: .Castle))
+            
+        } else if move.file == Figure.shortCastleKingPosition {
+            guard let rook = figuresDict[figure.row]?[8] else {
+                logger.error("rook not found")
+                return
+            }
+            doMove(rook, Move(move.row, 6, piece: .rook, type: .Castle))
+            
+        }
     }
     
     private func getIntersectingPiece(_ piece: Figure, _ move: Move) -> Figure? {
