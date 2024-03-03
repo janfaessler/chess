@@ -113,9 +113,8 @@ class Board : ObservableObject {
         figure.move(to: move)
         if figure.type == PieceType.pawn && (move.row == 1 || move.row == 8) {
             // Todo: Promotion Choice
-            let promotedPiece = PieceType.queen
             figures.remove(at: figures.firstIndex(where: { $0 == figure })!)
-            figures.append(Figure(type: promotedPiece, color: figure.color, row: move.row, file: move.file))
+            figures.append(Queen(color: figure.color, row: move.row, file: move.file))
         }
         if figure.type == .king && move.type == .Castle {
             moveRookForCastling(move, figure)

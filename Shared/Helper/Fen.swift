@@ -31,7 +31,24 @@ public class Fen {
             for part in Array(rowPart) {
                 let digit = Int("\(part)")
                 if (digit == nil) {
-                    figures.append(Figure(type: getPieceType(part)!, color: getPieceColor(part), row: row, file: file))
+                    let pieceType = getPieceType(part);
+                    let pieceColor = getPieceColor(part);
+                    switch (pieceType) {
+                    case .pawn:
+                        figures.append(Pawn(color: pieceColor, row: row, file: file))
+                    case .bishop:
+                        figures.append(Bishop(color: pieceColor, row: row, file: file))
+                    case .knight:
+                        figures.append(Knight(color: pieceColor, row: row, file: file))
+                    case .rook:
+                        figures.append(Rook(color: pieceColor, row: row, file: file))
+                    case .queen:
+                        figures.append(Queen(color: pieceColor, row: row, file: file))
+                    case .king:
+                        figures.append(King(color: pieceColor, row: row, file: file))
+                    case .none:
+                        continue
+                    }
                     file += 1
                 } else {
                     file += digit!
