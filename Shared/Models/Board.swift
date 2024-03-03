@@ -82,6 +82,21 @@ class Board : ObservableObject {
         return true
     }
     
+    private func isMoveInBoard(_ move:Move) -> Bool {
+        return 1...8 ~= move.row && 1...8 ~= move.file
+    }
+    
+    private func isMovePossible( _ move: Move) -> Bool {
+        switch move.piece.type {
+            case .pawn:
+                return isPawnMove(move)
+            case .king:
+                return isKingMove(move)
+            case .bishop, .knight, .rook, .queen:
+                return isMove(move)
+        }
+    }
+    
     private func doesMovePutOwnKingInCheck(_ target:Move) -> Bool {
         
         let startRow = target.piece.row
@@ -102,14 +117,6 @@ class Board : ObservableObject {
         return isKingInCheck
     }
     
-    func doCaptures(_ figure: Figure, _ move: Move) {
-        let notSameFile = figure.file != move.file
-        if figure.type == PieceType.pawn && notSameFile && boardDict[move.row]?[move.file] == nil {
-            captureFigureAt(row: figure.row, file: move.file)
-        } else {
-            captureFigureAt(row: move.row, file: move.file)
-        }
-    }
     
     func doMove(_ figure: Figure, _ move: Move) {
         figure.move(to: move)
@@ -125,6 +132,15 @@ class Board : ObservableObject {
         logger.log("\(move.info())")
     }
     
+    func doCaptures(_ figure: Figure, _ move: Move) {
+        let notSameFile = figure.file != move.file
+        if figure.type == PieceType.pawn && notSameFile && boardDict[move.row]?[move.file] == nil {
+            captureFigureAt(row: figure.row, file: move.file)
+        } else {
+            captureFigureAt(row: move.row, file: move.file)
+        }
+    }
+    
     private func captureFigureAt(row: Int, file: Int) {
         let figureAtTarget = boardDict[row]?[file];
         if figureAtTarget != nil {
@@ -136,36 +152,28 @@ class Board : ObservableObject {
         }
     }
     
-    private func isMoveInBoard(_ move:Move) -> Bool {
-        return 1...8 ~= move.row && 1...8 ~= move.file
-    }
-    
-    private func isMovePossible( _ move: Move) -> Bool {
-        switch move.piece.type {
-            case .pawn:
-                return isLegalPawnMove(move)
-            case .king:
-                return islegalKingMove(move)
-            case .bishop, .knight, .rook, .queen:
-                return isLegalMove(move)
-        }
-    }
-    
-    private func isLegalPawnMove(_ move: Move) -> Bool {
-        
-        let piece = move.piece
+    private func isPawnMove(_ move: Move) -> Bool {
 
-        let moveIsPossible = piece.getPossibleMoves().contains(where:{ $0 == move })
-        
-        let noFileChange = move.file == piece.file
-        let targetSquareIsEmpty = boardDict[move.row]?[move.file] == nil
-        let squareBeforeStartIsEmpty = boardDict[piece.color == PieceColor.white ? piece.row+1 : piece.row-1]?[piece.file] == nil
-
-        let canMoveOnce = move.type == .Normal && noFileChange && targetSquareIsEmpty
-        let canMoveTwice = move.type == .Double && !piece.moved && noFileChange && targetSquareIsEmpty && squareBeforeStartIsEmpty
+        let moveIsPossible = move.piece.getPossibleMoves().contains(where:{ $0 == move })
+        let canMoveOnce = canPawnMoveOnce(move)
+        let canMoveTwice = canPawnMoveTwice(move)
         let canCapture = canPawnCapture(move, lastMove: moves.last)
         
         return  moveIsPossible && (canMoveOnce || canMoveTwice || canCapture)
+    }
+    
+    private func canPawnMoveOnce(_ move: Move) -> Bool {
+        let noFileChange = move.file == piece.file
+        let targetSquareIsEmpty = boardDict[move.row]?[move.file] == nil
+        return move.type == .Normal && noFileChange && targetSquareIsEmpty
+    }
+    
+    private func canPawnMoveTwice(_ move: Move) -> Bool {
+        let piece = move.piece
+        let noFileChange = move.file == piece.file
+        let targetSquareIsEmpty = boardDict[move.row]?[move.file] == nil
+        let squareBeforeStartIsEmpty = boardDict[piece.color == PieceColor.white ? piece.row+1 : piece.row-1]?[piece.file] == nil
+        return move.type == .Double && !piece.moved && noFileChange && targetSquareIsEmpty && squareBeforeStartIsEmpty
     }
     
     private func canPawnCapture(_ move:Move, lastMove:Move?) -> Bool {
@@ -194,8 +202,8 @@ class Board : ObservableObject {
     }
 
     
-    private func islegalKingMove(_ move:Move) -> Bool {
-        let isLegalMove =  isLegalMove(move)
+    private func isKingMove(_ move:Move) -> Bool {
+        let isLegalMove =  isMove(move)
         let isCatlingInCheck = isCastlingInCheck(move)
         return isLegalMove && !isCatlingInCheck
     }
@@ -212,13 +220,13 @@ class Board : ObservableObject {
     }
     
     private func isFieldInCheck(_ row: Int, _ file: Int) -> Bool {
-        guard figures.contains(where: { $0.color != colorToMove && isLegalMove(Move(row, file, piece: $0))}) else {
+        guard figures.contains(where: { $0.color != colorToMove && isMove(Move(row, file, piece: $0))}) else {
             return false
         }
         return true
     }
     
-    private func isLegalMove(_ move: Move) -> Bool {
+    private func isMove(_ move: Move) -> Bool {
         
         let possiblePeaceMoves = move.piece.getPossibleMoves()
         guard possiblePeaceMoves.contains(where:{$0 == move}) else { return false }
