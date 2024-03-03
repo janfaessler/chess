@@ -8,7 +8,7 @@
 import Foundation
 
 public enum MoveType {
-    case Normal,Castle,Double,Promotion
+    case Normal,Castle,Double,Promotion,Revert
 }
 
 public struct Move:Identifiable{
@@ -16,23 +16,27 @@ public struct Move:Identifiable{
     
     var row:Int = 0
     var file:Int = 0
-    var piece:PieceType
+    var piece:Figure
     var type:MoveType = MoveType.Normal
     
-    init(_ r:Int, _ f:Int, piece: PieceType) {
+    init(_ r:Int, _ f:Int, piece: Figure) {
         self.row = r
         self.file = f
         self.piece = piece
     }
     
-    init (_ r:Int, _ f:Int, piece: PieceType, type: MoveType){
+    init (_ r:Int, _ f:Int, piece: Figure, type: MoveType){
         self.init(r,f, piece: piece)
         self.type = type
     }
-    
+
     
     static func == (l:Move, r:Move) -> Bool {
-        return l.row == r.row && l.file == r.file
+        return l.row == r.row && l.file == r.file && l.piece == r.piece
+    }
+    
+    static func != (l:Move, r:Move) -> Bool {
+        return !(l == r)
     }
     
     func info() -> String {
@@ -45,24 +49,6 @@ public struct Move:Identifiable{
             }
             return "O-O-0"
         }
-        return "\(ident())\(fileName)\(row)";
+        return "\(piece.ident())\(fileName)\(row)";
     }
-    
-    func ident() -> String {
-        switch piece {
-            case .pawn:
-                return ""
-            case .bishop:
-                return "B"
-            case .knight:
-                return "K"
-            case .rook:
-                return "R"
-            case .queen:
-                return "Q"
-            case .king:
-                return "K"
-        }
-    }
-
 }
