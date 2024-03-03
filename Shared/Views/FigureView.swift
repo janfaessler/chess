@@ -43,19 +43,18 @@ struct FigureView: View {
     }
     
     func onDragEnd(_ gesture: _ChangedGesture<DragGesture>.Value) {
-        let row = getRow(gesture.translation.height)
-        let file = getFile(gesture.translation.width)
-        let move = Move(figure.row + row, figure.file + file, piece: figure.type)
+        let row = calculateDeltaRow(gesture.translation.height)
+        let file = calculateDeltaFile(gesture.translation.width)
 
-        board.move(figure: figure, move: move)
+        board.move(figure: figure, deltaRow: row, deltaFile: file)
         resetOffset()
     }
 
-    func getRow(_ height:CGFloat) -> Int {
+    func calculateDeltaRow(_ height:CGFloat) -> Int {
         return Int(round(height / fieldSize)) * -1
     }
     
-    func getFile(_ width:CGFloat) -> Int {
+    func calculateDeltaFile(_ width:CGFloat) -> Int {
         return Int(round(width / fieldSize))
     }
     

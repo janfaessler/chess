@@ -52,17 +52,20 @@ class Figure : Identifiable, ObservableObject {
         }
     }
     
-    func enrichMove(move: Move) -> Move? {
+    func getMove(deltaRow:Int, deltaFile:Int) -> Move? {
         
-        if move.piece == .king && moved == false && move.file < Figure.longCastleKingPosition {
-            return Move(move.row, Figure.longCastleKingPosition, piece: .king, type: .Castle)
+        let moveToRow = row + deltaRow;
+        let moveToFile = file + deltaFile;
+        
+        if type == .king && moved == false && moveToFile < Figure.longCastleKingPosition {
+            return Move(moveToRow, Figure.longCastleKingPosition, piece: .king, type: .Castle)
         }
-        if move.piece == .king && moved == false && move.file > Figure.shortCastleKingPosition {
-            return Move(move.row, Figure.shortCastleKingPosition, piece: .king, type: .Castle)
+        if type == .king && moved == false && moveToFile > Figure.shortCastleKingPosition {
+            return Move(moveToRow, Figure.shortCastleKingPosition, piece: .king, type: .Castle)
         }
         
         let moves = getPossibleMoves();
-        return moves.first(where:{ $0 == move })
+        return moves.first(where:{ $0.row == moveToRow && $0.file == moveToFile })
     }
     
     static func == (l:Figure, r:Figure) -> Bool {
