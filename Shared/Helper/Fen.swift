@@ -43,7 +43,10 @@ public class Fen {
         for part in Array(rowPart) {
             let digit = Int("\(part)")
             if (digit == nil) {
-                figures.append(parsePiece(part, rowNumber: rowNumber, fileNumber: file))
+                guard let fig = parsePiece(part, rowNumber: rowNumber, fileNumber: file) else {
+                    break
+                }
+                figures.append(fig)
                 file += 1
             } else {
                 file += digit!
@@ -53,13 +56,13 @@ public class Fen {
         return figures
     }
     
-    private static func parsePiece(_ str: Character, rowNumber:Int, fileNumber:Int) -> Figure {
+    private static func parsePiece(_ str: Character, rowNumber:Int, fileNumber:Int) -> Figure? {
         let pieceType = parcePieceType(str);
         let pieceColor = parseColor(str);
         return createFigure(pieceType, pieceColor, rowNumber, fileNumber)
     }
     
-    private static func createFigure(_ pieceType: PieceType?, _ pieceColor: PieceColor, _ rowNumber: Int, _ fileNumber: Int) -> Figure {
+    private static func createFigure(_ pieceType: PieceType?, _ pieceColor: PieceColor, _ rowNumber: Int, _ fileNumber: Int) -> Figure? {
         switch (pieceType) {
             case .pawn:
                 return Pawn(color: pieceColor, row: rowNumber, file: fileNumber)
@@ -73,6 +76,8 @@ public class Fen {
                 return Queen(color: pieceColor, row: rowNumber, file: fileNumber)
             case .king:
                 return King(color: pieceColor, row: rowNumber, file: fileNumber)
+            case .none:
+                return nil
         }
     }
     

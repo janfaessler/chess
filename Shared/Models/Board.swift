@@ -163,7 +163,7 @@ class Board : ObservableObject {
     }
     
     private func canPawnMoveOnce(_ move: Move) -> Bool {
-        let noFileChange = move.file == piece.file
+        let noFileChange = move.file == move.piece.file
         let targetSquareIsEmpty = boardDict[move.row]?[move.file] == nil
         return move.type == .Normal && noFileChange && targetSquareIsEmpty
     }
