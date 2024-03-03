@@ -38,6 +38,7 @@ class Pawn : Figure {
                 return moves
         }
     }
+
     
     override func ident() -> String {
         return ""

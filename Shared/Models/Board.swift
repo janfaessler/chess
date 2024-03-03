@@ -10,12 +10,11 @@ import os
 class Board : ObservableObject {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "board")
-
     
     @Published var figures:[Figure] = []
     @Published var focus:Figure?
     
-    private var figuresDict:[Int:[Int:Figure]] = [:]
+    private var boardDict:[Int:[Int:Figure]] = [:]
     private var colorToMove:PieceColor = .white
     private var moves: [Move] = []
 
@@ -34,7 +33,7 @@ class Board : ObservableObject {
         if IsMoveLegal(move) {
             doCaptures(figure, move)
             doMove(figure, move)
-            recreateFiguresCache()
+            recreateBoardDict()
             moves += [move]
         }
     }
@@ -60,7 +59,7 @@ class Board : ObservableObject {
     func addFigures() {
         let pos = Fen.loadStartingPosition()
         figures.append(contentsOf: pos.figures)
-        recreateFiguresCache()
+        recreateBoardDict()
     }
     
     private func IsMoveLegal(_ target:Move) -> Bool {
@@ -84,10 +83,13 @@ class Board : ObservableObject {
     }
     
     private func doesMovePutOwnKingInCheck(_ target:Move) -> Bool {
+        
         let startRow = target.piece.row
         let startFile = target.piece.file
         target.piece.move(to: target)
-        recreateFiguresCache()
+        
+        recreateBoardDict()
+        
         guard let king = figures.first(where: { $0.type == .king && $0.color == target.piece.color }) else {
             logger.error("we dont have a king?")
             return false
@@ -95,14 +97,14 @@ class Board : ObservableObject {
         let isKingInCheck = isFieldInCheck(king.row, king.file)
         
         target.piece.move(to: Move(startRow, startFile, piece: target.piece, type: .Revert))
-        recreateFiguresCache()
+        recreateBoardDict()
         
         return isKingInCheck
     }
     
     func doCaptures(_ figure: Figure, _ move: Move) {
         let notSameFile = figure.file != move.file
-        if figure.type == PieceType.pawn && notSameFile && figuresDict[move.row]?[move.file] == nil {
+        if figure.type == PieceType.pawn && notSameFile && boardDict[move.row]?[move.file] == nil {
             captureFigureAt(row: figure.row, file: move.file)
         } else {
             captureFigureAt(row: move.row, file: move.file)
@@ -124,7 +126,7 @@ class Board : ObservableObject {
     }
     
     private func captureFigureAt(row: Int, file: Int) {
-        let figureAtTarget = figuresDict[row]?[file];
+        let figureAtTarget = boardDict[row]?[file];
         if figureAtTarget != nil {
             let index = figures.firstIndex(where: {f in f == figureAtTarget! })
             if index != nil {
@@ -150,40 +152,63 @@ class Board : ObservableObject {
     }
     
     private func isLegalPawnMove(_ move: Move) -> Bool {
-        let lastMove = moves.last
-        let forPiece = move.piece
         
-        let moveIsPossible = forPiece.getPossibleMoves().contains(where:{ $0 == move })
-        let targetSquareIsEmpty = figuresDict[move.row]?[move.file] == nil
-        let squareBeforeStartIsEmpty = figuresDict[forPiece.color == PieceColor.white ? forPiece.row+1 : forPiece.row-1]?[forPiece.file] == nil
-        let noFileChange = move.file == forPiece.file
-        let movedOnce = move.type != .Double
-        let movedTwice = move.type == .Double
-        let lastMoveToLeft = lastMove?.row == forPiece.row && lastMove!.file - forPiece.file == -1
-        let lastMoveToRight = lastMove?.row == forPiece.row && lastMove!.file - forPiece.file == 1
-        let figureToCaptureOnLeft = figuresDict[forPiece.color == PieceColor.white ? forPiece.row+1 : forPiece.row-1]?[forPiece.file - 1] != nil
-        let figureToCaptureOnRight = figuresDict[forPiece.color == PieceColor.white ? forPiece.row+1 : forPiece.row-1]?[forPiece.file + 1] != nil
-        let enPassantIsPossible = lastMove != nil && lastMove?.piece.type == .pawn && lastMove?.type == .Double
-        let canEnPassantToLeft = movedOnce && enPassantIsPossible && lastMoveToLeft && move.file - forPiece.file == -1
-        let canEnPassantToRight = movedOnce && enPassantIsPossible && lastMoveToRight && move.file - forPiece.file == 1
+        let piece = move.piece
 
-        let canMoveOnce = movedOnce && noFileChange && targetSquareIsEmpty
-        let canMoveTwice = !forPiece.moved && movedTwice && noFileChange && targetSquareIsEmpty && squareBeforeStartIsEmpty
-        let canCapture = movedOnce && (figureToCaptureOnLeft || figureToCaptureOnRight || canEnPassantToLeft || canEnPassantToRight)
+        let moveIsPossible = piece.getPossibleMoves().contains(where:{ $0 == move })
+        
+        let noFileChange = move.file == piece.file
+        let targetSquareIsEmpty = boardDict[move.row]?[move.file] == nil
+        let squareBeforeStartIsEmpty = boardDict[piece.color == PieceColor.white ? piece.row+1 : piece.row-1]?[piece.file] == nil
+
+        let canMoveOnce = move.type == .Normal && noFileChange && targetSquareIsEmpty
+        let canMoveTwice = move.type == .Double && !piece.moved && noFileChange && targetSquareIsEmpty && squareBeforeStartIsEmpty
+        let canCapture = canPawnCapture(move, lastMove: moves.last)
         
         return  moveIsPossible && (canMoveOnce || canMoveTwice || canCapture)
     }
     
+    private func canPawnCapture(_ move:Move, lastMove:Move?) -> Bool {
+        
+        let piece = move.piece
+        let movedOnce = move.type != .Double
+        let figureToCaptureOnLeft = boardDict[piece.color == PieceColor.white ? piece.row+1 : piece.row-1]?[piece.file - 1] != nil
+        let figureToCaptureOnRight = boardDict[piece.color == PieceColor.white ? piece.row+1 : piece.row-1]?[piece.file + 1] != nil
+        let canEnPassant = canEnPassant(move, lastMove: moves.last)
+        return movedOnce && (figureToCaptureOnLeft || figureToCaptureOnRight || canEnPassant)
+    }
+    
+    private func canEnPassant(_ move:Move, lastMove:Move?) -> Bool {
+        guard let lastMove = lastMove else {
+            return false
+        }
+        
+        let piece = move.piece
+        let movedOnce = move.type != .Double
+        let lastMoveToLeft = lastMove.row == piece.row && lastMove.file - piece.file == -1
+        let lastMoveToRight = lastMove.row == piece.row && lastMove.file - piece.file == 1
+        let enPassantIsPossible = lastMove.piece.type == .pawn && lastMove.type == .Double
+        let canEnPassantToLeft = movedOnce && enPassantIsPossible && lastMoveToLeft && move.file - piece.file == -1
+        let canEnPassantToRight = movedOnce && enPassantIsPossible && lastMoveToRight && move.file - piece.file == 1
+        return canEnPassantToLeft || canEnPassantToRight
+    }
+
+    
     private func islegalKingMove(_ move:Move) -> Bool {
         let isLegalMove =  isLegalMove(move)
+        let isCatlingInCheck = isCastlingInCheck(move)
+        return isLegalMove && !isCatlingInCheck
+    }
+    
+    private func isCastlingInCheck(_ move:Move) -> Bool {
         
-        let isCastle = move.type == .Castle
-        let isLongCastle = isCastle && move.file == Figure.longCastleKingPosition
+        let isLongCastle = move.type == .Castle && move.file == Figure.longCastleKingPosition
+        
         let isKingStartingPositionInCheck = isFieldInCheck(move.piece.row, move.piece.file)
         let isKingMovingThroughChek = isFieldInCheck(move.row, isLongCastle ? move.file + 1 : move.file - 1)
         let isKingLandingInCheck = isFieldInCheck(move.row, move.file)
         
-        return isLegalMove && !isKingStartingPositionInCheck && !isKingLandingInCheck && !isKingMovingThroughChek
+        return isKingStartingPositionInCheck && isKingMovingThroughChek && isKingLandingInCheck
     }
     
     private func isFieldInCheck(_ row: Int, _ file: Int) -> Bool {
@@ -210,7 +235,7 @@ class Board : ObservableObject {
     
     private func moveRookForCastling(_ move: Move, _ figure: Figure) {
         if move.file == Figure.longCastleKingPosition {
-            guard let rook = figuresDict[figure.row]?[1] else {
+            guard let rook = boardDict[figure.row]?[1] else {
                 logger.error("rook not found")
                 return
             }
@@ -218,7 +243,7 @@ class Board : ObservableObject {
             rook.move(to: Move(move.row, 4, piece: rook, type: .Castle))
             
         } else if move.file == Figure.shortCastleKingPosition {
-            guard let rook = figuresDict[figure.row]?[8] else {
+            guard let rook = boardDict[figure.row]?[8] else {
                 logger.error("rook not found")
                 return
             }
@@ -244,7 +269,7 @@ class Board : ObservableObject {
     
     private func getIntersectingPieceOnRow(_ move: Move) -> Figure? {
         for f in stride(from: move.piece.file, to: move.file, by: move.piece.file < move.file ? 1 : -1)  {
-            let foundPiece = figuresDict[move.piece.row]?[f];
+            let foundPiece = boardDict[move.piece.row]?[f];
             if foundPiece != nil && foundPiece! != move.piece {
                 return foundPiece
             }
@@ -254,7 +279,7 @@ class Board : ObservableObject {
     
     private func getIntersectingPieceOnFile(_ move: Move) -> Figure? {
         for r in stride(from: move.piece.row, to: move.row, by: move.piece.row < move.row ? 1 : -1) {
-            let foundPiece = figuresDict[r]?[move.piece.file]
+            let foundPiece = boardDict[r]?[move.piece.file]
             if foundPiece != nil && foundPiece! != move.piece {
                 return foundPiece
             }
@@ -267,7 +292,7 @@ class Board : ObservableObject {
         let fileDir = min(max(move.file - move.piece.file, -1), 1)
         let delta = abs(move.piece.file - move.file)
         for i in 1...delta {
-            let foundPiece = figuresDict[move.piece.row+(i*rowDir)]?[move.piece.file+(i*fileDir)]
+            let foundPiece = boardDict[move.piece.row+(i*rowDir)]?[move.piece.file+(i*fileDir)]
             if foundPiece != nil && foundPiece! != move.piece {
                 return foundPiece
             }
@@ -276,10 +301,10 @@ class Board : ObservableObject {
     }
     
     private func getIntersectingPieceForKnight(_ move: Move) -> Figure? {
-        return figuresDict[move.row]?[move.file]
+        return boardDict[move.row]?[move.file]
     }
     
-    private func recreateFiguresCache(){
+    private func recreateBoardDict(){
         var dict:[Int:[Int:Figure]] = [:]
         for f in figures {
             if dict[f.row] == nil {
@@ -287,6 +312,6 @@ class Board : ObservableObject {
             }
             dict[f.row]![f.file] = f
         }
-        figuresDict = dict
+        boardDict = dict
     }
 }
