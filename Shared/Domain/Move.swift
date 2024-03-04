@@ -7,11 +7,8 @@
 
 import Foundation
 
-public enum MoveType {
-    case Normal,Castle,Double,Promotion,Revert
-}
-
 public struct Move:Identifiable{
+    
     public let id:String = UUID().uuidString
     
     var row:Int = 0

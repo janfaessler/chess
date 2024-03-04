@@ -1,5 +1,5 @@
 //
-//  Queen.swift
+//  Rook.swift
 //  SwiftChess
 //
 //  Created by Jan Fässler on 03.03.2024.
@@ -7,18 +7,20 @@
 
 import Foundation
 
-class Queen : Figure {
+class Rook : Figure {
     
+    static let LongCastlePosition = 4
+    static let ShortCastlePosition = 6
     
     init(color: PieceColor, row:Int, file:Int) {
-        super.init(type: .queen, color: color, row: row, file: file)
+        super.init(type: .rook, color: color, row: row, file: file)
     }
     
     override func getPossibleMoves() -> [Move] {
         var moves:[Move] = []
         for r in 1...8 {
             for f in 1...8 {
-                if !(row == r && file == f) && (r == row || f == file || row-r == file-f || row+file == r+f) {
+                if !(getRow() == r && getFile() == f) && (r == getRow() || f==getFile()) {
                     moves.append(CreateMove(r, f))
                 }
             }
@@ -27,6 +29,6 @@ class Queen : Figure {
     }
     
     override func ident() -> String {
-        return "Q"
+        return "R"
     }
 }

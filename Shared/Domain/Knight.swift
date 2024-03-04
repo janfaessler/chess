@@ -8,12 +8,13 @@
 import Foundation
 class Knight : Figure {
     
-    
     init(color: PieceColor, row:Int, file:Int) {
         super.init(type: .knight, color: color, row: row, file: file)
     }
     
     override func getPossibleMoves() -> [Move] {
+        let row = getRow()
+        let file = getFile()
         let moves = [
             CreateMove(row+1, file+2),
             CreateMove(row+1, file-2),

@@ -4,6 +4,7 @@
 //
 //  Created by Jan Fässler on 15.11.21.
 //
+
 import SwiftUI
 
 struct FigureView: View {
@@ -11,12 +12,12 @@ struct FigureView: View {
     let board:BoardModel
     let fieldSize:CGFloat
 
-    @ObservedObject var figure:Figure
+    @ObservedObject var figure:FigureModel
 
     @State var x:CGFloat? = 0
     @State var y:CGFloat? = 0
     
-    init(size: CGFloat, figure:Figure, board:BoardModel) {
+    init(size: CGFloat, figure:FigureModel, board:BoardModel) {
         fieldSize = size
         self.figure = figure
         self.board = board
@@ -84,10 +85,10 @@ struct FigureView: View {
     }
     
     func getColor() -> String {
-        return "\(figure.color)"
+        return "\(figure.getColor())"
     }
     
     func getPiece() -> String {
-        return "\(figure.type)"
+        return "\(figure.getType())"
     }
 }

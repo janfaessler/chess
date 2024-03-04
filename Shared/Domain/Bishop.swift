@@ -17,7 +17,7 @@ class Bishop : Figure {
         var moves:[Move] = []
         for r in 1...8 {
             for f in 1...8 {
-                if !(row == r && file == f) && (row-r == file-f || row+file == r+f) {
+                if !(getRow() == r && getFile() == f) && (getRow()-r == getFile()-f || getRow()+getFile() == r+f) {
                     moves.append(CreateMove(r, f))
                 }
             }

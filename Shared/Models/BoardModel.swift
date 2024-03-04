@@ -11,20 +11,20 @@ class BoardModel : ObservableObject {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "BoardModel")
     
-    @Published var figures:[Figure] = []
-    @Published var focus:Figure?
+    @Published var figures:[FigureModel] = []
+    @Published var focus:FigureModel?
     
     private var board:ChessBoard
 
     init() {
         board = ChessBoard(Fen.loadStartingPosition())
-        figures = board.getFigures()
+        figures = getFigures()
     }
     
 
-    func move(figure: Figure, deltaRow:Int, deltaFile:Int) {
+    func move(figure: FigureModel, deltaRow:Int, deltaFile:Int) {
         
-        guard figure.color == board.getColorToMove() else {
+        guard figure.getColor() == board.getColorToMove() else {
             logger.error("other player has to move first")
             return
         }
@@ -39,13 +39,13 @@ class BoardModel : ObservableObject {
     
     func getLegalMoves() -> [Move] {
         if focus != nil {
-            let moves = board.getPossibleMoves(forPeace: focus!)
+            let moves = board.getPossibleMoves(forPeace: focus!.getFigure())
             return moves
         }
         return []
     }
     
-    func setFocus(_ fig: Figure) {
+    func setFocus(_ fig: FigureModel) {
         focus = fig
     }
     
@@ -57,6 +57,11 @@ class BoardModel : ObservableObject {
     
     private func moveAndUpdateFigures(_ move: Move) {
         board.move(move: move)
-        figures = board.getFigures()
+        figures = getFigures()
+    }
+    
+    private func getFigures() -> [FigureModel] {
+        let figures = board.getFigures()
+        return figures.map({ FigureModel($0) })
     }
 }

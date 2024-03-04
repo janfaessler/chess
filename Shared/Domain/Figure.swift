@@ -1,37 +1,30 @@
 //
-//  FigureViewModel.swift
+//  Figure.swift
 //  SwiftChess
 //
-//  Created by Jan Fässler on 13.12.21.
+//  Created by Jan Fässler on 04.03.2024.
 //
 
 import Foundation
 
-class Figure : Identifiable, ObservableObject {
-    let id:String = UUID().uuidString
+class Figure:Identifiable {
     
-    static let longCastleKingPosition = 3
-    static let shortCastleKingPosition = 7
+    private let type:PieceType
+    private let color:PieceColor
+    private var moved:Bool = false
+    private var row:Int = 0
+    private var file:Int = 0
     
-    let type:PieceType
-    let color:PieceColor
-    var moved:Bool = false
-        
-    @Published var row:Int = 0
-    @Published var file:Int = 0
-    
-
-    init(type:PieceType, color: PieceColor, row:Int, file:Int) {	
+    init(type:PieceType, color: PieceColor, row:Int, file:Int) {
         self.type = type
         self.color = color
         self.row = row
         self.file = file
     }
-
     
-    func move(to:Move) {
-        self.row =  to.row
-        self.file = to.file
+    func move(row:Int, file:Int) {
+        self.row =  row
+        self.file = file
         self.moved = true
     }
     
@@ -39,11 +32,24 @@ class Figure : Identifiable, ObservableObject {
         return []
     }
     
-    func getMove(deltaRow:Int, deltaFile:Int) -> Move? {
-        let moveToRow = row + deltaRow;
-        let moveToFile = file + deltaFile;
-        let moves = getPossibleMoves();
-        return moves.first(where:{ $0.row == moveToRow && $0.file == moveToFile })
+    func getRow() -> Int {
+        return row
+    }
+    
+    func getFile() -> Int {
+        return file
+    }
+    
+    func getColor() -> PieceColor {
+        return color
+    }
+    
+    func getType() -> PieceType {
+        return type
+    }
+    
+    func hasMoved() -> Bool {
+        return moved
     }
     
     static func == (l:Figure, r:Figure) -> Bool {
@@ -57,7 +63,7 @@ class Figure : Identifiable, ObservableObject {
     func ident() -> String {
         return ""
     }
-
+    
     func inBoard(_ m:Move) -> Bool {
         return 1...8 ~= m.row && 1...8 ~= m.file
     }

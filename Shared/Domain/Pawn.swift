@@ -9,13 +9,14 @@ import Foundation
 
 class Pawn : Figure {
     
-    
     init(color: PieceColor, row:Int, file:Int) {
         super.init(type: .pawn, color: color, row: row, file: file)
     }
     
     override func getPossibleMoves() -> [Move] {
-        switch color {
+        let row = getRow()
+        let file = getFile()
+        switch getColor() {
             case.black:
                 let moveType = row == 2 ? MoveType.Promotion : MoveType.Normal
                 var moves = [
