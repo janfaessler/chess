@@ -28,6 +28,10 @@ class Figure:Identifiable {
         self.moved = true
     }
     
+    func canDo(move:Move) -> Bool {
+        return getPossibleMoves().contains(where:{$0 == move})
+    }
+    
     func getPossibleMoves() -> [Move] {
         return []
     }

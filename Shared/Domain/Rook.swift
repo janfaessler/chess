@@ -9,8 +9,10 @@ import Foundation
 
 class Rook : Figure {
     
-    static let LongCastlePosition = 4
-    static let ShortCastlePosition = 6
+    static let LongCastleStartingFile = 1
+    static let LongCastleEndFile = 4
+    static let ShortCastleStartingFile = 8
+    static let ShortCastleEndFile = 6
     
     init(color: PieceColor, row:Int, file:Int) {
         super.init(type: .rook, color: color, row: row, file: file)
