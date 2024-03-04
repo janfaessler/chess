@@ -8,7 +8,7 @@ import SwiftUI
 
 struct FigureView: View {
     
-    let board:Board
+    let board:BoardModel
     let fieldSize:CGFloat
 
     @ObservedObject var figure:Figure
@@ -16,7 +16,7 @@ struct FigureView: View {
     @State var x:CGFloat? = 0
     @State var y:CGFloat? = 0
     
-    init(size: CGFloat, figure:Figure, board:Board) {
+    init(size: CGFloat, figure:Figure, board:BoardModel) {
         fieldSize = size
         self.figure = figure
         self.board = board

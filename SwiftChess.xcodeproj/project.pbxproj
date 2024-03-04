@@ -23,8 +23,8 @@
 		617723A82742ABB800169D3D /* FigureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617723A62742ABB800169D3D /* FigureView.swift */; };
 		61812E212767F0A900616866 /* Figure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E202767F0A900616866 /* Figure.swift */; };
 		61812E222767F0A900616866 /* Figure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E202767F0A900616866 /* Figure.swift */; };
-		61812E242767F42000616866 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E232767F42000616866 /* Board.swift */; };
-		61812E252767F42000616866 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E232767F42000616866 /* Board.swift */; };
+		61812E242767F42000616866 /* BoardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E232767F42000616866 /* BoardModel.swift */; };
+		61812E252767F42000616866 /* BoardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E232767F42000616866 /* BoardModel.swift */; };
 		61812E272767FDA900616866 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E262767FDA900616866 /* BoardView.swift */; };
 		61812E282767FDA900616866 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E262767FDA900616866 /* BoardView.swift */; };
 		61812E2B2768078E00616866 /* PieceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E2A2768078E00616866 /* PieceType.swift */; };
@@ -47,6 +47,8 @@
 		61B0B4482B94F92E0085DB48 /* King.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B4462B94F92E0085DB48 /* King.swift */; };
 		61B0B44A2B94FAE60085DB48 /* Knight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B4492B94FAE60085DB48 /* Knight.swift */; };
 		61B0B44B2B94FAE60085DB48 /* Knight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B4492B94FAE60085DB48 /* Knight.swift */; };
+		61B0B4502B95DEB00085DB48 /* ChessBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B44F2B95DEB00085DB48 /* ChessBoard.swift */; };
+		61B0B4512B95DEB00085DB48 /* ChessBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B44F2B95DEB00085DB48 /* ChessBoard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,7 +64,7 @@
 		617723A62742ABB800169D3D /* FigureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigureView.swift; sourceTree = "<group>"; };
 		617E4872277D453600DF0999 /* BoardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardTests.swift; sourceTree = "<group>"; };
 		61812E202767F0A900616866 /* Figure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Figure.swift; sourceTree = "<group>"; };
-		61812E232767F42000616866 /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
+		61812E232767F42000616866 /* BoardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardModel.swift; sourceTree = "<group>"; };
 		61812E262767FDA900616866 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		61812E2A2768078E00616866 /* PieceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieceType.swift; sourceTree = "<group>"; };
 		61812E2D276807E600616866 /* PieceColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieceColor.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 		61B0B4432B94F8DB0085DB48 /* Queen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Queen.swift; sourceTree = "<group>"; };
 		61B0B4462B94F92E0085DB48 /* King.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = King.swift; sourceTree = "<group>"; };
 		61B0B4492B94FAE60085DB48 /* Knight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Knight.swift; sourceTree = "<group>"; };
+		61B0B44F2B95DEB00085DB48 /* ChessBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessBoard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,8 +100,8 @@
 		6177235A274284FE00169D3D = {
 			isa = PBXGroup;
 			children = (
-				617E4871277D450100DF0999 /* Tests */,
 				6177235F274284FE00169D3D /* Shared */,
+				617E4871277D450100DF0999 /* Tests */,
 				61772371274284FF00169D3D /* macOS */,
 				6177236B274284FF00169D3D /* Products */,
 			);
@@ -107,6 +110,7 @@
 		6177235F274284FE00169D3D /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				61B0B44C2B95D7160085DB48 /* Domain */,
 				61812E3027681DE400616866 /* Helper */,
 				61812E292768077900616866 /* Enums */,
 				61812E1F2767F09400616866 /* Models */,
@@ -158,7 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				61812E202767F0A900616866 /* Figure.swift */,
-				61812E232767F42000616866 /* Board.swift */,
+				61812E232767F42000616866 /* BoardModel.swift */,
 				61812E3427681E8100616866 /* Position.swift */,
 				614FFC6C277786560082F892 /* Move.swift */,
 				61B0B43A2B94F5F20085DB48 /* Pawn.swift */,
@@ -186,6 +190,14 @@
 				61812E3127681DFC00616866 /* Fen.swift */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		61B0B44C2B95D7160085DB48 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				61B0B44F2B95DEB00085DB48 /* ChessBoard.swift */,
+			);
+			path = Domain;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -295,8 +307,9 @@
 				614FFC6D277786560082F892 /* Move.swift in Sources */,
 				61812E212767F0A900616866 /* Figure.swift in Sources */,
 				61B0B4442B94F8DB0085DB48 /* Queen.swift in Sources */,
+				61B0B4502B95DEB00085DB48 /* ChessBoard.swift in Sources */,
 				61812E2B2768078E00616866 /* PieceType.swift in Sources */,
-				61812E242767F42000616866 /* Board.swift in Sources */,
+				61812E242767F42000616866 /* BoardModel.swift in Sources */,
 				61812E2E276807E600616866 /* PieceColor.swift in Sources */,
 				617723A72742ABB800169D3D /* FigureView.swift in Sources */,
 				617723A427429C9300169D3D /* BoardBackgroundView.swift in Sources */,
@@ -321,8 +334,9 @@
 				614FFC6E277786560082F892 /* Move.swift in Sources */,
 				61812E222767F0A900616866 /* Figure.swift in Sources */,
 				61B0B4452B94F8DB0085DB48 /* Queen.swift in Sources */,
+				61B0B4512B95DEB00085DB48 /* ChessBoard.swift in Sources */,
 				61812E2C2768078E00616866 /* PieceType.swift in Sources */,
-				61812E252767F42000616866 /* Board.swift in Sources */,
+				61812E252767F42000616866 /* BoardModel.swift in Sources */,
 				61812E2F276807E600616866 /* PieceColor.swift in Sources */,
 				617723A82742ABB800169D3D /* FigureView.swift in Sources */,
 				617723A527429C9300169D3D /* BoardBackgroundView.swift in Sources */,

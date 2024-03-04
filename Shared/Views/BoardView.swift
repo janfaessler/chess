@@ -9,11 +9,10 @@ import SwiftUI
 
 struct BoardView: View {
     let fieldSize:CGFloat
-    @ObservedObject var model = Board()
+    @ObservedObject var model = BoardModel()
     
     init(_ size:CGFloat) {
         fieldSize = size
-        model.addFigures()
     }
     
     var body: some View {

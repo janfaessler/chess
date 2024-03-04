@@ -16,7 +16,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "200"
             endingLineNumber = "200"
-            landmarkName = "isLegalMove(_:_:)"
+            landmarkName = "canEnPassant(_:lastMove:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -32,7 +32,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "190"
             endingLineNumber = "190"
-            landmarkName = "isFieldInCheck(_:_:)"
+            landmarkName = "canEnPassant(_:lastMove:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -64,6 +64,54 @@
                   startingLineNumber = "190"
                   endingLineNumber = "190"
                   offsetFromSymbolStart = "76">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0505B4F5-4D73-45D1-93F1-5394620FA20B"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Shared/Models/Figure.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "10"
+            endingLineNumber = "10"
+            landmarkName = "Figure"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "0505B4F5-4D73-45D1-93F1-5394620FA20B - 56752560077c7db6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SwiftChess.Figure.deinit"
+                  moduleName = "SwiftChess"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/janfassler/Documents/Projekte/SwiftChess/Shared/Models/Figure.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  uuid = "0505B4F5-4D73-45D1-93F1-5394620FA20B - 8b12565c2b6d9f09"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SwiftChess.Figure.__deallocating_deinit"
+                  moduleName = "SwiftChess"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/janfassler/Documents/Projekte/SwiftChess/Shared/Models/Figure.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "16">
                </Location>
             </Locations>
          </BreakpointContent>
