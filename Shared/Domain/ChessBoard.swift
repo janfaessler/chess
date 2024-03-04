@@ -137,20 +137,18 @@ class ChessBoard {
     
     private func doesMovePutOwnKingInCheck(_ target:Move) -> Bool {
         
-        let startRow = target.piece.getRow()
-        let startFile = target.piece.getFile()
-        target.piece.move(row: target.row, file: target.file)
-        
-        recreateBoardDict()
+        boardDict[target.piece.getRow()]![target.piece.getFile()] = nil
+        if boardDict[target.row] == nil {
+            boardDict[target.row] = [:]
+        }
+        boardDict[target.row]![target.file] = target.piece
         
         guard let king = figures.first(where: { $0.getType() == .king && $0.getColor() == target.piece.getColor() }) else {
             logger.error("we dont have a king?")
             return false
         }
         let isKingInCheck = isFieldInCheck(king.getRow(), king.getFile())
-        
-        target.piece.move(row: startRow, file: startFile)
-        
+                
         recreateBoardDict()
         
         return isKingInCheck
