@@ -35,7 +35,6 @@
 		61812E3327681DFC00616866 /* Fen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E3127681DFC00616866 /* Fen.swift */; };
 		61812E3527681E8100616866 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E3427681E8100616866 /* Position.swift */; };
 		61812E3627681E8100616866 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E3427681E8100616866 /* Position.swift */; };
-		61AE78232B991AAD008F56F8 /* SwiftChessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AE78222B991AAD008F56F8 /* SwiftChessTests.swift */; };
 		61B0B43B2B94F5F20085DB48 /* Pawn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B43A2B94F5F20085DB48 /* Pawn.swift */; };
 		61B0B43C2B94F5F20085DB48 /* Pawn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B43A2B94F5F20085DB48 /* Pawn.swift */; };
 		61B0B43E2B94F80F0085DB48 /* Bishop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B43D2B94F80F0085DB48 /* Bishop.swift */; };
@@ -54,6 +53,11 @@
 		61B0B4542B95E1A90085DB48 /* MoveType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B4522B95E1A90085DB48 /* MoveType.swift */; };
 		61B0B4562B95F4E00085DB48 /* Figure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B4552B95F4E00085DB48 /* Figure.swift */; };
 		61B0B4572B95F4E00085DB48 /* Figure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B4552B95F4E00085DB48 /* Figure.swift */; };
+		61B32F562B99F1F300790CF7 /* SwiftChessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AE78222B991AAD008F56F8 /* SwiftChessTests.swift */; };
+		61B32F572B99F1F800790CF7 /* FieldTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AE782F2B99ED07008F56F8 /* FieldTest.swift */; };
+		61B32F592B9A53DB00790CF7 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F582B9A53DB00790CF7 /* Field.swift */; };
+		61B32F5A2B9A53DB00790CF7 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F582B9A53DB00790CF7 /* Field.swift */; };
+		61B32F5C2B9A7D7E00790CF7 /* ChessBoardTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F5B2B9A7D7E00790CF7 /* ChessBoardTestBase.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +91,7 @@
 		61AE78202B991AAD008F56F8 /* SwiftChessTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftChessTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		61AE78222B991AAD008F56F8 /* SwiftChessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftChessTests.swift; sourceTree = "<group>"; };
 		61AE78292B991BE8008F56F8 /* SwiftChess (macOS).xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "SwiftChess (macOS).xctestplan"; sourceTree = "<group>"; };
+		61AE782F2B99ED07008F56F8 /* FieldTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldTest.swift; sourceTree = "<group>"; };
 		61B0B43A2B94F5F20085DB48 /* Pawn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pawn.swift; sourceTree = "<group>"; };
 		61B0B43D2B94F80F0085DB48 /* Bishop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bishop.swift; sourceTree = "<group>"; };
 		61B0B4402B94F8850085DB48 /* Rook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rook.swift; sourceTree = "<group>"; };
@@ -96,6 +101,8 @@
 		61B0B44F2B95DEB00085DB48 /* ChessBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessBoard.swift; sourceTree = "<group>"; };
 		61B0B4522B95E1A90085DB48 /* MoveType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveType.swift; sourceTree = "<group>"; };
 		61B0B4552B95F4E00085DB48 /* Figure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Figure.swift; sourceTree = "<group>"; };
+		61B32F582B9A53DB00790CF7 /* Field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Field.swift; sourceTree = "<group>"; };
+		61B32F5B2B9A7D7E00790CF7 /* ChessBoardTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessBoardTestBase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -210,6 +217,8 @@
 			isa = PBXGroup;
 			children = (
 				61AE78222B991AAD008F56F8 /* SwiftChessTests.swift */,
+				61AE782F2B99ED07008F56F8 /* FieldTest.swift */,
+				61B32F5B2B9A7D7E00790CF7 /* ChessBoardTestBase.swift */,
 			);
 			path = SwiftChessTests;
 			sourceTree = "<group>";
@@ -226,6 +235,7 @@
 				614FFC6C277786560082F892 /* Move.swift */,
 				61B0B44F2B95DEB00085DB48 /* ChessBoard.swift */,
 				61B0B4552B95F4E00085DB48 /* Figure.swift */,
+				61B32F582B9A53DB00790CF7 /* Field.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -293,7 +303,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1530;
-				LastUpgradeCheck = 1520;
+				LastUpgradeCheck = 1530;
 				TargetAttributes = {
 					61772369274284FF00169D3D = {
 						CreatedOnToolsVersion = 13.1;
@@ -360,6 +370,7 @@
 			files = (
 				61B0B4412B94F8850085DB48 /* Rook.swift in Sources */,
 				61812E3527681E8100616866 /* Position.swift in Sources */,
+				61B32F592B9A53DB00790CF7 /* Field.swift in Sources */,
 				61B0B4472B94F92E0085DB48 /* King.swift in Sources */,
 				61B0B43B2B94F5F20085DB48 /* Pawn.swift in Sources */,
 				61812E3227681DFC00616866 /* Fen.swift in Sources */,
@@ -389,6 +400,7 @@
 			files = (
 				61B0B4422B94F8850085DB48 /* Rook.swift in Sources */,
 				61812E3627681E8100616866 /* Position.swift in Sources */,
+				61B32F5A2B9A53DB00790CF7 /* Field.swift in Sources */,
 				61B0B4482B94F92E0085DB48 /* King.swift in Sources */,
 				61B0B43C2B94F5F20085DB48 /* Pawn.swift in Sources */,
 				61812E3327681DFC00616866 /* Fen.swift in Sources */,
@@ -416,7 +428,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				61AE78232B991AAD008F56F8 /* SwiftChessTests.swift in Sources */,
+				61B32F5C2B9A7D7E00790CF7 /* ChessBoardTestBase.swift in Sources */,
+				61B32F572B99F1F800790CF7 /* FieldTest.swift in Sources */,
+				61B32F562B99F1F300790CF7 /* SwiftChessTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -619,6 +633,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 4RQV64824E;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -626,7 +641,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.redshadow.SwiftChess;
 				PRODUCT_NAME = SwiftChess;
@@ -649,6 +664,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 4RQV64824E;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -656,7 +672,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.redshadow.SwiftChess;
 				PRODUCT_NAME = SwiftChess;
@@ -679,7 +695,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.3;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.redshadow.SwiftChessTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -703,7 +719,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.3;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.redshadow.SwiftChessTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -46,8 +46,9 @@ struct FigureView: View {
     func onDragEnd(_ gesture: _ChangedGesture<DragGesture>.Value) {
         let row = calculateDeltaRow(gesture.translation.height)
         let file = calculateDeltaFile(gesture.translation.width)
-
-        board.move(figure: figure, deltaRow: row, deltaFile: file)
+        do {
+            try board.move(figure: figure, deltaRow: row, deltaFile: file)
+        } catch {}
         resetOffset()
     }
 

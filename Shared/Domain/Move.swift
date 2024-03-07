@@ -26,6 +26,14 @@ public struct Move:Identifiable, Equatable{
         self.init(r,f, piece: piece)
         self.type = type
     }
+    
+    public init?(_ fieldname:String, piece: Figure, type: MoveType) {
+        guard let field = Field(fieldname) else { return nil }
+        self.row = field.row
+        self.file = field.file
+        self.piece = piece
+        self.type = type
+    }
 
     
     public static func == (l:Move, r:Move) -> Bool {
@@ -34,6 +42,14 @@ public struct Move:Identifiable, Equatable{
     
     static func != (l:Move, r:Move) -> Bool {
         return !(l == r)
+    }
+    
+    public func getRow() -> Int {
+        return row
+    }
+    
+    public func getFile() -> Int {
+        return file
     }
     
     func info() -> String {

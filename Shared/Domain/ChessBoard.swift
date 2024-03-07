@@ -7,7 +7,9 @@
 
 import Foundation
 import os
-
+public enum ValidationError: Error {
+    case MoveNotLegalMoveOnTheBoard
+}
 public class ChessBoard {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "ChessBoard")
@@ -23,11 +25,11 @@ public class ChessBoard {
         recreateBoardDict()
     }
 
-    public func move(_ move:Move) {
+    public func move(_ move:Move) throws {
         
         guard IsMoveLegalMoveOnTheBoard(move) else {
-            logger.error("move is not allowed")
-            return
+            logger.error("move (\(move.piece.ident())\(move.piece.getField()) -> \(move.info())) is not allowed")
+            throw ValidationError.MoveNotLegalMoveOnTheBoard
         }
 
         doCapture(move)
@@ -322,10 +324,7 @@ public class ChessBoard {
     }
     
     private func isFieldInCheck(_ row: Int, _ file: Int) -> Bool {
-        return figures.contains(where: { 
-            let moep = $0.getColor() != colorToMove && isMovePossible(Move(row, file, piece: $0))
-            return moep
-        })
+        return figures.contains(where: {  $0.getColor() != colorToMove && isMovePossible(Move(row, file, piece: $0)) })
     }
     
     private func isCaptureablePiece(_ move: Move, pieceToCapture: Figure?) -> Bool {

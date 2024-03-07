@@ -9,7 +9,6 @@
     }
   ],
   "defaultOptions" : {
-    "codeCoverage" : false,
     "targetForVariableExpansion" : {
       "containerPath" : "container:SwiftChess.xcodeproj",
       "identifier" : "6177236F274284FF00169D3D",

@@ -22,7 +22,7 @@ class BoardModel : ObservableObject {
     }
     
 
-    func move(figure: FigureModel, deltaRow:Int, deltaFile:Int) {
+    func move(figure: FigureModel, deltaRow:Int, deltaFile:Int)  throws {
         
         guard figure.getColor() == board.getColorToMove() else {
             logger.error("other player has to move first")
@@ -34,7 +34,7 @@ class BoardModel : ObservableObject {
             return
         }
         
-        moveAndUpdateFigures(move)
+        try moveAndUpdateFigures(move)
     }
     
     func getLegalMoves() -> [Move] {
@@ -55,8 +55,8 @@ class BoardModel : ObservableObject {
         }
     }
     
-    private func moveAndUpdateFigures(_ move: Move) {
-        board.move(move)
+    private func moveAndUpdateFigures(_ move: Move) throws {
+        try board.move(move)
         figures = getFigures()
     }
     

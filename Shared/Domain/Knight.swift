@@ -8,8 +8,14 @@
 import Foundation
 public class Knight : Figure {
     
+    private let type:PieceType = .knight
+
     public init(color: PieceColor, row:Int, file:Int) {
-        super.init(type: .knight, color: color, row: row, file: file)
+        super.init(type: type, color: color, row: row, file: file)
+    }
+    
+    public init? (_ field:String, color: PieceColor) {
+        super.init(field, type: type, color: color)
     }
     
     override func getPossibleMoves() -> [Move] {

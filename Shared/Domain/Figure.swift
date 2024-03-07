@@ -22,6 +22,14 @@ public class Figure:Identifiable, Equatable {
         self.file = file
     }
     
+    public init?(_ fieldname:String, type:PieceType, color: PieceColor) {
+        guard let field = Field(fieldname) else { return nil }
+        self.row = field.row
+        self.file = field.file
+        self.type = type
+        self.color = color
+    }
+    
     func move(row:Int, file:Int) {
         self.row =  row
         self.file = file
@@ -29,11 +37,25 @@ public class Figure:Identifiable, Equatable {
     }
     
     func canDo(move:Move) -> Bool {
-        return getPossibleMoves().contains(where:{$0 == move})
+        let moves = getPossibleMoves()
+        return moves.contains(where:{$0.row == move.row && $0.file == move.file})
     }
     
     func getPossibleMoves() -> [Move] {
-        return []
+        switch type {
+        case .pawn:
+            return Pawn(color: color, row: row, file: file).getPossibleMoves()
+        case .bishop:
+            return Bishop(color: color, row: row, file: file).getPossibleMoves()
+        case .knight:
+            return Knight(color: color, row: row, file: file).getPossibleMoves()
+        case .rook:
+            return Rook(color: color, row: row, file: file).getPossibleMoves()
+        case .queen:
+            return Queen(color: color, row: row, file: file).getPossibleMoves()
+        case .king:
+            return King(color: color, row: row, file: file).getPossibleMoves()
+        }
     }
     
     public func getRow() -> Int {
@@ -50,6 +72,10 @@ public class Figure:Identifiable, Equatable {
     
     public func getType() -> PieceType {
         return type
+    }
+    
+    public func getField() -> String {
+        return Field(row:row, file:file).info()
     }
     
     func hasMoved() -> Bool {
