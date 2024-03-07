@@ -7,9 +7,7 @@
 
 import Foundation
 import os
-public enum ValidationError: Error {
-    case MoveNotLegalMoveOnTheBoard
-}
+
 public class ChessBoard {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "ChessBoard")

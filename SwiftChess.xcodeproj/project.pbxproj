@@ -58,6 +58,8 @@
 		61B32F592B9A53DB00790CF7 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F582B9A53DB00790CF7 /* Field.swift */; };
 		61B32F5A2B9A53DB00790CF7 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F582B9A53DB00790CF7 /* Field.swift */; };
 		61B32F5C2B9A7D7E00790CF7 /* ChessBoardTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F5B2B9A7D7E00790CF7 /* ChessBoardTestBase.swift */; };
+		61B32F5E2B9A86BC00790CF7 /* ValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F5D2B9A86BC00790CF7 /* ValidationError.swift */; };
+		61B32F5F2B9A873500790CF7 /* ValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F5D2B9A86BC00790CF7 /* ValidationError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,6 +105,7 @@
 		61B0B4552B95F4E00085DB48 /* Figure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Figure.swift; sourceTree = "<group>"; };
 		61B32F582B9A53DB00790CF7 /* Field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Field.swift; sourceTree = "<group>"; };
 		61B32F5B2B9A7D7E00790CF7 /* ChessBoardTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessBoardTestBase.swift; sourceTree = "<group>"; };
+		61B32F5D2B9A86BC00790CF7 /* ValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +203,7 @@
 				61812E2A2768078E00616866 /* PieceType.swift */,
 				61812E2D276807E600616866 /* PieceColor.swift */,
 				61B0B4522B95E1A90085DB48 /* MoveType.swift */,
+				61B32F5D2B9A86BC00790CF7 /* ValidationError.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -398,6 +402,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61B32F5F2B9A873500790CF7 /* ValidationError.swift in Sources */,
 				61B0B4422B94F8850085DB48 /* Rook.swift in Sources */,
 				61812E3627681E8100616866 /* Position.swift in Sources */,
 				61B32F5A2B9A53DB00790CF7 /* Field.swift in Sources */,
@@ -429,6 +434,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				61B32F5C2B9A7D7E00790CF7 /* ChessBoardTestBase.swift in Sources */,
+				61B32F5E2B9A86BC00790CF7 /* ValidationError.swift in Sources */,
 				61B32F572B99F1F800790CF7 /* FieldTest.swift in Sources */,
 				61B32F562B99F1F300790CF7 /* SwiftChessTests.swift in Sources */,
 			);
