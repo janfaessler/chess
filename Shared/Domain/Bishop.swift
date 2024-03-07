@@ -7,9 +7,9 @@
 
 import Foundation
 
-class Bishop : Figure {
+public class Bishop : Figure {
     
-    init(color: PieceColor, row:Int, file:Int) {
+    public init(color: PieceColor, row:Int, file:Int) {
         super.init(type: .bishop, color: color, row: row, file: file)
     }
     

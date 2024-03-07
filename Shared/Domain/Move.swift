@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Move:Identifiable{
+public struct Move:Identifiable, Equatable{
     
     public let id:String = UUID().uuidString
     
@@ -22,14 +22,14 @@ public struct Move:Identifiable{
         self.piece = piece
     }
     
-    init (_ r:Int, _ f:Int, piece: Figure, type: MoveType){
+    public init (_ r:Int, _ f:Int, piece: Figure, type: MoveType){
         self.init(r,f, piece: piece)
         self.type = type
     }
 
     
-    static func == (l:Move, r:Move) -> Bool {
-        return l.row == r.row && l.file == r.file && l.piece == r.piece
+    public static func == (l:Move, r:Move) -> Bool {
+        return l.row == r.row && l.file == r.file && l.piece == r.piece && l.type == r.type
     }
     
     static func != (l:Move, r:Move) -> Bool {

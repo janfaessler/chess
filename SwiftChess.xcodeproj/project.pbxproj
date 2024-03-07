@@ -35,6 +35,7 @@
 		61812E3327681DFC00616866 /* Fen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E3127681DFC00616866 /* Fen.swift */; };
 		61812E3527681E8100616866 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E3427681E8100616866 /* Position.swift */; };
 		61812E3627681E8100616866 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E3427681E8100616866 /* Position.swift */; };
+		61AE78232B991AAD008F56F8 /* SwiftChessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AE78222B991AAD008F56F8 /* SwiftChessTests.swift */; };
 		61B0B43B2B94F5F20085DB48 /* Pawn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B43A2B94F5F20085DB48 /* Pawn.swift */; };
 		61B0B43C2B94F5F20085DB48 /* Pawn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B43A2B94F5F20085DB48 /* Pawn.swift */; };
 		61B0B43E2B94F80F0085DB48 /* Bishop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B43D2B94F80F0085DB48 /* Bishop.swift */; };
@@ -55,6 +56,16 @@
 		61B0B4572B95F4E00085DB48 /* Figure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B4552B95F4E00085DB48 /* Figure.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		61AE78242B991AAD008F56F8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6177235B274284FE00169D3D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6177236F274284FF00169D3D;
+			remoteInfo = "SwiftChess (macOS)";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		614FFC69277780130082F892 /* MoveIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveIndicatorView.swift; sourceTree = "<group>"; };
 		614FFC6C277786560082F892 /* Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
@@ -66,7 +77,6 @@
 		61772372274284FF00169D3D /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
 		617723A327429C9300169D3D /* BoardBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardBackgroundView.swift; sourceTree = "<group>"; };
 		617723A62742ABB800169D3D /* FigureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigureView.swift; sourceTree = "<group>"; };
-		617E4872277D453600DF0999 /* BoardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardTests.swift; sourceTree = "<group>"; };
 		61812E202767F0A900616866 /* FigureModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigureModel.swift; sourceTree = "<group>"; };
 		61812E232767F42000616866 /* BoardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardModel.swift; sourceTree = "<group>"; };
 		61812E262767FDA900616866 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
@@ -74,6 +84,9 @@
 		61812E2D276807E600616866 /* PieceColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieceColor.swift; sourceTree = "<group>"; };
 		61812E3127681DFC00616866 /* Fen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fen.swift; sourceTree = "<group>"; };
 		61812E3427681E8100616866 /* Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
+		61AE78202B991AAD008F56F8 /* SwiftChessTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftChessTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		61AE78222B991AAD008F56F8 /* SwiftChessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftChessTests.swift; sourceTree = "<group>"; };
+		61AE78292B991BE8008F56F8 /* SwiftChess (macOS).xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "SwiftChess (macOS).xctestplan"; sourceTree = "<group>"; };
 		61B0B43A2B94F5F20085DB48 /* Pawn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pawn.swift; sourceTree = "<group>"; };
 		61B0B43D2B94F80F0085DB48 /* Bishop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bishop.swift; sourceTree = "<group>"; };
 		61B0B4402B94F8850085DB48 /* Rook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rook.swift; sourceTree = "<group>"; };
@@ -100,15 +113,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		61AE781D2B991AAD008F56F8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		6177235A274284FE00169D3D = {
 			isa = PBXGroup;
 			children = (
+				61AE78292B991BE8008F56F8 /* SwiftChess (macOS).xctestplan */,
 				6177235F274284FE00169D3D /* Shared */,
-				617E4871277D450100DF0999 /* Tests */,
 				61772371274284FF00169D3D /* macOS */,
+				61AE78212B991AAD008F56F8 /* SwiftChessTests */,
 				6177236B274284FF00169D3D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -133,6 +154,7 @@
 			children = (
 				6177236A274284FF00169D3D /* SwiftChess.app */,
 				61772370274284FF00169D3D /* SwiftChess.app */,
+				61AE78202B991AAD008F56F8 /* SwiftChessTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -154,14 +176,6 @@
 				614FFC69277780130082F892 /* MoveIndicatorView.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		617E4871277D450100DF0999 /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				617E4872277D453600DF0999 /* BoardTests.swift */,
-			);
-			path = Tests;
 			sourceTree = "<group>";
 		};
 		61812E1F2767F09400616866 /* Models */ = {
@@ -190,6 +204,14 @@
 				61812E3127681DFC00616866 /* Fen.swift */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		61AE78212B991AAD008F56F8 /* SwiftChessTests */ = {
+			isa = PBXGroup;
+			children = (
+				61AE78222B991AAD008F56F8 /* SwiftChessTests.swift */,
+			);
+			path = SwiftChessTests;
 			sourceTree = "<group>";
 		};
 		61B0B44C2B95D7160085DB48 /* Domain */ = {
@@ -245,6 +267,24 @@
 			productReference = 61772370274284FF00169D3D /* SwiftChess.app */;
 			productType = "com.apple.product-type.application";
 		};
+		61AE781F2B991AAD008F56F8 /* SwiftChessTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 61AE78262B991AAD008F56F8 /* Build configuration list for PBXNativeTarget "SwiftChessTests" */;
+			buildPhases = (
+				61AE781C2B991AAD008F56F8 /* Sources */,
+				61AE781D2B991AAD008F56F8 /* Frameworks */,
+				61AE781E2B991AAD008F56F8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				61AE78252B991AAD008F56F8 /* PBXTargetDependency */,
+			);
+			name = SwiftChessTests;
+			productName = SwiftChessTests;
+			productReference = 61AE78202B991AAD008F56F8 /* SwiftChessTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -252,7 +292,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1310;
+				LastSwiftUpdateCheck = 1530;
 				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					61772369274284FF00169D3D = {
@@ -260,6 +300,10 @@
 					};
 					6177236F274284FF00169D3D = {
 						CreatedOnToolsVersion = 13.1;
+					};
+					61AE781F2B991AAD008F56F8 = {
+						CreatedOnToolsVersion = 15.3;
+						TestTargetID = 6177236F274284FF00169D3D;
 					};
 				};
 			};
@@ -278,6 +322,7 @@
 			targets = (
 				61772369274284FF00169D3D /* SwiftChess (iOS) */,
 				6177236F274284FF00169D3D /* SwiftChess (macOS) */,
+				61AE781F2B991AAD008F56F8 /* SwiftChessTests */,
 			);
 		};
 /* End PBXProject section */
@@ -296,6 +341,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				61772394274284FF00169D3D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61AE781E2B991AAD008F56F8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -360,7 +412,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		61AE781C2B991AAD008F56F8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61AE78232B991AAD008F56F8 /* SwiftChessTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		61AE78252B991AAD008F56F8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6177236F274284FF00169D3D /* SwiftChess (macOS) */;
+			targetProxy = 61AE78242B991AAD008F56F8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		61772395274284FF00169D3D /* Debug */ = {
@@ -599,6 +667,53 @@
 			};
 			name = Release;
 		};
+		61AE78272B991AAD008F56F8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4RQV64824E;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.redshadow.SwiftChessTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftChess.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SwiftChess";
+			};
+			name = Debug;
+		};
+		61AE78282B991AAD008F56F8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4RQV64824E;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.redshadow.SwiftChessTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftChess.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SwiftChess";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -625,6 +740,15 @@
 			buildConfigurations = (
 				6177239B274284FF00169D3D /* Debug */,
 				6177239C274284FF00169D3D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		61AE78262B991AAD008F56F8 /* Build configuration list for PBXNativeTarget "SwiftChessTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				61AE78272B991AAD008F56F8 /* Debug */,
+				61AE78282B991AAD008F56F8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

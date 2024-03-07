@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Figure:Identifiable {
+public class Figure:Identifiable, Equatable {
     
     private let type:PieceType
     private let color:PieceColor
@@ -15,7 +15,7 @@ class Figure:Identifiable {
     private var row:Int = 0
     private var file:Int = 0
     
-    init(type:PieceType, color: PieceColor, row:Int, file:Int) {
+    public init(type:PieceType, color: PieceColor, row:Int, file:Int) {
         self.type = type
         self.color = color
         self.row = row
@@ -36,19 +36,19 @@ class Figure:Identifiable {
         return []
     }
     
-    func getRow() -> Int {
+    public func getRow() -> Int {
         return row
     }
     
-    func getFile() -> Int {
+    public func getFile() -> Int {
         return file
     }
     
-    func getColor() -> PieceColor {
+    public func getColor() -> PieceColor {
         return color
     }
     
-    func getType() -> PieceType {
+    public func getType() -> PieceType {
         return type
     }
     
@@ -56,14 +56,14 @@ class Figure:Identifiable {
         return moved
     }
     
-    static func == (l:Figure, r:Figure) -> Bool {
+    public static func == (l:Figure, r:Figure) -> Bool {
         return l.row == r.row && l.file == r.file && l.type == r.type && l.color == r.color
     }
     
-    static func != (l:Figure, r:Figure) -> Bool {
+    public static func != (l:Figure, r:Figure) -> Bool {
         return !(l == r)
     }
-    
+
     func ident() -> String {
         return ""
     }

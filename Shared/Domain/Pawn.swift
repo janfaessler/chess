@@ -7,9 +7,9 @@
 
 import Foundation
 
-class Pawn : Figure {
+public class Pawn : Figure {
     
-    init(color: PieceColor, row:Int, file:Int) {
+    public init(color: PieceColor, row:Int, file:Int) {
         super.init(type: .pawn, color: color, row: row, file: file)
     }
     
@@ -40,7 +40,6 @@ class Pawn : Figure {
         }
     }
 
-    
     override func ident() -> String {
         return ""
     }

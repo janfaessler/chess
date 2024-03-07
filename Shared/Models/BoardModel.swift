@@ -56,7 +56,7 @@ class BoardModel : ObservableObject {
     }
     
     private func moveAndUpdateFigures(_ move: Move) {
-        board.move(move: move)
+        board.move(move)
         figures = getFigures()
     }
     

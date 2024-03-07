@@ -7,14 +7,14 @@
 
 import Foundation
 
-class Rook : Figure {
+public class Rook : Figure {
     
-    static let LongCastleStartingFile = 1
-    static let LongCastleEndFile = 4
-    static let ShortCastleStartingFile = 8
-    static let ShortCastleEndFile = 6
+    public static let LongCastleStartingFile = 1
+    public static let LongCastleEndFile = 4
+    public static let ShortCastleStartingFile = 8
+    public static let ShortCastleEndFile = 6
     
-    init(color: PieceColor, row:Int, file:Int) {
+    public init(color: PieceColor, row:Int, file:Int) {
         super.init(type: .rook, color: color, row: row, file: file)
     }
     

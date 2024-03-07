@@ -11,7 +11,7 @@ public class Fen {
     
     static let StartSetup = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     
-    static func loadStartingPosition() -> Position {
+    public static func loadStartingPosition() -> Position {
         return load(StartSetup)
     }
     

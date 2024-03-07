@@ -7,6 +7,6 @@
 
 import Foundation
 
-enum PieceType {
+public enum PieceType {
     case pawn, bishop, knight, rook, queen, king
 }

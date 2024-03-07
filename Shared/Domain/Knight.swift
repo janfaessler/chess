@@ -6,9 +6,9 @@
 //
 
 import Foundation
-class Knight : Figure {
+public class Knight : Figure {
     
-    init(color: PieceColor, row:Int, file:Int) {
+    public init(color: PieceColor, row:Int, file:Int) {
         super.init(type: .knight, color: color, row: row, file: file)
     }
     

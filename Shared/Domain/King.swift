@@ -7,12 +7,12 @@
 
 import Foundation
 
-class King : Figure {
+public class King : Figure {
     
-    static let LongCastlePosition = 3
-    static let ShortCastlePosition = 7
+    public static let LongCastlePosition = 3
+    public static let ShortCastlePosition = 7
     
-    init(color: PieceColor, row:Int, file:Int) {
+    public init(color: PieceColor, row:Int, file:Int) {
         super.init(type: .king, color: color, row: row, file: file)
     }
     

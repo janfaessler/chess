@@ -8,7 +8,7 @@
 import Foundation
 import os
 
-class ChessBoard {
+public class ChessBoard {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "ChessBoard")
 
@@ -17,13 +17,13 @@ class ChessBoard {
     private var colorToMove:PieceColor = .white
     private var moves: [Move] = []
     
-    init(_ pos:Position) {
+    public init(_ pos:Position) {
         colorToMove = pos.colorToMove
         figures.append(contentsOf: pos.figures)
         recreateBoardDict()
     }
 
-    func move(move:Move) {
+    public func move(_ move:Move) {
         
         guard IsMoveLegalMoveOnTheBoard(move) else {
             logger.error("move is not allowed")
@@ -34,7 +34,6 @@ class ChessBoard {
         doMove(move)
         checkPromotion(move)
         setColorToMove()
-        
         moves += [move]
     }
     
@@ -51,7 +50,7 @@ class ChessBoard {
         return moves.filter({ IsMoveLegalMoveOnTheBoard($0) })
     }
     
-    func getFigures() -> [Figure] {
+    public func getFigures() -> [Figure] {
         return figures
     }
     
@@ -83,7 +82,11 @@ class ChessBoard {
     }
 
     private func doMove(_ move: Move) {
-        move.piece.move(row: move.row, file: move.file)
+        guard let figure = figures.first(where: { $0 == move.piece }) else {
+            logger.warning("figure not found")
+            return
+        }
+        figure.move(row: move.row, file: move.file)
         moveRookForCastling(move)
         recreateBoardDict()
         LogMove(move)
