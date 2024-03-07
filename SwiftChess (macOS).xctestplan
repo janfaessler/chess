@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "1E95F0EA-A497-4674-8E37-77DF023BD7D9",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:SwiftChess.xcodeproj",
+      "identifier" : "6177236F274284FF00169D3D",
+      "name" : "SwiftChess (macOS)"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:SwiftChess.xcodeproj",
+        "identifier" : "61AE781F2B991AAD008F56F8",
+        "name" : "SwiftChessTests"
+      }
+    }
+  ],
+  "version" : 1
+}
