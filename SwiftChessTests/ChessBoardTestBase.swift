@@ -31,14 +31,14 @@ class SwiftChessTestBase: XCTestCase {
         let startFigure = Figure(from, type:type, color: color)!
         let endFigure = Figure(to, type:type, color:color)!
         let move = Move(to, piece:startFigure, type: moveType)!
-        var error:Bool = false
+        var moveError:Bool = false
         do {
             try testee.move(move)
-        } catch is ValidationError { error = true}
+        } catch { moveError = true }
         let startFigureExists = figureExist(startFigure)
         let endFigureExists = figureExist(endFigure)
         
-        guard error == true || startFigureExists == true || endFigureExists == false || testee.getFigures().count != pieceCount else {
+        guard moveError == true || startFigureExists == true || endFigureExists == false || testee.getFigures().count != pieceCount else {
             return
         }
         
@@ -62,9 +62,25 @@ class SwiftChessTestBase: XCTestCase {
         
         do {
             try testee.move(move)
-        } catch is ValidationError { return }
+        } catch { return }
         
         XCTFail(message(from, to, startFigure), file: file, line: line)
+        
+    }
+    
+    func moveAndAssertError(
+        _ move:Move,
+        message: (Move, Figure) -> String = { "move from \($0.getPiece().getField()) to \($0.getField())) of \($1.getColor()) \($1.getType()) should not be possible" },
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) throws {
+        let testee = try XCTUnwrap(testee)
+        
+        do {
+            try testee.move(move)
+        } catch { return }
+        
+        XCTFail(message(move, move.getPiece()), file: file, line: line)
         
     }
     
@@ -115,7 +131,7 @@ class SwiftChessTestBase: XCTestCase {
         XCTFail(message(f), file: file, line: line)
     }
     
-    private func figureExist(_ figure: Figure) -> Bool {
+    func figureExist(_ figure: Figure) -> Bool {
         do {
             let testee = try XCTUnwrap(testee)
             return testee.getFigures().contains(where: { $0 == figure })

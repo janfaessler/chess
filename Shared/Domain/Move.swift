@@ -52,6 +52,14 @@ public struct Move:Identifiable, Equatable{
         return file
     }
     
+    public func getField() -> String {
+        return Field(row:row, file:file).info()
+    }
+    
+    public func getPiece() -> Figure {
+        return piece
+    }
+    
     func info() -> String {
         guard let scalar = UnicodeScalar(file+96) else { return "XXX" }
         let fileName = Character(scalar)
