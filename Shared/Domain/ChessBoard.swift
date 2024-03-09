@@ -13,14 +13,14 @@ public class ChessBoard {
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "ChessBoard")
 
     private var figures:[Figure] = []
-    private var boardDict:[Int:[Int:Figure]] = [:]
+    private var cache:BoardCache
     private var colorToMove:PieceColor = .white
     private var moves: [Move] = []
     
     public init(_ pos:Position) {
         colorToMove = pos.colorToMove
         figures.append(contentsOf: pos.figures)
-        recreateBoardDict()
+        cache = BoardCache.create(figures)
     }
 
     public func move(_ move:Move) throws {
@@ -94,14 +94,8 @@ public class ChessBoard {
     
     
     private func checkPromotion(_ move: Move) {
-        guard move.piece.getType() == .pawn else {
-            logger.debug("only Pawns can promote")
-            return
-        }
-        guard pawnHasReachedEndOfTheBoard(move) else {
-            logger.debug("pawn needs to travel to the end")
-            return
-        }
+        guard move.piece.getType() == .pawn else { return }
+        guard pawnHasReachedEndOfTheBoard(move) else { return }
 
         // Todo: Promotion Choice
         promote(Pawn(color: move.piece.getColor(), row: move.getRow(), file: move.getFile()), to: Queen(color: move.piece.getColor(), row: move.row, file: move.file))
@@ -379,7 +373,7 @@ public class ChessBoard {
     }
     
     private func getFigure(atRow:Int, atFile:Int) -> Figure? {
-        return boardDict[atRow]?[atFile]
+        return cache.get(atRow: atRow, atFile: atFile)
     }
     
     private func addFigure(_ to: Figure) {
@@ -395,21 +389,11 @@ public class ChessBoard {
     }
     
     private func pretendMove(_ target: Move) {
-        boardDict[target.piece.getRow()]![target.piece.getFile()] = nil
-        if boardDict[target.row] == nil {
-            boardDict[target.row] = [:]
-        }
-        boardDict[target.row]![target.file] = target.piece
+        cache.clearField(atRow: target.piece.getRow(), atFile: target.piece.getFile())
+        cache.set(Figure(type: target.piece.getType(), color: target.piece.getColor(), row: target.getRow(), file: target.getFile()))
     }
 
     private func recreateBoardDict(){
-        var dict:[Int:[Int:Figure]] = [:]
-        for f in figures {
-            if dict[f.getRow()] == nil {
-                dict[f.getRow()] = [:]
-            }
-            dict[f.getRow()]![f.getFile()] = f
-        }
-        boardDict = dict
+        cache = BoardCache.create(figures)
     }
 }
