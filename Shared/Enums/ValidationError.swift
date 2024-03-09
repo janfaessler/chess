@@ -7,5 +7,5 @@
 import Foundation
 
 public enum ValidationError: Error {
-    case MoveNotLegalMoveOnTheBoard
+    case MoveNotLegalMoveOnTheBoard, FigureDoesNotExist(_ figure:ChessFigure)
 }

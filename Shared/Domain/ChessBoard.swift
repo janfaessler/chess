@@ -31,7 +31,7 @@ public class ChessBoard {
         }
 
         doCapture(move)
-        doMove(move)
+        try doMove(move)
         checkPromotion(move)
         setColorToMove()
         moves += [move]
@@ -43,7 +43,6 @@ public class ChessBoard {
     
     func getPossibleMoves(forPeace:any ChessFigure) -> [Move] {
         guard let piece = figures.first(where: { $0.equals(forPeace) }) else {
-            logger.error("Piece not found on the board")
             return []
         }
         let moves = piece.getPossibleMoves()
@@ -85,10 +84,9 @@ public class ChessBoard {
         }
     }
 
-    private func doMove(_ move: Move) {
+    private func doMove(_ move: Move) throws {
         guard let figure = figures.first(where: { $0.equals(move.piece) }) else {
-            logger.warning("figure not found")
-            return
+            throw ValidationError.FigureDoesNotExist(move.piece)
         }
         figure.move(row: move.row, file: move.file)
         moveRookForCastling(move)
