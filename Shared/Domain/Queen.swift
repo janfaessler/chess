@@ -11,8 +11,8 @@ public class Queen : Figure {
     
     private let type:PieceType = .queen
 
-    public init(color: PieceColor, row:Int, file:Int) {
-        super.init(type: type, color: color, row: row, file: file)
+    public init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
+        super.init(type: type, color: color, row: row, file: file, moved: moved)
     }
     
     public init? (_ field:String, color: PieceColor) {

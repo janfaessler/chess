@@ -55,17 +55,17 @@ public class ChessBoard {
     }
     
     private func IsMoveLegalMoveOnTheBoard(_ target:Move) -> Bool {
-        if !isMoveInBoard(target) {
+        guard isMoveInBoard(target) else {
             logger.debug("move would jump out of the board")
             return false
         }
         
-        if !isMovePossible(target) {
+        guard target.piece.isMovePossible(target, cache: getBoardCache()) else {
             logger.debug("not possible")
             return false
         }
         
-        if doesMovePutOwnKingInCheck(target) {
+        guard !doesMovePutOwnKingInCheck(target) else {
             logger.debug("move would set own king in check")
             return false
         }
@@ -111,14 +111,7 @@ public class ChessBoard {
     }
     
     private func isMovePossible( _ move: Move) -> Bool {
-        switch move.piece.getType() {
-            case .pawn:
-                return canPawnMove(to:move)
-            case .king:
-                return canKingMove(to:move)
-            case .bishop, .knight, .rook, .queen:
-                return canMove(move)
-        }
+        return move.piece.isMovePossible(move, cache: getBoardCache())
     }
     
     private func captureFigureAt(row: Int, file: Int) {
@@ -128,9 +121,7 @@ public class ChessBoard {
     }
     
     private func moveRookForCastling(_ move: Move) {
-        
-        guard isKingCastling(move) else { return }
-        
+    
         if isLongCastling(move) {
             guard let rook = getFigure(atRow: move.piece.getRow(), atFile: Rook.LongCastleStartingFile) else {
                 logger.error("no rook able to castle long found")
@@ -152,192 +143,23 @@ public class ChessBoard {
         addFigure(to)
     }
     
-    private func doesMovePutOwnKingInCheck(_ target:Move) -> Bool {
+    private func doesMovePutOwnKingInCheck(_ move:Move) -> Bool {
         
-        guard let king = figures.first(where: { $0.getType() == .king && $0.getColor() == target.piece.getColor() }) else {
+        guard let king = figures.first(where: { $0.getType() == .king && $0.getColor() == move.piece.getColor() }) else {
             logger.error("we dont have a king?")
             return false
         }
+                
+        let modifiedCache = createCacheWithMove(move)
         
-        pretendMove(target)
-        let isKingInCheck = isFieldInCheck(king.getRow(), king.getFile())
-        recreateBoardDict()
-        return isKingInCheck
+        return figures.contains(where: {  $0.getColor() != colorToMove && $0.isMovePossible(Move(king.getRow(), king.getFile(), piece: $0), cache: modifiedCache) })
     }
     
-    private func canPawnMove(to: Move) -> Bool {
-        guard to.piece.canDo(move: to) else { return false }
-        let once = canPawnMoveOnce(to)
-        let twice = canPawnMoveTwice(to)
-        let capture = canPawnCapture(to, lastMove: moves.last)
-        return once || twice || capture
-    }
-    
-    private func canKingMove(to:Move) -> Bool {
-        guard canMove(to) else { return false }
-        if isShortCastling(to) {
-            return canCastle(to, rookStart: Rook.ShortCastleStartingFile)
-        } else if isLongCastling(to) {
-            return canCastle(to, rookStart: Rook.LongCastleEndFile)
-        }
-        return true
-    }
-    
-    private func canMove(_ move: Move) -> Bool {
-        guard move.piece.canDo(move: move) else {
-            return false
-        }
-        guard let intersectingPiece = getNextPieceOnTheWay(move) else {
-            return true
-        }
-        
-        return isCaptureablePiece(move, pieceToCapture: intersectingPiece)
-    }
-    
-    private func canPawnCapture(_ move:Move, lastMove:Move?) -> Bool {
-        guard move.type == .Normal || move.type == .Promotion else { return false }
-        
-        let row = move.piece.getRow() + (move.piece.getColor() == PieceColor.white ? +1 : -1)
-        let leftFile = move.piece.getFile() - 1
-        let rightFile = move.piece.getFile() + 1
-        
-        let figureToCaptureOnLeft = hasFigure(atRow: row, atFile: leftFile)
-        let figureToCaptureOnRight = hasFigure(atRow: row, atFile: rightFile)
-        
-        
-        let canEnPassant = canEnPassant(move, lastMove: moves.last)
-        
-        return (figureToCaptureOnLeft && leftFile == move.file) || (figureToCaptureOnRight && rightFile == move.file) || canEnPassant
-    }
-    
-    private func canEnPassant(_ move:Move, lastMove:Move?) -> Bool {
-        guard let lastMove = lastMove else {
-            logger.debug("no en passant if there is no last move")
-            return false
-        }
-        
-        let piece = move.piece
-        let movedOnce = move.type != .Double
-        let lastMoveToLeft = lastMove.row == piece.getRow() && lastMove.file - piece.getFile() == -1
-        let lastMoveToRight = lastMove.row == piece.getRow() && lastMove.file - piece.getFile() == 1
-        let enPassantIsPossible = lastMove.piece.getType() == .pawn && lastMove.type == .Double
-        let canEnPassantToLeft = movedOnce && enPassantIsPossible && lastMoveToLeft && move.file - piece.getFile() == -1
-        let canEnPassantToRight = movedOnce && enPassantIsPossible && lastMoveToRight && move.file - piece.getFile() == 1
-        return canEnPassantToLeft || canEnPassantToRight
-    }
-    
-    private func canCastle(_ to: Move, rookStart:Int) -> Bool {
-        let isNotCastlingInCheck = isCastlingInCheck(to) == false
-        let kingHasNotMovedYet = figureHasNotMoved(King(color: to.piece.getColor(), row: to.piece.getRow(), file: to.piece.getFile()))
-        let rookHasNotMovedYet = figureHasNotMoved(Rook(color: to.piece.getColor(), row: to.piece.getRow(), file: Rook.ShortCastleStartingFile))
-        return isNotCastlingInCheck && kingHasNotMovedYet && rookHasNotMovedYet
-    }
-
-    private func isCastlingInCheck(_ move:Move) -> Bool {
-         
-        let isLongCastle = isLongCastling(move)
-        
-        guard !isFieldInCheck(move.piece.getRow(), move.piece.getFile()) else {
-            logger.debug("King starts in check for castling")
-            return true
-        }
-        guard !isFieldInCheck(move.row, isLongCastle ? move.file + 1 : move.file - 1) else {
-            logger.debug("King whould have move through check by castling")
-            return true
-        }
-        guard !isFieldInCheck(move.row, move.file) else {
-            logger.debug("King would land in check by castling")
-            return true
-        }
-        
-        return false
-    }
-    
-    private func getNextPieceOnTheWay(_ move: Move) -> Figure? {
-        let deltaFile = abs(move.piece.getFile() - move.file)
-        let deltaRow = abs(move.piece.getRow() - move.row)
-        
-        if deltaRow == 0 {
-            return getIntersectingPieceOnRow(move)
-        } else if deltaFile == 0 {
-            return getIntersectingPieceOnFile(move)
-        } else if deltaRow == deltaFile {
-            return getIntersectingPieceOnDiagonal(move)
-        } else if move.piece.getType() == .knight {
-            return getFigure(atRow: move.row, atFile: move.file)
-        }
-        return nil
-    }
-    
-    private func getIntersectingPieceOnRow(_ move: Move) -> Figure? {
-        for f in stride(from: move.piece.getFile(), to: move.file, by: move.piece.getFile() < move.file ? 1 : -1)  {
-            let foundPiece = getFigure(atRow: move.piece.getRow(), atFile: f)
-            if foundPiece != nil && foundPiece! != move.piece {
-                return foundPiece
-            }
-        }
-        return nil
-    }
-    
-    private func getIntersectingPieceOnFile(_ move: Move) -> Figure? {
-        for r in stride(from: move.piece.getRow(), to: move.row, by: move.piece.getRow() < move.row ? 1 : -1) {
-            let foundPiece = getFigure(atRow: r, atFile: move.piece.getFile())
-            if foundPiece != nil && foundPiece! != move.piece {
-                return foundPiece
-            }
-        }
-        return nil
-    }
-    
-    private func getIntersectingPieceOnDiagonal(_ move: Move) -> Figure? {
-        let rowDir = min(max(move.row - move.piece.getRow(), -1), 1)
-        let fileDir = min(max(move.file - move.piece.getFile(), -1), 1)
-        let delta = abs(move.piece.getFile() - move.file)
-        for i in 1...delta {
-            let row = move.piece.getRow()+(i*rowDir)
-            let file = move.piece.getFile()+(i*fileDir)
-            let foundPiece = getFigure(atRow: row, atFile: file)
-            if foundPiece != nil && foundPiece! != move.piece {
-                return foundPiece
-            }
-        }
-        return nil
-    }
-    
-    private func canPawnMoveOnce(_ move: Move) -> Bool {
-        guard move.type == .Normal else { return false }
-        guard moveDoesNotChangeFile(move) else { return false }
-        return fieldIsEmpty(atRow: move.row, atFile: move.file)
-    }
-    
-    private func canPawnMoveTwice(_ move: Move) -> Bool {
-        guard move.type == .Double else { return false }
-        guard !move.piece.hasMoved() else { return false }
-        guard moveDoesNotChangeFile(move) else { return false }
-        guard fieldIsEmpty(atRow: move.row, atFile: move.file) else { return false }
-        
-        if move.piece.getColor() == PieceColor.white {
-            return fieldIsEmpty(atRow: move.piece.getRow()+1, atFile: move.file)
-        } else {
-            return fieldIsEmpty(atRow: move.piece.getRow()-1, atFile: move.file)
-        }
-    }
-    
-    private func isFieldInCheck(_ row: Int, _ file: Int) -> Bool {
-        return figures.contains(where: {  $0.getColor() != colorToMove && isMovePossible(Move(row, file, piece: $0)) })
-    }
-    
-    private func figureHasNotMoved(_ fig: Figure) -> Bool {
-        let foundFigure = figures.first(where: { $0 == fig })
-        return foundFigure?.hasMoved() == false
-    }
-    
-    private func isCaptureablePiece(_ move: Move, pieceToCapture: Figure?) -> Bool {
-        return move.piece.getColor() != pieceToCapture!.getColor() && pieceToCapture!.getRow() == move.row && pieceToCapture!.getFile() == move.file
-    }
-    
-    private func moveDoesNotChangeFile(_ move:Move) -> Bool {
-        return move.file == move.piece.getFile()
+    private func createCacheWithMove(_ move:Move) -> BoardCache {
+        let cache = getBoardCache()
+        cache.clearField(atRow: move.piece.getRow(), atFile: move.piece.getFile())
+        cache.set(Figure(type: move.piece.getType(), color: move.piece.getColor(), row: move.getRow(), file: move.getFile()))
+        return cache
     }
     
     private func isPawnCapturing(_ move: Move) -> Bool {
@@ -364,12 +186,12 @@ public class ChessBoard {
         return move.file == King.ShortCastlePosition && isKingCastling(move)
     }
     
-    private func hasFigure(atRow:Int, atFile:Int) -> Bool {
-        return getFigure(atRow: atRow, atFile: atFile) != nil
-    }
-    
     private func fieldIsEmpty(atRow:Int, atFile:Int) -> Bool {
         return hasFigure(atRow: atRow, atFile: atFile) == false
+    }
+    
+    private func hasFigure(atRow:Int, atFile:Int) -> Bool {
+        return getFigure(atRow: atRow, atFile: atFile) != nil
     }
     
     private func getFigure(atRow:Int, atFile:Int) -> Figure? {
@@ -388,12 +210,11 @@ public class ChessBoard {
         figures.remove(at: index)
     }
     
-    private func pretendMove(_ target: Move) {
-        cache.clearField(atRow: target.piece.getRow(), atFile: target.piece.getFile())
-        cache.set(Figure(type: target.piece.getType(), color: target.piece.getColor(), row: target.getRow(), file: target.getFile()))
-    }
-
     private func recreateBoardDict(){
-        cache = BoardCache.create(figures)
+        cache = getBoardCache()
+    }
+    
+    private func getBoardCache() -> BoardCache {
+        return BoardCache.create(figures, lastMove: moves.last)
     }
 }

@@ -53,7 +53,11 @@ public struct Move:Identifiable, Equatable{
     }
     
     public func getField() -> String {
-        return Field(row:row, file:file).info()
+        return getFieldObject().info()
+    }
+    
+    public func getFieldObject() -> Field {
+        return Field(row:row, file:file)
     }
     
     public func getPiece() -> Figure {

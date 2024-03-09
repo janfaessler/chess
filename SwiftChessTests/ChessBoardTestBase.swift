@@ -70,7 +70,7 @@ class SwiftChessTestBase: XCTestCase {
     
     func moveAndAssertError(
         _ move:Move,
-        message: (Move, Figure) -> String = { "move from \($0.getPiece().getField()) to \($0.getField())) of \($1.getColor()) \($1.getType()) should not be possible" },
+        message: (Move, Figure) -> String = { "move from \($0.getPiece().getField()) to \($0.getField()) of \($1.getColor()) \($1.getType()) should not be possible" },
         file: StaticString = #filePath,
         line: UInt = #line
     ) throws {

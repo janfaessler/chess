@@ -16,8 +16,8 @@ public class Rook : Figure {
     
     private let type:PieceType = .rook
 
-    public init(color: PieceColor, row:Int, file:Int) {
-        super.init(type: type, color: color, row: row, file: file)
+    public init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
+        super.init(type: type, color: color, row: row, file: file, moved:moved)
     }
     
     public init? (_ field:String, color: PieceColor) {
