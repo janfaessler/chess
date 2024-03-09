@@ -94,7 +94,7 @@ public class ChessBoard {
     
     
     private func checkPromotion(_ move: Move) {
-        guard let pawn = move.piece as? Pawn else {
+        guard move.piece.getType() == .pawn else {
             logger.debug("only Pawns can promote")
             return
         }
@@ -104,7 +104,7 @@ public class ChessBoard {
         }
 
         // Todo: Promotion Choice
-        promote(pawn, to: Queen(color: move.piece.getColor(), row: move.row, file: move.file))
+        promote(Pawn(color: move.piece.getColor(), row: move.getRow(), file: move.getFile()), to: Queen(color: move.piece.getColor(), row: move.row, file: move.file))
 
     }
     
@@ -153,7 +153,7 @@ public class ChessBoard {
         }
     }
     
-    private func promote(_ pawn: Pawn, to:Figure) {
+    private func promote(_ pawn: Figure, to:Figure) {
         removeFigure(pawn)
         addFigure(to)
     }
@@ -181,8 +181,10 @@ public class ChessBoard {
     
     private func canKingMove(to:Move) -> Bool {
         guard canMove(to) else { return false }
-        if isKingCastling(to) {
-            return isCastlingInCheck(to) == false
+        if isShortCastling(to) {
+            return canCastle(to, rookStart: Rook.ShortCastleStartingFile)
+        } else if isLongCastling(to) {
+            return canCastle(to, rookStart: Rook.LongCastleEndFile)
         }
         return true
     }
@@ -197,7 +199,6 @@ public class ChessBoard {
         
         return isCaptureablePiece(move, pieceToCapture: intersectingPiece)
     }
-    
     
     private func canPawnCapture(_ move:Move, lastMove:Move?) -> Bool {
         guard move.type == .Normal || move.type == .Promotion else { return false }
@@ -229,6 +230,13 @@ public class ChessBoard {
         let canEnPassantToLeft = movedOnce && enPassantIsPossible && lastMoveToLeft && move.file - piece.getFile() == -1
         let canEnPassantToRight = movedOnce && enPassantIsPossible && lastMoveToRight && move.file - piece.getFile() == 1
         return canEnPassantToLeft || canEnPassantToRight
+    }
+    
+    private func canCastle(_ to: Move, rookStart:Int) -> Bool {
+        let isNotCastlingInCheck = isCastlingInCheck(to) == false
+        let kingHasNotMovedYet = figureHasNotMoved(King(color: to.piece.getColor(), row: to.piece.getRow(), file: to.piece.getFile()))
+        let rookHasNotMovedYet = figureHasNotMoved(Rook(color: to.piece.getColor(), row: to.piece.getRow(), file: Rook.ShortCastleStartingFile))
+        return isNotCastlingInCheck && kingHasNotMovedYet && rookHasNotMovedYet
     }
 
     private func isCastlingInCheck(_ move:Move) -> Bool {
@@ -325,6 +333,11 @@ public class ChessBoard {
         return figures.contains(where: {  $0.getColor() != colorToMove && isMovePossible(Move(row, file, piece: $0)) })
     }
     
+    private func figureHasNotMoved(_ fig: Figure) -> Bool {
+        let foundFigure = figures.first(where: { $0 == fig })
+        return foundFigure?.hasMoved() == false
+    }
+    
     private func isCaptureablePiece(_ move: Move, pieceToCapture: Figure?) -> Bool {
         return move.piece.getColor() != pieceToCapture!.getColor() && pieceToCapture!.getRow() == move.row && pieceToCapture!.getFile() == move.file
     }
@@ -350,11 +363,11 @@ public class ChessBoard {
     }
     
     private func isLongCastling(_ move: Move) -> Bool {
-        return move.file == King.LongCastlePosition
+        return move.file == King.LongCastlePosition && isKingCastling(move)
     }
     
     private func isShortCastling(_ move: Move) -> Bool {
-        return move.file == King.ShortCastlePosition
+        return move.file == King.ShortCastlePosition && isKingCastling(move)
     }
     
     private func hasFigure(atRow:Int, atFile:Int) -> Bool {
@@ -374,7 +387,10 @@ public class ChessBoard {
     }
     
     private func removeFigure(_ figure:Figure) {
-        guard let index = figures.firstIndex(where: { $0 == figure }) else { return }
+        guard let index = figures.firstIndex(where: { $0 == figure }) else {
+            logger.error("cant remove figure (\(figure.info())) because it doesnt exist")
+            return
+        }
         figures.remove(at: index)
     }
     

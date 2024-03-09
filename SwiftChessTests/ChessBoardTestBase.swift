@@ -98,13 +98,40 @@ class SwiftChessTestBase: XCTestCase {
         let startFigure = Figure(from, type:type, color: color)!
         let endFigure = Figure(to, type:type, color:color)!
         let move = Move(to, piece:startFigure, type: .Normal)!
-        var error:Bool = false
+        var moveError:Bool = false
 
         do {
             try testee.move(move)
-        } catch is ValidationError { error = true}
+        } catch { moveError = true}
         
-        guard error == true || figureExist(startFigure) == true || figureExist(endFigure) == false || testee.getFigures().count != pieceCount else {
+        guard moveError == true || figureExist(startFigure) == true || figureExist(endFigure) == false || testee.getFigures().count != pieceCount else {
+            return
+        }
+
+        XCTFail(message(from, to, startFigure), file: file, line: line)
+    }
+    
+    func captureAndAssertPromotion(
+        _ from:String,
+        to:String,
+        type:PieceType,
+        color:PieceColor,
+        message: (String, String, Figure) -> String = { "\($2.getColor()) \($2.getType()) on \($0) could not capture on \($1)" },
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) throws {
+        let testee = try XCTUnwrap(testee)
+        let pieceCount = testee.getFigures().count - 1
+        let startFigure = Figure(from, type:type, color: color)!
+        let endFigure = Figure(to, type:.queen, color:color)!
+        let move = Move(to, piece:startFigure, type: .Normal)!
+        var moveError:Bool = false
+
+        do {
+            try testee.move(move)
+        } catch { moveError = true}
+        
+        guard moveError == true || figureExist(startFigure) == true || figureExist(endFigure) == false || testee.getFigures().count != pieceCount else {
             return
         }
 
@@ -113,7 +140,7 @@ class SwiftChessTestBase: XCTestCase {
 
     func assertFigureExists(
         _ f: Figure,
-        message: (Figure) -> String = { "\($0.getColor()) \($0.getType()) at \($0.getRow()):\($0.getFile()) does not exist" },
+        message: (Figure) -> String = { "\($0.info()) does not exist" },
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
@@ -123,7 +150,7 @@ class SwiftChessTestBase: XCTestCase {
     
     func assertFigureNotExists(
         _ f: Figure,
-        message: (Figure) -> String = { "\($0.getColor()) \($0.getType()) at \($0.getRow()):\($0.getFile()) does not exist" },
+        message: (Figure) -> String = { "\($0.info()) does not exist" },
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
@@ -134,7 +161,13 @@ class SwiftChessTestBase: XCTestCase {
     func figureExist(_ figure: Figure) -> Bool {
         do {
             let testee = try XCTUnwrap(testee)
-            return testee.getFigures().contains(where: { $0 == figure })
+            return testee.getFigures().contains(where: {
+                if $0 == figure {
+                    return true
+                } else {
+                    return false
+                }
+            })
             } catch {
                 return false
             }

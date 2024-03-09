@@ -78,6 +78,10 @@ public class Figure:Identifiable, Equatable {
         return Field(row:row, file:file).info()
     }
     
+    public func info() -> String {
+        return "(\(color) \(type) \(getField()))"
+    }
+    
     func hasMoved() -> Bool {
         return moved
     }
