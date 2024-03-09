@@ -7,7 +7,7 @@
 import XCTest
 import SwiftChess
 
-final class SwiftChessTests: SwiftChessTestBase {
+final class StartingPositionTests: SwiftChessTestBase {
     
     func testStartingPosition() throws {
         let testee = try XCTUnwrap(testee)
