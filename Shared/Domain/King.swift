@@ -12,17 +12,11 @@ public class King : Figure {
     public static let LongCastlePosition = 3
     public static let ShortCastlePosition = 7
     
-    private let type:PieceType = .king
-
     public init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
-        super.init(type: type, color: color, row: row, file: file, moved: moved)
+        super.init(type: .king, color: color, row: row, file: file, moved: moved)
     }
     
-    public init? (_ field:String, color: PieceColor) {
-        super.init(field, type: type, color: color)
-    }
-    
-    override func getPossibleMoves() -> [Move] {
+    public override func getPossibleMoves() -> [Move] {
         let row = getRow()
         let file = getFile()
         var moves = [
@@ -55,7 +49,7 @@ public class King : Figure {
     }
     
     
-    override func ident() -> String {
+    public override func ident() -> String {
         return "K"
     }
     

@@ -13,21 +13,21 @@ public struct Move:Identifiable, Equatable{
     
     var row:Int = 0
     var file:Int = 0
-    var piece:Figure
+    var piece:ChessFigure
     var type:MoveType = MoveType.Normal
     
-    init(_ r:Int, _ f:Int, piece: Figure) {
+    init(_ r:Int, _ f:Int, piece: ChessFigure) {
         self.row = r
         self.file = f
         self.piece = piece
     }
     
-    public init (_ r:Int, _ f:Int, piece: Figure, type: MoveType){
+    public init (_ r:Int, _ f:Int, piece: ChessFigure, type: MoveType){
         self.init(r,f, piece: piece)
         self.type = type
     }
     
-    public init?(_ fieldname:String, piece: Figure, type: MoveType) {
+    public init?(_ fieldname:String, piece: ChessFigure, type: MoveType) {
         guard let field = Field(fieldname) else { return nil }
         self.row = field.row
         self.file = field.file
@@ -37,7 +37,7 @@ public struct Move:Identifiable, Equatable{
 
     
     public static func == (l:Move, r:Move) -> Bool {
-        return l.row == r.row && l.file == r.file && l.piece == r.piece && l.type == r.type
+        return l.row == r.row && l.file == r.file && l.piece.equals(r.piece) && l.type == r.type
     }
     
     static func != (l:Move, r:Move) -> Bool {
@@ -60,11 +60,11 @@ public struct Move:Identifiable, Equatable{
         return Field(row:row, file:file)
     }
     
-    public func getPiece() -> Figure {
+    public func getPiece() -> ChessFigure {
         return piece
     }
     
-    func info() -> String {
+    public func info() -> String {
         guard let scalar = UnicodeScalar(file+96) else { return "XXX" }
         let fileName = Character(scalar)
         

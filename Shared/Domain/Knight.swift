@@ -8,17 +8,11 @@
 import Foundation
 public class Knight : Figure {
     
-    private let type:PieceType = .knight
-
     public init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
-        super.init(type: type, color: color, row: row, file: file, moved: moved)
+        super.init(type: .knight, color: color, row: row, file: file, moved: moved)
     }
     
-    public init? (_ field:String, color: PieceColor) {
-        super.init(field, type: type, color: color)
-    }
-    
-    override func getPossibleMoves() -> [Move] {
+    public override func getPossibleMoves() -> [Move] {
         let row = getRow()
         let file = getFile()
         let moves = [
@@ -46,7 +40,7 @@ public class Knight : Figure {
         return super.isCaptureablePiece(move, pieceToCapture: pieceAtTarget);
     }
     
-    override func ident() -> String {
+    public override func ident() -> String {
         return "N"
     }
 }

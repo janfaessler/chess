@@ -9,16 +9,16 @@ import Foundation
 
 public class BoardCache {
     
-    private var cache:[Int:[Int:Figure]]
+    private var cache:[Int:[Int:ChessFigure]]
     private var lastMove:Move?
     
-    private init(input:[Int:[Int:Figure]], lastMove:Move?) {
+    private init(input:[Int:[Int:ChessFigure]], lastMove:Move?) {
         cache = input
         self.lastMove = lastMove
     }
     
-    public static func create(_ figures: [Figure], lastMove:Move? = nil) -> BoardCache {
-        var dict:[Int:[Int:Figure]] = [:]
+    public static func create(_ figures: [ChessFigure], lastMove:Move? = nil) -> BoardCache {
+        var dict:[Int:[Int:ChessFigure]] = [:]
         for f in figures {
             if dict[f.getRow()] == nil {
                 dict[f.getRow()] = [:]
@@ -28,7 +28,7 @@ public class BoardCache {
         return BoardCache(input: dict, lastMove: lastMove)
     }
     
-    public func get(atRow:Int, atFile:Int) -> Figure? {
+    public func get(atRow:Int, atFile:Int) -> ChessFigure? {
         return cache[atRow]?[atFile]
     }
     
@@ -36,7 +36,7 @@ public class BoardCache {
         cache[atRow]?[atFile] = nil
     }
     
-    public func set(_ figure:Figure) {
+    public func set(_ figure:ChessFigure) {
         if cache[figure.getRow()] == nil {
             cache[figure.getRow()] = [:]
         }
@@ -55,11 +55,11 @@ public class BoardCache {
         return lastMove
     }
     
-    public func getFigures() -> [Figure] {
+    public func getFigures() -> [ChessFigure] {
         return cache.flatMap({ fileKey, row in return row.values})
     }
     
-    public func getIntersectingPieceOnRow(from:Field, to:Field) -> Figure? {
+    public func getNextPieceOnRow(from:Field, to:Field) -> ChessFigure? {
         let direction = from.file < to.file ? 1 : -1
         for f in stride(from: from.file + direction, to: to.file, by: direction)  {
             let foundPiece = get(atRow: from.row, atFile: f)
@@ -70,7 +70,7 @@ public class BoardCache {
         return nil
     }
     
-    public func getIntersectingPieceOnFile(from:Field, to:Field) -> Figure? {
+    public func getNextPieceOnFile(from:Field, to:Field) -> ChessFigure? {
         let direction = from.row < to.row ? 1 : -1
         for r in stride(from: from.row + direction, to: to.row, by: direction) {
             let foundPiece = get(atRow: r, atFile: from.file)
@@ -82,7 +82,7 @@ public class BoardCache {
     }
     
     
-    public func getIntersectingPieceOnDiagonal(from:Field, to:Field) -> Figure? {
+    public func getNextPieceOnDiagonal(from:Field, to:Field) -> ChessFigure? {
         let rowDir = min(max(to.row - from.row, -1), 1)
         let fileDir = min(max(to.file - from.file, -1), 1)
         let delta = abs(from.file - to.file)
@@ -97,7 +97,6 @@ public class BoardCache {
             }
         }
     
-
         return nil
     }
 }

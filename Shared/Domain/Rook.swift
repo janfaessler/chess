@@ -14,17 +14,11 @@ public class Rook : Figure {
     public static let ShortCastleStartingFile = 8
     public static let ShortCastleEndFile = 6
     
-    private let type:PieceType = .rook
-
     public init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
-        super.init(type: type, color: color, row: row, file: file, moved:moved)
+        super.init(type: .rook, color: color, row: row, file: file, moved:moved)
     }
     
-    public init? (_ field:String, color: PieceColor) {
-        super.init(field, type: type, color: color)
-    }
-    
-    override func getPossibleMoves() -> [Move] {
+    public override func getPossibleMoves() -> [Move] {
         var moves:[Move] = []
         for r in 1...8 {
             for f in 1...8 {
@@ -36,7 +30,7 @@ public class Rook : Figure {
         return moves
     }
     
-    override func ident() -> String {
+    public override func ident() -> String {
         return "R"
     }
 }

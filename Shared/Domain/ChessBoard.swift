@@ -12,7 +12,7 @@ public class ChessBoard {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "ChessBoard")
 
-    private var figures:[Figure] = []
+    private var figures:[ChessFigure] = []
     private var cache:BoardCache
     private var colorToMove:PieceColor = .white
     private var moves: [Move] = []
@@ -26,7 +26,7 @@ public class ChessBoard {
     public func move(_ move:Move) throws {
         
         guard IsMoveLegalMoveOnTheBoard(move) else {
-            logger.error("move (\(move.piece.ident())\(move.piece.getField()) -> \(move.info())) is not allowed")
+            logger.error("move (\(move.piece.ident())\(move.piece.getFieldInfo()) -> \(move.info())) is not allowed")
             throw ValidationError.MoveNotLegalMoveOnTheBoard
         }
 
@@ -41,8 +41,8 @@ public class ChessBoard {
         return colorToMove
     }
     
-    func getPossibleMoves(forPeace:Figure) -> [Move] {
-        guard let piece = figures.first(where: { $0 == forPeace }) else {
+    func getPossibleMoves(forPeace:any ChessFigure) -> [Move] {
+        guard let piece = figures.first(where: { $0.equals(forPeace) }) else {
             logger.error("Piece not found on the board")
             return []
         }
@@ -50,8 +50,12 @@ public class ChessBoard {
         return moves.filter({ IsMoveLegalMoveOnTheBoard($0) })
     }
     
-    public func getFigures() -> [Figure] {
+    public func getFigures() -> [ChessFigure] {
         return figures
+    }
+    
+    public func getMoves() -> [Move] {
+        return moves
     }
     
     private func IsMoveLegalMoveOnTheBoard(_ target:Move) -> Bool {
@@ -82,7 +86,7 @@ public class ChessBoard {
     }
 
     private func doMove(_ move: Move) {
-        guard let figure = figures.first(where: { $0 == move.piece }) else {
+        guard let figure = figures.first(where: { $0.equals(move.piece) }) else {
             logger.warning("figure not found")
             return
         }
@@ -194,16 +198,16 @@ public class ChessBoard {
         return getFigure(atRow: atRow, atFile: atFile) != nil
     }
     
-    private func getFigure(atRow:Int, atFile:Int) -> Figure? {
+    private func getFigure(atRow:Int, atFile:Int) -> ChessFigure? {
         return cache.get(atRow: atRow, atFile: atFile)
     }
     
-    private func addFigure(_ to: Figure) {
+    private func addFigure(_ to: ChessFigure) {
         figures.append(to)
     }
     
-    private func removeFigure(_ figure:Figure) {
-        guard let index = figures.firstIndex(where: { $0 == figure }) else {
+    private func removeFigure(_ figure:ChessFigure) {
+        guard let index = figures.firstIndex(where: { $0.equals(figure) }) else {
             logger.error("cant remove figure (\(figure.info())) because it doesnt exist")
             return
         }

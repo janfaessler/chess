@@ -9,17 +9,11 @@ import Foundation
 
 public class Pawn : Figure {
     
-    private let type:PieceType = .pawn
-
-    public init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
-        super.init(type: type, color: color, row: row, file: file, moved: moved)
+    init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
+        super.init(type: .pawn, color: color, row: row, file: file, moved: moved)
     }
     
-    public init? (_ field:String, color: PieceColor) {
-        super.init(field, type: type, color: color)
-    }
-    
-    override func getPossibleMoves() -> [Move] {
+    public override func getPossibleMoves() -> [Move] {
         let row = getRow()
         let file = getFile()
         switch getColor() {
@@ -52,6 +46,10 @@ public class Pawn : Figure {
         let twice = canPawnMoveTwice(move, cache: cache)
         let capture = canPawnCapture(move, cache: cache)
         return once || twice || capture
+    }
+    
+    public override func ident() -> String {
+        return ""
     }
     
     private func canPawnMoveOnce(_ move: Move, cache:BoardCache) -> Bool {
@@ -104,9 +102,5 @@ public class Pawn : Figure {
     
     private func moveDoesNotChangeFile(_ move:Move) -> Bool {
         return move.file == move.piece.getFile()
-    }
-
-    override func ident() -> String {
-        return ""
     }
 }

@@ -10,26 +10,25 @@ import SwiftChess
 final class StartingPositionTests: SwiftChessTestBase {
     
     func testStartingPosition() throws {
-        let testee = try XCTUnwrap(testee)
-        let figures = testee.getFigures()
-        
         for color:PieceColor in [.white, .black] {
             let row = color == .white ? 1 : 8
-            assertFigureExists(Rook("a\(row)", color: color)!)
-            assertFigureExists(Knight("b\(row)", color: color)!)
-            assertFigureExists(Bishop("c\(row)", color: color)!)
-            assertFigureExists(Queen("d\(row)", color: color)!)
-            assertFigureExists(King("e\(row)", color: color)!)
-            assertFigureExists(Bishop("f\(row)", color: color)!)
-            assertFigureExists(Knight("g\(row)", color: color)!)
-            assertFigureExists(Rook("h\(row)", color: color)!)
+            assertFigureExists(Figure.create("a\(row)", type: .rook, color: color)!)
+            assertFigureExists(Figure.create("b\(row)", type: .knight, color: color)!)
+            assertFigureExists(Figure.create("c\(row)", type: .bishop, color: color)!)
+            assertFigureExists(Figure.create("d\(row)", type: .queen, color: color)!)
+            assertFigureExists(Figure.create("e\(row)", type: .king, color: color)!)
+            assertFigureExists(Figure.create("f\(row)", type: .bishop, color: color)!)
+            assertFigureExists(Figure.create("g\(row)", type: .knight, color: color)!)
+            assertFigureExists(Figure.create("h\(row)", type: .rook, color: color)!)
 
             let pawnRow = color == .white ? 2 : 7
             for file in 1...8 {
-                XCTAssert(figures.contains([Pawn(color: color, row: pawnRow, file: file)]))
+                assertFigureExists(Figure.create(type: .pawn, color: color, row:pawnRow, file: file))
             }
         }
     }
+    
+
     
     func testSimplePawnCapture() throws {
         
@@ -37,6 +36,8 @@ final class StartingPositionTests: SwiftChessTestBase {
         try moveAndAssert("d7", to: "d5", type:.pawn, color: .black, moveType: .Double)
         
         try captureAndAssert("e4", to: "d5", type:.pawn, color: .white)
+        
+        try assertMoves(["e4", "d5", "d5"])
         
     }
     
@@ -51,6 +52,9 @@ final class StartingPositionTests: SwiftChessTestBase {
         
         try captureAndAssert("e5", to: "d6", type: .pawn, color: .white)
         
+        try assertMoves(["e4", "a6", "e5", "d5", "d6"])
+
+        
     }
     
     func testEnPassanRight() throws {
@@ -63,6 +67,7 @@ final class StartingPositionTests: SwiftChessTestBase {
         
         try captureAndAssert("e5", to: "f6", type: .pawn, color: .white)
         
+        try assertMoves(["e4", "a6", "e5", "f5", "f6"])
     }
     
     func testEnPassantToPromotion() throws {
@@ -81,6 +86,8 @@ final class StartingPositionTests: SwiftChessTestBase {
 
         try captureAndAssertPromotion("e7", to: "d8", type: .pawn, color: .white)
         
+        try assertMoves(["e4", "a6", "e5", "d5", "d6", "b5", "e7", "c5", "d8"])
+
     }
     
     func testShortCastle() throws {
@@ -97,6 +104,8 @@ final class StartingPositionTests: SwiftChessTestBase {
         try moveAndAssert("e1", to: "g1", type:.king, color: .white, moveType: .Castle)
         try moveAndAssert("e8", to: "g8", type:.king, color: .black, moveType: .Castle)
         
+        try assertMoves(["e4", "e5", "Bc4", "Bc5", "Nf3", "Nf6", "O-O", "O-O"])
+
     }
     
     func testLongCastle() throws {
@@ -119,6 +128,9 @@ final class StartingPositionTests: SwiftChessTestBase {
         try moveAndAssert("e1", to: "c1", type: .king, color: .white, moveType: .Castle)
         try moveAndAssert("e8", to: "c8", type: .king, color: .black, moveType: .Castle)
         
+        try assertMoves(["b3", "b6", "Bb2", "Bb7", "Nc3", "Nc6", "e3", "e6", "Qe2", "Qe7", "O-O-0", "O-O-0"])
+
+        
     }
     
     func testCastleAttemptStartInCheck() throws {
@@ -136,6 +148,8 @@ final class StartingPositionTests: SwiftChessTestBase {
         try moveAndAssert("d8", to: "h4", type: .queen, color: .black)
         
         try moveAndAssertError("e1", to: "g1", type: .king, color: .white, moveType: .Castle)
+        
+        try assertMoves(["e4", "e5", "f3", "f5", "Bc4", "d6", "Nh3", "Qh4"])
         
     }
     
@@ -157,6 +171,8 @@ final class StartingPositionTests: SwiftChessTestBase {
         try captureAndAssert("e6", to: "c4", type: .bishop, color: .black)
         
         try moveAndAssertError("e1", to: "g1", type: .king, color: .white, moveType: .Castle)
+        
+        try assertMoves(["e4", "e5", "Nf3", "d6", "h3", "Be6", "Na3", "f6", "Bc4", "Bc4"])
     }
     
     
@@ -176,6 +192,8 @@ final class StartingPositionTests: SwiftChessTestBase {
         
         try moveAndAssertError("e1", to: "g1", type: .king, color: .white, moveType: .Castle)
         
+        try assertMoves(["e4", "e5", "f3", "Bc5", "Bc4", "d6", "Ne2", "f6"])
+
     }
     
     func testCastleWithoutRook() throws {
@@ -199,6 +217,8 @@ final class StartingPositionTests: SwiftChessTestBase {
         try captureAndAssert("e8", to: "d8", type: .king, color: .black)
         
         try moveAndAssertError("e1", to: "g1", type: .king, color: .white, moveType: .Castle)
+        
+        try assertMoves(["Nf3", "b6", "g3", "Bb7", "Bg2", "e5", "Ne5", "Bg2", "Nf7", "Bh1", "Nd8", "Kd8"])
         
     }
     
@@ -229,10 +249,29 @@ final class StartingPositionTests: SwiftChessTestBase {
         
         try moveAndAssert("g1", to: "h1", type: .king, color: .white)
         
-        try moveAndAssertError(Move(8, 9,piece: King("h8", color: .black)!, type: MoveType.Normal))
+        try moveAndAssertError(Move(8, 9,piece: Figure.create("h8", type: .king, color: .black)!, type: MoveType.Normal))
         
         let testee = try XCTUnwrap(testee)
-        XCTAssertThrowsError(try testee.move(Move(8,9, piece: King("h8", color: .black)!, type: .Normal)))
+        XCTAssertThrowsError(try testee.move(Move(8,9, piece: Figure.create("h8", type: .king, color: .black)!, type: .Normal)))
         XCTAssertFalse(figureExist(King(color: .black, row: 8, file: 9)))
+        
+        try assertMoves(["e4", "e5", "Bc4", "Bb4", "c3", "Nf6", "Nf3", "O-O", "b4", "Re8", "O-O", "Kh8", "Kh1"])
+    }
+    
+    func testRowIntersection() throws {
+        
+        try moveAndAssert("e2", to: "e4", type: .pawn, color: .white, moveType: .Double)
+        try moveAndAssert("e7", to: "e5", type: .pawn, color: .black, moveType: .Double)
+        
+        try moveAndAssert("f1", to: "c4", type: .bishop, color: .white)
+        try moveAndAssert("d8", to: "h4", type: .queen, color: .black)
+        
+        try moveAndAssert("a2", to: "a3", type: .pawn, color: .white)
+        
+        try captureAndAssertError("h4", to: "c4", type: .queen, color: .black)
+        try captureAndAssert("h4", to: "e4", type: .queen, color: .black)
+        
+        try assertMoves(["e4", "e5", "Bc4", "Qh4", "a3", "Qe4"])
+        
     }
 }

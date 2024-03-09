@@ -11,9 +11,10 @@
   "defaultOptions" : {
     "targetForVariableExpansion" : {
       "containerPath" : "container:SwiftChess.xcodeproj",
-      "identifier" : "6177236F274284FF00169D3D",
-      "name" : "SwiftChess (macOS)"
-    }
+      "identifier" : "61AE781F2B991AAD008F56F8",
+      "name" : "SwiftChessTests"
+    },
+    "testExecutionOrdering" : "random"
   },
   "testTargets" : [
     {

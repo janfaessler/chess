@@ -7,15 +7,15 @@
 
 import Foundation
 
-public class Figure:Identifiable, Equatable {
-    
+public class Figure:Identifiable, Equatable, ChessFigure {
+
     private let type:PieceType
     private let color:PieceColor
-    private var moved:Bool = false
-    private var row:Int = 0
-    private var file:Int = 0
+    private var moved:Bool
+    private var row:Int
+    private var file:Int
     
-    public init(type:PieceType, color: PieceColor, row:Int, file:Int, moved:Bool = false) {
+    init(type:PieceType, color: PieceColor, row:Int, file:Int, moved:Bool = false) {
         self.type = type
         self.color = color
         self.row = row
@@ -23,28 +23,41 @@ public class Figure:Identifiable, Equatable {
         self.moved = moved
     }
     
-    public init?(_ fieldname:String, type:PieceType, color: PieceColor, moved:Bool = false) {
+    public static func create(_ fieldname:String, type:PieceType, color: PieceColor, moved:Bool = false) -> ChessFigure? {
         guard let field = Field(fieldname) else { return nil }
-        self.row = field.row
-        self.file = field.file
-        self.type = type
-        self.color = color
-        self.moved = moved
+        return Figure.create(type: type, color: color, row: field.row, file: field.file, moved: moved)
     }
     
-    func move(row:Int, file:Int) {
+    public static func create(type:PieceType, color: PieceColor, row:Int, file:Int, moved:Bool = false) -> ChessFigure {
+        switch type {
+            case .pawn: return Pawn(color: color, row: row, file: file, moved: moved)
+            case .knight: return Knight(color: color, row: row, file: file, moved: moved)
+            case .bishop: return Bishop(color: color, row: row, file: file, moved: moved)
+            case .rook: return Rook(color: color, row: row, file: file, moved: moved)
+            case .queen: return Queen(color: color, row: row, file: file, moved: moved)
+            case .king: return King(color: color, row: row, file: file, moved: moved)
+        }
+    }
+    
+    public func equals(_ other: any ChessFigure) -> Bool {
+        return row == other.getRow()
+        && file == other.getFile()
+        && type == other.getType()
+        && color == other.getColor()
+    }
+    
+    public func move(row:Int, file:Int) {
         self.row =  row
         self.file = file
         self.moved = true
     }
     
-    func canDo(move:Move) -> Bool {
+    public func canDo(move:Move) -> Bool {
         let moves = getPossibleMoves()
         return moves.contains(where:{$0.row == move.row && $0.file == move.file})
     }
 
-
-    func getPossibleMoves() -> [Move] {
+    public func getPossibleMoves() -> [Move] {
         switch type {
             case .pawn:
                 return toPawn().getPossibleMoves()
@@ -79,7 +92,7 @@ public class Figure:Identifiable, Equatable {
             return false
         }
 
-        guard let intersectingPiece = getNextPieceOnTheWay(move, cache: cache) else {
+        guard let intersectingPiece = getNextPiece(move, cache: cache) else {
             return true
         }
         
@@ -102,19 +115,19 @@ public class Figure:Identifiable, Equatable {
         return type
     }
     
-    public func getField() -> String {
-        return getFieldObject().info()
+    public func getFieldInfo() -> String {
+        return getField().info()
     }
     
-    public func getFieldObject() -> Field {
+    public func getField() -> Field {
         return Field(row:row, file:file)
     }
     
     public func info() -> String {
-        return "(\(color) \(type) \(getField()))"
+        return "(\(color) \(type) \(getFieldInfo()))"
     }
     
-    func hasMoved() -> Bool {
+    public func hasMoved() -> Bool {
         return moved
     }
     
@@ -126,7 +139,7 @@ public class Figure:Identifiable, Equatable {
         return !(l == r)
     }
 
-    func ident() -> String {
+    public func ident() -> String {
         return ""
     }
     
@@ -138,27 +151,27 @@ public class Figure:Identifiable, Equatable {
         return Move(row, file, piece: self, type: .Normal)
     }
     
-    func CreateMove(_ row:Int, _ file:Int, _ type:MoveType) -> Move {
+    public func CreateMove(_ row:Int, _ file:Int, _ type:MoveType) -> Move {
         return Move(row, file, piece: self, type: type)
     }
     
-    private func getNextPieceOnTheWay(_ move: Move, cache:BoardCache) -> Figure? {
+    func isCaptureablePiece(_ move: Move, pieceToCapture: ChessFigure?) -> Bool {
+        return move.piece.getColor() != pieceToCapture!.getColor() && pieceToCapture!.getRow() == move.row && pieceToCapture!.getFile() == move.file
+    }
+    
+    private func getNextPiece(_ move: Move, cache:BoardCache) -> ChessFigure? {
         let deltaFile = abs(move.piece.getFile() - move.file)
         let deltaRow = abs(move.piece.getRow() - move.row)
         
         if deltaRow == 0 {
-            return cache.getIntersectingPieceOnRow(from: move.piece.getFieldObject(), to: move.getFieldObject())
+            return cache.getNextPieceOnRow(from: move.piece.getField(), to: move.getFieldObject())
         } else if deltaFile == 0 {
-            return cache.getIntersectingPieceOnFile(from: move.piece.getFieldObject(), to: move.getFieldObject())
+            return cache.getNextPieceOnFile(from: move.piece.getField(), to: move.getFieldObject())
         } else if deltaRow == deltaFile {
-            return cache.getIntersectingPieceOnDiagonal(from: move.piece.getFieldObject(), to: move.getFieldObject())
+            return cache.getNextPieceOnDiagonal(from: move.piece.getField(), to: move.getFieldObject())
         }
         
         return nil
-    }
-    
-    func isCaptureablePiece(_ move: Move, pieceToCapture: Figure?) -> Bool {
-        return move.piece.getColor() != pieceToCapture!.getColor() && pieceToCapture!.getRow() == move.row && pieceToCapture!.getFile() == move.file
     }
     
     private func toPawn() -> Pawn {

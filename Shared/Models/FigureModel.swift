@@ -14,13 +14,13 @@ class FigureModel : Identifiable, ObservableObject {
     @Published var row:Int = 0
     @Published var file:Int = 0
     
-    private let figure:Figure
+    private let figure:ChessFigure
 
     init(type:PieceType, color: PieceColor, row:Int, file:Int) {
-        figure = Figure(type: type, color: color, row: row, file: file)
+        figure = Figure.create(type: type, color: color, row: row, file: file)
     }
     
-    init(_ figure:Figure) {
+    init(_ figure:ChessFigure) {
         self.figure = figure
         self.row = figure.getRow()
         self.file = figure.getFile()
@@ -57,7 +57,7 @@ class FigureModel : Identifiable, ObservableObject {
         return figure.getType()
     }
     
-    func getFigure() -> Figure {
+    func getFigure() -> ChessFigure {
         return figure
     }
 }

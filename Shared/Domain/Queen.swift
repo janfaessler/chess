@@ -9,17 +9,11 @@ import Foundation
 
 public class Queen : Figure {
     
-    private let type:PieceType = .queen
-
     public init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
-        super.init(type: type, color: color, row: row, file: file, moved: moved)
+        super.init(type: .queen, color: color, row: row, file: file, moved: moved)
     }
     
-    public init? (_ field:String, color: PieceColor) {
-        super.init(field, type: type, color: color)
-    }
-    
-    override func getPossibleMoves() -> [Move] {
+    public override func getPossibleMoves() -> [Move] {
         var moves:[Move] = []
         for r in 1...8 {
             for f in 1...8 {
@@ -31,7 +25,7 @@ public class Queen : Figure {
         return moves
     }
     
-    override func ident() -> String {
+    public override func ident() -> String {
         return "Q"
     }
 }

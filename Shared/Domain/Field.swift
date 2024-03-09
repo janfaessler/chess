@@ -8,8 +8,11 @@
 import Foundation
 
 public class Field {
-    private let fileNames = zip("abcdefgh", 1...8).reduce(into: [:]) { $0[$1.0] = $1.1 }
-    private let fileNamesOut = zip(1...8, "abcdefgh").reduce(into: [:]) { $0[$1.0] = $1.1 }
+    
+    private static let PossibleFileNames: String = "abcdefgh"
+    
+    private let fileNames = zip(PossibleFileNames, 1...8).reduce(into: [:]) { $0[$1.0] = $1.1 }
+    private let fileNamesOut = zip(1...8, PossibleFileNames).reduce(into: [:]) { $0[$1.0] = $1.1 }
 
     public let row:Int
     public let file:Int
@@ -31,4 +34,5 @@ public class Field {
         guard let filename = fileNamesOut[file] else { return "??" }
         return "\(filename)\(row)"
     }
+
 }
