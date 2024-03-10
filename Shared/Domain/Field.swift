@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class Field {
+public struct Field {
     
     private static let PossibleFileNames: String = "abcdefgh"
     
@@ -33,6 +33,11 @@ public class Field {
     public func info() -> String {
         guard let filename = fileNamesOut[file] else { return "??" }
         return "\(filename)\(row)"
+    }
+    
+    public func getFileName() -> String {
+        guard let filename = fileNamesOut[file] else { return "??" }
+        return "\(filename)"
     }
 
 }

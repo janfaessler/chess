@@ -15,11 +15,13 @@ public struct Move:Identifiable, Equatable{
     var file:Int = 0
     var piece:ChessFigure
     var type:MoveType = MoveType.Normal
+    var startingField:Field
     
     init(_ r:Int, _ f:Int, piece: ChessFigure) {
         self.row = r
         self.file = f
         self.piece = piece
+        self.startingField = piece.getField()
     }
     
     public init (_ r:Int, _ f:Int, piece: ChessFigure, type: MoveType){
@@ -29,10 +31,7 @@ public struct Move:Identifiable, Equatable{
     
     public init?(_ fieldname:String, piece: ChessFigure, type: MoveType) {
         guard let field = Field(fieldname) else { return nil }
-        self.row = field.row
-        self.file = field.file
-        self.piece = piece
-        self.type = type
+        self.init(field.row, field.file, piece: piece, type: type)
     }
 
     
@@ -52,12 +51,16 @@ public struct Move:Identifiable, Equatable{
         return file
     }
     
-    public func getField() -> String {
-        return getFieldObject().info()
+    public func getFieldInfo() -> String {
+        return getField().info()
     }
     
-    public func getFieldObject() -> Field {
+    public func getField() -> Field {
         return Field(row:row, file:file)
+    }
+    
+    public func getStartingField() -> Field {
+        return startingField
     }
     
     public func getPiece() -> ChessFigure {
@@ -74,6 +77,6 @@ public struct Move:Identifiable, Equatable{
             }
             return "O-O-0"
         }
-        return "\(piece.ident())\(fileName)\(row)";
+        return "\(fileName)\(row)";
     }
 }

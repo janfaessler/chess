@@ -16,6 +16,7 @@ public class ChessBoard {
     private var cache:BoardCache
     private var colorToMove:PieceColor = .white
     private var moves: [Move] = []
+    private var moveLog: [String] = []
     
     public init(_ pos:Position) {
         colorToMove = pos.colorToMove
@@ -30,11 +31,13 @@ public class ChessBoard {
             throw ValidationError.MoveNotLegalMoveOnTheBoard
         }
 
-        doCapture(move)
+        let isCapture = doCapture(move)
         try doMove(move)
-        checkPromotion(move)
+        let isPromotion = checkPromotion(move)
         setColorToMove()
         moves += [move]
+        LogMove(move, isCapture: isCapture, isPromotion: isPromotion)
+
     }
     
     public func getColorToMove() -> PieceColor {
@@ -53,8 +56,8 @@ public class ChessBoard {
         return figures
     }
     
-    public func getMoves() -> [Move] {
-        return moves
+    public func getMoves() -> [String] {
+        return moveLog
     }
     
     private func IsMoveLegalMoveOnTheBoard(_ target:Move) -> Bool {
@@ -76,12 +79,12 @@ public class ChessBoard {
         return true
     }
     
-    private func doCapture(_ move: Move) {
+    private func doCapture(_ move: Move) -> Bool {
         if isPawnCapturing(move) {
-            captureFigureAt(row: move.piece.getRow(), file: move.file)
-        } else {
-            captureFigureAt(row: move.row, file: move.file)
+            return captureFigureAt(row: move.piece.getRow(), file: move.file)
         }
+        
+        return captureFigureAt(row: move.row, file: move.file)
     }
 
     private func doMove(_ move: Move) throws {
@@ -89,31 +92,50 @@ public class ChessBoard {
         figure.move(row: move.row, file: move.file)
         moveRookForCastling(move)
         recreateBoardDict()
-        LogMove(move)
     }
     
     
-    private func checkPromotion(_ move: Move) {
-        guard move.piece.getType() == .pawn else { return }
-        guard pawnHasReachedEndOfTheBoard(move) else { return }
+    private func checkPromotion(_ move: Move) -> Bool {
+        guard move.piece.getType() == .pawn else { return false }
+        guard pawnHasReachedEndOfTheBoard(move) else { return false  }
 
         // Todo: Promotion Choice
         promote(Pawn(color: move.piece.getColor(), row: move.getRow(), file: move.getFile()), to: Queen(color: move.piece.getColor(), row: move.row, file: move.file))
-
+        return true
     }
     
     private func setColorToMove() {
         colorToMove = colorToMove == .black ? .white : .black
     }
     
-    private func LogMove(_ move: Move) {
-        logger.log("\(move.info())")
+    private func LogMove(_ move: Move, isCapture:Bool, isPromotion:Bool) {
+        
+        var logInfo:String = ""
+        if move.type == .Castle {
+            logInfo.append(move.info())
+        } else {
+            logInfo.append("\(move.piece.ident())")
+            
+            if isCapture {
+                if move.piece.getType() == .pawn {
+                    logInfo.append(move.startingField.getFileName())
+                }
+                logInfo.append("x")
+            }
+            logInfo.append(move.getFieldInfo())
+            if isPromotion {
+                logInfo.append("=Q")
+            }
+        }
+        logger.log("\(logInfo)")
+        moveLog += [logInfo]
     }
     
-    private func captureFigureAt(row: Int, file: Int) {
-        guard let figureAtTarget = getFigure(atRow: row, atFile: file) else { return }
+    private func captureFigureAt(row: Int, file: Int) -> Bool {
+        guard let figureAtTarget = getFigure(atRow: row, atFile: file) else { return false }
         removeFigure(figureAtTarget)
         logger.info("\(String(describing: figureAtTarget.getColor())) \(String(describing:figureAtTarget.getType())) at \(row):\(file) got captured")
+        return true
     }
     
     private func moveRookForCastling(_ move: Move) {

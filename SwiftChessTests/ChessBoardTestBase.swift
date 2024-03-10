@@ -207,7 +207,7 @@ class SwiftChessTestBase: XCTestCase {
         file: StaticString = #filePath,
         line: UInt = #line) throws {
         let testee = try XCTUnwrap(testee)
-        let moves = testee.getMoves().map({$0.info()})
+        let moves = testee.getMoves()
         
         guard !moves.elementsEqual(expectedMoves) else { return }
 

@@ -64,11 +64,11 @@ public class BoardCache {
         let deltaRow = abs(move.piece.getRow() - move.row)
         
         if deltaRow == 0 {
-            return getNextPieceOnRow(from: move.piece.getField(), to: move.getFieldObject())
+            return getNextPieceOnRow(from: move.piece.getField(), to: move.getField())
         } else if deltaFile == 0 {
-            return getNextPieceOnFile(from: move.piece.getField(), to: move.getFieldObject())
+            return getNextPieceOnFile(from: move.piece.getField(), to: move.getField())
         } else if deltaRow == deltaFile {
-            return getNextPieceOnDiagonal(from: move.piece.getField(), to: move.getFieldObject())
+            return getNextPieceOnDiagonal(from: move.piece.getField(), to: move.getField())
         }
         return get(atRow: move.row, atFile: move.file)
     }

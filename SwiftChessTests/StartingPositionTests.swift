@@ -28,8 +28,6 @@ final class StartingPositionTests: SwiftChessTestBase {
         }
     }
     
-
-    
     func testSimplePawnCapture() throws {
         
         try moveAndAssert("e2", to: "e4", type:.pawn, color: .white, moveType: .Double)
@@ -37,7 +35,7 @@ final class StartingPositionTests: SwiftChessTestBase {
         
         try captureAndAssert("e4", to: "d5", type:.pawn, color: .white)
         
-        try assertMoves(["e4", "d5", "d5"])
+        try assertMoves(["e4", "d5", "exd5"])
         
     }
     
@@ -51,7 +49,7 @@ final class StartingPositionTests: SwiftChessTestBase {
         
         try captureAndAssert("e5", to: "d6", type: .pawn, color: .white)
         
-        try assertMoves(["e4", "a6", "e5", "d5", "d6"])
+        try assertMoves(["e4", "a6", "e5", "d5", "exd6"])
 
         
     }
@@ -66,7 +64,7 @@ final class StartingPositionTests: SwiftChessTestBase {
         
         try captureAndAssert("e5", to: "f6", type: .pawn, color: .white)
         
-        try assertMoves(["e4", "a6", "e5", "f5", "f6"])
+        try assertMoves(["e4", "a6", "e5", "f5", "exf6"])
     }
     
     func testEnPassantToPromotion() throws {
@@ -85,7 +83,7 @@ final class StartingPositionTests: SwiftChessTestBase {
 
         try captureAndAssertPromotion("e7", to: "d8", type: .pawn, color: .white)
         
-        try assertMoves(["e4", "a6", "e5", "d5", "d6", "b5", "e7", "c5", "d8"])
+        try assertMoves(["e4", "a6", "e5", "d5", "exd6", "b5", "dxe7", "c5", "exd8=Q"])
 
     }
     
@@ -171,7 +169,7 @@ final class StartingPositionTests: SwiftChessTestBase {
         
         try moveAndAssertError("e1", to: "g1", type: .king, color: .white, moveType: .Castle)
         
-        try assertMoves(["e4", "e5", "Nf3", "d6", "h3", "Be6", "Na3", "f6", "Bc4", "Bc4"])
+        try assertMoves(["e4", "e5", "Nf3", "d6", "h3", "Be6", "Na3", "f6", "Bc4", "Bxc4"])
     }
     
     
@@ -217,7 +215,7 @@ final class StartingPositionTests: SwiftChessTestBase {
         
         try moveAndAssertError("e1", to: "g1", type: .king, color: .white, moveType: .Castle)
         
-        try assertMoves(["Nf3", "b6", "g3", "Bb7", "Bg2", "e5", "Ne5", "Bg2", "Nf7", "Bh1", "Nd8", "Kd8"])
+        try assertMoves(["Nf3", "b6", "g3", "Bb7", "Bg2", "e5", "Nxe5", "Bxg2", "Nxf7", "Bxh1", "Nxd8", "Kxd8"])
         
     }
     
@@ -250,7 +248,7 @@ final class StartingPositionTests: SwiftChessTestBase {
         
         try moveAndAssertError(Move(8, 9,piece: Figure.create("h8", type: .king, color: .black)!, type: MoveType.Normal))
         
-        try assertMoves(["e4", "e5", "Bc4", "Bb4", "c3", "Nf6", "Nf3", "O-O", "b4", "Re8", "O-O", "Kh8", "Kh1"])
+        try assertMoves(["e4", "e5", "Bc4", "Bb4", "c3", "Nf6", "Nf3", "O-O", "cxb4", "Re8", "O-O", "Kh8", "Kh1"])
     }
     
     func testRowIntersection() throws {
@@ -266,7 +264,7 @@ final class StartingPositionTests: SwiftChessTestBase {
         try captureAndAssertError("h4", to: "c4", type: .queen, color: .black)
         try captureAndAssert("h4", to: "e4", type: .queen, color: .black)
         
-        try assertMoves(["e4", "e5", "Bc4", "Qh4", "a3", "Qe4"])
+        try assertMoves(["e4", "e5", "Bc4", "Qh4", "a3", "Qxe4"])
     }
     
     func testCheckMate() throws {
@@ -300,6 +298,8 @@ final class StartingPositionTests: SwiftChessTestBase {
         try moveAndAssert("g8", to: "f6", type: .knight, color: .black)
         
         try captureAndAssert("g5", to: "f6", type: .bishop, color: .white)
+        
+        try assertMoves(["e4", "f5", "Bc4", "e6", "h3", "g5", "Qh5", "Ke7", "e5", "a6","d3","b5", "Bxg5", "Nf6", "Bxf6"])
         
     }
 
