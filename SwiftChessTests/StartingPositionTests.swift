@@ -251,10 +251,6 @@ final class StartingPositionTests: SwiftChessTestBase {
         
         try moveAndAssertError(Move(8, 9,piece: Figure.create("h8", type: .king, color: .black)!, type: MoveType.Normal))
         
-        let testee = try XCTUnwrap(testee)
-        XCTAssertThrowsError(try testee.move(Move(8,9, piece: Figure.create("h8", type: .king, color: .black)!, type: .Normal)))
-        XCTAssertFalse(figureExist(King(color: .black, row: 8, file: 9)))
-        
         try assertMoves(["e4", "e5", "Bc4", "Bb4", "c3", "Nf6", "Nf3", "O-O", "b4", "Re8", "O-O", "Kh8", "Kh1"])
     }
     
@@ -272,6 +268,15 @@ final class StartingPositionTests: SwiftChessTestBase {
         try captureAndAssert("h4", to: "e4", type: .queen, color: .black)
         
         try assertMoves(["e4", "e5", "Bc4", "Qh4", "a3", "Qe4"])
+    }
+    
+    func testNonExistingMoves() throws {
+        let testee = try XCTUnwrap(testee)
+        XCTAssertThrowsError(try testee.move(Move(8,9, piece: Figure.create("h8", type: .king, color: .black)!, type: .Normal)))
+        XCTAssertFalse(figureExist(Figure.create(type:.king, color: .black, row: 8, file: 9)))
         
+        XCTAssertThrowsError(try testee.move(Move("e5", piece: Figure.create("e4", type: .king, color: .black)!, type: .Normal)!))
+        XCTAssertFalse(figureExist(Figure.create("e4", type: .king, color: .black)!))
+
     }
 }

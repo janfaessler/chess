@@ -58,7 +58,6 @@
 		61B32F592B9A53DB00790CF7 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F582B9A53DB00790CF7 /* Field.swift */; };
 		61B32F5A2B9A53DB00790CF7 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F582B9A53DB00790CF7 /* Field.swift */; };
 		61B32F5C2B9A7D7E00790CF7 /* ChessBoardTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F5B2B9A7D7E00790CF7 /* ChessBoardTestBase.swift */; };
-		61B32F5E2B9A86BC00790CF7 /* ValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F5D2B9A86BC00790CF7 /* ValidationError.swift */; };
 		61B32F5F2B9A873500790CF7 /* ValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F5D2B9A86BC00790CF7 /* ValidationError.swift */; };
 		61B32F612B9CC5D700790CF7 /* BoardCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F602B9CC5D700790CF7 /* BoardCache.swift */; };
 		61B32F622B9CC5D700790CF7 /* BoardCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F602B9CC5D700790CF7 /* BoardCache.swift */; };
@@ -446,7 +445,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				61B32F5C2B9A7D7E00790CF7 /* ChessBoardTestBase.swift in Sources */,
-				61B32F5E2B9A86BC00790CF7 /* ValidationError.swift in Sources */,
 				61B32F572B99F1F800790CF7 /* FieldTest.swift in Sources */,
 				61B32F562B99F1F300790CF7 /* StartingPositionTests.swift in Sources */,
 			);

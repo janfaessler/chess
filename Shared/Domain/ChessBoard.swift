@@ -37,7 +37,7 @@ public class ChessBoard {
         moves += [move]
     }
     
-    func getColorToMove() -> PieceColor {
+    public func getColorToMove() -> PieceColor {
         return colorToMove
     }
     
@@ -85,9 +85,7 @@ public class ChessBoard {
     }
 
     private func doMove(_ move: Move) throws {
-        guard let figure = figures.first(where: { $0.equals(move.piece) }) else {
-            throw ValidationError.FigureDoesNotExist(move.piece)
-        }
+        let figure = figures.first(where: { $0.equals(move.piece) })!
         figure.move(row: move.row, file: move.file)
         moveRookForCastling(move)
         recreateBoardDict()
@@ -112,10 +110,6 @@ public class ChessBoard {
         logger.log("\(move.info())")
     }
     
-    private func isMovePossible( _ move: Move) -> Bool {
-        return move.piece.isMovePossible(move, cache: getBoardCache())
-    }
-    
     private func captureFigureAt(row: Int, file: Int) {
         guard let figureAtTarget = getFigure(atRow: row, atFile: file) else { return }
         removeFigure(figureAtTarget)
@@ -125,17 +119,10 @@ public class ChessBoard {
     private func moveRookForCastling(_ move: Move) {
     
         if isLongCastling(move) {
-            guard let rook = getFigure(atRow: move.piece.getRow(), atFile: Rook.LongCastleStartingFile) else {
-                logger.error("no rook able to castle long found")
-                return
-            }
+            let rook = getFigure(atRow:move.piece.getRow(), atFile: Rook.LongCastleStartingFile)!
             rook.move(row: move.row, file: Rook.LongCastleEndFile)
-                
         } else if isShortCastling(move) {
-            guard let rook = getFigure(atRow:move.piece.getRow(), atFile: Rook.ShortCastleStartingFile) else {
-                logger.error("no rook able to castle short found")
-                return
-            }
+            let rook = getFigure(atRow:move.piece.getRow(), atFile: Rook.ShortCastleStartingFile)!
             rook.move(row: move.row, file: Rook.ShortCastleEndFile)
         }
     }
@@ -147,10 +134,7 @@ public class ChessBoard {
     
     private func doesMovePutOwnKingInCheck(_ move:Move) -> Bool {
         
-        guard let king = figures.first(where: { $0.getType() == .king && $0.getColor() == move.piece.getColor() }) else {
-            logger.error("we dont have a king?")
-            return false
-        }
+        let king = figures.first(where: { $0.getType() == .king && $0.getColor() == move.piece.getColor() })!
                 
         let modifiedCache = createCacheWithMove(move)
         
@@ -205,11 +189,7 @@ public class ChessBoard {
     }
     
     private func removeFigure(_ figure:ChessFigure) {
-        guard let index = figures.firstIndex(where: { $0.equals(figure) }) else {
-            logger.error("cant remove figure (\(figure.info())) because it doesnt exist")
-            return
-        }
-        figures.remove(at: index)
+        figures.removeAll(where: { $0.equals(figure) })
     }
     
     private func recreateBoardDict(){

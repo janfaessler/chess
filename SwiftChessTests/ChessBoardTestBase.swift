@@ -37,8 +37,9 @@ class SwiftChessTestBase: XCTestCase {
         } catch { moveError = true }
         let startFigureExists = figureExist(startFigure)
         let endFigureExists = figureExist(endFigure)
+        let nextColorToMoveDidNotChange = testee.getColorToMove() == color
         
-        guard moveError == true || startFigureExists == true || endFigureExists == false || testee.getFigures().count != pieceCount else {
+        guard moveError == true || startFigureExists == true || endFigureExists == false || testee.getFigures().count != pieceCount && nextColorToMoveDidNotChange else {
             return
         }
         
@@ -98,13 +99,15 @@ class SwiftChessTestBase: XCTestCase {
         let startFigure = Figure.create(from, type:type, color: color)!
         let endFigure = Figure.create(to, type:type, color:color)!
         let move = Move(to, piece:startFigure, type: .Normal)!
+        let nextColorToMoveDidNotChange = testee.getColorToMove() == color
+
         var moveError:Bool = false
 
         do {
             try testee.move(move)
         } catch { moveError = true}
         
-        guard moveError == true || figureExist(startFigure) == true || figureExist(endFigure) == false || testee.getFigures().count != pieceCount else {
+        guard moveError == true || figureExist(startFigure) == true || figureExist(endFigure) == false || testee.getFigures().count != pieceCount && nextColorToMoveDidNotChange else {
             return
         }
 
@@ -145,13 +148,14 @@ class SwiftChessTestBase: XCTestCase {
         let startFigure = Figure.create(from, type:type, color: color)!
         let endFigure = Figure.create(to, type:.queen, color:color)!
         let move = Move(to, piece:startFigure, type: .Normal)!
+        let nextColorToMoveDidNotChange = testee.getColorToMove() == color
         var moveError:Bool = false
 
         do {
             try testee.move(move)
         } catch { moveError = true}
         
-        guard moveError == true || figureExist(startFigure) == true || figureExist(endFigure) == false || testee.getFigures().count != pieceCount else {
+        guard moveError == true || figureExist(startFigure) == true || figureExist(endFigure) == false || testee.getFigures().count != pieceCount && nextColorToMoveDidNotChange else {
             return
         }
 
