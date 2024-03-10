@@ -58,41 +58,16 @@ public class Figure:Identifiable, Equatable, ChessFigure {
     }
 
     public func getPossibleMoves() -> [Move] {
-        switch type {
-            case .pawn:
-                return toPawn().getPossibleMoves()
-            case .bishop:
-                return toBishop().getPossibleMoves()
-            case .knight:
-                return toKnight().getPossibleMoves()
-            case .rook:
-                return toRook().getPossibleMoves()
-            case .queen:
-                return toQueen().getPossibleMoves()
-            case .king:
-                return toKing().getPossibleMoves()
-        }
+        return Figure.create(type: type, color: color, row: row, file: file, moved: moved).getPossibleMoves()
     }
     
     public func isMovePossible(_ move: Move, cache:BoardCache) -> Bool {
-        
-        guard type != .pawn else {
-            return toPawn().isMovePossible(move, cache: cache)
-        }
-        
-        guard type != .king else {
-            return toKing().isMovePossible(move, cache: cache)
-        }
-        
-        guard type != .knight else {
-            return toKnight().isMovePossible(move, cache: cache)
-        }
         
         guard canDo(move: move) else {
             return false
         }
 
-        guard let intersectingPiece = getNextPiece(move, cache: cache) else {
+        guard let intersectingPiece = cache.getNextPiece(move) else {
             return true
         }
         
@@ -159,43 +134,6 @@ public class Figure:Identifiable, Equatable, ChessFigure {
         return move.piece.getColor() != pieceToCapture!.getColor() && pieceToCapture!.getRow() == move.row && pieceToCapture!.getFile() == move.file
     }
     
-    private func getNextPiece(_ move: Move, cache:BoardCache) -> ChessFigure? {
-        let deltaFile = abs(move.piece.getFile() - move.file)
-        let deltaRow = abs(move.piece.getRow() - move.row)
-        
-        if deltaRow == 0 {
-            return cache.getNextPieceOnRow(from: move.piece.getField(), to: move.getFieldObject())
-        } else if deltaFile == 0 {
-            return cache.getNextPieceOnFile(from: move.piece.getField(), to: move.getFieldObject())
-        } else if deltaRow == deltaFile {
-            return cache.getNextPieceOnDiagonal(from: move.piece.getField(), to: move.getFieldObject())
-        }
-        
-        return nil
-    }
     
-    private func toPawn() -> Pawn {
-        return Pawn(color: color, row: row, file: file, moved: moved)
-    }
-    
-    private func toBishop() -> Bishop {
-        return Bishop(color: color, row: row, file: file, moved: moved)
-    }
-    
-    private func toKnight() -> Knight {
-        return Knight(color: color, row: row, file: file, moved: moved)
-    }
-    
-    private func toRook() -> Rook {
-        return Rook(color: color, row: row, file: file, moved: moved)
-    }
-    
-    private func toKing() -> King {
-        return King(color: color, row: row, file: file, moved: moved)
-    }
-    
-    private func toQueen() -> Queen {
-        return Queen(color: color, row: row, file: file, moved: moved)
-    }
     
 }

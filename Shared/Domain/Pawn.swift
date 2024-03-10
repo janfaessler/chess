@@ -42,9 +42,9 @@ public class Pawn : Figure {
     
     public override func isMovePossible( _ move: Move, cache:BoardCache) -> Bool {
         guard canDo(move: move) else { return false }
-        let once = canPawnMoveOnce(move, cache: cache)
-        let twice = canPawnMoveTwice(move, cache: cache)
-        let capture = canPawnCapture(move, cache: cache)
+        let once = canMoveOnce(move, cache: cache)
+        let twice = canMoveTwice(move, cache: cache)
+        let capture = canCapture(move, cache: cache)
         return once || twice || capture
     }
     
@@ -52,13 +52,13 @@ public class Pawn : Figure {
         return ""
     }
     
-    private func canPawnMoveOnce(_ move: Move, cache:BoardCache) -> Bool {
+    private func canMoveOnce(_ move: Move, cache:BoardCache) -> Bool {
         guard move.type == .Normal else { return false }
         guard moveDoesNotChangeFile(move) else { return false }
         return cache.isEmpty(atRow: move.row, atFile: move.file)
     }
     
-    private func canPawnMoveTwice(_ move: Move, cache:BoardCache) -> Bool {
+    private func canMoveTwice(_ move: Move, cache:BoardCache) -> Bool {
         guard move.type == .Double else { return false }
         guard !move.piece.hasMoved() else { return false }
         guard moveDoesNotChangeFile(move) else { return false }
@@ -71,7 +71,7 @@ public class Pawn : Figure {
         }
     }
     
-    private func canPawnCapture(_ move:Move, cache:BoardCache) -> Bool {
+    private func canCapture(_ move:Move, cache:BoardCache) -> Bool {
         guard move.type == .Normal || move.type == .Promotion else { return false }
         
         let row = move.piece.getRow() + (move.piece.getColor() == PieceColor.white ? +1 : -1)

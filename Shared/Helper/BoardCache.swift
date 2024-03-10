@@ -59,7 +59,22 @@ public class BoardCache {
         return cache.flatMap({ fileKey, row in return row.values})
     }
     
-    public func getNextPieceOnRow(from:Field, to:Field) -> ChessFigure? {
+    public func getNextPiece(_ move: Move) -> ChessFigure? {
+        let deltaFile = abs(move.piece.getFile() - move.file)
+        let deltaRow = abs(move.piece.getRow() - move.row)
+        
+        if deltaRow == 0 {
+            return getNextPieceOnRow(from: move.piece.getField(), to: move.getFieldObject())
+        } else if deltaFile == 0 {
+            return getNextPieceOnFile(from: move.piece.getField(), to: move.getFieldObject())
+        } else if deltaRow == deltaFile {
+            return getNextPieceOnDiagonal(from: move.piece.getField(), to: move.getFieldObject())
+        }
+        
+        return nil
+    }
+    
+    private func getNextPieceOnRow(from:Field, to:Field) -> ChessFigure? {
         let direction = from.file < to.file ? 1 : -1
         for f in stride(from: from.file + direction, to: to.file, by: direction)  {
             let foundPiece = get(atRow: from.row, atFile: f)
@@ -70,7 +85,7 @@ public class BoardCache {
         return nil
     }
     
-    public func getNextPieceOnFile(from:Field, to:Field) -> ChessFigure? {
+    private func getNextPieceOnFile(from:Field, to:Field) -> ChessFigure? {
         let direction = from.row < to.row ? 1 : -1
         for r in stride(from: from.row + direction, to: to.row, by: direction) {
             let foundPiece = get(atRow: r, atFile: from.file)
@@ -82,7 +97,7 @@ public class BoardCache {
     }
     
     
-    public func getNextPieceOnDiagonal(from:Field, to:Field) -> ChessFigure? {
+    private func getNextPieceOnDiagonal(from:Field, to:Field) -> ChessFigure? {
         let rowDir = min(max(to.row - from.row, -1), 1)
         let fileDir = min(max(to.file - from.file, -1), 1)
         let delta = abs(from.file - to.file)
