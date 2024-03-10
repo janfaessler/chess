@@ -161,6 +161,25 @@ class SwiftChessTestBase: XCTestCase {
 
         XCTFail(message(from, to, startFigure), file: file, line: line)
     }
+    
+    func assertPossibleMoves(
+        forFigure:ChessFigure,
+        moves:[Move],
+        message: ([String], [String]) -> String = { "moves [\($0)] and [\($1)] are not equal" },
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) throws {
+        
+        let testee = try XCTUnwrap(testee)
+        let blackKing = testee.getFigures().first(where: { $0.equals(forFigure)})!
+        let possibleMoves = testee.getPossibleMoves(forPeace: blackKing)
+            
+        guard possibleMoves.elementsEqual(moves) == false else {
+            return
+        }
+            
+        XCTFail(message(possibleMoves.map({$0.info()}), moves.map({$0.info()})), file: file, line: line)
+    }
 
     func assertFigureExists(
         _ f: ChessFigure,

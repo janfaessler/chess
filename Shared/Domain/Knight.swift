@@ -33,7 +33,7 @@ public class Knight : Figure {
             return false
         }
         
-        guard let pieceAtTarget = cache.get(atRow: move.row, atFile: move.file) else {
+        guard let pieceAtTarget = cache.getNextPiece(move) else {
             return true
         }
         

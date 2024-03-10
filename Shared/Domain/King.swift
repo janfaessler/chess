@@ -39,13 +39,12 @@ public class King : Figure {
     }
     
     public override func isMovePossible( _ move: Move, cache:BoardCache) -> Bool {
-        guard super.canDo(move: move) else { return false }
         if isShortCastling(move) {
             return canCastle(move, rookStart: Rook.ShortCastleStartingFile, cache: cache)
         } else if isLongCastling(move) {
             return canCastle(move, rookStart: Rook.LongCastleStartingFile, cache: cache)
         }
-        return true
+        return super.isMovePossible(move, cache: cache)
     }
     
     

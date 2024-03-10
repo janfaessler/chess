@@ -41,7 +41,7 @@ public class ChessBoard {
         return colorToMove
     }
     
-    func getPossibleMoves(forPeace:any ChessFigure) -> [Move] {
+    public func getPossibleMoves(forPeace:any ChessFigure) -> [Move] {
         guard let piece = figures.first(where: { $0.equals(forPeace) }) else {
             return []
         }
@@ -59,17 +59,17 @@ public class ChessBoard {
     
     private func IsMoveLegalMoveOnTheBoard(_ target:Move) -> Bool {
         guard isMoveInBoard(target) else {
-            logger.debug("move would jump out of the board")
+            logger.debug("move '\(target.info())' would jump out of the board")
             return false
         }
         
         guard target.piece.isMovePossible(target, cache: getBoardCache()) else {
-            logger.debug("not possible")
+            logger.debug("move '\(target.info())' is not possible")
             return false
         }
         
         guard !doesMovePutOwnKingInCheck(target) else {
-            logger.debug("move would set own king in check")
+            logger.debug("move '\(target.info())' would set own king in check")
             return false
         }
         
@@ -134,11 +134,24 @@ public class ChessBoard {
     
     private func doesMovePutOwnKingInCheck(_ move:Move) -> Bool {
         
+        let isKingMKove = move.piece.getType() == .king
         let king = figures.first(where: { $0.getType() == .king && $0.getColor() == move.piece.getColor() })!
+        let rowToCheck = isKingMKove ? move.getRow() : king.getRow()
+        let fileToCheck = isKingMKove ? move.getFile() : king.getFile()
+        
                 
         let modifiedCache = createCacheWithMove(move)
         
-        return figures.contains(where: {  $0.getColor() != colorToMove && $0.isMovePossible(Move(king.getRow(), king.getFile(), piece: $0), cache: modifiedCache) })
+        return figures.contains(where: {
+            if $0.getColor() != colorToMove {
+                if $0.isMovePossible($0.CreateMove(rowToCheck, fileToCheck, MoveType.Normal), cache: modifiedCache) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+            return false
+        })
     }
     
     private func createCacheWithMove(_ move:Move) -> BoardCache {

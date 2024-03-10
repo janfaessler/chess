@@ -41,7 +41,6 @@ final class StartingPositionTests: SwiftChessTestBase {
         
     }
     
-    
     func testEnPassantLeft() throws {
         
         try moveAndAssert("e2", to: "e4", type:.pawn, color: .white, moveType: .Double)
@@ -270,13 +269,38 @@ final class StartingPositionTests: SwiftChessTestBase {
         try assertMoves(["e4", "e5", "Bc4", "Qh4", "a3", "Qe4"])
     }
     
-    func testNonExistingMoves() throws {
-        let testee = try XCTUnwrap(testee)
-        XCTAssertThrowsError(try testee.move(Move(8,9, piece: Figure.create("h8", type: .king, color: .black)!, type: .Normal)))
-        XCTAssertFalse(figureExist(Figure.create(type:.king, color: .black, row: 8, file: 9)))
+    func testCheckMate() throws {
         
-        XCTAssertThrowsError(try testee.move(Move("e5", piece: Figure.create("e4", type: .king, color: .black)!, type: .Normal)!))
-        XCTAssertFalse(figureExist(Figure.create("e4", type: .king, color: .black)!))
+        try moveAndAssert("e2", to: "e4", type: .pawn, color: .white, moveType: .Double)
+        try moveAndAssert("f7", to: "f5", type: .pawn, color: .black, moveType: .Double)
+        
+        try moveAndAssert("f1", to: "c4", type: .bishop, color: .white)
+        try moveAndAssert("e7", to: "e6", type: .pawn, color: .black)
+        
+        try moveAndAssert("h2", to: "h3", type: .pawn, color: .white)
+        try moveAndAssert("g7", to: "g5", type: .pawn, color: .black, moveType: .Double)
+        
+        try moveAndAssert("d1", to: "h5", type: .queen, color: .white)
+        
+        let king = Figure.create("e8", type: .king, color: .black)!;
+        try assertPossibleMoves(forFigure: king, moves: [king.CreateMove("e7")!])
+        
+        try moveAndAssert("e8", to: "e7", type: .king, color: .black)
+        
+        try moveAndAssert("e4", to: "e5", type: .pawn, color: .white)
+        
+        try assertPossibleMoves(forFigure: Figure.create("e7", type: .king, color: .black)!, moves: [])
 
+        try moveAndAssert("a7", to: "a6", type: .pawn, color: .black)
+        
+        try moveAndAssert("d2", to: "d3", type: .pawn, color: .white)
+        try moveAndAssert("b7", to: "b5", type: .pawn, color: .black, moveType: .Double)
+        
+        try captureAndAssert("c1", to: "g5", type: .bishop, color: .white)
+        try moveAndAssert("g8", to: "f6", type: .knight, color: .black)
+        
+        try captureAndAssert("g5", to: "f6", type: .bishop, color: .white)
+        
     }
+
 }

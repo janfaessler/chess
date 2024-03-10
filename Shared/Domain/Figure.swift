@@ -9,6 +9,8 @@ import Foundation
 
 public class Figure:Identifiable, Equatable, ChessFigure {
 
+    
+
     private let type:PieceType
     private let color:PieceColor
     private var moved:Bool
@@ -126,8 +128,16 @@ public class Figure:Identifiable, Equatable, ChessFigure {
         return Move(row, file, piece: self, type: .Normal)
     }
     
-    public func CreateMove(_ row:Int, _ file:Int, _ type:MoveType) -> Move {
+    public func CreateMove(_ filename: String) -> Move? {
+        return CreateMove(filename, type: .Normal)
+    }
+    
+    public func CreateMove(_ row:Int, _ file:Int, _ type:MoveType = .Normal) -> Move {
         return Move(row, file, piece: self, type: type)
+    }
+    
+    public func CreateMove(_ file:String, type:MoveType = .Normal) -> Move? {
+        return Move(file, piece: self, type: type)
     }
     
     func isCaptureablePiece(_ move: Move, pieceToCapture: ChessFigure?) -> Bool {

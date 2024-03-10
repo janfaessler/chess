@@ -70,8 +70,7 @@ public class BoardCache {
         } else if deltaRow == deltaFile {
             return getNextPieceOnDiagonal(from: move.piece.getField(), to: move.getFieldObject())
         }
-        
-        return nil
+        return get(atRow: move.row, atFile: move.file)
     }
     
     private func getNextPieceOnRow(from:Field, to:Field) -> ChessFigure? {
@@ -82,7 +81,7 @@ public class BoardCache {
                 return foundPiece
             }
         }
-        return nil
+        return get(atRow: to.row, atFile: to.file)
     }
     
     private func getNextPieceOnFile(from:Field, to:Field) -> ChessFigure? {
@@ -93,9 +92,9 @@ public class BoardCache {
                 return foundPiece
             }
         }
-        return nil
+        return get(atRow: to.row, atFile: to.file)
+
     }
-    
     
     private func getNextPieceOnDiagonal(from:Field, to:Field) -> ChessFigure? {
         let rowDir = min(max(to.row - from.row, -1), 1)
@@ -111,7 +110,7 @@ public class BoardCache {
                 }
             }
         }
-    
-        return nil
+
+        return get(atRow: to.row, atFile: to.file)
     }
 }
