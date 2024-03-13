@@ -8,7 +8,7 @@
 import Foundation
 
 public struct Position {
-    var figures:[Figure] = []
+    public var figures:[Figure] = []
     var colorToMove:PieceColor = .white
     var whiteShortCastle:Bool
     var whiteLongCastle:Bool

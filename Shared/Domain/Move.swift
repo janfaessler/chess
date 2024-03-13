@@ -51,6 +51,10 @@ public struct Move:Identifiable, Equatable{
         return file
     }
     
+    public func getType() -> MoveType {
+        return type
+    }
+    
     public func getFieldInfo() -> String {
         return getField().info()
     }

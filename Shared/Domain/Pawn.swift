@@ -48,6 +48,14 @@ public class Pawn : Figure {
         return once || twice || capture
     }
     
+    public override func CreateMove(_ move:String) -> Move? {
+        let stringArray = Array(move)
+        let rowString = String(stringArray[1])
+        let moveRow = Int(rowString) ?? 0
+        let moveType = abs(moveRow - getRow()) == 2 ? MoveType.Double : MoveType.Normal
+        return Move(move, piece: self, type: moveType)
+    }
+    
     public override func ident() -> String {
         return ""
     }

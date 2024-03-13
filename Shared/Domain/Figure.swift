@@ -136,8 +136,8 @@ public class Figure:Identifiable, Equatable, ChessFigure {
         return Move(row, file, piece: self, type: type)
     }
     
-    public func CreateMove(_ file:String, type:MoveType = .Normal) -> Move? {
-        return Move(file, piece: self, type: type)
+    public func CreateMove(_ move:String, type:MoveType = .Normal) -> Move? {
+        return Move(move, piece: self, type: type)
     }
     
     func isCaptureablePiece(_ move: Move, pieceToCapture: ChessFigure?) -> Bool {
