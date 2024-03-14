@@ -232,7 +232,7 @@ public class ChessBoard {
             logInfo.append(move.getFieldInfo())
 
             if isPromotion {
-                logInfo.append("=Q")
+                logInfo.append("=\(Queen.Ident)")
             }
             
             if isCheck {
