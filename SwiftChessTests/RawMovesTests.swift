@@ -1,9 +1,3 @@
-//
-//  SwiftChessTests.swift
-//  SwiftChessTests
-//
-//  Created by Jan Fässler on 06.03.2024.
-//
 import XCTest
 import SwiftChess
 

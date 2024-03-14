@@ -1,10 +1,3 @@
-//
-//  MoveFactoryTests.swift
-//  SwiftChessTests
-//
-//  Created by Jan Fässler on 13.03.2024.
-//
-
 import XCTest
 import SwiftChess
 

@@ -1,10 +1,3 @@
-//
-//  Pawn.swift
-//  SwiftChess
-//
-//  Created by Jan Fässler on 03.03.2024.
-//
-
 import Foundation
 
 public class Pawn : Figure {
@@ -50,8 +43,6 @@ public class Pawn : Figure {
         let capture = canCapture(move, cache: cache)
         return once || twice || capture
     }
-    
-
     
     public override func createMove(_ move:any StringProtocol) -> Move? {
         return Move(move, piece: self, type: getMoveType(move))

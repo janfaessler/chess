@@ -1,10 +1,3 @@
-//
-//  ChessBoard.swift
-//  SwiftChess
-//
-//  Created by Jan Fässler on 04.03.2024.
-//
-
 import Foundation
 import os
 

@@ -1,10 +1,3 @@
-//
-//  FenLoader.swift
-//  SwiftChess
-//
-//  Created by Jan Fässler on 14.12.21.
-//
-
 import Foundation
 
 public class Fen {

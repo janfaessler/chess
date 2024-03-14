@@ -1,12 +1,4 @@
-//
-//  Board.swift
-//  SwiftChess
-//
-//  Created by Jan Fässler on 15.11.21.
-//
-
 import SwiftUI
-import Foundation
 
 struct BoardBackgroundView: View {
     

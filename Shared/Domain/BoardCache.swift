@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  SwiftChess
-//
-//  Created by Jan Fässler on 09.03.2024.
-//
-
 import Foundation
 
 public class BoardCache {

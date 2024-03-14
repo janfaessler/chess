@@ -1,10 +1,3 @@
-//
-//  NotationTests.swift
-//  SwiftChessTests
-//
-//  Created by Jan Fässler on 14.03.2024.
-//
-
 import XCTest
 import SwiftChess
 

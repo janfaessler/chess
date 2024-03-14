@@ -1,10 +1,3 @@
-//
-//  ChessBoardTestBase.swift
-//  SwiftChessTests
-//
-//  Created by Jan Fässler on 07.03.2024.
-//
-
 import XCTest
 import SwiftChess
 

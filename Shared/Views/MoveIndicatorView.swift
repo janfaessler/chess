@@ -1,10 +1,3 @@
-//
-//  MoveIndicatorView.swift
-//  SwiftChess
-//
-//  Created by Jan Fässler on 25.12.21.
-//
-
 import SwiftUI
 
 struct MoveIndicatorView: View {

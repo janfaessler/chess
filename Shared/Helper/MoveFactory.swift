@@ -1,10 +1,3 @@
-//
-//  MoveFactory.swift
-//  SwiftChess
-//
-//  Created by Jan Fässler on 13.03.2024.
-//
-
 import Foundation
 
 public class MoveFactory {

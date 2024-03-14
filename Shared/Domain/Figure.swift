@@ -1,10 +1,3 @@
-//
-//  Figure.swift
-//  SwiftChess
-//
-//  Created by Jan Fässler on 04.03.2024.
-//
-
 import Foundation
 
 public class Figure:Identifiable, Equatable, ChessFigure {
