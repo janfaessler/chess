@@ -113,34 +113,6 @@ public class ChessBoard {
         return true
     }
     
-    private func setColorToMove() {
-
-    }
-    
-    private func LogMove(_ move: Move, isCapture:Bool) {
-        let isPromotion = checkPromotion(move)
-
-        var logInfo:String = ""
-        if move.type == .Castle {
-            logInfo.append(move.info())
-        } else {
-            logInfo.append("\(move.piece.ident())")
-            
-            if isCapture {
-                if move.piece.getType() == .pawn {
-                    logInfo.append(move.getStartingField().getFileName())
-                }
-                logInfo.append("x")
-            }
-            logInfo.append(move.getFieldInfo())
-            if isPromotion {
-                logInfo.append("=Q")
-            }
-        }
-        logger.log("\(logInfo)")
-        moveLog += [logInfo]
-    }
-    
     private func captureFigureAt(row: Int, file: Int) -> Bool {
         guard let figureAtTarget = getFigure(atRow: row, atFile: file) else { return false }
         removeFigure(figureAtTarget)
@@ -176,7 +148,7 @@ public class ChessBoard {
         
         return figures.contains(where: {
             if $0.getColor() != colorToMove {
-                if $0.isMovePossible($0.CreateMove(rowToCheck, fileToCheck, MoveType.Normal), cache: modifiedCache) {
+                if $0.isMovePossible($0.createMove(rowToCheck, fileToCheck, MoveType.Normal), cache: modifiedCache) {
                     return true
                 } else {
                     return false
@@ -239,5 +211,29 @@ public class ChessBoard {
 
     private func getBoardCache() -> BoardCache {
         return BoardCache.create(figures, lastMove: moves.last)
+    }
+    
+    private func LogMove(_ move: Move, isCapture:Bool) {
+        let isPromotion = checkPromotion(move)
+
+        var logInfo:String = ""
+        if move.type == .Castle {
+            logInfo.append(move.info())
+        } else {
+            logInfo.append("\(move.piece.ident())")
+            
+            if isCapture {
+                if move.piece.getType() == .pawn {
+                    logInfo.append(move.getStartingField().getFileName())
+                }
+                logInfo.append("x")
+            }
+            logInfo.append(move.getFieldInfo())
+            if isPromotion {
+                logInfo.append("=Q")
+            }
+        }
+        logger.log("\(logInfo)")
+        moveLog += [logInfo]
     }
 }

@@ -9,6 +9,7 @@ import Foundation
 
 public class Rook : Figure {
     
+    public static let Ident = "R"
     public static let LongCastleStartingFile = 1
     public static let LongCastleEndFile = 4
     public static let ShortCastleStartingFile = 8
@@ -31,6 +32,6 @@ public class Rook : Figure {
     }
     
     public override func ident() -> String {
-        return "R"
+        return Rook.Ident
     }
 }

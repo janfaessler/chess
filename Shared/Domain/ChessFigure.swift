@@ -22,7 +22,7 @@ public protocol ChessFigure {
     func hasMoved() -> Bool
     func info() -> String
     func ident() -> String
-    func CreateMove(_ row:Int, _ file:Int, _ type:MoveType) -> Move
-    func CreateMove(_ filename:any StringProtocol, type:MoveType) -> Move?
-    func CreateMove(_ filename:any StringProtocol) -> Move?
+    func createMove(_ row:Int, _ file:Int, _ type:MoveType) -> Move
+    func createMove(_ filename:any StringProtocol, type:MoveType) -> Move?
+    func createMove(_ filename:any StringProtocol) -> Move?
 }

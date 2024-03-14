@@ -259,7 +259,7 @@ final class NotationTests: ChessTestBase {
         try moveAndAssert(notation: "Qh5", toField: "h5", type: .queen, color: .white)
         
         let king = Figure.create("e8", type: .king, color: .black)!;
-        try assertPossibleMoves(forFigure: king, moves: [king.CreateMove("e7")!])
+        try assertPossibleMoves(forFigure: king, moves: [king.createMove("e7")!])
         
         try moveAndAssert(notation: "Ke7", toField: "e7", type: .king, color: .black)
         

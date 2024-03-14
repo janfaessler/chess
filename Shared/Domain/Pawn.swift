@@ -9,6 +9,9 @@ import Foundation
 
 public class Pawn : Figure {
     
+    public static let RowWherePromotionIsPossibleForWhite = 7
+    public static let RowWherePromotionIsPossibleForBlack = 2
+    
     init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
         super.init(type: .pawn, color: color, row: row, file: file, moved: moved)
     }
@@ -17,26 +20,26 @@ public class Pawn : Figure {
         let row = getRow()
         let file = getFile()
         switch getColor() {
-            case.black:
-                let moveType = row == 2 ? MoveType.Promotion : MoveType.Normal
-                var moves = [
-                    CreateMove(row-1, file-1, moveType),
-                    CreateMove(row-1, file, moveType),
-                    CreateMove(row-1, file+1, moveType)]
-                if row == 7 {
-                    moves.append(CreateMove(row-2, file, MoveType.Double))
-                }
-                return moves
-            case .white:
-                let moveType = row == 7 ? MoveType.Promotion : MoveType.Normal
-                var moves = [
-                    CreateMove(row+1, file-1, moveType),
-                    CreateMove(row+1, file, moveType),
-                    CreateMove(row+1, file+1, moveType)]
-                if row == 2 {
-                    moves.append(CreateMove(row+2, file, MoveType.Double))
-                }
-                return moves
+        case.black:
+            let moveType = row == Pawn.RowWherePromotionIsPossibleForBlack ? MoveType.Promotion : MoveType.Normal
+            var moves = [
+                createMove(row-1, file-1, moveType),
+                createMove(row-1, file, moveType),
+                createMove(row-1, file+1, moveType)]
+            if row == 7 {
+                moves.append(createMove(row-2, file, MoveType.Double))
+            }
+            return moves
+        case .white:
+            let moveType = row == Pawn.RowWherePromotionIsPossibleForWhite ? MoveType.Promotion : MoveType.Normal
+            var moves = [
+                createMove(row+1, file-1, moveType),
+                createMove(row+1, file, moveType),
+                createMove(row+1, file+1, moveType)]
+            if row == 2 {
+                moves.append(createMove(row+2, file, MoveType.Double))
+            }
+            return moves
         }
     }
     
@@ -48,12 +51,10 @@ public class Pawn : Figure {
         return once || twice || capture
     }
     
-    public override func CreateMove(_ move:any StringProtocol) -> Move? {
-        let stringArray = Array(move)
-        let rowString = String(stringArray[1])
-        let moveRow = Int(rowString)!
-        let moveType = abs(moveRow - getRow()) == 2 ? MoveType.Double : MoveType.Normal
-        return Move(move, piece: self, type: moveType)
+
+    
+    public override func createMove(_ move:any StringProtocol) -> Move? {
+        return Move(move, piece: self, type: getMoveType(move))
     }
     
     public override func ident() -> String {
@@ -110,5 +111,9 @@ public class Pawn : Figure {
     
     private func moveDoesNotChangeFile(_ move:Move) -> Bool {
         return move.file == move.piece.getFile()
+    }
+    
+    private func getMoveType(_ move: any StringProtocol) -> MoveType {
+        return abs(Int(String(Array(move).last!))! - getRow()) == 2 ? MoveType.Double : MoveType.Normal
     }
 }

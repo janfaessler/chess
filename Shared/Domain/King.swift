@@ -9,6 +9,7 @@ import Foundation
 
 public class King : Figure {
     
+    public static let Ident = "K"
     public static let LongCastleNotation = "O-O-O"
     public static let ShortCastleNotation = "O-O"
     public static let LongCastlePosition = 3
@@ -33,8 +34,8 @@ public class King : Figure {
         ]
         if (!hasMoved()) {
             moves.append(contentsOf: [
-                CreateMove(row, King.LongCastlePosition, MoveType.Castle),
-                CreateMove(row, King.ShortCastlePosition, MoveType.Castle)
+                createMove(row, King.LongCastlePosition, MoveType.Castle),
+                createMove(row, King.ShortCastlePosition, MoveType.Castle)
             ])
         }
         return moves.filter({ move in inBoard(move) })
@@ -49,13 +50,13 @@ public class King : Figure {
         return super.isMovePossible(move, cache: cache)
     }
     
-    public override func CreateMove(_ filename: any StringProtocol) -> Move? {
+    public override func createMove(_ filename: any StringProtocol) -> Move? {
         let possibleMoves = getPossibleMoves()
         return possibleMoves.first(where: {$0.getFieldInfo() == filename})
     }
     
     public override func ident() -> String {
-        return "K"
+        return King.Ident
     }
     
     private func canCastle(_ to: Move, rookStart:Int, cache:BoardCache) -> Bool {

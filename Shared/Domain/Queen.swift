@@ -9,6 +9,8 @@ import Foundation
 
 public class Queen : Figure {
     
+    public static let Ident = "Q"
+    
     public init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
         super.init(type: .queen, color: color, row: row, file: file, moved: moved)
     }
@@ -26,6 +28,6 @@ public class Queen : Figure {
     }
     
     public override func ident() -> String {
-        return "Q"
+        return Queen.Ident
     }
 }

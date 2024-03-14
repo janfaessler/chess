@@ -8,6 +8,8 @@
 import Foundation
 public class Knight : Figure {
     
+    public static let Ident = "N"
+    
     public init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
         super.init(type: .knight, color: color, row: row, file: file, moved: moved)
     }
@@ -41,6 +43,6 @@ public class Knight : Figure {
     }
     
     public override func ident() -> String {
-        return "N"
+        return Knight.Ident
     }
 }

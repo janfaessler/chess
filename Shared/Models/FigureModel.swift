@@ -39,10 +39,10 @@ class FigureModel : Identifiable, ObservableObject {
         
         if figure.getType() == .king {
             if figure.hasMoved() == false && moveToFile < King.LongCastlePosition {
-                return figure.CreateMove(moveToRow, King.LongCastlePosition, .Castle)
+                return figure.createMove(moveToRow, King.LongCastlePosition, .Castle)
             }
             if figure.hasMoved() == false && moveToFile > King.ShortCastlePosition {
-                return figure.CreateMove(moveToRow, King.ShortCastlePosition, .Castle)
+                return figure.createMove(moveToRow, King.ShortCastlePosition, .Castle)
             }
         }
         

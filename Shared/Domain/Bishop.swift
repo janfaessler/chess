@@ -9,6 +9,8 @@ import Foundation
 
 public class Bishop : Figure {
     
+    public static let Ident = "B"
+    
     public init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
         super.init(type: .bishop, color: color, row: row, file: file, moved: moved)
     }
@@ -26,6 +28,6 @@ public class Bishop : Figure {
     }
     
     public override func ident() -> String {
-        return "B"
+        return Bishop.Ident
     }
 }

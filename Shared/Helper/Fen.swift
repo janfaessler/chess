@@ -41,19 +41,19 @@ public class Fen {
     }
     
     private static func canWhiteCastleShort(_ str:String) -> Bool {
-        return str.contains(where: { $0 == "K"})
+        return str.contains(where: { String($0) == King.Ident})
     }
     
     private static func canWhiteCastleLong(_ str:String) -> Bool {
-        return str.contains(where: { $0 == "Q"})
+        return str.contains(where: { String($0) == Queen.Ident})
     }
     
     private static func canBlackCastleShort(_ str:String) -> Bool {
-        return str.contains(where: { $0 == "k"})
+        return str.contains(where: { String($0) == King.Ident.lowercased()})
     }
     
     private static func canBlackCastleLong(_ str:String) -> Bool {
-        return str.contains(where: { $0 == "q"})
+        return str.contains(where: { String($0) == Queen.Ident.lowercased()})
     }
     
     private static func getEnPassantTarget(_ str:String) -> Field? {
@@ -109,14 +109,13 @@ public class Fen {
     }
     
     private static func parcePieceType(_ str:Character) -> PieceType? {
-        switch str.lowercased() {
-            case "p": return .pawn
-            case "b": return .bishop
-            case "n": return .knight
-            case "r": return .rook
-            case "q": return .queen
-            case "k": return .king
-            default: return nil
+        switch str.uppercased() {
+        case Bishop.Ident: return .bishop
+        case Knight.Ident: return .knight
+        case Rook.Ident: return .rook
+        case Queen.Ident: return .queen
+        case King.Ident: return .king
+        default: return .pawn
         }
     }
     

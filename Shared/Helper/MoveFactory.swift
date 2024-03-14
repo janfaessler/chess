@@ -36,9 +36,9 @@ public class MoveFactory {
         let kingFile = getFileOfKing(input)
         let fig = getFigure(targetField: "\(kingFile)\(kingRow)", type: .king, color: color, cache: cache)
         if input == King.ShortCastleNotation {
-            return fig?.CreateMove("\(kingFile)\(kingRow)", type: .Castle)
+            return fig?.createMove("\(kingFile)\(kingRow)", type: .Castle)
         } else {
-            return fig?.CreateMove("\(kingFile)\(kingRow)", type: .Castle)
+            return fig?.createMove("\(kingFile)\(kingRow)", type: .Castle)
         }
     }
     
@@ -47,25 +47,25 @@ public class MoveFactory {
         let pieceType = getPieceType(input[..<pieceEndIndex])
         let field = getField(input[pieceEndIndex...])
         let fig:ChessFigure? = getFigure(targetField: field, type: pieceType!, color: color, cache: cache)
-        return fig?.CreateMove(field)
+        return fig?.createMove(field)
     }
     
     private static func createPawnMove(_ input: String, color:PieceColor, cache: BoardCache) -> Move? {
         let field = getField(input)
         let fig:ChessFigure? = getFigure(targetField: field, type: .pawn, color: color, cache: cache)
         if isPromotion(input) {
-            return fig?.CreateMove(field, type: .Promotion)
+            return fig?.createMove(field, type: .Promotion)
         }
-        return fig?.CreateMove(field)
+        return fig?.createMove(field)
     }
     
     private static func getPieceType(_ char:any StringProtocol) -> PieceType? {
-        switch Character(String(char)) {
-        case "B": return .bishop
-        case "N": return .knight
-        case "Q": return .queen
-        case "R": return .rook
-        case "K": return .king
+        switch String(char) {
+        case Bishop.Ident: return .bishop
+        case Knight.Ident: return .knight
+        case Queen.Ident: return .queen
+        case Rook.Ident: return .rook
+        case King.Ident: return .king
         default: return nil
         }
     }
@@ -73,7 +73,7 @@ public class MoveFactory {
     private static func getFigure(targetField:any StringProtocol, type:PieceType, color:PieceColor, cache:BoardCache) -> ChessFigure? {
         let allFigures = cache.getFigures()
         let figuresOfTypeAndColor = allFigures.filter({ $0.getType() == type && $0.getColor() == color})
-        return figuresOfTypeAndColor.first(where: { $0.CreateMove(targetField) != nil && $0.isMovePossible($0.CreateMove(targetField)!, cache: cache) })
+        return figuresOfTypeAndColor.first(where: { $0.createMove(targetField) != nil && $0.isMovePossible($0.createMove(targetField)!, cache: cache) })
     }
     
     private static func getField(_ input:any StringProtocol) -> any StringProtocol {

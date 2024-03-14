@@ -76,10 +76,7 @@ public struct Move:Identifiable, Equatable{
         let fileName = Character(scalar)
         
         if (type == .Castle) {
-            if (file == 7) {
-                return King.ShortCastleNotation
-            }
-            return King.LongCastleNotation
+            return file == King.ShortCastlePosition ? King.ShortCastleNotation : King.LongCastleNotation
         }
         return "\(fileName)\(row)";
     }

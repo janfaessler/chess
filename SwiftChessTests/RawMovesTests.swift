@@ -261,7 +261,7 @@ final class RawMovesTests: ChessTestBase {
         try moveAndAssert(from: "d1", to: "h5", type: .queen, color: .white)
         
         let king = Figure.create("e8", type: .king, color: .black)!;
-        try assertPossibleMoves(forFigure: king, moves: [king.CreateMove("e7")!])
+        try assertPossibleMoves(forFigure: king, moves: [king.createMove("e7")!])
         
         try moveAndAssert(from: "e8", to: "e7", type: .king, color: .black)
         
