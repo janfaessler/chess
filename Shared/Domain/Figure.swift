@@ -128,7 +128,7 @@ public class Figure:Identifiable, Equatable, ChessFigure {
         return Move(row, file, piece: self, type: .Normal)
     }
     
-    public func CreateMove(_ filename: String) -> Move? {
+    public func CreateMove(_ filename: any StringProtocol) -> Move? {
         return CreateMove(filename, type: .Normal)
     }
     
@@ -136,7 +136,7 @@ public class Figure:Identifiable, Equatable, ChessFigure {
         return Move(row, file, piece: self, type: type)
     }
     
-    public func CreateMove(_ move:String, type:MoveType = .Normal) -> Move? {
+    public func CreateMove(_ move:any StringProtocol, type:MoveType = .Normal) -> Move? {
         return Move(move, piece: self, type: type)
     }
     

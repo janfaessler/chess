@@ -29,7 +29,7 @@ public struct Move:Identifiable, Equatable{
         self.type = type
     }
     
-    public init?(_ fieldname:String, piece: ChessFigure, type: MoveType) {
+    public init?(_ fieldname:any StringProtocol, piece: ChessFigure, type: MoveType) {
         guard let field = Field(fieldname) else { return nil }
         self.init(field.row, field.file, piece: piece, type: type)
     }
@@ -77,9 +77,9 @@ public struct Move:Identifiable, Equatable{
         
         if (type == .Castle) {
             if (file == 7) {
-                return "O-O"
+                return King.ShortCastleNotation
             }
-            return "O-O-0"
+            return King.LongCastleNotation
         }
         return "\(fileName)\(row)";
     }

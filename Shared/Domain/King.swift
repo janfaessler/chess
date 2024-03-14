@@ -9,6 +9,8 @@ import Foundation
 
 public class King : Figure {
     
+    public static let LongCastleNotation = "O-O-O"
+    public static let ShortCastleNotation = "O-O"
     public static let LongCastlePosition = 3
     public static let ShortCastlePosition = 7
     
@@ -47,6 +49,10 @@ public class King : Figure {
         return super.isMovePossible(move, cache: cache)
     }
     
+    public override func CreateMove(_ filename: any StringProtocol) -> Move? {
+        let possibleMoves = getPossibleMoves()
+        return possibleMoves.first(where: {$0.getFieldInfo() == filename})
+    }
     
     public override func ident() -> String {
         return "K"

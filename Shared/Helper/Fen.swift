@@ -29,13 +29,6 @@ public class Fen {
             moveCount: parseInt(parts[5]))
     }
     
-    public static func create(_ pos:Position) -> String {
-        
-        
-        
-        return ""
-    }
-    
     private static func getFigures(_ position: String) -> [Figure] {
         var figures:[Figure] = []
         var row = 8

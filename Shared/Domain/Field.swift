@@ -22,7 +22,7 @@ public struct Field {
         self.file = file
     }
     
-    public init?(_ field:String) {
+    public init?(_ field:any StringProtocol) {
         let chars = [Character](field)
         guard let file = fileNames[chars[0]] else { return nil }
         guard let row = Int(String(chars[1])) else { return nil }

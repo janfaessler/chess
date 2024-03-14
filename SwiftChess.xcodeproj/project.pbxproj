@@ -11,6 +11,8 @@
 		614FFC6B277780130082F892 /* MoveIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC69277780130082F892 /* MoveIndicatorView.swift */; };
 		614FFC6D277786560082F892 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC6C277786560082F892 /* Move.swift */; };
 		614FFC6E277786560082F892 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC6C277786560082F892 /* Move.swift */; };
+		616D3E412BA35241002D78EE /* PositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E402BA35241002D78EE /* PositionTests.swift */; };
+		616D3E432BA352BF002D78EE /* NotationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E422BA352BF002D78EE /* NotationTests.swift */; };
 		6177238D274284FF00169D3D /* SwiftChessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61772362274284FE00169D3D /* SwiftChessApp.swift */; };
 		6177238E274284FF00169D3D /* SwiftChessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61772362274284FE00169D3D /* SwiftChessApp.swift */; };
 		6177238F274284FF00169D3D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61772363274284FE00169D3D /* ContentView.swift */; };
@@ -56,11 +58,11 @@
 		61B0B4542B95E1A90085DB48 /* MoveType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B4522B95E1A90085DB48 /* MoveType.swift */; };
 		61B0B4562B95F4E00085DB48 /* Figure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B4552B95F4E00085DB48 /* Figure.swift */; };
 		61B0B4572B95F4E00085DB48 /* Figure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B4552B95F4E00085DB48 /* Figure.swift */; };
-		61B32F562B99F1F300790CF7 /* StartingPositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AE78222B991AAD008F56F8 /* StartingPositionTests.swift */; };
+		61B32F562B99F1F300790CF7 /* RawMovesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AE78222B991AAD008F56F8 /* RawMovesTests.swift */; };
 		61B32F572B99F1F800790CF7 /* FieldTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AE782F2B99ED07008F56F8 /* FieldTest.swift */; };
 		61B32F592B9A53DB00790CF7 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F582B9A53DB00790CF7 /* Field.swift */; };
 		61B32F5A2B9A53DB00790CF7 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F582B9A53DB00790CF7 /* Field.swift */; };
-		61B32F5C2B9A7D7E00790CF7 /* ChessBoardTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F5B2B9A7D7E00790CF7 /* ChessBoardTestBase.swift */; };
+		61B32F5C2B9A7D7E00790CF7 /* ChessTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F5B2B9A7D7E00790CF7 /* ChessTestBase.swift */; };
 		61B32F5F2B9A873500790CF7 /* ValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F5D2B9A86BC00790CF7 /* ValidationError.swift */; };
 		61B32F612B9CC5D700790CF7 /* BoardCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F602B9CC5D700790CF7 /* BoardCache.swift */; };
 		61B32F622B9CC5D700790CF7 /* BoardCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F602B9CC5D700790CF7 /* BoardCache.swift */; };
@@ -81,6 +83,8 @@
 /* Begin PBXFileReference section */
 		614FFC69277780130082F892 /* MoveIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveIndicatorView.swift; sourceTree = "<group>"; };
 		614FFC6C277786560082F892 /* Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
+		616D3E402BA35241002D78EE /* PositionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionTests.swift; sourceTree = "<group>"; };
+		616D3E422BA352BF002D78EE /* NotationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotationTests.swift; sourceTree = "<group>"; };
 		61772362274284FE00169D3D /* SwiftChessApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftChessApp.swift; sourceTree = "<group>"; };
 		61772363274284FE00169D3D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		61772365274284FF00169D3D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -99,7 +103,7 @@
 		61A919232BA1F83E00AD371E /* MoveFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveFactory.swift; sourceTree = "<group>"; };
 		61A919262BA1F8ED00AD371E /* MoveFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveFactoryTests.swift; sourceTree = "<group>"; };
 		61AE78202B991AAD008F56F8 /* SwiftChessTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftChessTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		61AE78222B991AAD008F56F8 /* StartingPositionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartingPositionTests.swift; sourceTree = "<group>"; };
+		61AE78222B991AAD008F56F8 /* RawMovesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawMovesTests.swift; sourceTree = "<group>"; };
 		61AE78292B991BE8008F56F8 /* SwiftChess (macOS).xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "SwiftChess (macOS).xctestplan"; sourceTree = "<group>"; };
 		61AE782F2B99ED07008F56F8 /* FieldTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldTest.swift; sourceTree = "<group>"; };
 		61B0B43A2B94F5F20085DB48 /* Pawn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pawn.swift; sourceTree = "<group>"; };
@@ -112,7 +116,7 @@
 		61B0B4522B95E1A90085DB48 /* MoveType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveType.swift; sourceTree = "<group>"; };
 		61B0B4552B95F4E00085DB48 /* Figure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Figure.swift; sourceTree = "<group>"; };
 		61B32F582B9A53DB00790CF7 /* Field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Field.swift; sourceTree = "<group>"; };
-		61B32F5B2B9A7D7E00790CF7 /* ChessBoardTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessBoardTestBase.swift; sourceTree = "<group>"; };
+		61B32F5B2B9A7D7E00790CF7 /* ChessTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessTestBase.swift; sourceTree = "<group>"; };
 		61B32F5D2B9A86BC00790CF7 /* ValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationError.swift; sourceTree = "<group>"; };
 		61B32F602B9CC5D700790CF7 /* BoardCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardCache.swift; sourceTree = "<group>"; };
 		61F163EC2B9D165200C48BAC /* ChessFigure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessFigure.swift; sourceTree = "<group>"; };
@@ -231,10 +235,12 @@
 		61AE78212B991AAD008F56F8 /* SwiftChessTests */ = {
 			isa = PBXGroup;
 			children = (
-				61AE78222B991AAD008F56F8 /* StartingPositionTests.swift */,
+				61AE78222B991AAD008F56F8 /* RawMovesTests.swift */,
 				61AE782F2B99ED07008F56F8 /* FieldTest.swift */,
-				61B32F5B2B9A7D7E00790CF7 /* ChessBoardTestBase.swift */,
+				61B32F5B2B9A7D7E00790CF7 /* ChessTestBase.swift */,
 				61A919262BA1F8ED00AD371E /* MoveFactoryTests.swift */,
+				616D3E402BA35241002D78EE /* PositionTests.swift */,
+				616D3E422BA352BF002D78EE /* NotationTests.swift */,
 			);
 			path = SwiftChessTests;
 			sourceTree = "<group>";
@@ -453,10 +459,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				61B32F5C2B9A7D7E00790CF7 /* ChessBoardTestBase.swift in Sources */,
+				61B32F5C2B9A7D7E00790CF7 /* ChessTestBase.swift in Sources */,
 				61B32F572B99F1F800790CF7 /* FieldTest.swift in Sources */,
-				61B32F562B99F1F300790CF7 /* StartingPositionTests.swift in Sources */,
+				61B32F562B99F1F300790CF7 /* RawMovesTests.swift in Sources */,
 				61A919272BA1F8ED00AD371E /* MoveFactoryTests.swift in Sources */,
+				616D3E412BA35241002D78EE /* PositionTests.swift in Sources */,
+				616D3E432BA352BF002D78EE /* NotationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

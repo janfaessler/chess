@@ -23,6 +23,13 @@ public class ChessBoard {
         figures.append(contentsOf: pos.figures)
         cache = BoardCache.create(figures)
     }
+    
+    public func move(_ moveNotation:String) throws {
+        guard let createdMove = MoveFactory.create(moveNotation, cache: cache) else {
+            throw ValidationError.CanNotIdentifyMove
+        }
+        try move(createdMove)
+    }
 
     public func move(_ move:Move) throws {
         
@@ -33,10 +40,8 @@ public class ChessBoard {
 
         let isCapture = doCapture(move)
         try doMove(move)
-        let isPromotion = checkPromotion(move)
-        setColorToMove()
-        moves += [move]
-        LogMove(move, isCapture: isCapture, isPromotion: isPromotion)
+
+        LogMove(move, isCapture: isCapture)
 
     }
     
@@ -56,7 +61,10 @@ public class ChessBoard {
         return figures
     }
     
-    public func getMoves() -> [String] {
+    public func getMoves() -> [Move] {
+        return moves
+    }
+    public func getMoveLog() -> [String] {
         return moveLog
     }
     
@@ -91,9 +99,10 @@ public class ChessBoard {
         let figure = figures.first(where: { $0.equals(move.piece) })!
         figure.move(row: move.row, file: move.file)
         moveRookForCastling(move)
-        recreateBoardDict()
+        colorToMove = colorToMove == .black ? .white : .black
+        moves += [move]
+        cache = getBoardCache()
     }
-    
     
     private func checkPromotion(_ move: Move) -> Bool {
         guard move.piece.getType() == .pawn else { return false }
@@ -105,11 +114,12 @@ public class ChessBoard {
     }
     
     private func setColorToMove() {
-        colorToMove = colorToMove == .black ? .white : .black
+
     }
     
-    private func LogMove(_ move: Move, isCapture:Bool, isPromotion:Bool) {
-        
+    private func LogMove(_ move: Move, isCapture:Bool) {
+        let isPromotion = checkPromotion(move)
+
         var logInfo:String = ""
         if move.type == .Castle {
             logInfo.append(move.info())
@@ -118,7 +128,7 @@ public class ChessBoard {
             
             if isCapture {
                 if move.piece.getType() == .pawn {
-                    logInfo.append(move.startingField.getFileName())
+                    logInfo.append(move.getStartingField().getFileName())
                 }
                 logInfo.append("x")
             }
@@ -226,11 +236,7 @@ public class ChessBoard {
     private func removeFigure(_ figure:ChessFigure) {
         figures.removeAll(where: { $0.equals(figure) })
     }
-    
-    private func recreateBoardDict(){
-        cache = getBoardCache()
-    }
-    
+
     private func getBoardCache() -> BoardCache {
         return BoardCache.create(figures, lastMove: moves.last)
     }
