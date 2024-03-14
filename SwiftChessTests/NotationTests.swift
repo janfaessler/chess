@@ -122,7 +122,7 @@ final class NotationTests: ChessTestBase {
         try moveAndAssert(notation: "d6", toField: "d6", type: .pawn, color: .black)
         
         try moveAndAssert(notation: "Nh3", toField: "h3", type: .knight, color: .white)
-        try moveAndAssert(notation: "Qh4", toField: "h4", type: .queen, color: .black)
+        try moveAndAssert(notation: "Qh4+", toField: "h4", type: .queen, color: .black)
         
         try moveAndAssertError("O-O")
         
@@ -240,7 +240,7 @@ final class NotationTests: ChessTestBase {
         try moveAndAssert(notation: "a3", toField: "a3", type: .pawn, color: .white)
         
         try moveAndAssertError("Qxc4")
-        try moveAndAssert(notation: "Qxe4", toField: "e4", type: .queen, color: .black)
+        try moveAndAssert(notation: "Qxe4+", toField: "e4", type: .queen, color: .black)
         
         try assertMoves()
     }
@@ -256,7 +256,7 @@ final class NotationTests: ChessTestBase {
         try moveAndAssert(notation: "h3", toField: "h3", type: .pawn, color: .white)
         try moveAndAssert(notation: "g5", toField: "g5", type: .pawn, color: .black, moveType: .Double)
         
-        try moveAndAssert(notation: "Qh5", toField: "h5", type: .queen, color: .white)
+        try moveAndAssert(notation: "Qh5+", toField: "h5", type: .queen, color: .white)
         
         let king = Figure.create("e8", type: .king, color: .black)!;
         try assertPossibleMoves(forFigure: king, moves: [king.createMove("e7")!])
@@ -272,10 +272,10 @@ final class NotationTests: ChessTestBase {
         try moveAndAssert(notation: "d3", toField: "d3", type: .pawn, color: .white)
         try moveAndAssert(notation: "b5", toField: "b5", type: .pawn, color: .black, moveType: .Double)
         
-        try moveAndAssert(notation: "Bxg5", toField: "g5", type: .bishop, color: .white)
+        try moveAndAssert(notation: "Bxg5+", toField: "g5", type: .bishop, color: .white)
         try moveAndAssert(notation: "Nf6", toField: "f6", type: .knight, color: .black)
         
-        try moveAndAssert(notation: "Bxf6", toField: "f6", type: .bishop, color: .white)
+        try moveAndAssert(notation: "Bxf6+", toField: "f6", type: .bishop, color: .white)
         
         try assertMoves()
         

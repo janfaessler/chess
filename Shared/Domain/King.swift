@@ -83,20 +83,10 @@ public class King : Figure {
          
         let isLongCastle = isLongCastling(move)
         
-        guard !isFieldInCheck(move.piece.getRow(), move.piece.getFile(), cache: cache) else { return true }
-        guard !isFieldInCheck(move.row, isLongCastle ? move.file + 1 : move.file - 1, cache: cache) else { return true }
-        guard !isFieldInCheck(move.row, move.file, cache: cache) else { return true }
+        guard !cache.isFieldInCheck(move.piece.getRow(), move.piece.getFile()) else { return true }
+        guard !cache.isFieldInCheck(move.row, isLongCastle ? move.file + 1 : move.file - 1) else { return true }
+        guard !cache.isFieldInCheck(move.row, move.file) else { return true }
         
         return false
-    }
-    
-    private func isFieldInCheck(_ row: Int, _ file: Int, cache:BoardCache) -> Bool {
-        let figures = cache.getFigures()
-        return figures.contains(where: {
-            
-            if $0.getColor() == getColor() { return false }
-            let movepossible = $0.isMovePossible(Move(row, file, piece: $0), cache: cache)
-            return movepossible
-        })
     }
 }

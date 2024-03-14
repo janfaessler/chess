@@ -73,6 +73,16 @@ public class BoardCache {
         return get(atRow: move.row, atFile: move.file)
     }
     
+    public func isFieldInCheck(_ row: Int, _ file: Int) -> Bool {
+        let figures = getFigures()
+        return figures.contains(where: {
+            
+            if $0.getColor() != lastMove?.getPiece().getColor() { return false }
+            let movepossible = $0.isMovePossible(Move(row, file, piece: $0), cache: self)
+            return movepossible
+        })
+    }
+    
     private func getNextPieceOnRow(from:Field, to:Field) -> ChessFigure? {
         let direction = from.file < to.file ? 1 : -1
         for f in stride(from: from.file + direction, to: to.file, by: direction)  {

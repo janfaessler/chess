@@ -215,6 +215,7 @@ public class ChessBoard {
     
     private func LogMove(_ move: Move, isCapture:Bool) {
         let isPromotion = checkPromotion(move)
+        let isCheck = isCheck(move)
 
         var logInfo:String = ""
         if move.type == .Castle {
@@ -229,11 +230,21 @@ public class ChessBoard {
                 logInfo.append("x")
             }
             logInfo.append(move.getFieldInfo())
+
             if isPromotion {
                 logInfo.append("=Q")
+            }
+            
+            if isCheck {
+                logInfo.append("+")
             }
         }
         logger.log("\(logInfo)")
         moveLog += [logInfo]
+    }
+    
+    private func isCheck(_ move:Move) -> Bool {
+        let opponentKing = figures.first(where: { $0.getType() == .king && $0.getColor() != move.piece.getColor()})
+        return cache.isFieldInCheck(opponentKing!.getRow(), opponentKing!.getFile())
     }
 }
