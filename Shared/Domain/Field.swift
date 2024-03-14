@@ -1,10 +1,3 @@
-//
-//  Field.swift
-//  SwiftChess
-//
-//  Created by Jan Fässler on 07.03.2024.
-//
-
 import Foundation
 
 public struct Field {
