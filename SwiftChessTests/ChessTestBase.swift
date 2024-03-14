@@ -11,9 +11,14 @@ import SwiftChess
 class ChessTestBase: XCTestCase {
     
     var testee:ChessBoard?
+    var moveLog:[String] = []
 
     override func setUpWithError() throws {
         testee = ChessBoard(Fen.loadStartingPosition())
+    }
+    
+    override func tearDownWithError() throws {
+        moveLog = []
     }
 
     func moveAndAssert(
@@ -69,6 +74,7 @@ class ChessTestBase: XCTestCase {
         var moveError:Bool = false
         do {
             try testee.move(move)
+            moveLog += [notation]
         } catch { moveError = true }
         let endFigureExists = figureExist(endFigure)
         let nextColorToMoveDidNotChange = testee.getColorToMove() == color
@@ -261,6 +267,18 @@ class ChessTestBase: XCTestCase {
         guard !moves.elementsEqual(expectedMoves) else { return }
 
         XCTFail(message(moves, expectedMoves), file: file, line: line)
+    }
+    
+    func assertMoves(
+        message: ([String], [String]) -> String = { "[\($0.joined(separator: ","))] is not equal [\($1.joined(separator: ","))]" },
+        file: StaticString = #filePath,
+        line: UInt = #line) throws {
+        let testee = try XCTUnwrap(testee)
+        let moves = testee.getMoveLog()
+        
+        guard !moves.elementsEqual(moveLog) else { return }
+
+        XCTFail(message(moves, moveLog), file: file, line: line)
     }
     
     func figureExist(_ figure: ChessFigure) -> Bool {

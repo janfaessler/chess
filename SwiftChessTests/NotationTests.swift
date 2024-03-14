@@ -17,7 +17,7 @@ final class NotationTests: ChessTestBase {
         
         try moveAndAssert(notation: "exd5", toField: "d5", type:.pawn, color: .white)
         
-        try assertMoves(["e4", "d5", "exd5"])
+        try assertMoves()
         
     }
     
@@ -29,9 +29,9 @@ final class NotationTests: ChessTestBase {
         try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .white)
         try moveAndAssert(notation: "d5", toField: "d5", type: .pawn, color: .black, moveType: .Double)
         
-        try moveAndAssert(notation: "d6", toField: "d6", type: .pawn, color: .white)
+        try moveAndAssert(notation: "exd6", toField: "d6", type: .pawn, color: .white)
         
-        try assertMoves(["e4", "a6", "e5", "d5", "exd6"])
+        try assertMoves()
 
     }
     
@@ -45,7 +45,7 @@ final class NotationTests: ChessTestBase {
         
         try moveAndAssert(notation: "exf6", toField: "f6", type: .pawn, color: .white)
         
-        try assertMoves(["e4", "a6", "e5", "f5", "exf6"])
+        try assertMoves()
     }
     
     func testEnPassantToPromotion() throws {
@@ -64,7 +64,7 @@ final class NotationTests: ChessTestBase {
 
         try moveAndAssert(notation: "exd8=Q", toField: "d8", type: .queen, color: .white)
         
-        try assertMoves(["e4", "a6", "e5", "d5", "exd6", "b5", "dxe7", "c5", "exd8=Q"])
+        try assertMoves()
 
     }
     
@@ -82,7 +82,7 @@ final class NotationTests: ChessTestBase {
         try moveAndAssert(notation: "O-O", toField: "g1", type:.king, color: .white, moveType: .Castle)
         try moveAndAssert(notation: "O-O", toField: "g8", type:.king, color: .black, moveType: .Castle)
         
-        try assertMoves(["e4", "e5", "Bc4", "Bc5", "Nf3", "Nf6", "O-O", "O-O"])
+        try assertMoves()
 
     }
     
@@ -106,7 +106,7 @@ final class NotationTests: ChessTestBase {
         try moveAndAssert(notation: "O-O-O", toField: "c1", type: .king, color: .white, moveType: .Castle)
         try moveAndAssert(notation: "O-O-O", toField: "c8", type: .king, color: .black, moveType: .Castle)
         
-        try assertMoves(["b3", "b6", "Bb2", "Bb7", "Nc3", "Nc6", "e3", "e6", "Qe2", "Qe7", "O-O-O", "O-O-O"])
+        try assertMoves()
 
     }
     
@@ -126,7 +126,7 @@ final class NotationTests: ChessTestBase {
         
         try moveAndAssertError("O-O")
         
-        try assertMoves(["e4", "e5", "f3", "f5", "Bc4", "d6", "Nh3", "Qh4"])
+        try assertMoves()
         
     }
     
@@ -149,7 +149,7 @@ final class NotationTests: ChessTestBase {
         
         try moveAndAssertError("O-O")
         
-        try assertMoves(["e4", "e5", "Nf3", "d6", "h3", "Be6", "Na3", "f6", "Bc4", "Bxc4"])
+        try assertMoves()
     }
     
     
@@ -169,7 +169,7 @@ final class NotationTests: ChessTestBase {
         
         try moveAndAssertError("O-O")
         
-        try assertMoves(["e4", "e5", "f3", "Bc5", "Bc4", "d6", "Ne2", "f6"])
+        try assertMoves()
 
     }
     
@@ -195,7 +195,7 @@ final class NotationTests: ChessTestBase {
         
         try moveAndAssertError("O-O")
         
-        try assertMoves(["Nf3", "b6", "g3", "Bb7", "Bg2", "e5", "Nxe5", "Bxg2", "Nxf7", "Bxh1", "Nxd8", "Kxd8"])
+        try assertMoves()
         
     }
     
@@ -226,7 +226,7 @@ final class NotationTests: ChessTestBase {
         
         try moveAndAssert(notation: "Kh1", toField: "h1", type: .king, color: .white)
                 
-        try assertMoves(["e4", "e5", "Bc4", "Bb4", "c3", "Nf6", "Nf3", "O-O", "cxb4", "Re8", "O-O", "Kh8", "Kh1"])
+        try assertMoves()
     }
     
     func testRowIntersection() throws {
@@ -242,7 +242,7 @@ final class NotationTests: ChessTestBase {
         try moveAndAssertError("Qxc4")
         try moveAndAssert(notation: "Qxe4", toField: "e4", type: .queen, color: .black)
         
-        try assertMoves(["e4", "e5", "Bc4", "Qh4", "a3", "Qxe4"])
+        try assertMoves()
     }
     
     func testCheckMate() throws {
@@ -277,7 +277,7 @@ final class NotationTests: ChessTestBase {
         
         try moveAndAssert(notation: "Bxf6", toField: "f6", type: .bishop, color: .white)
         
-        try assertMoves(["e4", "f5", "Bc4", "e6", "h3", "g5", "Qh5", "Ke7", "e5", "a6","d3","b5", "Bxg5", "Nf6", "Bxf6"])
+        try assertMoves()
         
     }
 
