@@ -38,6 +38,14 @@ public class ChessBoard {
 
     }
     
+    public func getGameState() -> GameState {
+        
+        guard playerHasLegalMove() else {
+            return colorToMove == .white ? .BlackWins : .WhiteWins
+        }
+        return moves.count > 0 ? .Running : .NotStarted
+    }
+    
     public func getColorToMove() -> PieceColor {
         return colorToMove
     }
@@ -180,6 +188,11 @@ public class ChessBoard {
     
     private func isShortCastling(_ move: Move) -> Bool {
         return move.file == King.ShortCastlePosition && isKingCastling(move)
+    }
+    
+    private func playerHasLegalMove() -> Bool {
+        let figuresOfCurrentPlayer = figures.filter({ $0.getColor() == colorToMove })
+        return figuresOfCurrentPlayer.contains(where: { fig in fig.getPossibleMoves().contains(where: { move in IsMoveLegalMoveOnTheBoard(move) }) })
     }
     
     private func fieldIsEmpty(atRow:Int, atFile:Int) -> Bool {

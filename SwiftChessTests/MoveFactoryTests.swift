@@ -83,6 +83,74 @@ final class MoveFactoryTests: XCTestCase {
         
     }
     
+    func testUncertainKnightMoves() throws {
+        try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .Double)
+        try assertMove("c6", field: "c6", type: .pawn, color: .black)
+        
+        try assertMove("d3", field: "d3", type: .pawn, color: .white)
+        try assertMove("d5", field: "d5", type: .pawn, color: .black, moveType: .Double)
+        
+        try assertMove("Nd2", field: "d2", type: .knight, color: .white)
+        try assertMove("Nd7", field: "d7", type: .knight, color: .black)
+        
+        try assertMove("Ngf3", field: "f3", type: .knight, color: .white)
+        try assertMove("Ngf6", field: "f6", type: .knight, color: .black)
+        
+        try assertMove("Nb3", field: "b3", type: .knight, color: .white)
+        try assertMove("Nb6", field: "b6", type: .knight, color: .black)
+        
+        try assertMove("Nfd2", field: "d2", type: .knight, color: .white)
+        try assertMove("Ng4", field: "g4", type: .knight, color: .black)
+
+        try assertMove("Nc4", field: "c4", type: .knight, color: .white)
+        try assertMove("Nf6", field: "f6", type: .knight, color: .black)
+        
+        try assertMove("Nca5", field: "a5", type: .knight, color: .white)
+        try assertMove("Ng4", field: "g4", type: .knight, color: .black)
+
+        try assertMove("Nxb7", field: "b7", type: .knight, color: .white)
+        try assertMove("Nf6", field: "f6", type: .knight, color: .black)
+        
+        try assertMove("N7c5", field: "c5", type: .knight, color: .white)
+        try assertMove("Ng4", field: "g4", type: .knight, color: .black)
+        
+        try assertMove("Nd2", field: "d2", type: .knight, color: .white)
+    }
+    
+    func testUncertainRookMoves() throws {
+        try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .Double)
+        try assertMove("e5", field: "e5", type: .pawn, color: .black, moveType: .Double)
+    
+        try assertMove("Nf3", field: "f3", type: .knight, color: .white)
+        try assertMove("Nf6" ,field: "f6", type: .knight, color: .black)
+    
+        try assertMove("Bc4", field: "c4", type: .bishop, color: .white)
+        try assertMove("Bc5", field: "c5", type: .bishop, color: .black)
+    
+        try assertMove("O-O", field: "g1", type: .king, color: .white, moveType: .Castle)
+        try assertMove("O-O", field: "g8", type: .king, color: .black, moveType: .Castle)
+        
+        try assertMove("Nc3", field: "c3", type: .knight, color: .white)
+        try assertMove("Nc6", field: "c6", type: .knight, color: .black)
+        
+        try assertMove("d3", field: "d3", type: .pawn, color: .white)
+        try assertMove("d6", field: "d6", type: .pawn, color: .black)
+        
+        try assertMove("Be3", field: "e3", type: .bishop, color: .white)
+        try assertMove("Be6", field: "e6", type: .bishop, color: .black)
+        
+        try assertMove("Qd2", field: "d2", type: .queen, color: .white)
+        try assertMove("Qd7", field: "d7", type: .queen, color: .black)
+        
+        try assertMove("Rfd1", field: "d1", type: .rook, color: .white)
+        try assertMove("Rfe8", field: "e8", type: .rook, color: .black)
+        
+        try assertMove("Rac1", field: "c1", type: .rook, color: .white)
+        try assertMove("Rac8", field: "c8", type: .rook, color: .black)
+    
+    }
+    
+
     private func assertMove(
         _ moveName:String,
         field:String,
@@ -110,6 +178,15 @@ final class MoveFactoryTests: XCTestCase {
         fig.move(row: move.getRow(), file: move.getFile())
         figures.removeAll(where: {$0.equals(move.getPiece())})
         figures.append(fig)
+        if move.getType() == .Castle {
+            if move.getFile() == King.LongCastlePosition{
+                let rook = figures.first(where: { $0.equals(Rook(color: fig.getColor(), row: fig.getRow(), file: Rook.LongCastleStartingFile))})!
+                rook.move(row: move.getRow(), file: Rook.LongCastleEndFile)
+            } else {
+                let rook = figures.first(where: { $0.equals(Rook(color: fig.getColor(), row: fig.getRow(), file: Rook.ShortCastleStartingFile))})!
+                rook.move(row: move.getRow(), file: Rook.ShortCastleEndFile)
+            }
+        }
         boardCache = BoardCache.create(figures, lastMove: move)
     }
 }

@@ -253,7 +253,8 @@ class ChessTestBase: XCTestCase {
         _ expectedMoves:[String],
         message: ([String], [String]) -> String = { "[\($0.joined(separator: ","))] is not equal [\($1.joined(separator: ","))]" },
         file: StaticString = #filePath,
-        line: UInt = #line) throws {
+        line: UInt = #line
+    ) throws {
         let testee = try XCTUnwrap(testee)
         let moves = testee.getMoveLog()
         
@@ -265,13 +266,28 @@ class ChessTestBase: XCTestCase {
     func assertMoves(
         message: ([String], [String]) -> String = { "[\($0.joined(separator: ","))] is not equal [\($1.joined(separator: ","))]" },
         file: StaticString = #filePath,
-        line: UInt = #line) throws {
+        line: UInt = #line
+    ) throws {
         let testee = try XCTUnwrap(testee)
         let moves = testee.getMoveLog()
         
         guard !moves.elementsEqual(moveLog) else { return }
 
         XCTFail(message(moves, moveLog), file: file, line: line)
+    }
+    
+    func assertGameState(
+        _ expectedState:GameState,
+        message: (GameState, GameState) -> String = { "\($0) is not equal to \($1)" },
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) throws {
+        let testee = try XCTUnwrap(testee)
+        
+        let gameState = testee.getGameState()
+        guard gameState != expectedState else { return }
+        
+        XCTFail(message(gameState, expectedState), file: file, line: line)
     }
     
     func figureExist(_ figure: ChessFigure) -> Bool {

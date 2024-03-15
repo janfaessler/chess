@@ -13,6 +13,9 @@
 		614FFC6E277786560082F892 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC6C277786560082F892 /* Move.swift */; };
 		616D3E412BA35241002D78EE /* PositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E402BA35241002D78EE /* PositionTests.swift */; };
 		616D3E432BA352BF002D78EE /* NotationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E422BA352BF002D78EE /* NotationTests.swift */; };
+		616D3E472BA464D8002D78EE /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E462BA464D8002D78EE /* GameState.swift */; };
+		616D3E482BA464D8002D78EE /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E462BA464D8002D78EE /* GameState.swift */; };
+		616D3E4A2BA46683002D78EE /* GameStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E492BA46683002D78EE /* GameStateTests.swift */; };
 		6177238D274284FF00169D3D /* SwiftChessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61772362274284FE00169D3D /* SwiftChessApp.swift */; };
 		6177238E274284FF00169D3D /* SwiftChessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61772362274284FE00169D3D /* SwiftChessApp.swift */; };
 		6177238F274284FF00169D3D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61772363274284FE00169D3D /* ContentView.swift */; };
@@ -85,6 +88,8 @@
 		614FFC6C277786560082F892 /* Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
 		616D3E402BA35241002D78EE /* PositionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionTests.swift; sourceTree = "<group>"; };
 		616D3E422BA352BF002D78EE /* NotationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotationTests.swift; sourceTree = "<group>"; };
+		616D3E462BA464D8002D78EE /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
+		616D3E492BA46683002D78EE /* GameStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStateTests.swift; sourceTree = "<group>"; };
 		61772362274284FE00169D3D /* SwiftChessApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftChessApp.swift; sourceTree = "<group>"; };
 		61772363274284FE00169D3D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		61772365274284FF00169D3D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -218,6 +223,7 @@
 				61812E2D276807E600616866 /* PieceColor.swift */,
 				61B0B4522B95E1A90085DB48 /* MoveType.swift */,
 				61B32F5D2B9A86BC00790CF7 /* ValidationError.swift */,
+				616D3E462BA464D8002D78EE /* GameState.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -241,6 +247,7 @@
 				61A919262BA1F8ED00AD371E /* MoveFactoryTests.swift */,
 				616D3E402BA35241002D78EE /* PositionTests.swift */,
 				616D3E422BA352BF002D78EE /* NotationTests.swift */,
+				616D3E492BA46683002D78EE /* GameStateTests.swift */,
 			);
 			path = SwiftChessTests;
 			sourceTree = "<group>";
@@ -408,6 +415,7 @@
 				61B0B4502B95DEB00085DB48 /* ChessBoard.swift in Sources */,
 				61812E2B2768078E00616866 /* PieceType.swift in Sources */,
 				61B32F612B9CC5D700790CF7 /* BoardCache.swift in Sources */,
+				616D3E472BA464D8002D78EE /* GameState.swift in Sources */,
 				61812E242767F42000616866 /* BoardModel.swift in Sources */,
 				61812E2E276807E600616866 /* PieceColor.swift in Sources */,
 				61B0B4532B95E1A90085DB48 /* MoveType.swift in Sources */,
@@ -434,6 +442,7 @@
 				61B0B43C2B94F5F20085DB48 /* Pawn.swift in Sources */,
 				61812E3327681DFC00616866 /* Fen.swift in Sources */,
 				61A919252BA1F83E00AD371E /* MoveFactory.swift in Sources */,
+				616D3E482BA464D8002D78EE /* GameState.swift in Sources */,
 				61B0B4572B95F4E00085DB48 /* Figure.swift in Sources */,
 				6177238E274284FF00169D3D /* SwiftChessApp.swift in Sources */,
 				614FFC6E277786560082F892 /* Move.swift in Sources */,
@@ -464,6 +473,7 @@
 				61B32F562B99F1F300790CF7 /* RawMovesTests.swift in Sources */,
 				61A919272BA1F8ED00AD371E /* MoveFactoryTests.swift in Sources */,
 				616D3E412BA35241002D78EE /* PositionTests.swift in Sources */,
+				616D3E4A2BA46683002D78EE /* GameStateTests.swift in Sources */,
 				616D3E432BA352BF002D78EE /* NotationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
