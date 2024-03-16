@@ -13,7 +13,7 @@ public class Bishop : Figure {
         for r in 1...8 {
             for f in 1...8 {
                 if !(getRow() == r && getFile() == f) && (getRow()-r == getFile()-f || getRow()+getFile() == r+f) {
-                    moves.append(CreateMove(r, f))
+                    moves.append(createMove(r, f))
                 }
             }
         }

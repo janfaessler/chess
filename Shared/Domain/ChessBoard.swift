@@ -11,6 +11,7 @@ public class ChessBoard {
     private var moves: [Move] = []
     private var moveLog: [String] = []
     private var moveClock:Int = 0
+    private var halfmoveClock:Int = 0
     private var positionCount:[Int:Int] = [:]
     
     public init(_ pos:Position) {
@@ -28,6 +29,8 @@ public class ChessBoard {
         try move(createdMove)
     }
 
+
+    
     public func move(_ move:Move) throws {
         
         guard IsMoveLegalMoveOnTheBoard(move) else {
@@ -35,13 +38,13 @@ public class ChessBoard {
             throw ValidationError.MoveNotLegalMoveOnTheBoard
         }
 
-        let isCapture = doCapture(move)
-        try doMove(move)
+        let isCapture = try doMove(move)
+        let isPromotion = checkPromotion(move)
 
-        LogMove(move, isCapture: isCapture)
+        LogMove(move, isCapture: isCapture, isPromotion: isPromotion)
 
     }
-    
+
     public func getGameState() -> GameState {
         
         if isDrawByInsufficientMaterial() {
@@ -50,6 +53,10 @@ public class ChessBoard {
         
         if isThreefoldRepetition() {
             return .DrawByRepetition
+        }
+        
+        if is50MoveWithoutPawnOrCaptureDone() {
+            return .DrawBy50MoveRule
         }
         
         if playerHasLegalMove() {
@@ -105,6 +112,21 @@ public class ChessBoard {
         return true
     }
     
+    private func doMove(_ move: Move) throws -> Bool {
+        let figure = figures.first(where: { $0.equals(move.piece) })!
+        let isCapture = doCapture(move)
+
+        figure.move(row: move.row, file: move.file)
+        moveRookForCastling(move)
+        colorToMove = colorToMove == .black ? .white : .black
+        moves += [move]
+        increaseMoveCounter()
+        cache = getBoardCache()
+        increasePositionCount()
+        increaseHalfmoveCounter(move, isCapture)
+        return isCapture
+    }
+    
     private func doCapture(_ move: Move) -> Bool {
         if isPawnCapturing(move) {
             return captureFigureAt(row: move.piece.getRow(), file: move.file)
@@ -113,19 +135,6 @@ public class ChessBoard {
         return captureFigureAt(row: move.row, file: move.file)
     }
 
-
-    
-    private func doMove(_ move: Move) throws {
-        let figure = figures.first(where: { $0.equals(move.piece) })!
-        figure.move(row: move.row, file: move.file)
-        moveRookForCastling(move)
-        colorToMove = colorToMove == .black ? .white : .black
-        moves += [move]
-        moveClock += 1
-        cache = getBoardCache()
-        increasePositionCount()
-    }
-    
     private func checkPromotion(_ move: Move) -> Bool {
         guard move.piece.getType() == .pawn else { return false }
         guard pawnHasReachedEndOfTheBoard(move) else { return false  }
@@ -255,6 +264,10 @@ public class ChessBoard {
         return  count >= 3
     }
     
+    private func is50MoveWithoutPawnOrCaptureDone() -> Bool {
+        return halfmoveClock > 100
+    }
+    
     private func isCheck(_ move:Move) -> Bool {
         let opponentKing = figures.first(where: { $0.getType() == .king && $0.getColor() != move.piece.getColor()})
         return cache.isFieldInCheck(opponentKing!.getRow(), opponentKing!.getFile())
@@ -294,8 +307,15 @@ public class ChessBoard {
         positionCount[cache.getHash()] = (positionCount[cache.getHash()] ?? 0) + 1
     }
     
-    private func LogMove(_ move: Move, isCapture:Bool) {
-        let isPromotion = checkPromotion(move)
+    private func increaseHalfmoveCounter(_ move: Move, _ isCapture: Bool) {
+        halfmoveClock = move.getPiece().getType() == .pawn || isCapture ? 1 : halfmoveClock + 1
+    }
+    
+    private func increaseMoveCounter() {
+        moveClock += 1
+    }
+    
+    private func LogMove(_ move: Move, isCapture:Bool, isPromotion:Bool) {
         let isCheck = isCheck(move)
 
         var logInfo:String = ""

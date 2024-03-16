@@ -15,7 +15,7 @@ public class MoveFactory {
         return Array(input).first!.isUppercase
     }
     
-    public static func create(_ input:String, cache:BoardCache) -> Move? {
+    public static func create(_ input:any StringProtocol, cache:BoardCache) -> Move? {
         let color = cache.getColorToMove()
         if isCastlingMove(input) {
             return createCastlingMove(input, color: color, cache: cache)
@@ -26,20 +26,20 @@ public class MoveFactory {
         return createPawnMove(input, color: color, cache: cache)
     }
     
-    private static func createCastlingMove(_ input: String, color: PieceColor, cache: BoardCache) -> Move? {
+    private static func createCastlingMove(_ input: any StringProtocol, color: PieceColor, cache: BoardCache) -> Move? {
         let kingRow = getRowOfKing(color)
         let kingFile = getFileOfKing(input)
         let fig = getFigure(targetField: "\(kingFile)\(kingRow)", type: .king, color: color, cache: cache)
-        if input == King.ShortCastleNotation {
+        if String(input) == King.ShortCastleNotation {
             return fig?.createMove("\(kingFile)\(kingRow)", type: .Castle)
         } else {
             return fig?.createMove("\(kingFile)\(kingRow)", type: .Castle)
         }
     }
     
-    private static func createPieceMove(_ input: String, _ color: PieceColor, _ cache: BoardCache) -> Move? {
+    private static func createPieceMove(_ input: any StringProtocol, _ color: PieceColor, _ cache: BoardCache) -> Move? {
         
-        let cleanedInput = input.filter({ $0 != checkIndicator && $0 != checkmateIndicator && $0 != captureSeparator })
+        let cleanedInput = String(input.filter({ $0 != checkIndicator && $0 != checkmateIndicator && $0 != captureSeparator }))
         
         let pieceEndIndex = getEndOfPieceIdentIndex(cleanedInput)!
         guard let pieceType = getPieceType(cleanedInput[..<pieceEndIndex]) else { return nil }
@@ -51,7 +51,7 @@ public class MoveFactory {
         return fig?.createMove(field)
     }
     
-    private static func createPawnMove(_ input: String, color:PieceColor, cache: BoardCache) -> Move? {
+    private static func createPawnMove(_ input: any StringProtocol, color:PieceColor, cache: BoardCache) -> Move? {
         let field = getField(input)
         let fig = getFigure(targetField: field, type: .pawn, color: color, cache: cache)
         if isPromotion(input) {
@@ -60,7 +60,7 @@ public class MoveFactory {
         return fig?.createMove(field)
     }
     
-    private static func getPieceFigure(_ cleanedInput: String, pieceType: PieceType, color: PieceColor, cache: BoardCache) -> (any ChessFigure)? {
+    private static func getPieceFigure(_ cleanedInput: any StringProtocol, pieceType: PieceType, color: PieceColor, cache: BoardCache) -> (any ChessFigure)? {
         let field = getPieceField(cleanedInput)
         if hasRowInfo(cleanedInput){
             let rowInfo = getPiecePositionInfo(cleanedInput)
@@ -125,17 +125,17 @@ public class MoveFactory {
         return promotionParts.first!
     }
     
-    private static func isPromotion(_ input:String) -> Bool {
+    private static func isPromotion(_ input:any StringProtocol) -> Bool {
         let captureParts = input.split(separator: captureSeparator)
         let promotionParts = captureParts.last!.split(separator: promotionSeparator)
         return promotionParts.count > 1
     }
     
-    private static func isCastlingMove(_ input: String) -> Bool {
-        return input == King.LongCastleNotation || input == King.ShortCastleNotation
+    private static func isCastlingMove(_ input:any StringProtocol) -> Bool {
+        return String(input) == King.LongCastleNotation || String(input) == King.ShortCastleNotation
     }
     
-    private static func getEndOfPieceIdentIndex(_ input: String) -> String.Index? {
+    private static func getEndOfPieceIdentIndex(_ input: any StringProtocol) -> String.Index? {
         return input.index(after: input.startIndex)
     }
     
@@ -143,8 +143,8 @@ public class MoveFactory {
         return color == .white ? whiteStartingRow : blackStartingRow
     }
     
-    private static func getFileOfKing(_ input: String) -> String {
-        return input == King.ShortCastleNotation ? ShortCastleTargetFile : LongCastleTargetFile
+    private static func getFileOfKing(_ input: any StringProtocol) -> String {
+        return String(input) == King.ShortCastleNotation ? ShortCastleTargetFile : LongCastleTargetFile
     }
     
     private static func hasFileInfo(_ input: any StringProtocol) -> Bool {
@@ -155,7 +155,7 @@ public class MoveFactory {
         return input.filter({ $0.isNumber }).count == 2
     }
     
-    private static func getPiecePositionInfo(_ cleanedInput: String) -> String {
+    private static func getPiecePositionInfo(_ cleanedInput: any StringProtocol) -> String {
         return String(Array(cleanedInput)[1])
     }
 }

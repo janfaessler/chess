@@ -45,7 +45,7 @@ public class Pawn : Figure {
     }
     
     public override func createMove(_ move:any StringProtocol) -> Move? {
-        return Move(move, piece: self, type: getMoveType(move))
+        return Move(move, piece: Pawn(color: self.getColor(), row: self.getRow(), file: self.getFile()), type: getMoveType(move))
     }
     
     public override func ident() -> String {

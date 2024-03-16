@@ -16,14 +16,14 @@ public class King : Figure {
         let row = getRow()
         let file = getFile()
         var moves = [
-            CreateMove(row+1, file+1),
-            CreateMove(row, file+1),
-            CreateMove(row+1, file),
-            CreateMove(row-1, file-1),
-            CreateMove(row, file-1),
-            CreateMove(row-1, file),
-            CreateMove(row-1, file+1),
-            CreateMove(row+1, file-1)
+            createMove(row+1, file+1),
+            createMove(row, file+1),
+            createMove(row+1, file),
+            createMove(row-1, file-1),
+            createMove(row, file-1),
+            createMove(row-1, file),
+            createMove(row-1, file+1),
+            createMove(row+1, file-1)
         ]
         if (!hasMoved()) {
             moves.append(contentsOf: [

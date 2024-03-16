@@ -11,11 +11,17 @@
 		614FFC6B277780130082F892 /* MoveIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC69277780130082F892 /* MoveIndicatorView.swift */; };
 		614FFC6D277786560082F892 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC6C277786560082F892 /* Move.swift */; };
 		614FFC6E277786560082F892 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC6C277786560082F892 /* Move.swift */; };
-		616D3E412BA35241002D78EE /* PositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E402BA35241002D78EE /* PositionTests.swift */; };
-		616D3E432BA352BF002D78EE /* NotationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E422BA352BF002D78EE /* NotationTests.swift */; };
+		615732142BA5ED0B0048EDDF /* RawMovesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AE78222B991AAD008F56F8 /* RawMovesTests.swift */; };
+		615732152BA5ED0B0048EDDF /* FieldTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AE782F2B99ED07008F56F8 /* FieldTest.swift */; };
+		615732162BA5ED0B0048EDDF /* ChessTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F5B2B9A7D7E00790CF7 /* ChessTestBase.swift */; };
+		615732172BA5ED0B0048EDDF /* MoveFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A919262BA1F8ED00AD371E /* MoveFactoryTests.swift */; };
+		615732182BA5ED0B0048EDDF /* PositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E402BA35241002D78EE /* PositionTests.swift */; };
+		615732192BA5ED0B0048EDDF /* NotationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E422BA352BF002D78EE /* NotationTests.swift */; };
+		6157321A2BA5ED0B0048EDDF /* GameStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E492BA46683002D78EE /* GameStateTests.swift */; };
+		6157321C2BA5F21E0048EDDF /* Pgn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6157321B2BA5F21E0048EDDF /* Pgn.swift */; };
+		6157321D2BA5F21E0048EDDF /* Pgn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6157321B2BA5F21E0048EDDF /* Pgn.swift */; };
 		616D3E472BA464D8002D78EE /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E462BA464D8002D78EE /* GameState.swift */; };
 		616D3E482BA464D8002D78EE /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E462BA464D8002D78EE /* GameState.swift */; };
-		616D3E4A2BA46683002D78EE /* GameStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E492BA46683002D78EE /* GameStateTests.swift */; };
 		6177238D274284FF00169D3D /* SwiftChessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61772362274284FE00169D3D /* SwiftChessApp.swift */; };
 		6177238E274284FF00169D3D /* SwiftChessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61772362274284FE00169D3D /* SwiftChessApp.swift */; };
 		6177238F274284FF00169D3D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61772363274284FE00169D3D /* ContentView.swift */; };
@@ -42,7 +48,6 @@
 		61812E3627681E8100616866 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E3427681E8100616866 /* Position.swift */; };
 		61A919242BA1F83E00AD371E /* MoveFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A919232BA1F83E00AD371E /* MoveFactory.swift */; };
 		61A919252BA1F83E00AD371E /* MoveFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A919232BA1F83E00AD371E /* MoveFactory.swift */; };
-		61A919272BA1F8ED00AD371E /* MoveFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A919262BA1F8ED00AD371E /* MoveFactoryTests.swift */; };
 		61B0B43B2B94F5F20085DB48 /* Pawn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B43A2B94F5F20085DB48 /* Pawn.swift */; };
 		61B0B43C2B94F5F20085DB48 /* Pawn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B43A2B94F5F20085DB48 /* Pawn.swift */; };
 		61B0B43E2B94F80F0085DB48 /* Bishop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B43D2B94F80F0085DB48 /* Bishop.swift */; };
@@ -61,11 +66,8 @@
 		61B0B4542B95E1A90085DB48 /* MoveType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B4522B95E1A90085DB48 /* MoveType.swift */; };
 		61B0B4562B95F4E00085DB48 /* Figure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B4552B95F4E00085DB48 /* Figure.swift */; };
 		61B0B4572B95F4E00085DB48 /* Figure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B4552B95F4E00085DB48 /* Figure.swift */; };
-		61B32F562B99F1F300790CF7 /* RawMovesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AE78222B991AAD008F56F8 /* RawMovesTests.swift */; };
-		61B32F572B99F1F800790CF7 /* FieldTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AE782F2B99ED07008F56F8 /* FieldTest.swift */; };
 		61B32F592B9A53DB00790CF7 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F582B9A53DB00790CF7 /* Field.swift */; };
 		61B32F5A2B9A53DB00790CF7 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F582B9A53DB00790CF7 /* Field.swift */; };
-		61B32F5C2B9A7D7E00790CF7 /* ChessTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F5B2B9A7D7E00790CF7 /* ChessTestBase.swift */; };
 		61B32F5F2B9A873500790CF7 /* ValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F5D2B9A86BC00790CF7 /* ValidationError.swift */; };
 		61B32F612B9CC5D700790CF7 /* BoardCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F602B9CC5D700790CF7 /* BoardCache.swift */; };
 		61B32F622B9CC5D700790CF7 /* BoardCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F602B9CC5D700790CF7 /* BoardCache.swift */; };
@@ -90,6 +92,7 @@
 /* Begin PBXFileReference section */
 		614FFC69277780130082F892 /* MoveIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveIndicatorView.swift; sourceTree = "<group>"; };
 		614FFC6C277786560082F892 /* Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
+		6157321B2BA5F21E0048EDDF /* Pgn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pgn.swift; sourceTree = "<group>"; };
 		616D3E402BA35241002D78EE /* PositionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionTests.swift; sourceTree = "<group>"; };
 		616D3E422BA352BF002D78EE /* NotationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotationTests.swift; sourceTree = "<group>"; };
 		616D3E462BA464D8002D78EE /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
@@ -257,6 +260,7 @@
 				61A919232BA1F83E00AD371E /* MoveFactory.swift */,
 				61FA7FC02BA52A37002CA3D2 /* FenParser.swift */,
 				61FA7FC32BA52AAF002CA3D2 /* FenBuilder.swift */,
+				6157321B2BA5F21E0048EDDF /* Pgn.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -328,7 +332,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 61AE78262B991AAD008F56F8 /* Build configuration list for PBXNativeTarget "SwiftChessTests" */;
 			buildPhases = (
-				61AE781C2B991AAD008F56F8 /* Sources */,
+				615732132BA5ECF90048EDDF /* Sources */,
 				61AE781D2B991AAD008F56F8 /* Frameworks */,
 				61AE781E2B991AAD008F56F8 /* Resources */,
 			);
@@ -411,11 +415,26 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		615732132BA5ECF90048EDDF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				615732142BA5ED0B0048EDDF /* RawMovesTests.swift in Sources */,
+				615732152BA5ED0B0048EDDF /* FieldTest.swift in Sources */,
+				615732162BA5ED0B0048EDDF /* ChessTestBase.swift in Sources */,
+				615732172BA5ED0B0048EDDF /* MoveFactoryTests.swift in Sources */,
+				615732182BA5ED0B0048EDDF /* PositionTests.swift in Sources */,
+				615732192BA5ED0B0048EDDF /* NotationTests.swift in Sources */,
+				6157321A2BA5ED0B0048EDDF /* GameStateTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		61772366274284FF00169D3D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				61B0B4412B94F8850085DB48 /* Rook.swift in Sources */,
+				6157321C2BA5F21E0048EDDF /* Pgn.swift in Sources */,
 				61812E3527681E8100616866 /* Position.swift in Sources */,
 				61B32F592B9A53DB00790CF7 /* Field.swift in Sources */,
 				61B0B4472B94F92E0085DB48 /* King.swift in Sources */,
@@ -469,6 +488,7 @@
 				61812E222767F0A900616866 /* FigureModel.swift in Sources */,
 				61B0B4452B94F8DB0085DB48 /* Queen.swift in Sources */,
 				61B0B4512B95DEB00085DB48 /* ChessBoard.swift in Sources */,
+				6157321D2BA5F21E0048EDDF /* Pgn.swift in Sources */,
 				61F163EE2B9D165200C48BAC /* ChessFigure.swift in Sources */,
 				61812E2C2768078E00616866 /* PieceType.swift in Sources */,
 				61812E252767F42000616866 /* BoardModel.swift in Sources */,
@@ -481,20 +501,6 @@
 				614FFC6B277780130082F892 /* MoveIndicatorView.swift in Sources */,
 				61812E282767FDA900616866 /* BoardView.swift in Sources */,
 				61772390274284FF00169D3D /* ContentView.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		61AE781C2B991AAD008F56F8 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				61B32F5C2B9A7D7E00790CF7 /* ChessTestBase.swift in Sources */,
-				61B32F572B99F1F800790CF7 /* FieldTest.swift in Sources */,
-				61B32F562B99F1F300790CF7 /* RawMovesTests.swift in Sources */,
-				61A919272BA1F8ED00AD371E /* MoveFactoryTests.swift in Sources */,
-				616D3E412BA35241002D78EE /* PositionTests.swift in Sources */,
-				616D3E4A2BA46683002D78EE /* GameStateTests.swift in Sources */,
-				616D3E432BA352BF002D78EE /* NotationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

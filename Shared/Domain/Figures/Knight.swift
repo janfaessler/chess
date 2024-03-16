@@ -11,14 +11,14 @@ public class Knight : Figure {
         let row = getRow()
         let file = getFile()
         let moves = [
-            CreateMove(row+1, file+2),
-            CreateMove(row+1, file-2),
-            CreateMove(row-1, file+2),
-            CreateMove(row-1, file-2),
-            CreateMove(row+2, file+1),
-            CreateMove(row+2, file-1),
-            CreateMove(row-2, file+1),
-            CreateMove(row-2, file-1)
+            createMove(row+1, file+2),
+            createMove(row+1, file-2),
+            createMove(row-1, file+2),
+            createMove(row-1, file-2),
+            createMove(row+2, file+1),
+            createMove(row+2, file-1),
+            createMove(row-2, file+1),
+            createMove(row-2, file-1)
         ]
         return moves.filter({ move in inBoard(move) })
     }

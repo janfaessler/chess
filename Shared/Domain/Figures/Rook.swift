@@ -17,7 +17,7 @@ public class Rook : Figure {
         for r in 1...8 {
             for f in 1...8 {
                 if !(getRow() == r && getFile() == f) && (r == getRow() || f==getFile()) {
-                    moves.append(CreateMove(r, f))
+                    moves.append(createMove(r, f))
                 }
             }
         }
