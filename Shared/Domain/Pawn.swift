@@ -88,16 +88,9 @@ public class Pawn : Figure {
     }
     
     private func canEnPassant(_ move:Move, cache:BoardCache) -> Bool {
-        guard let lastMove = cache.getLastMove() else { return false }
+        guard let target = cache.getEnPassentTarget() else { return false }
         
-        let piece = move.piece
-        let movedOnce = move.type != .Double
-        let lastMoveToLeft = lastMove.row == piece.getRow() && lastMove.file - piece.getFile() == -1
-        let lastMoveToRight = lastMove.row == piece.getRow() && lastMove.file - piece.getFile() == 1
-        let enPassantIsPossible = lastMove.piece.getType() == .pawn && lastMove.type == .Double
-        let canEnPassantToLeft = movedOnce && enPassantIsPossible && lastMoveToLeft && move.file - piece.getFile() == -1
-        let canEnPassantToRight = movedOnce && enPassantIsPossible && lastMoveToRight && move.file - piece.getFile() == 1
-        return canEnPassantToLeft || canEnPassantToRight
+        return move.getField() == target
     }
     
     private func moveDoesNotChangeFile(_ move:Move) -> Bool {

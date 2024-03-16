@@ -173,7 +173,7 @@ final class MoveFactoryTests: XCTestCase {
     }
     
     private func updateBoardCache(_ move:Move) throws {
-        var figures:[ChessFigure] = try XCTUnwrap(boardCache).getFigures()
+        var figures:[any ChessFigure] = try XCTUnwrap(boardCache).getFigures()
         let fig = figures.first(where: { $0.equals(move.getPiece())})!
         fig.move(row: move.getRow(), file: move.getFile())
         figures.removeAll(where: {$0.equals(move.getPiece())})

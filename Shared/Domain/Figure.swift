@@ -7,7 +7,7 @@ public class Figure:Identifiable, Equatable, ChessFigure {
     private var moved:Bool
     private var row:Int
     private var file:Int
-    
+
     init(type:PieceType, color: PieceColor, row:Int, file:Int, moved:Bool = false) {
         self.type = type
         self.color = color
@@ -16,12 +16,12 @@ public class Figure:Identifiable, Equatable, ChessFigure {
         self.moved = moved
     }
     
-    public static func create(_ fieldname:String, type:PieceType, color: PieceColor, moved:Bool = false) -> ChessFigure? {
+    public static func create(_ fieldname:String, type:PieceType, color: PieceColor, moved:Bool = false) -> (any ChessFigure)? {
         guard let field = Field(fieldname) else { return nil }
         return Figure.create(type: type, color: color, row: field.row, file: field.file, moved: moved)
     }
     
-    public static func create(type:PieceType, color: PieceColor, row:Int, file:Int, moved:Bool = false) -> ChessFigure {
+    public static func create(type:PieceType, color: PieceColor, row:Int, file:Int, moved:Bool = false) -> any ChessFigure {
         switch type {
             case .pawn: return Pawn(color: color, row: row, file: file, moved: moved)
             case .knight: return Knight(color: color, row: row, file: file, moved: moved)
@@ -37,6 +37,13 @@ public class Figure:Identifiable, Equatable, ChessFigure {
         && file == other.getFile()
         && type == other.getType()
         && color == other.getColor()
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(type)
+        hasher.combine(color)
+        hasher.combine(row)
+        hasher.combine(file)
     }
     
     public func move(row:Int, file:Int) {
@@ -131,7 +138,7 @@ public class Figure:Identifiable, Equatable, ChessFigure {
         return Move(move, piece: self, type: type)
     }
     
-    func isCaptureablePiece(_ move: Move, pieceToCapture: ChessFigure?) -> Bool {
+    func isCaptureablePiece(_ move: Move, pieceToCapture: (any ChessFigure)?) -> Bool {
         return move.piece.getColor() != pieceToCapture!.getColor() && pieceToCapture!.getRow() == move.row && pieceToCapture!.getFile() == move.file
     }
 }

@@ -1,5 +1,6 @@
 import Foundation
 import SwiftChess
+import XCTest
 
 final class GameStateTests : ChessTestBase {
     
@@ -147,20 +148,8 @@ final class GameStateTests : ChessTestBase {
         try moveAndAssert(notation: "Nf3", toField: "f3", type: .knight, color: .white)
         try moveAndAssert(notation: "Nf6", toField: "f6", type: .knight, color: .black)
         
-        try moveAndAssert(notation: "Nd4", toField: "d4", type: .knight, color: .white)
-        try moveAndAssert(notation: "Nd5", toField: "d5", type: .knight, color: .black)
-        
-        try moveAndAssert(notation: "Nb3", toField: "b3", type: .knight, color: .white)
-        try moveAndAssert(notation: "Nb6", toField: "b6", type: .knight, color: .black)
-        
-        try moveAndAssert(notation: "Nc3", toField: "c3", type: .knight, color: .white)
-        try moveAndAssert(notation: "Nc6", toField: "c6", type: .knight, color: .black)
-        
-        try moveAndAssert(notation: "Ne4", toField: "e4", type: .knight, color: .white)
-        try moveAndAssert(notation: "Ne5", toField: "e5", type: .knight, color: .black)
-        
-        try moveAndAssert(notation: "Ng5", toField: "g5", type: .knight, color: .white)
-        try moveAndAssert(notation: "Ng4", toField: "g4", type: .knight, color: .black)
+        try moveAndAssert(notation: "Ng1", toField: "g1", type: .knight, color: .white)
+        try moveAndAssert(notation: "Ng8", toField: "g8", type: .knight, color: .black)
         
         try moveAndAssert(notation: "Nf3", toField: "f3", type: .knight, color: .white)
         try moveAndAssert(notation: "Nf6", toField: "f6", type: .knight, color: .black)
@@ -168,19 +157,8 @@ final class GameStateTests : ChessTestBase {
         try moveAndAssert(notation: "Ng1", toField: "g1", type: .knight, color: .white)
         try moveAndAssert(notation: "Ng8", toField: "g8", type: .knight, color: .black)
         
-        try moveAndAssert(notation: "Nc5", toField: "c5", type: .knight, color: .white)
-        try moveAndAssert(notation: "Nc4", toField: "c4", type: .knight, color: .black)
-        
-        try moveAndAssert(notation: "Na4", toField: "a4", type: .knight, color: .white)
-        try moveAndAssert(notation: "Na5", toField: "a5", type: .knight, color: .black)
-        
-        try moveAndAssert(notation: "Nc3", toField: "c3", type: .knight, color: .white)
-        try moveAndAssert(notation: "Nc6", toField: "c6", type: .knight, color: .black)
-        
-        try moveAndAssert(notation: "Nb1", toField: "b1", type: .knight, color: .white)
-        try moveAndAssert(notation: "Nb8", toField: "b8", type: .knight, color: .black)
-        
         try moveAndAssert(notation: "Nf3", toField: "f3", type: .knight, color: .white)
+
         
         try assertGameState(.DrawByRepetition)
 
@@ -215,5 +193,22 @@ final class GameStateTests : ChessTestBase {
             loadFen(fen)
             try assertGameState(.Running, fen: fen)
         }
+    }
+    
+    func testHasher() throws {
+        var hasher = Hasher()
+        
+        hasher.combine("a1")
+        hasher.combine("a5")
+        var value = hasher.finalize()
+        
+        var hasher2 = Hasher()
+
+        hasher2.combine("a1")
+        hasher2.combine("a5")
+
+        var value2 = hasher2.finalize()
+        
+        try XCTAssertEqual(value, value2)
     }
 }

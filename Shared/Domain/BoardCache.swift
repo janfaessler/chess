@@ -2,26 +2,27 @@ import Foundation
 
 public class BoardCache {
     
-    private var cache:[Int:[Int:ChessFigure]]
-    private var lastMove:Move?
+    private var hasher = Hasher()
+
+    private var cache:[Int:[Int:any ChessFigure]]
+    private let colorToMove:PieceColor
+    private let enPassantTarget:Field?
     
-    private init(input:[Int:[Int:ChessFigure]], lastMove:Move?) {
-        cache = input
-        self.lastMove = lastMove
+    private init(_ cache:[Int:[Int:any ChessFigure]], colorToMove:PieceColor, enPassentTarget:Field?) {
+        self.cache = cache
+        self.colorToMove = colorToMove
+        self.enPassantTarget = enPassentTarget
     }
     
-    public static func create(_ figures: [ChessFigure], lastMove:Move? = nil) -> BoardCache {
-        var dict:[Int:[Int:ChessFigure]] = [:]
-        for f in figures {
-            if dict[f.getRow()] == nil {
-                dict[f.getRow()] = [:]
-            }
-            dict[f.getRow()]![f.getFile()] = f
-        }
-        return BoardCache(input: dict, lastMove: lastMove)
+    public static func create(_ figures: [any ChessFigure], lastMove:Move? = nil) -> BoardCache {
+        let dict = createCachDictionary(figures)
+        let colorToMove = createColorToMove(lastMove)
+        let enPassantTarget = createEnPassantTarget(lastMove)
+            
+        return BoardCache(dict, colorToMove: colorToMove, enPassentTarget: enPassantTarget)
     }
     
-    public func get(atRow:Int, atFile:Int) -> ChessFigure? {
+    public func get(atRow:Int, atFile:Int) -> (any ChessFigure)? {
         return cache[atRow]?[atFile]
     }
     
@@ -29,7 +30,7 @@ public class BoardCache {
         cache[atRow]?[atFile] = nil
     }
     
-    public func set(_ figure:ChessFigure) {
+    public func set(_ figure:any ChessFigure) {
         if cache[figure.getRow()] == nil {
             cache[figure.getRow()] = [:]
         }
@@ -44,15 +45,19 @@ public class BoardCache {
         return isEmpty(atRow: atRow, atFile: atFile) == false
     }
     
-    public func getLastMove() -> Move? {
-        return lastMove
+    public func getColorToMove() -> PieceColor {
+        return colorToMove
     }
     
-    public func getFigures() -> [ChessFigure] {
+    public func getEnPassentTarget() -> Field? {
+        return enPassantTarget
+    }
+    
+    public func getFigures() -> [any ChessFigure] {
         return cache.flatMap({ fileKey, row in return row.values})
     }
     
-    public func getNextPiece(_ move: Move) -> ChessFigure? {
+    public func getNextPiece(_ move: Move) -> (any ChessFigure)? {
         let deltaFile = abs(move.piece.getFile() - move.file)
         let deltaRow = abs(move.piece.getRow() - move.row)
         
@@ -70,13 +75,21 @@ public class BoardCache {
         let figures = getFigures()
         return figures.contains(where: {
             
-            if $0.getColor() != lastMove?.getPiece().getColor() { return false }
+            if $0.getColor() == colorToMove{ return false }
             let movepossible = $0.isMovePossible(Move(row, file, piece: $0), cache: self)
             return movepossible
         })
     }
     
-    private func getNextPieceOnRow(from:Field, to:Field) -> ChessFigure? {
+    public func getHash() -> Int {
+        var hasher = Hasher()
+        for fig in getFigures().sorted(by: { $0.getRow() > $1.getRow() }).sorted(by: { $0.getFile() > $1.getFile() }) {
+            hasher.combine(fig)
+        }
+        return hasher.finalize()
+    }
+    
+    private func getNextPieceOnRow(from:Field, to:Field) -> (any ChessFigure)? {
         let direction = from.file < to.file ? 1 : -1
         for f in stride(from: from.file + direction, to: to.file, by: direction)  {
             let foundPiece = get(atRow: from.row, atFile: f)
@@ -87,7 +100,7 @@ public class BoardCache {
         return get(atRow: to.row, atFile: to.file)
     }
     
-    private func getNextPieceOnFile(from:Field, to:Field) -> ChessFigure? {
+    private func getNextPieceOnFile(from:Field, to:Field) -> (any ChessFigure)? {
         let direction = from.row < to.row ? 1 : -1
         for r in stride(from: from.row + direction, to: to.row, by: direction) {
             let foundPiece = get(atRow: r, atFile: from.file)
@@ -99,7 +112,7 @@ public class BoardCache {
 
     }
     
-    private func getNextPieceOnDiagonal(from:Field, to:Field) -> ChessFigure? {
+    private func getNextPieceOnDiagonal(from:Field, to:Field) -> (any ChessFigure)? {
         let rowDir = min(max(to.row - from.row, -1), 1)
         let fileDir = min(max(to.file - from.file, -1), 1)
         let delta = abs(from.file - to.file)
@@ -115,5 +128,30 @@ public class BoardCache {
         }
 
         return get(atRow: to.row, atFile: to.file)
+    }
+    
+    private static func createCachDictionary(_ figures: [any ChessFigure]) -> [Int : [Int : any ChessFigure]] {
+        var dict:[Int:[Int:any ChessFigure]] = [:]
+
+        for f in figures {
+            if dict[f.getRow()] == nil {
+                dict[f.getRow()] = [:]
+            }
+            dict[f.getRow()]![f.getFile()] = f
+        }
+        return dict
+    }
+    
+    private static func createColorToMove(_ move:Move?) -> PieceColor {
+        return  move?.piece.getColor() == .white ? .black : .white
+    }
+    
+    private static func createEnPassantTarget(_ move:Move?) -> Field? {
+        guard move?.type == .Double else { return nil }
+        
+        let targetRow = move!.piece.getColor() == .white ? move!.getRow() - 1 : move!.getRow() + 1
+        let targetFile = move!.getFile()
+        
+        return Field(row:targetRow, file: targetFile)
     }
 }

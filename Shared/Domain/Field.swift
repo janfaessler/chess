@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Field {
+public struct Field : Equatable, Hashable {
     
     private static let PossibleFileNames: String = "abcdefgh"
     
@@ -32,5 +32,10 @@ public struct Field {
         guard let filename = fileNamesOut[file] else { return "??" }
         return "\(filename)"
     }
+    
+    public static func == (l:Field, r:Field) -> Bool {
+        return l.row == r.row && l.file == r.file
+    }
+
 
 }

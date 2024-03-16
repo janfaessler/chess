@@ -5,18 +5,20 @@ public class ChessBoard {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "ChessBoard")
 
-    private var figures:[ChessFigure] = []
+    private var figures:[any ChessFigure] = []
     private var cache:BoardCache
     private var colorToMove:PieceColor = .white
     private var moves: [Move] = []
     private var moveLog: [String] = []
     private var moveClock:Int = 0
+    private var positionCount:[Int:Int] = [:]
     
     public init(_ pos:Position) {
         colorToMove = pos.colorToMove
         moveClock = pos.moveCount
         figures.append(contentsOf: pos.figures)
         cache = BoardCache.create(figures)
+        positionCount = [:]
     }
     
     public func move(_ moveNotation:String) throws {
@@ -46,6 +48,10 @@ public class ChessBoard {
             return .DrawByInsufficientMaterial
         }
         
+        if isThreefoldRepetition() {
+            return .DrawByRepetition
+        }
+        
         if playerHasLegalMove() {
             return moveClock > 0 ? .Running : .NotStarted
         }
@@ -69,7 +75,7 @@ public class ChessBoard {
         return moves.filter({ IsMoveLegalMoveOnTheBoard($0) })
     }
     
-    public func getFigures() -> [ChessFigure] {
+    public func getFigures() -> [any ChessFigure] {
         return figures
     }
     
@@ -107,6 +113,8 @@ public class ChessBoard {
         return captureFigureAt(row: move.row, file: move.file)
     }
 
+
+    
     private func doMove(_ move: Move) throws {
         let figure = figures.first(where: { $0.equals(move.piece) })!
         figure.move(row: move.row, file: move.file)
@@ -115,6 +123,7 @@ public class ChessBoard {
         moves += [move]
         moveClock += 1
         cache = getBoardCache()
+        increasePositionCount()
     }
     
     private func checkPromotion(_ move: Move) -> Bool {
@@ -240,6 +249,17 @@ public class ChessBoard {
         return cache.isFieldInCheck(king.getRow(), king.getFile())
     }
     
+    private func isThreefoldRepetition() -> Bool {
+        let hash = cache.getHash()
+        let count = positionCount[hash] ?? 0
+        return  count >= 3
+    }
+    
+    private func isCheck(_ move:Move) -> Bool {
+        let opponentKing = figures.first(where: { $0.getType() == .king && $0.getColor() != move.piece.getColor()})
+        return cache.isFieldInCheck(opponentKing!.getRow(), opponentKing!.getFile())
+    }
+    
     private func fieldIsEmpty(atRow:Int, atFile:Int) -> Bool {
         return hasFigure(atRow: atRow, atFile: atFile) == false
     }
@@ -248,20 +268,30 @@ public class ChessBoard {
         return getFigure(atRow: atRow, atFile: atFile) != nil
     }
     
-    private func getFigure(atRow:Int, atFile:Int) -> ChessFigure? {
+    private func getFigure(atRow:Int, atFile:Int) -> (any ChessFigure)? {
         return cache.get(atRow: atRow, atFile: atFile)
     }
     
-    private func addFigure(_ to: ChessFigure) {
+    private func addFigure(_ to: any ChessFigure) {
         figures.append(to)
     }
     
-    private func removeFigure(_ figure:ChessFigure) {
+    private func removeFigure(_ figure:any ChessFigure) {
         figures.removeAll(where: { $0.equals(figure) })
     }
 
     private func getBoardCache() -> BoardCache {
         return BoardCache.create(figures, lastMove: moves.last)
+    }
+    
+    private func increasePositionCount() {
+        let hash = cache.getHash()
+        
+        guard positionCount[hash] != nil else {
+            positionCount[cache.getHash()] = 1
+            return
+        }
+        positionCount[cache.getHash()] = (positionCount[cache.getHash()] ?? 0) + 1
     }
     
     private func LogMove(_ move: Move, isCapture:Bool) {
@@ -292,10 +322,5 @@ public class ChessBoard {
         }
         logger.log("\(logInfo)")
         moveLog += [logInfo]
-    }
-    
-    private func isCheck(_ move:Move) -> Bool {
-        let opponentKing = figures.first(where: { $0.getType() == .king && $0.getColor() != move.piece.getColor()})
-        return cache.isFieldInCheck(opponentKing!.getRow(), opponentKing!.getFile())
     }
 }
