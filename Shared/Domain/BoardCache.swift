@@ -86,6 +86,7 @@ public class BoardCache {
         for fig in getFigures().sorted(by: { $0.getRow() > $1.getRow() }).sorted(by: { $0.getFile() > $1.getFile() }) {
             hasher.combine(fig)
         }
+        hasher.combine(enPassantTarget)
         return hasher.finalize()
     }
     
