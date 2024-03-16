@@ -1,10 +1,3 @@
-//
-//  Move.swift
-//  SwiftChess
-//
-//  Created by Jan Fässler on 25.12.21.
-//
-
 import Foundation
 
 public struct Move:Identifiable, Equatable{
