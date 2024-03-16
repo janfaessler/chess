@@ -158,6 +158,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6157320A2BA5EB4C0048EDDF /* Figures */ = {
+			isa = PBXGroup;
+			children = (
+				61F163EC2B9D165200C48BAC /* ChessFigure.swift */,
+				61B0B4552B95F4E00085DB48 /* Figure.swift */,
+				61B0B43A2B94F5F20085DB48 /* Pawn.swift */,
+				61B0B43D2B94F80F0085DB48 /* Bishop.swift */,
+				61B0B4402B94F8850085DB48 /* Rook.swift */,
+				61B0B4432B94F8DB0085DB48 /* Queen.swift */,
+				61B0B4462B94F92E0085DB48 /* King.swift */,
+				61B0B4492B94FAE60085DB48 /* Knight.swift */,
+			);
+			path = Figures;
+			sourceTree = "<group>";
+		};
 		6177235A274284FE00169D3D = {
 			isa = PBXGroup;
 			children = (
@@ -263,18 +278,11 @@
 		61B0B44C2B95D7160085DB48 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				6157320A2BA5EB4C0048EDDF /* Figures */,
 				61B32F602B9CC5D700790CF7 /* BoardCache.swift */,
-				61B0B43A2B94F5F20085DB48 /* Pawn.swift */,
-				61B0B43D2B94F80F0085DB48 /* Bishop.swift */,
-				61B0B4402B94F8850085DB48 /* Rook.swift */,
-				61B0B4432B94F8DB0085DB48 /* Queen.swift */,
-				61B0B4462B94F92E0085DB48 /* King.swift */,
-				61B0B4492B94FAE60085DB48 /* Knight.swift */,
 				614FFC6C277786560082F892 /* Move.swift */,
 				61B0B44F2B95DEB00085DB48 /* ChessBoard.swift */,
-				61B0B4552B95F4E00085DB48 /* Figure.swift */,
 				61B32F582B9A53DB00790CF7 /* Field.swift */,
-				61F163EC2B9D165200C48BAC /* ChessFigure.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
