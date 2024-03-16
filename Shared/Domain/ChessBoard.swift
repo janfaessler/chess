@@ -29,8 +29,6 @@ public class ChessBoard {
         try move(createdMove)
     }
 
-
-    
     public func move(_ move:Move) throws {
         
         guard IsMoveLegalMoveOnTheBoard(move) else {
@@ -120,10 +118,7 @@ public class ChessBoard {
         moveRookForCastling(move)
         colorToMove = colorToMove == .black ? .white : .black
         moves += [move]
-        increaseMoveCounter()
-        cache = getBoardCache()
-        increasePositionCount()
-        increaseHalfmoveCounter(move, isCapture)
+        updateBoardStates(move, isCapture: isCapture)
         return isCapture
     }
     
@@ -142,6 +137,13 @@ public class ChessBoard {
         // Todo: Promotion Choice
         promote(Pawn(color: move.piece.getColor(), row: move.getRow(), file: move.getFile()), to: Queen(color: move.piece.getColor(), row: move.row, file: move.file))
         return true
+    }
+    
+    private func updateBoardStates(_ move: Move, isCapture: Bool) {
+        cache = getBoardCache()
+        increasePositionCount()
+        increaseMoveCounter()
+        increaseHalfmoveCounter(move, isCapture)
     }
     
     private func isDrawByInsufficientMaterial() -> Bool {
