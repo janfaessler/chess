@@ -21,5 +21,10 @@ final class PositionTests: ChessTestBase {
             }
         }
     }
+    
+    func testFenCreation() throws {
+        let startPosition = Fen.create(Fen.loadStartingPosition())
+        XCTAssertEqual(startPosition, Fen.StartSetup)
+    }
 
 }

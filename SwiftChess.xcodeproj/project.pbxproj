@@ -71,6 +71,10 @@
 		61B32F622B9CC5D700790CF7 /* BoardCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F602B9CC5D700790CF7 /* BoardCache.swift */; };
 		61F163ED2B9D165200C48BAC /* ChessFigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F163EC2B9D165200C48BAC /* ChessFigure.swift */; };
 		61F163EE2B9D165200C48BAC /* ChessFigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F163EC2B9D165200C48BAC /* ChessFigure.swift */; };
+		61FA7FC12BA52A37002CA3D2 /* FenParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7FC02BA52A37002CA3D2 /* FenParser.swift */; };
+		61FA7FC22BA52A37002CA3D2 /* FenParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7FC02BA52A37002CA3D2 /* FenParser.swift */; };
+		61FA7FC42BA52AAF002CA3D2 /* FenBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7FC32BA52AAF002CA3D2 /* FenBuilder.swift */; };
+		61FA7FC52BA52AAF002CA3D2 /* FenBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7FC32BA52AAF002CA3D2 /* FenBuilder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -125,6 +129,8 @@
 		61B32F5D2B9A86BC00790CF7 /* ValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationError.swift; sourceTree = "<group>"; };
 		61B32F602B9CC5D700790CF7 /* BoardCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardCache.swift; sourceTree = "<group>"; };
 		61F163EC2B9D165200C48BAC /* ChessFigure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessFigure.swift; sourceTree = "<group>"; };
+		61FA7FC02BA52A37002CA3D2 /* FenParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FenParser.swift; sourceTree = "<group>"; };
+		61FA7FC32BA52AAF002CA3D2 /* FenBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FenBuilder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,6 +240,8 @@
 				61812E3427681E8100616866 /* Position.swift */,
 				61812E3127681DFC00616866 /* Fen.swift */,
 				61A919232BA1F83E00AD371E /* MoveFactory.swift */,
+				61FA7FC02BA52A37002CA3D2 /* FenParser.swift */,
+				61FA7FC32BA52AAF002CA3D2 /* FenBuilder.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -403,6 +411,7 @@
 				61812E3527681E8100616866 /* Position.swift in Sources */,
 				61B32F592B9A53DB00790CF7 /* Field.swift in Sources */,
 				61B0B4472B94F92E0085DB48 /* King.swift in Sources */,
+				61FA7FC12BA52A37002CA3D2 /* FenParser.swift in Sources */,
 				61B0B43B2B94F5F20085DB48 /* Pawn.swift in Sources */,
 				61812E3227681DFC00616866 /* Fen.swift in Sources */,
 				61B0B4562B95F4E00085DB48 /* Figure.swift in Sources */,
@@ -415,6 +424,7 @@
 				61B0B4502B95DEB00085DB48 /* ChessBoard.swift in Sources */,
 				61812E2B2768078E00616866 /* PieceType.swift in Sources */,
 				61B32F612B9CC5D700790CF7 /* BoardCache.swift in Sources */,
+				61FA7FC42BA52AAF002CA3D2 /* FenBuilder.swift in Sources */,
 				616D3E472BA464D8002D78EE /* GameState.swift in Sources */,
 				61812E242767F42000616866 /* BoardModel.swift in Sources */,
 				61812E2E276807E600616866 /* PieceColor.swift in Sources */,
@@ -434,7 +444,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				61B32F622B9CC5D700790CF7 /* BoardCache.swift in Sources */,
+				61FA7FC22BA52A37002CA3D2 /* FenParser.swift in Sources */,
 				61B32F5F2B9A873500790CF7 /* ValidationError.swift in Sources */,
+				61FA7FC52BA52AAF002CA3D2 /* FenBuilder.swift in Sources */,
 				61B0B4422B94F8850085DB48 /* Rook.swift in Sources */,
 				61812E3627681E8100616866 /* Position.swift in Sources */,
 				61B32F5A2B9A53DB00790CF7 /* Field.swift in Sources */,

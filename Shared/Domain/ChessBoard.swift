@@ -10,9 +10,11 @@ public class ChessBoard {
     private var colorToMove:PieceColor = .white
     private var moves: [Move] = []
     private var moveLog: [String] = []
+    private var moveClock:Int = 0
     
     public init(_ pos:Position) {
         colorToMove = pos.colorToMove
+        moveClock = pos.moveCount
         figures.append(contentsOf: pos.figures)
         cache = BoardCache.create(figures)
     }
@@ -40,10 +42,19 @@ public class ChessBoard {
     
     public func getGameState() -> GameState {
         
-        guard playerHasLegalMove() else {
+        if isDrawByInsufficientMaterial() {
+            return .DrawByInsufficientMaterial
+        }
+        
+        if playerHasLegalMove() {
+            return moveClock > 0 ? .Running : .NotStarted
+        }
+
+        if isKingInCheck() {
             return colorToMove == .white ? .BlackWins : .WhiteWins
         }
-        return moves.count > 0 ? .Running : .NotStarted
+        
+        return .DrawByStalemate
     }
     
     public func getColorToMove() -> PieceColor {
@@ -102,6 +113,7 @@ public class ChessBoard {
         moveRookForCastling(move)
         colorToMove = colorToMove == .black ? .white : .black
         moves += [move]
+        moveClock += 1
         cache = getBoardCache()
     }
     
@@ -112,6 +124,14 @@ public class ChessBoard {
         // Todo: Promotion Choice
         promote(Pawn(color: move.piece.getColor(), row: move.getRow(), file: move.getFile()), to: Queen(color: move.piece.getColor(), row: move.row, file: move.file))
         return true
+    }
+    
+    private func isDrawByInsufficientMaterial() -> Bool {
+        
+        return onlyKingsLeft()
+            || onlyOneKnightLeft()
+            || onlyOneBishopLeft()
+            || onlySameColorBishopsLeft()
     }
     
     private func captureFigureAt(row: Int, file: Int) -> Bool {
@@ -143,7 +163,6 @@ public class ChessBoard {
         let king = figures.first(where: { $0.getType() == .king && $0.getColor() == move.piece.getColor() })!
         let rowToCheck = isKingMKove ? move.getRow() : king.getRow()
         let fileToCheck = isKingMKove ? move.getFile() : king.getFile()
-        
                 
         let modifiedCache = createCacheWithMove(move)
         
@@ -164,6 +183,27 @@ public class ChessBoard {
         cache.clearField(atRow: move.piece.getRow(), atFile: move.piece.getFile())
         cache.set(Figure(type: move.piece.getType(), color: move.piece.getColor(), row: move.getRow(), file: move.getFile()))
         return cache
+    }
+    
+    private func onlyKingsLeft() -> Bool {
+        return figures.filter({ $0.getType() == .king }).count == 2 && figures.count == 2
+    }
+    
+    private func onlyOneKnightLeft() -> Bool {
+        return figures.filter({ $0.getType() == .knight }).count == 1 && figures.count == 3
+    }
+    
+    private func onlyOneBishopLeft() -> Bool {
+        return figures.filter({ $0.getType() == .bishop }).count == 1 && figures.count == 3
+    }
+    
+    private func onlySameColorBishopsLeft() -> Bool {
+        let bishopList = figures.filter({ $0.getType() == .bishop })
+        guard bishopList.count == 2 else { return false }
+        guard Set(figures.map({ $0.getColor() })).count == 2 else { return false }
+        let indices = bishopList.map({ ($0.getRow() + $0.getFile()) })
+        let modIndices = indices.map({ $0 % 2})
+        return Set(modIndices).count == 1
     }
     
     private func isPawnCapturing(_ move: Move) -> Bool {
@@ -193,6 +233,11 @@ public class ChessBoard {
     private func playerHasLegalMove() -> Bool {
         let figuresOfCurrentPlayer = figures.filter({ $0.getColor() == colorToMove })
         return figuresOfCurrentPlayer.contains(where: { fig in fig.getPossibleMoves().contains(where: { move in IsMoveLegalMoveOnTheBoard(move) }) })
+    }
+    
+    private func isKingInCheck() -> Bool {
+        let king = figures.first(where: { $0.getType() == .king && $0.getColor() == colorToMove})!
+        return cache.isFieldInCheck(king.getRow(), king.getFile())
     }
     
     private func fieldIsEmpty(atRow:Int, atFile:Int) -> Bool {

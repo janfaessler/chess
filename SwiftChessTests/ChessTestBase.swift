@@ -278,7 +278,8 @@ class ChessTestBase: XCTestCase {
     
     func assertGameState(
         _ expectedState:GameState,
-        message: (GameState, GameState) -> String = { "\($0) is not equal to \($1)" },
+        fen:String = "",
+        message: (GameState, GameState, String) -> String = { "\($0) is not equal to \($1). Fen: \($2)" },
         file: StaticString = #filePath,
         line: UInt = #line
     ) throws {
@@ -287,7 +288,7 @@ class ChessTestBase: XCTestCase {
         let gameState = testee.getGameState()
         guard gameState != expectedState else { return }
         
-        XCTFail(message(gameState, expectedState), file: file, line: line)
+        XCTFail(message(gameState, expectedState, fen), file: file, line: line)
     }
     
     func figureExist(_ figure: ChessFigure) -> Bool {
@@ -297,5 +298,9 @@ class ChessTestBase: XCTestCase {
         } catch {
             return false
         }
+    }
+    
+    func loadFen(_ fen:String) {
+        testee = ChessBoard(Fen.loadPosition(fen))
     }
 }

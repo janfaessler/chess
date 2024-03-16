@@ -131,4 +131,89 @@ final class GameStateTests : ChessTestBase {
         try assertGameState(.WhiteWins)
 
     }
+    
+    func testStalemate() throws  {
+    
+        loadFen("7k/4NK2/5r2/5BN1/8/8/8/8 w - - 103 115")
+        
+        try assertGameState(.Running)
+        
+        try moveAndAssert(notation: "Kxf6", toField: "f6", type: .king, color: .white)
+        
+        try assertGameState(.DrawByStalemate)
+    }
+    
+    func testThreefoldRepetition() throws {
+        try moveAndAssert(notation: "Nf3", toField: "f3", type: .knight, color: .white)
+        try moveAndAssert(notation: "Nf6", toField: "f6", type: .knight, color: .black)
+        
+        try moveAndAssert(notation: "Nd4", toField: "d4", type: .knight, color: .white)
+        try moveAndAssert(notation: "Nd5", toField: "d5", type: .knight, color: .black)
+        
+        try moveAndAssert(notation: "Nb3", toField: "b3", type: .knight, color: .white)
+        try moveAndAssert(notation: "Nb6", toField: "b6", type: .knight, color: .black)
+        
+        try moveAndAssert(notation: "Nc3", toField: "c3", type: .knight, color: .white)
+        try moveAndAssert(notation: "Nc6", toField: "c6", type: .knight, color: .black)
+        
+        try moveAndAssert(notation: "Ne4", toField: "e4", type: .knight, color: .white)
+        try moveAndAssert(notation: "Ne5", toField: "e5", type: .knight, color: .black)
+        
+        try moveAndAssert(notation: "Ng5", toField: "g5", type: .knight, color: .white)
+        try moveAndAssert(notation: "Ng4", toField: "g4", type: .knight, color: .black)
+        
+        try moveAndAssert(notation: "Nf3", toField: "f3", type: .knight, color: .white)
+        try moveAndAssert(notation: "Nf6", toField: "f6", type: .knight, color: .black)
+        
+        try moveAndAssert(notation: "Ng1", toField: "g1", type: .knight, color: .white)
+        try moveAndAssert(notation: "Ng8", toField: "g8", type: .knight, color: .black)
+        
+        try moveAndAssert(notation: "Nc5", toField: "c5", type: .knight, color: .white)
+        try moveAndAssert(notation: "Nc4", toField: "c4", type: .knight, color: .black)
+        
+        try moveAndAssert(notation: "Na4", toField: "a4", type: .knight, color: .white)
+        try moveAndAssert(notation: "Na5", toField: "a5", type: .knight, color: .black)
+        
+        try moveAndAssert(notation: "Nc3", toField: "c3", type: .knight, color: .white)
+        try moveAndAssert(notation: "Nc6", toField: "c6", type: .knight, color: .black)
+        
+        try moveAndAssert(notation: "Nb1", toField: "b1", type: .knight, color: .white)
+        try moveAndAssert(notation: "Nb8", toField: "b8", type: .knight, color: .black)
+        
+        try moveAndAssert(notation: "Nf3", toField: "f3", type: .knight, color: .white)
+        
+        try assertGameState(.DrawByRepetition)
+
+        
+    }
+    
+    func testDrawByInsufficientMaterial() throws {
+        
+        let drawFens = [
+            "8/5k2/8/3K4/8/8/8/8 w - - 0 1",
+            "8/5k2/8/3K1b2/8/8/8/8 w - - 0 1",
+            "8/5k2/8/3K4/8/2B5/8/8 w - - 0 1",
+            "8/5k2/8/3K4/6n1/8/8/8 w - - 0 1",
+            "8/5k2/8/3K4/8/8/5N2/8 w - - 0 1",
+            "8/5k2/b7/3K4/6B1/8/8/8 w - - 0 1"
+        ]
+        
+        for fen in drawFens {
+            loadFen(fen)
+            try assertGameState(.DrawByInsufficientMaterial, fen: fen)
+        }
+    }
+    
+    func testNoDraw() throws {
+        let notADrawFen = [
+            "8/5k2/b7/3K4/7B/8/8/8 w - - 0 10",
+            "8/5k2/8/3K1b2/8/8/8/6r1 w - - 0 10",
+            "8/5k2/8/3K1b2/8/8/1n6/8 w - - 0 10",
+        ]
+        
+        for fen in notADrawFen {
+            loadFen(fen)
+            try assertGameState(.Running, fen: fen)
+        }
+    }
 }
