@@ -133,7 +133,7 @@ public class ChessBoard {
     
     private func updateBoardStates(_ move: Move, capturedPiece: (any ChessFigure)?) {
         
-        position = Position.create(position, afterMove: move, capturedPiece: capturedPiece)
+        position = PositionFactory.create(position, afterMove: move, capturedPiece: capturedPiece)
         increasePositionCount()
     }
     
@@ -201,7 +201,7 @@ public class ChessBoard {
         figures.removeAll(where: { $0.equals(move.getPiece()) })
         figures.append(Figure.create(type: move.getPiece().getType(), color: move.getPiece().getColor(), row: move.getRow(), file: move.file, moved: true))
         
-        let pos = Position.create(position, afterMove: move, figures: figures, capturedPiece: capturedPiece)
+        let pos = PositionFactory.create(position, afterMove: move, figures: figures, capturedPiece: capturedPiece)
 
         return pos
     }
