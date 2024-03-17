@@ -36,19 +36,19 @@ public class Position {
     
     public static func create(
         _ oldPosition:Position,
+        afterMove:Move,
         figures: [any ChessFigure]? = nil,
-        afterMove:Move? = nil,
         capturedPiece:(any ChessFigure)? = nil
     ) -> Position {
         return Position(
             figures ?? oldPosition.getFigures(),
-            colorToMove: afterMove == nil ? oldPosition.getColorToMove() : createColorToMove(afterMove),
+            colorToMove: createColorToMove(afterMove),
             enPassantTarget: createEnPassantTarget(afterMove),
             whiteCanCastleKingside: canCastle(afterMove: afterMove, color: .white, rookStartingFile: Rook.CastleKingsideStartingFile, capturedPiece: capturedPiece, oldPosition: oldPosition),
             whiteCanCastleQueenside: canCastle(afterMove: afterMove, color: .white, rookStartingFile: Rook.CastleQueensideStartingFile, capturedPiece: capturedPiece, oldPosition: oldPosition),
             blackCanCastleKingside: canCastle(afterMove: afterMove, color: .black, rookStartingFile: Rook.CastleKingsideStartingFile, capturedPiece: capturedPiece, oldPosition: oldPosition),
             blackCanCastleQueenside: canCastle(afterMove: afterMove, color: .black, rookStartingFile: Rook.CastleQueensideStartingFile, capturedPiece: capturedPiece, oldPosition: oldPosition),
-            moveClock: oldPosition.getMoveClock() + (afterMove != nil ? 1 : 0),
+            moveClock: oldPosition.getMoveClock() + 1,
             halfmoveClock: getHalfmoveClock(afterMove, capturedPiece != nil, oldPosition: oldPosition))
     }
     
@@ -197,27 +197,23 @@ public class Position {
         return dict
     }
     
-    private static func createColorToMove(_ move:Move?) -> PieceColor {
-        return  move?.piece.getColor() == .white ? .black : .white
+    private static func createColorToMove(_ move:Move) -> PieceColor {
+        return  move.piece.getColor() == .white ? .black : .white
     }
     
-    private static func createEnPassantTarget(_ move:Move?) -> Field? {
-        guard move?.type == .Double else { return nil }
+    private static func createEnPassantTarget(_ move:Move) -> Field? {
+        guard move.type == .Double else { return nil }
         
-        let targetRow = move!.piece.getColor() == .white ? move!.getRow() - 1 : move!.getRow() + 1
-        let targetFile = move!.getFile()
+        let targetRow = move.piece.getColor() == .white ? move.getRow() - 1 : move.getRow() + 1
+        let targetFile = move.getFile()
         
         return Field(row:targetRow, file: targetFile)
     }
     
 
     
-    private static func canCastle(afterMove:Move?, color:PieceColor, rookStartingFile:Int, capturedPiece:(any ChessFigure)?, oldPosition:Position) -> Bool {
-        
-        guard let afterMove = afterMove else {
-            return getOldCastlingState(oldPosition, color: color, rookStartingFile: rookStartingFile)
-        }
-        
+    private static func canCastle(afterMove:Move, color:PieceColor, rookStartingFile:Int, capturedPiece:(any ChessFigure)?, oldPosition:Position) -> Bool {
+    
         if afterMove.piece.getColor() == color && afterMove.piece.getType() == .king {
             return false
         }
@@ -260,8 +256,8 @@ public class Position {
         }
     }
     
-    private static func getHalfmoveClock(_ move: Move?, _ isCapture: Bool, oldPosition:Position) -> Int {
-        if move?.getPiece().getType() == .pawn || isCapture  {
+    private static func getHalfmoveClock(_ move: Move, _ isCapture: Bool, oldPosition:Position) -> Int {
+        if move.getPiece().getType() == .pawn || isCapture  {
             return 1
         } else {
             return oldPosition.getHalfmoveClock() + 1

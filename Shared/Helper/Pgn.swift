@@ -41,6 +41,6 @@ public class Pgn {
             }
         }
         
-        return Position.create(cache, figures: figures, afterMove: move, capturedPiece: capturedPiece)
+        return Position.create(cache, afterMove: move, figures: figures, capturedPiece: capturedPiece)
     }
 }

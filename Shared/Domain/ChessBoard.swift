@@ -199,7 +199,7 @@ public class ChessBoard {
         figures.removeAll(where: { $0.equals(move.getPiece()) })
         figures.append(Figure.create(type: move.getPiece().getType(), color: move.getPiece().getColor(), row: move.getRow(), file: move.file, moved: true))
         
-        let pos = Position.create(position, figures: figures, afterMove: move, capturedPiece: capturedPiece)
+        let pos = Position.create(position, afterMove: move, figures: figures, capturedPiece: capturedPiece)
 
         return pos
     }

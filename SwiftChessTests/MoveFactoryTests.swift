@@ -192,7 +192,7 @@ final class MoveFactoryTests: XCTestCase {
                 cache.set(rook)
             }
         }
-        boardCache = Position.create(cache, figures: figures, afterMove: move, capturedPiece: capturedPiece)
+        boardCache = Position.create(cache, afterMove: move, figures: figures, capturedPiece: capturedPiece)
     
     }
 }
