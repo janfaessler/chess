@@ -11,7 +11,6 @@ final class RawMovesTests: ChessTestBase {
         try captureAndAssert("e4", to: "d5", type:.pawn, color: .white)
         
         try assertMoves(["e4", "d5", "exd5"])
-        
     }
     
     func testEnPassantLeft() throws {
@@ -25,8 +24,6 @@ final class RawMovesTests: ChessTestBase {
         try captureAndAssert("e5", to: "d6", type: .pawn, color: .white)
         
         try assertMoves(["e4", "a6", "e5", "d5", "exd6"])
-
-        
     }
     
     func testEnPassanRight() throws {
@@ -59,7 +56,6 @@ final class RawMovesTests: ChessTestBase {
         try captureAndAssertPromotion("e7", to: "d8", type: .pawn, color: .white)
         
         try assertMoves(["e4", "a6", "e5", "d5", "exd6", "b5", "dxe7", "c5", "exd8=Q+"])
-
     }
     
     func testShortCastle() throws {
@@ -77,7 +73,6 @@ final class RawMovesTests: ChessTestBase {
         try moveAndAssert(from: "e8", to: "g8", type:.king, color: .black, moveType: .Castle)
         
         try assertMoves(["e4", "e5", "Bc4", "Bc5", "Nf3", "Nf6", "O-O", "O-O"])
-
     }
     
     func testLongCastle() throws {
@@ -101,7 +96,6 @@ final class RawMovesTests: ChessTestBase {
         try moveAndAssert(from: "e8", to: "c8", type: .king, color: .black, moveType: .Castle)
         
         try assertMoves(["b3", "b6", "Bb2", "Bb7", "Nc3", "Nc6", "e3", "e6", "Qe2", "Qe7", "O-O-O", "O-O-O"])
-
     }
     
     func testCastleAttemptStartInCheck() throws {
@@ -121,7 +115,6 @@ final class RawMovesTests: ChessTestBase {
         try moveAndAssertError("e1", to: "g1", type: .king, color: .white, moveType: .Castle)
         
         try assertMoves(["e4", "e5", "f3", "f5", "Bc4", "d6", "Nh3", "Qh4+"])
-        
     }
     
     func testCastleAttemptMiddleInCheck() throws {
@@ -164,7 +157,6 @@ final class RawMovesTests: ChessTestBase {
         try moveAndAssertError("e1", to: "g1", type: .king, color: .white, moveType: .Castle)
         
         try assertMoves(["e4", "e5", "f3", "Bc5", "Bc4", "d6", "Ne2", "f6"])
-
     }
     
     func testCastleWithoutRook() throws {
@@ -190,7 +182,6 @@ final class RawMovesTests: ChessTestBase {
         try moveAndAssertError("e1", to: "g1", type: .king, color: .white, moveType: .Castle)
         
         try assertMoves(["Nf3", "b6", "g3", "Bb7", "Bg2", "e5", "Nxe5", "Bxg2", "Nxf7", "Bxh1", "Nxd8", "Kxd8"])
-        
     }
     
     func testSimpleCastleWithTryingWrongMoves() throws {
@@ -274,7 +265,5 @@ final class RawMovesTests: ChessTestBase {
         try captureAndAssert("g5", to: "f6", type: .bishop, color: .white)
         
         try assertMoves(["e4", "f5", "Bc4", "e6", "h3", "g5", "Qh5+", "Ke7", "e5", "a6","d3","b5", "Bxg5+", "Nf6", "Bxf6+"])
-        
     }
-
 }

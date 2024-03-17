@@ -12,7 +12,7 @@ public class MoveFactory {
     private static let LongCastleTargetFile = "c"
     
     private static func isNotAPawnMove(_ input: any StringProtocol) -> Bool {
-        return Array(input).first!.isUppercase
+        return Array(input).first?.isUppercase ?? false
     }
     
     public static func create(_ input:any StringProtocol, position:Position) -> Move? {
@@ -42,9 +42,11 @@ public class MoveFactory {
         let cleanedInput = String(input.filter({ $0 != checkIndicator && $0 != checkmateIndicator && $0 != captureSeparator }))
         
         let pieceEndIndex = getEndOfPieceIdentIndex(cleanedInput)!
-        guard let pieceType = getPieceType(cleanedInput[..<pieceEndIndex]) else { return nil }
         
-        let field = getPieceField(cleanedInput)
+        guard
+            let pieceType = getPieceType(cleanedInput[..<pieceEndIndex]),
+            let field = getPieceField(cleanedInput)
+        else { return nil }
         
         let fig = getPieceFigure(cleanedInput, pieceType: pieceType, color: color, cache: cache)
         
@@ -52,7 +54,7 @@ public class MoveFactory {
     }
     
     private static func createPawnMove(_ input: any StringProtocol, color:PieceColor, cache: Position) -> Move? {
-        let field = getField(input)
+        guard let field = getField(input) else { return nil }
         let fig = getFigure(targetField: field, type: .pawn, color: color, cache: cache)
         if isPromotion(input) {
             return fig?.createMove(field, type: .Promotion)
@@ -61,7 +63,7 @@ public class MoveFactory {
     }
     
     private static func getPieceFigure(_ cleanedInput: any StringProtocol, pieceType: PieceType, color: PieceColor, cache: Position) -> (any ChessFigure)? {
-        let field = getPieceField(cleanedInput)
+        guard let field = getPieceField(cleanedInput) else { return nil }
         if hasRowInfo(cleanedInput){
             let rowInfo = getPiecePositionInfo(cleanedInput)
             return getFigure(field, withRow: rowInfo, type: pieceType, color: color, cache: cache)
@@ -111,7 +113,7 @@ public class MoveFactory {
         })
     }
     
-    private static func getPieceField(_ input:any StringProtocol) -> any StringProtocol {
+    private static func getPieceField(_ input:any StringProtocol) -> (any StringProtocol)? {
         let hasFileInfo = hasFileInfo(input)
         let hasRowInfo = hasRowInfo(input)
         let offset = hasFileInfo || hasRowInfo ? 2 : 1
@@ -119,10 +121,10 @@ public class MoveFactory {
         let promotionParts = input[fieldStartIndex...].split(separator: promotionSeparator)
         return promotionParts.first!
     }
-    private static func getField(_ input:any StringProtocol) -> any StringProtocol {
+    private static func getField(_ input:any StringProtocol) -> (any StringProtocol)? {
         let captureParts = input.split(separator: captureSeparator)
-        let promotionParts = captureParts.last!.split(separator: promotionSeparator)
-        return promotionParts.first!
+        let promotionParts = captureParts.last?.split(separator: promotionSeparator)
+        return promotionParts?.first
     }
     
     private static func isPromotion(_ input:any StringProtocol) -> Bool {

@@ -121,8 +121,10 @@ public class ChessBoard {
     }
 
     private func checkPromotion(_ move: Move) -> Bool {
-        guard move.piece.getType() == .pawn else { return false }
-        guard pawnHasReachedEndOfTheBoard(move) else { return false  }
+        guard 
+            move.piece.getType() == .pawn,
+            pawnHasReachedEndOfTheBoard(move)
+        else { return false }
 
         // Todo: Promotion Choice
         promote(Pawn(color: move.piece.getColor(), row: move.getRow(), file: move.getFile()), to: Queen(color: move.piece.getColor(), row: move.row, file: move.file))
@@ -222,8 +224,10 @@ public class ChessBoard {
     private func onlySameColorBishopsLeft() -> Bool {
         let figures = position.getFigures()
         let bishopList = figures.filter({ $0.getType() == .bishop })
-        guard bishopList.count == 2 else { return false }
-        guard Set(bishopList.map({ $0.getColor() })).count == 2 else { return false }
+        guard 
+            bishopList.count == 2,
+            Set(bishopList.map({ $0.getColor() })).count == 2
+        else { return false }
         let indices = bishopList.map({ ($0.getRow() + $0.getFile()) })
         let modIndices = indices.map({ $0 % 2})
         return Set(modIndices).count == 1

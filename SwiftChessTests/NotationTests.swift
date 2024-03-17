@@ -166,7 +166,7 @@ final class NotationTests: ChessTestBase {
 
     }
     
-    func testCastleWithoutRook() throws {
+    func testCastleWithoutRookKingside() throws {
         
         try moveAndAssert(notation: "Nf3", toField: "f3", type: .knight, color: .white)
         try moveAndAssert(notation: "b6", toField: "b6", type: .pawn, color: .black)
@@ -190,6 +190,27 @@ final class NotationTests: ChessTestBase {
         
         try assertMoves()
         
+    }
+    
+    func testCastleWithoutRookQueenside() throws {
+        
+        let moves = Pgn.load("1. b4 b5 2. Bb2 Bb7 3. Nf3 Nf6 4. g3 g6 5. Bg2 Bg7 6. e3 e6 7. Qe2 Qe7 8. d3 d6 9. Nbd2 Nbd7 10. Ng5 Ng4 11. Bxb7 Bxb2")
+        for move in moves {
+            try testee?.move(move)
+        }
+        
+        try moveAndAssert(notation: "Bxa8", toField: "a8", type: .bishop, color: .white)
+        
+        try moveAndAssertError("O-O-O")
+        try moveAndAssert(notation: "Bxa1", toField: "a1", type: .bishop, color: .black)
+
+        try moveAndAssertError("O-O-O")
+        try moveAndAssert(notation: "Bg2", toField: "g2", type: .bishop, color: .white)
+        
+        try moveAndAssertError("O-O-O")
+        try moveAndAssert(notation: "Bg7", toField: "g7", type: .bishop, color: .black)
+
+        try moveAndAssertError("O-O-O")
     }
     
     func testSimpleCastleWithTryingWrongMoves() throws {

@@ -8,7 +8,7 @@ public class Pgn {
             if !line.starts(with: "[") {
                 var cache = Fen.loadStartingPosition()
                 let moves:[Move?] = line.split{ $0.isWhitespace }.map({ input in
-                    
+                    let input = input.replacing(". ", with: ".")
                     let dot = input.firstIndex(of: ".")
                     
                     let notation = dot == nil ? input : input[input.index(after: dot!)...]

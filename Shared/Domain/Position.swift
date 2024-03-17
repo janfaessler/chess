@@ -210,8 +210,6 @@ public class Position {
         return Field(row:targetRow, file: targetFile)
     }
     
-
-    
     private static func canCastle(afterMove:Move, color:PieceColor, rookStartingFile:Int, capturedPiece:(any ChessFigure)?, oldPosition:Position) -> Bool {
     
         if afterMove.piece.getColor() == color && afterMove.piece.getType() == .king {
@@ -223,12 +221,10 @@ public class Position {
         }
         
         if color == .white {
-
             if capturedPiece != nil && capturedPiece?.getColor() == .white && capturedPiece?.getType() == .rook {
                 if capturedPiece?.getFile() == Rook.CastleKingsideStartingFile { return false }
                 if capturedPiece?.getFile() == Rook.CastleQueensideStartingFile { return false }
             }
-
         } else {
             if capturedPiece != nil && capturedPiece?.getColor() == .black && capturedPiece?.getType() == .rook {
                 if capturedPiece?.getFile() == Rook.CastleKingsideStartingFile { return false }
