@@ -27,6 +27,7 @@ public class Pgn {
     private static func updateBoardCache(_ move:Move, cache:Position, isCapture:Bool) -> Position{
         var figures:[any ChessFigure] = cache.getFigures()
         let fig = figures.first(where: { $0.equals(move.getPiece())})!
+        let capturedPiece = cache.get(atRow: move.getRow(), atFile: move.getFile())
         fig.move(row: move.getRow(), file: move.getFile())
         figures.removeAll(where: {$0.equals(move.getPiece())})
         figures.append(fig)
@@ -39,14 +40,7 @@ public class Pgn {
                 rook.move(row: move.getRow(), file: Rook.CastleKingsideEndFile)
             }
         }
-        return Position.create(
-            figures,
-            lastMove: move,
-            whiteCanCastleKingside: cache.canWhiteCastleKingside(), 
-            whiteCanCastleQueenside: cache.canWhiteCastleQueenside(), 
-            blackCanCastleKingside: cache.canBlackCastleKingside(),
-            blackCanCastleQueenside: cache.canBlackCastleQueenside(),
-            moveClock: cache.getMoveClock() + 1,
-            halfmoveClock: fig.getType() == .pawn || isCapture ? 1 : cache.getHalfmoveClock() + 1)
+        
+        return Position.create(cache, figures: figures, afterMove: move, capturedPiece: capturedPiece)
     }
 }

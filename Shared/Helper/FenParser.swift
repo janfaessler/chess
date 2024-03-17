@@ -5,15 +5,15 @@ public class FenParser {
     public static func parse(_ fen:String) -> Position {
         let parts = fen.split(separator: " ").map({String($0)})
         
-        return Position.create(getFigures(parts[0]),
-                                 colorToMove: getNextMove(parts[1]),
-                                 enPassantTarget: getEnPassantTarget(parts[3]),
-                                 whiteCanCastleKingside: canWhiteCastleShort(parts[2]),
-                                 whiteCanCastleQueenside: canWhiteCastleLong(parts[2]),
-                                 blackCanCastleKingside: canBlackCastleShort(parts[2]),
-                                 blackCanCastleQueenside: canBlackCastleLong(parts[2]),
-                                 moveClock: parseInt(parts[5]) - 1,
-                                 halfmoveClock: parseInt(parts[4]))
+        return Position(getFigures(parts[0]),
+                        colorToMove: getNextMove(parts[1]),
+                        enPassantTarget: getEnPassantTarget(parts[3]),
+                        whiteCanCastleKingside: canWhiteCastleShort(parts[2]),
+                        whiteCanCastleQueenside: canWhiteCastleLong(parts[2]),
+                        blackCanCastleKingside: canBlackCastleShort(parts[2]),
+                        blackCanCastleQueenside: canBlackCastleLong(parts[2]),
+                        moveClock: parseInt(parts[5]) - 1,
+                        halfmoveClock: parseInt(parts[4]))
         
     }
     

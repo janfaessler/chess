@@ -205,6 +205,7 @@ final class GameStateTests : ChessTestBase {
             "8/5k2/b7/3K4/7B/8/8/8 w - - 0 10",
             "8/5k2/8/3K1b2/8/8/8/6r1 w - - 0 10",
             "8/5k2/8/3K1b2/8/8/1n6/8 w - - 0 10",
+            "8/2k5/8/4BB2/8/5K2/8/8 w - - 0 10"
         ]
         
         for fen in notADrawFen {
