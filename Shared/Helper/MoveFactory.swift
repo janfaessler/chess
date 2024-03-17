@@ -30,7 +30,7 @@ public class MoveFactory {
         let kingRow = getRowOfKing(color)
         let kingFile = getFileOfKing(input)
         let fig = getFigure(targetField: "\(kingFile)\(kingRow)", type: .king, color: color, cache: cache)
-        if String(input) == King.ShortCastleNotation {
+        if String(input) == King.CastleKingsideNotation {
             return fig?.createMove("\(kingFile)\(kingRow)", type: .Castle)
         } else {
             return fig?.createMove("\(kingFile)\(kingRow)", type: .Castle)
@@ -132,7 +132,7 @@ public class MoveFactory {
     }
     
     private static func isCastlingMove(_ input:any StringProtocol) -> Bool {
-        return String(input) == King.LongCastleNotation || String(input) == King.ShortCastleNotation
+        return String(input) == King.CastleQueensideNotation || String(input) == King.CastleKingsideNotation
     }
     
     private static func getEndOfPieceIdentIndex(_ input: any StringProtocol) -> String.Index? {
@@ -144,7 +144,7 @@ public class MoveFactory {
     }
     
     private static func getFileOfKing(_ input: any StringProtocol) -> String {
-        return String(input) == King.ShortCastleNotation ? ShortCastleTargetFile : LongCastleTargetFile
+        return String(input) == King.CastleKingsideNotation ? ShortCastleTargetFile : LongCastleTargetFile
     }
     
     private static func hasFileInfo(_ input: any StringProtocol) -> Bool {

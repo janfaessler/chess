@@ -3,10 +3,10 @@ import Foundation
 public class King : Figure {
     
     public static let Ident = "K"
-    public static let LongCastleNotation = "O-O-O"
-    public static let ShortCastleNotation = "O-O"
-    public static let LongCastlePosition = 3
-    public static let ShortCastlePosition = 7
+    public static let CastleQueensideNotation = "O-O-O"
+    public static let CastleKingsideNotation = "O-O"
+    public static let CastleQueensidePosition = 3
+    public static let CastleKingsidePosition = 7
     
     public init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
         super.init(type: .king, color: color, row: row, file: file, moved: moved)
@@ -27,8 +27,8 @@ public class King : Figure {
         ]
         if (!hasMoved()) {
             moves.append(contentsOf: [
-                createMove(row, King.LongCastlePosition, MoveType.Castle),
-                createMove(row, King.ShortCastlePosition, MoveType.Castle)
+                createMove(row, King.CastleQueensidePosition, MoveType.Castle),
+                createMove(row, King.CastleKingsidePosition, MoveType.Castle)
             ])
         }
         return moves.filter({ move in inBoard(move) })
@@ -36,9 +36,9 @@ public class King : Figure {
     
     public override func isMovePossible( _ move: Move, position:Position) -> Bool {
         if isShortCastling(move) {
-            return canCastle(move, rookStart: Rook.ShortCastleStartingFile, cache: position)
+            return canCastle(move, rookStart: Rook.CastleKingsideStartingFile, cache: position)
         } else if isLongCastling(move) {
-            return canCastle(move, rookStart: Rook.LongCastleStartingFile, cache: position)
+            return canCastle(move, rookStart: Rook.CastleQueensideStartingFile, cache: position)
         }
         return super.isMovePossible(move, position: position)
     }
@@ -53,19 +53,23 @@ public class King : Figure {
     }
     
     private func canCastle(_ to: Move, rookStart:Int, cache:Position) -> Bool {
-        let isNotCastlingInCheck = isCastlingInCheck(to, cache:cache) == false
-        let kingHasNotMovedYet = self.hasMoved() == false
-        let figureAtRookStart = cache.get(atRow: to.piece.getRow(), atFile: rookStart)
-        let rookHasNotMovedYet = figureAtRookStart != nil && figureAtRookStart!.getType() == .rook && figureAtRookStart?.getColor() == getColor() && figureAtRookStart?.hasMoved() == false
-        return isNotCastlingInCheck && kingHasNotMovedYet && rookHasNotMovedYet
+        if  isCastlingInCheck(to, cache:cache) {
+            return false
+        }
+        
+        if to.piece.getColor() == .white {
+            return rookStart == Rook.CastleKingsideStartingFile ? cache.canWhiteCastleKingside() : cache.canWhiteCastleQueenside()
+        } else {
+            return rookStart == Rook.CastleKingsideStartingFile ? cache.canBlackCastleKingside() : cache.canBlackCastleQueenside()
+        }
     }
     
     private func isLongCastling(_ move: Move) -> Bool {
-        return move.file == King.LongCastlePosition && isKingCastling(move)
+        return move.file == King.CastleQueensidePosition && isKingCastling(move)
     }
     
     private func isShortCastling(_ move: Move) -> Bool {
-        return move.file == King.ShortCastlePosition && isKingCastling(move)
+        return move.file == King.CastleKingsidePosition && isKingCastling(move)
     }
     
     private func isKingCastling(_ move: Move) -> Bool {

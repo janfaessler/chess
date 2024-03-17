@@ -107,16 +107,16 @@ public class ChessBoard {
     
     private func doMove(_ move: Move) throws -> Bool {
         let figure = position.get(atRow: move.getPiece().getRow(), atFile: move.getPiece().getFile())!
-        let isCapture = doCapture(move)
+        let capturedPiece = doCapture(move)
 
         figure.move(row: move.row, file: move.file)
         moveRookForCastling(move)
         moves += [move]
-        updateBoardStates(move, isCapture: isCapture)
-        return isCapture
+        updateBoardStates(move, capturedPiece: capturedPiece)
+        return capturedPiece != nil
     }
     
-    private func doCapture(_ move: Move) -> Bool {
+    private func doCapture(_ move: Move) -> (any ChessFigure)? {
         if isPawnCapturing(move) {
             return captureFigureAt(row: move.piece.getRow(), file: move.file)
         }
@@ -133,16 +133,16 @@ public class ChessBoard {
         return true
     }
     
-    private func updateBoardStates(_ move: Move, isCapture: Bool) {
+    private func updateBoardStates(_ move: Move, capturedPiece: (any ChessFigure)?) {
         position = Position.create(
             position.getFigures(),
             lastMove: move,
-            whiteCanCastleKingside: canCastle(afterMove: move, color: .white, rookStartingFile: Rook.ShortCastleStartingFile),
-            whiteCanCastleQueenside: canCastle(afterMove: move, color: .white, rookStartingFile: Rook.LongCastleStartingFile),
-            blackCanCastleKingside: canCastle(afterMove: move, color: .black, rookStartingFile: Rook.ShortCastleStartingFile),
-            blackCanCastleQueenside: canCastle(afterMove: move, color: .black, rookStartingFile: Rook.LongCastleStartingFile),
+            whiteCanCastleKingside: canCastle(afterMove: move, color: .white, rookStartingFile: Rook.CastleKingsideStartingFile, capturedPiece: capturedPiece),
+            whiteCanCastleQueenside: canCastle(afterMove: move, color: .white, rookStartingFile: Rook.CastleQueensideStartingFile, capturedPiece: capturedPiece),
+            blackCanCastleKingside: canCastle(afterMove: move, color: .black, rookStartingFile: Rook.CastleKingsideStartingFile, capturedPiece: capturedPiece),
+            blackCanCastleQueenside: canCastle(afterMove: move, color: .black, rookStartingFile: Rook.CastleQueensideStartingFile, capturedPiece: capturedPiece),
             moveClock: position.getMoveClock() + 1,
-            halfmoveClock: getHalfmoveClock(move, isCapture))
+            halfmoveClock: getHalfmoveClock(move, capturedPiece != nil))
         increasePositionCount()
     }
     
@@ -154,24 +154,24 @@ public class ChessBoard {
             || onlySameColorBishopsLeft()
     }
     
-    private func captureFigureAt(row: Int, file: Int) -> Bool {
-        guard let figureAtTarget = position.get(atRow: row, atFile: file) else { return false }
+    private func captureFigureAt(row: Int, file: Int) -> (any ChessFigure)? {
+        guard let figureAtTarget = position.get(atRow: row, atFile: file) else { return nil }
         removeFigure(figureAtTarget)
         logger.info("\(String(describing: figureAtTarget.getColor())) \(String(describing:figureAtTarget.getType())) at \(row):\(file) got captured")
-        return true
+        return figureAtTarget
     }
     
     private func moveRookForCastling(_ move: Move) {
     
         if isLongCastling(move) {
-            let rook = position.get(atRow: move.piece.getRow(), atFile: Rook.LongCastleStartingFile)!
-            rook.move(row: move.row, file: Rook.LongCastleEndFile)
-            position.clearField(atRow: move.piece.getRow(), atFile: Rook.LongCastleStartingFile)
+            let rook = position.get(atRow: move.piece.getRow(), atFile: Rook.CastleQueensideStartingFile)!
+            rook.move(row: move.row, file: Rook.CastleQueensideEndFile)
+            position.clearField(atRow: move.piece.getRow(), atFile: Rook.CastleQueensideStartingFile)
             position.set(rook)
         } else if isShortCastling(move) {
-            let rook = position.get(atRow: move.piece.getRow(), atFile: Rook.ShortCastleStartingFile)!
-            rook.move(row: move.row, file: Rook.ShortCastleEndFile)
-            position.clearField(atRow: move.piece.getRow(), atFile: Rook.ShortCastleStartingFile)
+            let rook = position.get(atRow: move.piece.getRow(), atFile: Rook.CastleKingsideStartingFile)!
+            rook.move(row: move.row, file: Rook.CastleKingsideEndFile)
+            position.clearField(atRow: move.piece.getRow(), atFile: Rook.CastleKingsideStartingFile)
             position.set(rook)
         }
     }
@@ -203,22 +203,46 @@ public class ChessBoard {
         })
     }
     
-    private func canCastle(afterMove:Move, color:PieceColor, rookStartingFile:Int) -> Bool {
-        guard afterMove.piece.getColor() == color else { return position.canWhiteCastleKingside() }
-        
-        if afterMove.piece.getType() == .king {
+    private func canCastle(afterMove:Move, color:PieceColor, rookStartingFile:Int, capturedPiece:(any ChessFigure)?) -> Bool {
+        if afterMove.piece.getColor() == color && afterMove.piece.getType() == .king {
             return false
         }
         
-        if afterMove.piece.getType() == .rook {
+        if afterMove.piece.getColor() == color && afterMove.piece.getType() == .rook {
             return afterMove.piece.getFile() != rookStartingFile
         }
         
-        return position.canWhiteCastleKingside()
+        if color == .white {
+            if rookStartingFile == Rook.CastleKingsideStartingFile {
+                if capturedPiece != nil && capturedPiece?.getColor() == .white && capturedPiece?.getType() == .rook && capturedPiece?.getFile() == Rook.CastleKingsideStartingFile {
+                    return false
+                }
+                return position.canWhiteCastleKingside()
+            } else {
+                if capturedPiece != nil && capturedPiece?.getColor() == .white && capturedPiece?.getType() == .rook && capturedPiece?.getFile() == Rook.CastleQueensideStartingFile {
+                    return false
+                }
+                return position.canWhiteCastleQueenside()
+            }
+            
+        } else {
+            
+            if rookStartingFile == Rook.CastleKingsideStartingFile {
+                if capturedPiece != nil && capturedPiece?.getColor() == .black && capturedPiece?.getType() == .rook && capturedPiece?.getFile() == Rook.CastleKingsideStartingFile {
+                    return false
+                }
+                return position.canBlackCastleKingside()
+            } else {
+                if capturedPiece != nil && capturedPiece?.getColor() == .black && capturedPiece?.getType() == .rook && capturedPiece?.getFile() == Rook.CastleQueensideStartingFile {
+                    return false
+                }
+                return position.canBlackCastleQueenside()
+            }
+        }
     }
     
     private func createPositionWithMove(_ move:Move) -> Position {
-        let isCapture = position.isNotEmpty(atRow: move.getRow(), atFile: move.getFile())
+        let capturedPiece = position.get(atRow: move.getRow(), atFile: move.getFile())
         
         var figures = position.getFigures()
         figures.removeAll(where: { $0.equals(move.getPiece()) })
@@ -226,12 +250,12 @@ public class ChessBoard {
         
         let pos = Position.create(figures,
                                       lastMove: move,
-                                      whiteCanCastleKingside: canCastle(afterMove: move, color: .white, rookStartingFile: Rook.ShortCastleStartingFile),
-                                      whiteCanCastleQueenside: canCastle(afterMove: move, color: .white, rookStartingFile: Rook.LongCastleStartingFile),
-                                      blackCanCastleKingside: canCastle(afterMove: move, color: .black, rookStartingFile: Rook.ShortCastleStartingFile),
-                                      blackCanCastleQueenside: canCastle(afterMove: move, color: .black, rookStartingFile: Rook.LongCastleStartingFile),
+                                      whiteCanCastleKingside: canCastle(afterMove: move, color: .white, rookStartingFile: Rook.CastleKingsideStartingFile, capturedPiece: capturedPiece),
+                                      whiteCanCastleQueenside: canCastle(afterMove: move, color: .white, rookStartingFile: Rook.CastleQueensideStartingFile, capturedPiece: capturedPiece),
+                                      blackCanCastleKingside: canCastle(afterMove: move, color: .black, rookStartingFile: Rook.CastleKingsideStartingFile, capturedPiece: capturedPiece),
+                                      blackCanCastleQueenside: canCastle(afterMove: move, color: .black, rookStartingFile: Rook.CastleQueensideStartingFile, capturedPiece: capturedPiece),
                                       moveClock: position.getMoveClock() + 1,
-                                      halfmoveClock: getHalfmoveClock(move, isCapture))
+                                      halfmoveClock: getHalfmoveClock(move, capturedPiece != nil))
         return pos
     }
     
@@ -277,11 +301,11 @@ public class ChessBoard {
     }
     
     private func isLongCastling(_ move: Move) -> Bool {
-        return move.file == King.LongCastlePosition && isKingCastling(move)
+        return move.file == King.CastleQueensidePosition && isKingCastling(move)
     }
     
     private func isShortCastling(_ move: Move) -> Bool {
-        return move.file == King.ShortCastlePosition && isKingCastling(move)
+        return move.file == King.CastleKingsidePosition && isKingCastling(move)
     }
     
     private func playerHasLegalMove() -> Bool {

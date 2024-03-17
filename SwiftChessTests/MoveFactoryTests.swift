@@ -179,21 +179,21 @@ final class MoveFactoryTests: XCTestCase {
         figures.removeAll(where: {$0.equals(move.getPiece())})
         figures.append(fig)
         if move.getType() == .Castle {
-            if move.getFile() == King.LongCastlePosition{
-                let rook = figures.first(where: { $0.equals(Rook(color: fig.getColor(), row: fig.getRow(), file: Rook.LongCastleStartingFile))})!
-                rook.move(row: move.getRow(), file: Rook.LongCastleEndFile)
+            if move.getFile() == King.CastleQueensidePosition{
+                let rook = figures.first(where: { $0.equals(Rook(color: fig.getColor(), row: fig.getRow(), file: Rook.CastleQueensideStartingFile))})!
+                rook.move(row: move.getRow(), file: Rook.CastleQueensideEndFile)
             } else {
-                let rook = figures.first(where: { $0.equals(Rook(color: fig.getColor(), row: fig.getRow(), file: Rook.ShortCastleStartingFile))})!
-                rook.move(row: move.getRow(), file: Rook.ShortCastleEndFile)
+                let rook = figures.first(where: { $0.equals(Rook(color: fig.getColor(), row: fig.getRow(), file: Rook.CastleKingsideStartingFile))})!
+                rook.move(row: move.getRow(), file: Rook.CastleKingsideEndFile)
             }
         }
         boardCache = Position.create(
             figures,
             lastMove: move,
-            whiteCanCastleKingside: try canCastle(afterMove: move, color: .white, rookStartingFile: Rook.ShortCastleStartingFile),
-            whiteCanCastleQueenside: try canCastle(afterMove: move, color: .white, rookStartingFile: Rook.LongCastleStartingFile),
-            blackCanCastleKingside: try canCastle(afterMove: move, color: .black, rookStartingFile: Rook.ShortCastleStartingFile),
-            blackCanCastleQueenside: try canCastle(afterMove: move, color: .black, rookStartingFile: Rook.LongCastleStartingFile),
+            whiteCanCastleKingside: try canCastle(afterMove: move, color: .white, rookStartingFile: Rook.CastleKingsideStartingFile),
+            whiteCanCastleQueenside: try canCastle(afterMove: move, color: .white, rookStartingFile: Rook.CastleQueensideStartingFile),
+            blackCanCastleKingside: try canCastle(afterMove: move, color: .black, rookStartingFile: Rook.CastleKingsideStartingFile),
+            blackCanCastleQueenside: try canCastle(afterMove: move, color: .black, rookStartingFile: Rook.CastleQueensideStartingFile),
             moveClock: cache.getMoveClock() + 1,
             halfmoveClock: try getHalfmoveClock(move, isCapture))
     }

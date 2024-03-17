@@ -31,12 +31,12 @@ public class Pgn {
         figures.removeAll(where: {$0.equals(move.getPiece())})
         figures.append(fig)
         if move.getType() == .Castle {
-            if move.getFile() == King.LongCastlePosition{
-                let rook = figures.first(where: { $0.equals(Rook(color: fig.getColor(), row: fig.getRow(), file: Rook.LongCastleStartingFile))})!
-                rook.move(row: move.getRow(), file: Rook.LongCastleEndFile)
+            if move.getFile() == King.CastleQueensidePosition{
+                let rook = figures.first(where: { $0.equals(Rook(color: fig.getColor(), row: fig.getRow(), file: Rook.CastleQueensideStartingFile))})!
+                rook.move(row: move.getRow(), file: Rook.CastleQueensideEndFile)
             } else {
-                let rook = figures.first(where: { $0.equals(Rook(color: fig.getColor(), row: fig.getRow(), file: Rook.ShortCastleStartingFile))})!
-                rook.move(row: move.getRow(), file: Rook.ShortCastleEndFile)
+                let rook = figures.first(where: { $0.equals(Rook(color: fig.getColor(), row: fig.getRow(), file: Rook.CastleKingsideStartingFile))})!
+                rook.move(row: move.getRow(), file: Rook.CastleKingsideEndFile)
             }
         }
         return Position.create(

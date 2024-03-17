@@ -31,11 +31,11 @@ class FigureModel : Identifiable, ObservableObject {
         let moves = figure.getPossibleMoves();
         
         if figure.getType() == .king {
-            if figure.hasMoved() == false && moveToFile < King.LongCastlePosition {
-                return figure.createMove(moveToRow, King.LongCastlePosition, .Castle)
+            if figure.hasMoved() == false && moveToFile < King.CastleQueensidePosition {
+                return figure.createMove(moveToRow, King.CastleQueensidePosition, .Castle)
             }
-            if figure.hasMoved() == false && moveToFile > King.ShortCastlePosition {
-                return figure.createMove(moveToRow, King.ShortCastlePosition, .Castle)
+            if figure.hasMoved() == false && moveToFile > King.CastleKingsidePosition {
+                return figure.createMove(moveToRow, King.CastleKingsidePosition, .Castle)
             }
         }
         
