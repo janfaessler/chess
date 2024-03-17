@@ -3,11 +3,10 @@ import SwiftChess
 
 final class MoveFactoryTests: XCTestCase {
 
-    private var boardCache:BoardCache?
+    private var boardCache:Position?
     
     override func setUpWithError() throws {
-        let position = Fen.loadStartingPosition();
-        boardCache = BoardCache.create(position.figures)
+        boardCache = Fen.loadStartingPosition();
     }
 
     func testPawnMoves() throws {
@@ -162,18 +161,19 @@ final class MoveFactoryTests: XCTestCase {
         line: UInt = #line
     ) throws {
         let cache = try XCTUnwrap(boardCache)
-        let move:Move? = MoveFactory.create(moveName, cache:cache);
+        let move:Move? = MoveFactory.create(moveName, position:cache);
         
         guard move == nil || move?.getPiece().getType() != type || move?.getPiece().getColor() != color || move?.getFieldInfo() != field || move?.getType() != moveType else {
-            try updateBoardCache(move!)
+            try updateBoardCache(move!, isCapture: moveName.contains("x"))
             return
         }
         
         XCTFail(message(move), file: file, line: line)
     }
     
-    private func updateBoardCache(_ move:Move) throws {
-        var figures:[any ChessFigure] = try XCTUnwrap(boardCache).getFigures()
+    private func updateBoardCache(_ move:Move, isCapture:Bool) throws {
+        let cache = try XCTUnwrap(boardCache)
+        var figures:[any ChessFigure] = cache.getFigures()
         let fig = figures.first(where: { $0.equals(move.getPiece())})!
         fig.move(row: move.getRow(), file: move.getFile())
         figures.removeAll(where: {$0.equals(move.getPiece())})
@@ -187,6 +187,39 @@ final class MoveFactoryTests: XCTestCase {
                 rook.move(row: move.getRow(), file: Rook.ShortCastleEndFile)
             }
         }
-        boardCache = BoardCache.create(figures, lastMove: move)
+        boardCache = Position.create(
+            figures,
+            lastMove: move,
+            whiteCanCastleKingside: try canCastle(afterMove: move, color: .white, rookStartingFile: Rook.ShortCastleStartingFile),
+            whiteCanCastleQueenside: try canCastle(afterMove: move, color: .white, rookStartingFile: Rook.LongCastleStartingFile),
+            blackCanCastleKingside: try canCastle(afterMove: move, color: .black, rookStartingFile: Rook.ShortCastleStartingFile),
+            blackCanCastleQueenside: try canCastle(afterMove: move, color: .black, rookStartingFile: Rook.LongCastleStartingFile),
+            moveClock: cache.getMoveClock() + 1,
+            halfmoveClock: try getHalfmoveClock(move, isCapture))
+    }
+    
+    private func canCastle(afterMove:Move, color:PieceColor, rookStartingFile:Int) throws -> Bool {
+        let cache = try XCTUnwrap(boardCache)
+        guard afterMove.getPiece().getColor() == color else { return cache.canWhiteCastleKingside() }
+        
+        if afterMove.getPiece().getType() == .king {
+            return false
+        }
+        
+        if afterMove.getPiece().getType() == .rook {
+            return afterMove.getPiece().getFile() != rookStartingFile
+        }
+        
+        return cache.canWhiteCastleKingside()
+    }
+    
+    private func getHalfmoveClock(_ move: Move, _ isCapture: Bool) throws -> Int  {
+        let cache = try XCTUnwrap(boardCache)
+
+        if move.getPiece().getType() == .pawn || isCapture  {
+            return 1
+        } else {
+            return cache.getHalfmoveClock() + 1
+        }
     }
 }

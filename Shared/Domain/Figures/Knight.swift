@@ -23,12 +23,12 @@ public class Knight : Figure {
         return moves.filter({ move in inBoard(move) })
     }
     
-    public override func isMovePossible( _ move: Move, cache:BoardCache) -> Bool {
+    public override func isMovePossible( _ move: Move, position:Position) -> Bool {
         guard canDo(move: move) else {
             return false
         }
         
-        guard let pieceAtTarget = cache.getNextPiece(move) else {
+        guard let pieceAtTarget = position.getNextPiece(move) else {
             return true
         }
         

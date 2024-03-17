@@ -15,18 +15,18 @@ public class MoveFactory {
         return Array(input).first!.isUppercase
     }
     
-    public static func create(_ input:any StringProtocol, cache:BoardCache) -> Move? {
-        let color = cache.getColorToMove()
+    public static func create(_ input:any StringProtocol, position:Position) -> Move? {
+        let color = position.getColorToMove()
         if isCastlingMove(input) {
-            return createCastlingMove(input, color: color, cache: cache)
+            return createCastlingMove(input, color: color, cache: position)
         }
         if isNotAPawnMove(input) {
-            return createPieceMove(input, color, cache)
+            return createPieceMove(input, color, position)
         }
-        return createPawnMove(input, color: color, cache: cache)
+        return createPawnMove(input, color: color, cache: position)
     }
     
-    private static func createCastlingMove(_ input: any StringProtocol, color: PieceColor, cache: BoardCache) -> Move? {
+    private static func createCastlingMove(_ input: any StringProtocol, color: PieceColor, cache: Position) -> Move? {
         let kingRow = getRowOfKing(color)
         let kingFile = getFileOfKing(input)
         let fig = getFigure(targetField: "\(kingFile)\(kingRow)", type: .king, color: color, cache: cache)
@@ -37,7 +37,7 @@ public class MoveFactory {
         }
     }
     
-    private static func createPieceMove(_ input: any StringProtocol, _ color: PieceColor, _ cache: BoardCache) -> Move? {
+    private static func createPieceMove(_ input: any StringProtocol, _ color: PieceColor, _ cache: Position) -> Move? {
         
         let cleanedInput = String(input.filter({ $0 != checkIndicator && $0 != checkmateIndicator && $0 != captureSeparator }))
         
@@ -51,7 +51,7 @@ public class MoveFactory {
         return fig?.createMove(field)
     }
     
-    private static func createPawnMove(_ input: any StringProtocol, color:PieceColor, cache: BoardCache) -> Move? {
+    private static func createPawnMove(_ input: any StringProtocol, color:PieceColor, cache: Position) -> Move? {
         let field = getField(input)
         let fig = getFigure(targetField: field, type: .pawn, color: color, cache: cache)
         if isPromotion(input) {
@@ -60,7 +60,7 @@ public class MoveFactory {
         return fig?.createMove(field)
     }
     
-    private static func getPieceFigure(_ cleanedInput: any StringProtocol, pieceType: PieceType, color: PieceColor, cache: BoardCache) -> (any ChessFigure)? {
+    private static func getPieceFigure(_ cleanedInput: any StringProtocol, pieceType: PieceType, color: PieceColor, cache: Position) -> (any ChessFigure)? {
         let field = getPieceField(cleanedInput)
         if hasRowInfo(cleanedInput){
             let rowInfo = getPiecePositionInfo(cleanedInput)
@@ -84,21 +84,21 @@ public class MoveFactory {
         }
     }
     
-    private static func getFigure(targetField:any StringProtocol, type:PieceType, color:PieceColor, cache:BoardCache) -> (any ChessFigure)? {
+    private static func getFigure(targetField:any StringProtocol, type:PieceType, color:PieceColor, cache:Position) -> (any ChessFigure)? {
         let allFigures = cache.getFigures()
         let figuresOfTypeAndColor = allFigures.filter({ $0.getType() == type && $0.getColor() == color})
-        return figuresOfTypeAndColor.first(where: { $0.createMove(targetField) != nil && $0.isMovePossible($0.createMove(targetField)!, cache: cache) })
+        return figuresOfTypeAndColor.first(where: { $0.createMove(targetField) != nil && $0.isMovePossible($0.createMove(targetField)!, position: cache) })
     }
     
-    private static func getFigure(_ field: any StringProtocol, withRow:String, type: PieceType, color: PieceColor, cache: BoardCache) -> (any ChessFigure)? {
+    private static func getFigure(_ field: any StringProtocol, withRow:String, type: PieceType, color: PieceColor, cache: Position) -> (any ChessFigure)? {
         
         return cache.getFigures().first(where: { fig in
             guard fig.getType() == type && fig.getColor() == color && fig.getRow() == Int(withRow)! else { return false }
-            return fig.isMovePossible(fig.createMove(field)!, cache: cache)
+            return fig.isMovePossible(fig.createMove(field)!, position: cache)
         })
     }
     
-    private static func getFigure(_ field: any StringProtocol, withFile:String, type: PieceType, color: PieceColor, cache: BoardCache) -> (any ChessFigure)? {
+    private static func getFigure(_ field: any StringProtocol, withFile:String, type: PieceType, color: PieceColor, cache: Position) -> (any ChessFigure)? {
         
         let figures = cache.getFigures().filter({fig in
             return fig.getType() == type && fig.getColor() == color
@@ -107,7 +107,7 @@ public class MoveFactory {
             let fileName = fig.getField().getFileName()
             guard fileName == withFile else { return false }
             
-            return fig.isMovePossible(fig.createMove(field)!, cache: cache)
+            return fig.isMovePossible(fig.createMove(field)!, position: cache)
         })
     }
     

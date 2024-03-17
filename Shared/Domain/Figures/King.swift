@@ -34,13 +34,13 @@ public class King : Figure {
         return moves.filter({ move in inBoard(move) })
     }
     
-    public override func isMovePossible( _ move: Move, cache:BoardCache) -> Bool {
+    public override func isMovePossible( _ move: Move, position:Position) -> Bool {
         if isShortCastling(move) {
-            return canCastle(move, rookStart: Rook.ShortCastleStartingFile, cache: cache)
+            return canCastle(move, rookStart: Rook.ShortCastleStartingFile, cache: position)
         } else if isLongCastling(move) {
-            return canCastle(move, rookStart: Rook.LongCastleStartingFile, cache: cache)
+            return canCastle(move, rookStart: Rook.LongCastleStartingFile, cache: position)
         }
-        return super.isMovePossible(move, cache: cache)
+        return super.isMovePossible(move, position: position)
     }
     
     public override func createMove(_ filename: any StringProtocol) -> Move? {
@@ -52,7 +52,7 @@ public class King : Figure {
         return King.Ident
     }
     
-    private func canCastle(_ to: Move, rookStart:Int, cache:BoardCache) -> Bool {
+    private func canCastle(_ to: Move, rookStart:Int, cache:Position) -> Bool {
         let isNotCastlingInCheck = isCastlingInCheck(to, cache:cache) == false
         let kingHasNotMovedYet = self.hasMoved() == false
         let figureAtRookStart = cache.get(atRow: to.piece.getRow(), atFile: rookStart)
@@ -72,7 +72,7 @@ public class King : Figure {
         return move.piece.getType() == .king && move.type == .Castle
     }
     
-    private func isCastlingInCheck(_ move:Move, cache:BoardCache) -> Bool {
+    private func isCastlingInCheck(_ move:Move, cache:Position) -> Bool {
          
         let isLongCastle = isLongCastling(move)
         

@@ -4,21 +4,19 @@ public class FenBuilder {
     
     public static func create(_ pos:Position) -> String {
         
-        var output = createFigures(pos.figures)
+        var output = createFigures(pos)
         output.append(" ")
-        output.append(createNextMove(pos.colorToMove))
+        output.append(createNextMove(pos.getColorToMove()))
         output.append(" ")
         output.append(createCastlingRights(pos))
         output.append(" ")
-        output.append(createEnPassantTarget(pos.enPassantTarget))
-        output.append(" \(pos.moveCountSinceLastChange) \(pos.moveCount+1)")
+        output.append(createEnPassantTarget(pos.getEnPassentTarget()))
+        output.append(" \(pos.getHalfmoveClock()) \(pos.getMoveClock()+1)")
 
         return output
     }
     
-    private static func createFigures(_ figures:[Figure]) -> String {
-        let cache = BoardCache.create(figures)
-        
+    private static func createFigures(_ cache:Position) -> String {
         var output = ""
         
         for row in stride(from: 8, to: 0, by: -1) {
@@ -36,6 +34,7 @@ public class FenBuilder {
                     let fig = cache.get(atRow: row, atFile: file)!
                     
                     output.append(getPieceIdent(fig))
+                    emptyCount = 0
                 }
             }
             if row > 1 {
@@ -53,17 +52,23 @@ public class FenBuilder {
     
     private static func createCastlingRights(_ pos:Position) -> String {
         var output = ""
-        if pos.whiteShortCastle {
+        if pos.canWhiteCastleKingside() {
             output.append("K")
         }
-        if pos.whiteLongCastle {
+        if pos.canWhiteCastleQueenside() {
             output.append("Q")
         }
-        if pos.blackShortCastle {
+        if pos.canBlackCastleKingside() {
             output.append("k")
         }
-        if pos.blackLongCastle {
+        if pos.canBlackCastleQueenside() {
             output.append("q")
+        }
+        if !pos.canWhiteCastleKingside()
+            && !pos.canWhiteCastleQueenside()
+            && !pos.canBlackCastleKingside()
+            && !pos.canBlackCastleQueenside() {
+            output.append("-")
         }
         return output
     }

@@ -6,14 +6,14 @@ public class Pgn {
         var result:[Move] = []
         for line in png.split(whereSeparator: \.isNewline) {
             if !line.starts(with: "[") {
-                var cache = BoardCache.create(Fen.loadStartingPosition().figures)
+                var cache = Fen.loadStartingPosition()
                 let moves:[Move?] = line.split{ $0.isWhitespace }.map({ input in
                     
                     let dot = input.firstIndex(of: ".")
                     
                     let notation = dot == nil ? input : input[input.index(after: dot!)...]
-                    guard let move = MoveFactory.create(notation, cache: cache) else { return nil }
-                    cache = updateBoardCache(move, cache: cache)
+                    guard let move = MoveFactory.create(notation, position: cache) else { return nil }
+                    cache = updateBoardCache(move, cache: cache, isCapture: input.contains("x"))
                     return move
                 })
                 let onlyMoves:[Move] = moves.filter({$0 != nil}) as! [Move]
@@ -24,7 +24,7 @@ public class Pgn {
 
     }
     
-    private static func updateBoardCache(_ move:Move, cache:BoardCache) -> BoardCache{
+    private static func updateBoardCache(_ move:Move, cache:Position, isCapture:Bool) -> Position{
         var figures:[any ChessFigure] = cache.getFigures()
         let fig = figures.first(where: { $0.equals(move.getPiece())})!
         fig.move(row: move.getRow(), file: move.getFile())
@@ -39,6 +39,14 @@ public class Pgn {
                 rook.move(row: move.getRow(), file: Rook.ShortCastleEndFile)
             }
         }
-        return BoardCache.create(figures, lastMove: move)
+        return Position.create(
+            figures,
+            lastMove: move,
+            whiteCanCastleKingside: cache.canWhiteCastleKingside(), 
+            whiteCanCastleQueenside: cache.canWhiteCastleQueenside(), 
+            blackCanCastleKingside: cache.canBlackCastleKingside(),
+            blackCanCastleQueenside: cache.canBlackCastleQueenside(),
+            moveClock: cache.getMoveClock() + 1,
+            halfmoveClock: fig.getType() == .pawn || isCapture ? 1 : cache.getHalfmoveClock() + 1)
     }
 }

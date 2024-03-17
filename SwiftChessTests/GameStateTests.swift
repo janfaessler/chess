@@ -135,7 +135,7 @@ final class GameStateTests : ChessTestBase {
     
     func testStalemate() throws  {
     
-        loadFen("7k/4NK2/5r2/5BN1/8/8/8/8 w - - 103 115")
+        loadFen("7k/4NK2/5r2/5BN1/8/8/8/8 w - - 50 115")
         
         try assertGameState(.Running)
         

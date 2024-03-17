@@ -5,25 +5,18 @@ public class ChessBoard {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "ChessBoard")
 
-    private var figures:[any ChessFigure] = []
-    private var cache:BoardCache
-    private var colorToMove:PieceColor = .white
+    private var position:Position
     private var moves: [Move] = []
     private var moveLog: [String] = []
-    private var moveClock:Int = 0
-    private var halfmoveClock:Int = 0
     private var positionCount:[Int:Int] = [:]
     
     public init(_ pos:Position) {
-        colorToMove = pos.colorToMove
-        moveClock = pos.moveCount
-        figures.append(contentsOf: pos.figures)
-        cache = BoardCache.create(figures)
+        position = pos
         positionCount = [:]
     }
     
     public func move(_ moveNotation:String) throws {
-        guard let createdMove = MoveFactory.create(moveNotation, cache: cache) else {
+        guard let createdMove = MoveFactory.create(moveNotation, position: position) else {
             throw ValidationError.CanNotIdentifyMove
         }
         try move(createdMove)
@@ -58,37 +51,39 @@ public class ChessBoard {
         }
         
         if playerHasLegalMove() {
-            return moveClock > 0 ? .Running : .NotStarted
+            return position.getMoveClock() > 0 ? .Running : .NotStarted
         }
 
         if isKingInCheck() {
-            return colorToMove == .white ? .BlackWins : .WhiteWins
+            return position.getColorToMove() == .white ? .BlackWins : .WhiteWins
         }
         
         return .DrawByStalemate
     }
     
-    public func getColorToMove() -> PieceColor {
-        return colorToMove
-    }
-    
     public func getPossibleMoves(forPeace:any ChessFigure) -> [Move] {
-        guard let piece = figures.first(where: { $0.equals(forPeace) }) else {
-            return []
-        }
-        let moves = piece.getPossibleMoves()
+        let moves = forPeace.getPossibleMoves()
         return moves.filter({ IsMoveLegalMoveOnTheBoard($0) })
     }
     
+    public func getColorToMove() -> PieceColor {
+        return position.getColorToMove()
+    }
+    
     public func getFigures() -> [any ChessFigure] {
-        return figures
+        return position.getFigures()
     }
     
     public func getMoves() -> [Move] {
         return moves
     }
+    
     public func getMoveLog() -> [String] {
         return moveLog
+    }
+    
+    public func getPosition() -> Position {
+        return position
     }
     
     private func IsMoveLegalMoveOnTheBoard(_ target:Move) -> Bool {
@@ -97,7 +92,7 @@ public class ChessBoard {
             return false
         }
         
-        guard target.piece.isMovePossible(target, cache: getBoardCache()) else {
+        guard target.piece.isMovePossible(target, position: position) else {
             logger.debug("move '\(target.info())' is not possible")
             return false
         }
@@ -111,12 +106,11 @@ public class ChessBoard {
     }
     
     private func doMove(_ move: Move) throws -> Bool {
-        let figure = figures.first(where: { $0.equals(move.piece) })!
+        let figure = position.get(atRow: move.getPiece().getRow(), atFile: move.getPiece().getFile())!
         let isCapture = doCapture(move)
 
         figure.move(row: move.row, file: move.file)
         moveRookForCastling(move)
-        colorToMove = colorToMove == .black ? .white : .black
         moves += [move]
         updateBoardStates(move, isCapture: isCapture)
         return isCapture
@@ -140,10 +134,16 @@ public class ChessBoard {
     }
     
     private func updateBoardStates(_ move: Move, isCapture: Bool) {
-        cache = getBoardCache()
+        position = Position.create(
+            position.getFigures(),
+            lastMove: move,
+            whiteCanCastleKingside: canCastle(afterMove: move, color: .white, rookStartingFile: Rook.ShortCastleStartingFile),
+            whiteCanCastleQueenside: canCastle(afterMove: move, color: .white, rookStartingFile: Rook.LongCastleStartingFile),
+            blackCanCastleKingside: canCastle(afterMove: move, color: .black, rookStartingFile: Rook.ShortCastleStartingFile),
+            blackCanCastleQueenside: canCastle(afterMove: move, color: .black, rookStartingFile: Rook.LongCastleStartingFile),
+            moveClock: position.getMoveClock() + 1,
+            halfmoveClock: getHalfmoveClock(move, isCapture))
         increasePositionCount()
-        increaseMoveCounter()
-        increaseHalfmoveCounter(move, isCapture)
     }
     
     private func isDrawByInsufficientMaterial() -> Bool {
@@ -155,7 +155,7 @@ public class ChessBoard {
     }
     
     private func captureFigureAt(row: Int, file: Int) -> Bool {
-        guard let figureAtTarget = getFigure(atRow: row, atFile: file) else { return false }
+        guard let figureAtTarget = position.get(atRow: row, atFile: file) else { return false }
         removeFigure(figureAtTarget)
         logger.info("\(String(describing: figureAtTarget.getColor())) \(String(describing:figureAtTarget.getType())) at \(row):\(file) got captured")
         return true
@@ -164,11 +164,15 @@ public class ChessBoard {
     private func moveRookForCastling(_ move: Move) {
     
         if isLongCastling(move) {
-            let rook = getFigure(atRow:move.piece.getRow(), atFile: Rook.LongCastleStartingFile)!
+            let rook = position.get(atRow: move.piece.getRow(), atFile: Rook.LongCastleStartingFile)!
             rook.move(row: move.row, file: Rook.LongCastleEndFile)
+            position.clearField(atRow: move.piece.getRow(), atFile: Rook.LongCastleStartingFile)
+            position.set(rook)
         } else if isShortCastling(move) {
-            let rook = getFigure(atRow:move.piece.getRow(), atFile: Rook.ShortCastleStartingFile)!
+            let rook = position.get(atRow: move.piece.getRow(), atFile: Rook.ShortCastleStartingFile)!
             rook.move(row: move.row, file: Rook.ShortCastleEndFile)
+            position.clearField(atRow: move.piece.getRow(), atFile: Rook.ShortCastleStartingFile)
+            position.set(rook)
         }
     }
     
@@ -180,15 +184,16 @@ public class ChessBoard {
     private func doesMovePutOwnKingInCheck(_ move:Move) -> Bool {
         
         let isKingMKove = move.piece.getType() == .king
+        let figures = position.getFigures()
         let king = figures.first(where: { $0.getType() == .king && $0.getColor() == move.piece.getColor() })!
         let rowToCheck = isKingMKove ? move.getRow() : king.getRow()
         let fileToCheck = isKingMKove ? move.getFile() : king.getFile()
                 
-        let modifiedCache = createCacheWithMove(move)
+        let newPos = createPositionWithMove(move)
         
         return figures.contains(where: {
-            if $0.getColor() != colorToMove {
-                if $0.isMovePossible($0.createMove(rowToCheck, fileToCheck, MoveType.Normal), cache: modifiedCache) {
+            if $0.getColor() != position.getColorToMove() {
+                if $0.isMovePossible($0.createMove(rowToCheck, fileToCheck, MoveType.Normal), position: newPos) {
                     return true
                 } else {
                     return false
@@ -198,26 +203,55 @@ public class ChessBoard {
         })
     }
     
-    private func createCacheWithMove(_ move:Move) -> BoardCache {
-        let cache = getBoardCache()
-        cache.clearField(atRow: move.piece.getRow(), atFile: move.piece.getFile())
-        cache.set(Figure(type: move.piece.getType(), color: move.piece.getColor(), row: move.getRow(), file: move.getFile()))
-        return cache
+    private func canCastle(afterMove:Move, color:PieceColor, rookStartingFile:Int) -> Bool {
+        guard afterMove.piece.getColor() == color else { return position.canWhiteCastleKingside() }
+        
+        if afterMove.piece.getType() == .king {
+            return false
+        }
+        
+        if afterMove.piece.getType() == .rook {
+            return afterMove.piece.getFile() != rookStartingFile
+        }
+        
+        return position.canWhiteCastleKingside()
+    }
+    
+    private func createPositionWithMove(_ move:Move) -> Position {
+        let isCapture = position.isNotEmpty(atRow: move.getRow(), atFile: move.getFile())
+        
+        var figures = position.getFigures()
+        figures.removeAll(where: { $0.equals(move.getPiece()) })
+        figures.append(Figure.create(type: move.getPiece().getType(), color: move.getPiece().getColor(), row: move.getRow(), file: move.file, moved: true))
+        
+        let pos = Position.create(figures,
+                                      lastMove: move,
+                                      whiteCanCastleKingside: canCastle(afterMove: move, color: .white, rookStartingFile: Rook.ShortCastleStartingFile),
+                                      whiteCanCastleQueenside: canCastle(afterMove: move, color: .white, rookStartingFile: Rook.LongCastleStartingFile),
+                                      blackCanCastleKingside: canCastle(afterMove: move, color: .black, rookStartingFile: Rook.ShortCastleStartingFile),
+                                      blackCanCastleQueenside: canCastle(afterMove: move, color: .black, rookStartingFile: Rook.LongCastleStartingFile),
+                                      moveClock: position.getMoveClock() + 1,
+                                      halfmoveClock: getHalfmoveClock(move, isCapture))
+        return pos
     }
     
     private func onlyKingsLeft() -> Bool {
+        let figures = position.getFigures()
         return figures.filter({ $0.getType() == .king }).count == 2 && figures.count == 2
     }
     
     private func onlyOneKnightLeft() -> Bool {
+        let figures = position.getFigures()
         return figures.filter({ $0.getType() == .knight }).count == 1 && figures.count == 3
     }
     
     private func onlyOneBishopLeft() -> Bool {
+        let figures = position.getFigures()
         return figures.filter({ $0.getType() == .bishop }).count == 1 && figures.count == 3
     }
     
     private func onlySameColorBishopsLeft() -> Bool {
+        let figures = position.getFigures()
         let bishopList = figures.filter({ $0.getType() == .bishop })
         guard bishopList.count == 2 else { return false }
         guard Set(figures.map({ $0.getColor() })).count == 2 else { return false }
@@ -251,28 +285,28 @@ public class ChessBoard {
     }
     
     private func playerHasLegalMove() -> Bool {
-        let figuresOfCurrentPlayer = figures.filter({ $0.getColor() == colorToMove })
+        let figuresOfCurrentPlayer = position.getFigures().filter({ $0.getColor() == position.getColorToMove() })
         return figuresOfCurrentPlayer.contains(where: { fig in fig.getPossibleMoves().contains(where: { move in IsMoveLegalMoveOnTheBoard(move) }) })
     }
     
     private func isKingInCheck() -> Bool {
-        let king = figures.first(where: { $0.getType() == .king && $0.getColor() == colorToMove})!
-        return cache.isFieldInCheck(king.getRow(), king.getFile())
+        let king = position.getFigures().first(where: { $0.getType() == .king && $0.getColor() == position.getColorToMove()})!
+        return position.isFieldInCheck(king.getRow(), king.getFile())
     }
     
     private func isThreefoldRepetition() -> Bool {
-        let hash = cache.getHash()
+        let hash = position.getHash()
         let count = positionCount[hash] ?? 0
         return  count >= 3
     }
     
     private func is50MoveWithoutPawnOrCaptureDone() -> Bool {
-        return halfmoveClock > 100
+        return position.getHalfmoveClock() > 100
     }
     
     private func isCheck(_ move:Move) -> Bool {
-        let opponentKing = figures.first(where: { $0.getType() == .king && $0.getColor() != move.piece.getColor()})
-        return cache.isFieldInCheck(opponentKing!.getRow(), opponentKing!.getFile())
+        let opponentKing = position.getFigures().first(where: { $0.getType() == .king && $0.getColor() != move.piece.getColor()})
+        return position.isFieldInCheck(opponentKing!.getRow(), opponentKing!.getFile())
     }
     
     private func fieldIsEmpty(atRow:Int, atFile:Int) -> Bool {
@@ -280,41 +314,33 @@ public class ChessBoard {
     }
     
     private func hasFigure(atRow:Int, atFile:Int) -> Bool {
-        return getFigure(atRow: atRow, atFile: atFile) != nil
-    }
-    
-    private func getFigure(atRow:Int, atFile:Int) -> (any ChessFigure)? {
-        return cache.get(atRow: atRow, atFile: atFile)
+        return position.get(atRow: atRow, atFile: atFile) != nil
     }
     
     private func addFigure(_ to: any ChessFigure) {
-        figures.append(to)
+        position.set(to)
     }
     
     private func removeFigure(_ figure:any ChessFigure) {
-        figures.removeAll(where: { $0.equals(figure) })
-    }
-
-    private func getBoardCache() -> BoardCache {
-        return BoardCache.create(figures, lastMove: moves.last)
+        position.clearField(atRow: figure.getRow(), atFile: figure.getFile())
     }
     
     private func increasePositionCount() {
-        let hash = cache.getHash()
+        let hash = position.getHash()
         
         guard positionCount[hash] != nil else {
-            positionCount[cache.getHash()] = 1
+            positionCount[position.getHash()] = 1
             return
         }
-        positionCount[cache.getHash()] = (positionCount[cache.getHash()] ?? 0) + 1
+        positionCount[position.getHash()] = (positionCount[position.getHash()] ?? 0) + 1
     }
     
-    private func increaseHalfmoveCounter(_ move: Move, _ isCapture: Bool) {
-        halfmoveClock = move.getPiece().getType() == .pawn || isCapture ? 1 : halfmoveClock + 1
-    }
-    
-    private func increaseMoveCounter() {
-        moveClock += 1
+    private func getHalfmoveClock(_ move: Move, _ isCapture: Bool) -> Int {
+        if move.getPiece().getType() == .pawn || isCapture  {
+            return 1
+        } else {
+            return position.getHalfmoveClock() + 1
+        }
     }
     
     private func LogMove(_ move: Move, isCapture:Bool, isPromotion:Bool) {

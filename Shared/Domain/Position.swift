@@ -1,25 +1,88 @@
 import Foundation
 
-public class BoardCache {
+public class Position {
     
-    private var hasher = Hasher()
-
     private var cache:[Int:[Int:any ChessFigure]]
     private let colorToMove:PieceColor
     private let enPassantTarget:Field?
+    private let whiteCanCastleKingside:Bool
+    private let whiteCanCastleQueenside:Bool
+    private let blackCanCastleKingside:Bool
+    private let blackCanCastleQueenside:Bool
+    private let halfmoveClock:Int
+    private let moveClock:Int
     
-    private init(_ cache:[Int:[Int:any ChessFigure]], colorToMove:PieceColor, enPassentTarget:Field?) {
+    private init(
+        _ cache:[Int:[Int:any ChessFigure]],
+        colorToMove:PieceColor,
+        enPassentTarget:Field?,
+        whiteCanCastleKingside:Bool,
+        whiteCanCastleQueenside:Bool,
+        blackCanCastleKingside:Bool,
+        blackCanCastleQueenside:Bool,
+        moveClock:Int,
+        halfmoveClock:Int
+    ) {
         self.cache = cache
         self.colorToMove = colorToMove
         self.enPassantTarget = enPassentTarget
+        self.whiteCanCastleKingside = whiteCanCastleKingside
+        self.whiteCanCastleQueenside = whiteCanCastleQueenside
+        self.blackCanCastleKingside = blackCanCastleKingside
+        self.blackCanCastleQueenside = blackCanCastleQueenside
+        self.moveClock = moveClock
+        self.halfmoveClock = halfmoveClock
     }
     
-    public static func create(_ figures: [any ChessFigure], lastMove:Move? = nil) -> BoardCache {
+    public static func create(
+        _ figures: [any ChessFigure],
+        colorToMove:PieceColor,
+        enPassantTarget:Field?,
+        whiteCanCastleKingside:Bool,
+        whiteCanCastleQueenside:Bool,
+        blackCanCastleKingside:Bool,
+        blackCanCastleQueenside:Bool,
+        moveClock:Int = 0,
+        halfmoveClock:Int = 0
+    ) -> Position {
+        let dict = createCachDictionary(figures)
+            
+        return Position(
+            dict,
+            colorToMove: colorToMove,
+            enPassentTarget: enPassantTarget,
+            whiteCanCastleKingside: whiteCanCastleKingside,
+            whiteCanCastleQueenside: whiteCanCastleQueenside,
+            blackCanCastleKingside: blackCanCastleKingside,
+            blackCanCastleQueenside: blackCanCastleQueenside,
+            moveClock: moveClock,
+            halfmoveClock: halfmoveClock)
+    }
+    
+    public static func create(
+        _ figures: [any ChessFigure],
+        lastMove:Move? = nil, 
+        whiteCanCastleKingside:Bool,
+        whiteCanCastleQueenside:Bool,
+        blackCanCastleKingside:Bool,
+        blackCanCastleQueenside:Bool,
+        moveClock:Int = 0,
+        halfmoveClock:Int = 0
+    ) -> Position {
         let dict = createCachDictionary(figures)
         let colorToMove = createColorToMove(lastMove)
         let enPassantTarget = createEnPassantTarget(lastMove)
             
-        return BoardCache(dict, colorToMove: colorToMove, enPassentTarget: enPassantTarget)
+        return Position(
+            dict,
+            colorToMove: colorToMove,
+            enPassentTarget: enPassantTarget,
+            whiteCanCastleKingside: whiteCanCastleKingside,
+            whiteCanCastleQueenside: whiteCanCastleQueenside,
+            blackCanCastleKingside: blackCanCastleKingside,
+            blackCanCastleQueenside: blackCanCastleQueenside,
+            moveClock: moveClock,
+            halfmoveClock: halfmoveClock)
     }
     
     public func get(atRow:Int, atFile:Int) -> (any ChessFigure)? {
@@ -53,8 +116,32 @@ public class BoardCache {
         return enPassantTarget
     }
     
+    public func canWhiteCastleKingside() -> Bool {
+        return whiteCanCastleKingside
+    }
+    
+    public func canWhiteCastleQueenside() -> Bool {
+        return whiteCanCastleQueenside
+    }
+    
+    public func canBlackCastleKingside() -> Bool {
+        return blackCanCastleKingside
+    }
+    
+    public func canBlackCastleQueenside() -> Bool {
+        return blackCanCastleQueenside
+    }
+    
+    public func getMoveClock() -> Int {
+        return moveClock
+    }
+
+    public func getHalfmoveClock() -> Int {
+        return halfmoveClock
+    }
+
     public func getFigures() -> [any ChessFigure] {
-        return cache.flatMap({ fileKey, row in return row.values})
+        return cache.flatMap({ $1.values })
     }
     
     public func getNextPiece(_ move: Move) -> (any ChessFigure)? {
@@ -76,7 +163,7 @@ public class BoardCache {
         return figures.contains(where: {
             
             if $0.getColor() == colorToMove{ return false }
-            let movepossible = $0.isMovePossible(Move(row, file, piece: $0), cache: self)
+            let movepossible = $0.isMovePossible(Move(row, file, piece: $0), position: self)
             return movepossible
         })
     }

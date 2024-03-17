@@ -61,13 +61,13 @@ public class Figure:Identifiable, Equatable, ChessFigure {
         return Figure.create(type: type, color: color, row: row, file: file, moved: moved).getPossibleMoves()
     }
     
-    public func isMovePossible(_ move: Move, cache:BoardCache) -> Bool {
+    public func isMovePossible(_ move: Move, position:Position) -> Bool {
         
         guard canDo(move: move) else {
             return false
         }
 
-        guard let intersectingPiece = cache.getNextPiece(move) else {
+        guard let intersectingPiece = position.getNextPiece(move) else {
             return true
         }
         

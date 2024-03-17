@@ -55,7 +55,7 @@ final class NotationTests: ChessTestBase {
         try moveAndAssert(notation: "dxe7", toField: "e7", type: .pawn, color: .white)
         try moveAndAssert(notation: "c5", toField: "c5", type:.pawn, color: .black, moveType: .Double)
 
-        try moveAndAssert(notation: "exd8=Q", toField: "d8", type: .queen, color: .white)
+        try moveAndAssert(notation: "exd8=Q+", toField: "d8", type: .queen, color: .white)
         
         try assertMoves()
 

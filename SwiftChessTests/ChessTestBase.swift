@@ -57,8 +57,8 @@ class ChessTestBase: XCTestCase {
     ) throws {
         let testee = try XCTUnwrap(testee)
         let pieceCount = testee.getFigures().count
-        let cache = BoardCache.create(testee.getFigures(), lastMove: testee.getMoves().last)
-        guard let move = MoveFactory.create(notation, cache: cache) else {
+        let cache = testee.getPosition()
+        guard let move = MoveFactory.create(notation, position: cache) else {
             XCTFail("move \(notation) could not be created", file: file, line: line)
             return
         }

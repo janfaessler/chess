@@ -58,7 +58,7 @@ final class RawMovesTests: ChessTestBase {
 
         try captureAndAssertPromotion("e7", to: "d8", type: .pawn, color: .white)
         
-        try assertMoves(["e4", "a6", "e5", "d5", "exd6", "b5", "dxe7", "c5", "exd8=Q"])
+        try assertMoves(["e4", "a6", "e5", "d5", "exd6", "b5", "dxe7", "c5", "exd8=Q+"])
 
     }
     
