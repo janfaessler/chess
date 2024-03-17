@@ -126,8 +126,8 @@ public class ChessBoard {
             pawnHasReachedEndOfTheBoard(move)
         else { return false }
 
-        // Todo: Promotion Choice
-        promote(Pawn(color: move.piece.getColor(), row: move.getRow(), file: move.getFile()), to: Queen(color: move.piece.getColor(), row: move.row, file: move.file))
+        promote(Pawn(color: move.piece.getColor(), row: move.getRow(), file: move.getFile()),
+                to: Figure.create(type: move.promoteTo, color: move.piece.getColor(), row: move.getRow(), file: move.getFile()))
         return true
     }
     
@@ -167,7 +167,7 @@ public class ChessBoard {
         }
     }
     
-    private func promote(_ pawn: Figure, to:Figure) {
+    private func promote(_ pawn: Figure, to:any ChessFigure) {
         removeFigure(pawn)
         addFigure(to)
     }

@@ -294,5 +294,17 @@ final class NotationTests: ChessTestBase {
         try assertMoves()
         
     }
+    
+    func testUnderpromotion() throws {
+        
+        let moves = Pgn.load("1. e4 e5 2. Nf3 Nc6 3. c3 Nf6 4. d4 Nxe4 5. d5 Ne7 6. Nxe5 d6 7. Bb5+ c6 8. dxc6 Qb6 9. cxb7+ Kd8 10. Nxf7+ Kc7")
+        for move in moves {
+            try testee?.move(move)
+        }
+        
+        try moveAndAssert(notation: "bxa8=N+", toField: "a8", type: .knight, color: .white)
+        try moveAndAssert(notation: "Kb7", toField: "b7", type: .king, color: .black)
+        try moveAndAssert(notation: "Nxb6", toField: "b6", type: .knight, color: .white)
+    }
 
 }

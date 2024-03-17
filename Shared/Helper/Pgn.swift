@@ -11,7 +11,9 @@ public class Pgn {
                     let input = input.replacing(". ", with: ".")
                     let dot = input.firstIndex(of: ".")
                     
-                    let notation = dot == nil ? input : input[input.index(after: dot!)...]
+                    var notation = dot == nil ? input : input[input.index(after: dot!)...]
+                    notation = notation.replacing("+", with: "")
+                    
                     guard let move = MoveFactory.create(notation, position: cache) else { return nil }
                     cache = updateBoardCache(move, cache: cache, isCapture: input.contains("x"))
                     return move

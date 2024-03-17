@@ -37,9 +37,11 @@ public class MoveFactory {
         }
     }
     
+    
+    
     private static func createPieceMove(_ input: any StringProtocol, _ color: PieceColor, _ cache: Position) -> Move? {
         
-        let cleanedInput = String(input.filter({ $0 != checkIndicator && $0 != checkmateIndicator && $0 != captureSeparator }))
+        let cleanedInput = clean(input)
         
         let pieceEndIndex = getEndOfPieceIdentIndex(cleanedInput)!
         
@@ -57,7 +59,8 @@ public class MoveFactory {
         guard let field = getField(input) else { return nil }
         let fig = getFigure(targetField: field, type: .pawn, color: color, cache: cache)
         if isPromotion(input) {
-            return fig?.createMove(field, type: .Promotion)
+            let promoteTo = getPromotToFigure(input)
+            return fig?.createMove(field, type: .Promotion, promoteTo: promoteTo)
         }
         return fig?.createMove(field)
     }
@@ -133,6 +136,11 @@ public class MoveFactory {
         return promotionParts.count > 1
     }
     
+    private static func getPromotToFigure(_ input:any StringProtocol) -> PieceType {
+        let promotionParts = input.split(separator: promotionSeparator)
+        return getPieceType(clean(promotionParts.last!)) ?? .queen
+    }
+    
     private static func isCastlingMove(_ input:any StringProtocol) -> Bool {
         return String(input) == King.CastleQueensideNotation || String(input) == King.CastleKingsideNotation
     }
@@ -160,4 +168,9 @@ public class MoveFactory {
     private static func getPiecePositionInfo(_ cleanedInput: any StringProtocol) -> String {
         return String(Array(cleanedInput)[1])
     }
+    
+    private static func clean(_ input: any StringProtocol) -> String {
+        return String(input.filter({ $0 != checkIndicator && $0 != checkmateIndicator && $0 != captureSeparator }))
+    }
 }
+

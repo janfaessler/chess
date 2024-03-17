@@ -16,7 +16,8 @@ public protocol ChessFigure : Hashable, Equatable {
     func info() -> String
     func ident() -> String
     func createMove(_ row:Int, _ file:Int, _ type:MoveType) -> Move
-    func createMove(_ filename:any StringProtocol, type:MoveType) -> Move?
+    func createMove(_ move:any StringProtocol, type:MoveType) -> Move?
+    func createMove(_ move:any StringProtocol, type:MoveType, promoteTo:PieceType) -> Move?
     func createMove(_ filename:any StringProtocol) -> Move?
     func hash(into hasher: inout Hasher)
 }

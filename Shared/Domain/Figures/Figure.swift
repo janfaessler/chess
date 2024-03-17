@@ -133,9 +133,13 @@ public class Figure:Identifiable, Equatable, ChessFigure {
     public func createMove(_ row:Int, _ file:Int, _ type:MoveType = .Normal) -> Move {
         return Move(row, file, piece: Figure.create(type: self.getType(), color: self.getColor(), row: self.getRow(), file: self.getFile()), type: type)
     }
-    
-    public func createMove(_ move:any StringProtocol, type:MoveType = .Normal) -> Move? {
+
+    public func createMove(_ move: any StringProtocol, type: MoveType) -> Move? {
         return Move(move, piece: Figure.create(type: self.getType(), color: self.getColor(), row: self.getRow(), file: self.getFile()), type: type)
+    }
+    
+    public func createMove(_ move:any StringProtocol, type:MoveType = .Normal, promoteTo:PieceType = .queen) -> Move? {
+        return Move(move, piece: Figure.create(type: self.getType(), color: self.getColor(), row: self.getRow(), file: self.getFile()), type: type, promoteTo: promoteTo)
     }
     
     func isCaptureablePiece(_ move: Move, pieceToCapture: (any ChessFigure)?) -> Bool {

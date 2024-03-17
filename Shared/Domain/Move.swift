@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Move:Identifiable, Equatable{
+public struct Move:Identifiable, Equatable {
     
     public let id:String = UUID().uuidString
     
@@ -9,25 +9,27 @@ public struct Move:Identifiable, Equatable{
     var piece:any ChessFigure
     var type:MoveType = MoveType.Normal
     var startingField:Field
+    var promoteTo:PieceType
     
     init(_ r:Int, _ f:Int, piece: any ChessFigure) {
         self.row = r
         self.file = f
         self.piece = piece
         self.startingField = piece.getField()
+        self.promoteTo = .queen
     }
     
-    public init (_ r:Int, _ f:Int, piece: any ChessFigure, type: MoveType){
+    public init (_ r:Int, _ f:Int, piece: any ChessFigure, type: MoveType, promoteTo:PieceType = PieceType.queen){
         self.init(r,f, piece: piece)
         self.type = type
+        self.promoteTo = promoteTo
     }
     
-    public init?(_ fieldname:any StringProtocol, piece: any ChessFigure, type: MoveType) {
+    public init?(_ fieldname:any StringProtocol, piece: any ChessFigure, type: MoveType, promoteTo:PieceType = PieceType.queen) {
         guard let field = Field(fieldname) else { return nil }
-        self.init(field.row, field.file, piece: piece, type: type)
+        self.init(field.row, field.file, piece: piece, type: type, promoteTo: promoteTo)
     }
 
-    
     public static func == (l:Move, r:Move) -> Bool {
         return l.row == r.row && l.file == r.file && l.piece.equals(r.piece) && l.type == r.type
     }
