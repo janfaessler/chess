@@ -1,10 +1,3 @@
-//
-//  ResultView.swift
-//  SwiftChess
-//
-//  Created by Jan Fässler on 17.03.2024.
-//
-
 import SwiftUI
 
 struct ResultView: View {
