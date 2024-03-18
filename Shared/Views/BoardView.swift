@@ -5,7 +5,7 @@ struct BoardView: View {
     @ObservedObject var model = BoardModel()
     
     init(_ size:CGFloat) {
-        fieldSize = size
+        fieldSize = 100
     }
     
     var body: some View {
@@ -21,6 +21,9 @@ struct BoardView: View {
             ForEach(model.getLegalMoves()) { move in
                 MoveIndicatorView(move, fieldSize)
             }
+            
+            ResultView(model.result)
+                .frame(width: fieldSize * 8, height: fieldSize * 8)
         }
     }
 }

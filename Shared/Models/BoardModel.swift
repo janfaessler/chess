@@ -7,11 +7,13 @@ class BoardModel : ObservableObject {
     
     @Published var figures:[FigureModel] = []
     @Published var focus:FigureModel?
+    @Published var result:ResultModel
     
     private var board:ChessBoard
 
     init() {
         board = ChessBoard(Fen.loadStartingPosition())
+        result = ResultModel(board.getGameState())
         figures = getFigures()
     }
     
@@ -28,7 +30,7 @@ class BoardModel : ObservableObject {
             return
         }
         
-        try moveAndUpdateFigures(move)
+        try moveAndUpdateModel(move)
     }
     
     func getLegalMoves() -> [Move] {
@@ -49,9 +51,10 @@ class BoardModel : ObservableObject {
         }
     }
     
-    private func moveAndUpdateFigures(_ move: Move) throws {
+    private func moveAndUpdateModel(_ move: Move) throws {
         try board.move(move)
         figures = getFigures()
+        result = ResultModel(board.getGameState())
     }
     
     private func getFigures() -> [FigureModel] {

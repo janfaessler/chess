@@ -72,6 +72,10 @@
 		61B32F622B9CC5D700790CF7 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F602B9CC5D700790CF7 /* Position.swift */; };
 		61EA62592BA7452F009A0300 /* PositionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EA62582BA7452F009A0300 /* PositionFactory.swift */; };
 		61EA625A2BA7452F009A0300 /* PositionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EA62582BA7452F009A0300 /* PositionFactory.swift */; };
+		61EA625C2BA7988B009A0300 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EA625B2BA7988B009A0300 /* ResultView.swift */; };
+		61EA625D2BA7988B009A0300 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EA625B2BA7988B009A0300 /* ResultView.swift */; };
+		61EA625F2BA8FDA3009A0300 /* ResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EA625E2BA8FDA3009A0300 /* ResultModel.swift */; };
+		61EA62602BA8FDA3009A0300 /* ResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EA625E2BA8FDA3009A0300 /* ResultModel.swift */; };
 		61F163ED2B9D165200C48BAC /* ChessFigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F163EC2B9D165200C48BAC /* ChessFigure.swift */; };
 		61F163EE2B9D165200C48BAC /* ChessFigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F163EC2B9D165200C48BAC /* ChessFigure.swift */; };
 		61FA7FC12BA52A37002CA3D2 /* FenParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7FC02BA52A37002CA3D2 /* FenParser.swift */; };
@@ -133,6 +137,8 @@
 		61B32F5D2B9A86BC00790CF7 /* ValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationError.swift; sourceTree = "<group>"; };
 		61B32F602B9CC5D700790CF7 /* Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
 		61EA62582BA7452F009A0300 /* PositionFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionFactory.swift; sourceTree = "<group>"; };
+		61EA625B2BA7988B009A0300 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
+		61EA625E2BA8FDA3009A0300 /* ResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultModel.swift; sourceTree = "<group>"; };
 		61F163EC2B9D165200C48BAC /* ChessFigure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessFigure.swift; sourceTree = "<group>"; };
 		61FA7FC02BA52A37002CA3D2 /* FenParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FenParser.swift; sourceTree = "<group>"; };
 		61FA7FC32BA52AAF002CA3D2 /* FenBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FenBuilder.swift; sourceTree = "<group>"; };
@@ -229,6 +235,7 @@
 				617723A62742ABB800169D3D /* FigureView.swift */,
 				61812E262767FDA900616866 /* BoardView.swift */,
 				614FFC69277780130082F892 /* MoveIndicatorView.swift */,
+				61EA625B2BA7988B009A0300 /* ResultView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -238,6 +245,7 @@
 			children = (
 				61812E202767F0A900616866 /* FigureModel.swift */,
 				61812E232767F42000616866 /* BoardModel.swift */,
+				61EA625E2BA8FDA3009A0300 /* ResultModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -441,6 +449,7 @@
 				6157321C2BA5F21E0048EDDF /* Pgn.swift in Sources */,
 				61B32F592B9A53DB00790CF7 /* Field.swift in Sources */,
 				61B0B4472B94F92E0085DB48 /* King.swift in Sources */,
+				61EA625C2BA7988B009A0300 /* ResultView.swift in Sources */,
 				61FA7FC12BA52A37002CA3D2 /* FenParser.swift in Sources */,
 				61B0B43B2B94F5F20085DB48 /* Pawn.swift in Sources */,
 				61812E3227681DFC00616866 /* Fen.swift in Sources */,
@@ -464,6 +473,7 @@
 				617723A427429C9300169D3D /* BoardBackgroundView.swift in Sources */,
 				61B0B44A2B94FAE60085DB48 /* Knight.swift in Sources */,
 				61B0B43E2B94F80F0085DB48 /* Bishop.swift in Sources */,
+				61EA625F2BA8FDA3009A0300 /* ResultModel.swift in Sources */,
 				614FFC6A277780130082F892 /* MoveIndicatorView.swift in Sources */,
 				61812E272767FDA900616866 /* BoardView.swift in Sources */,
 				6177238F274284FF00169D3D /* ContentView.swift in Sources */,
@@ -479,8 +489,10 @@
 				61B32F5F2B9A873500790CF7 /* ValidationError.swift in Sources */,
 				61FA7FC52BA52AAF002CA3D2 /* FenBuilder.swift in Sources */,
 				61B0B4422B94F8850085DB48 /* Rook.swift in Sources */,
+				61EA625D2BA7988B009A0300 /* ResultView.swift in Sources */,
 				61B32F5A2B9A53DB00790CF7 /* Field.swift in Sources */,
 				61B0B4482B94F92E0085DB48 /* King.swift in Sources */,
+				61EA62602BA8FDA3009A0300 /* ResultModel.swift in Sources */,
 				61B0B43C2B94F5F20085DB48 /* Pawn.swift in Sources */,
 				61812E3327681DFC00616866 /* Fen.swift in Sources */,
 				61A919252BA1F83E00AD371E /* MoveFactory.swift in Sources */,
