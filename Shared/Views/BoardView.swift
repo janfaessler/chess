@@ -15,12 +15,14 @@ struct BoardView: View {
             }
 
             ForEach(model.figures) { figure in
-                FigureView(size: fieldSize, figure: figure, board: model)
+                BoardFigureView(size: fieldSize, figure: figure, board: model)
             }
             
             ForEach(model.getLegalMoves()) { move in
                 MoveIndicatorView(move, fieldSize)
             }
+            
+            PromotionChooseView(model, fieldSize)
             
             ResultView(model.result)
                 .frame(width: fieldSize * 8, height: fieldSize * 8)

@@ -31,8 +31,8 @@
 		61772394274284FF00169D3D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61772365274284FF00169D3D /* Assets.xcassets */; };
 		617723A427429C9300169D3D /* BoardBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617723A327429C9300169D3D /* BoardBackgroundView.swift */; };
 		617723A527429C9300169D3D /* BoardBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617723A327429C9300169D3D /* BoardBackgroundView.swift */; };
-		617723A72742ABB800169D3D /* FigureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617723A62742ABB800169D3D /* FigureView.swift */; };
-		617723A82742ABB800169D3D /* FigureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617723A62742ABB800169D3D /* FigureView.swift */; };
+		617723A72742ABB800169D3D /* BoardFigureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617723A62742ABB800169D3D /* BoardFigureView.swift */; };
+		617723A82742ABB800169D3D /* BoardFigureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617723A62742ABB800169D3D /* BoardFigureView.swift */; };
 		61812E212767F0A900616866 /* FigureModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E202767F0A900616866 /* FigureModel.swift */; };
 		61812E222767F0A900616866 /* FigureModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E202767F0A900616866 /* FigureModel.swift */; };
 		61812E242767F42000616866 /* BoardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E232767F42000616866 /* BoardModel.swift */; };
@@ -45,6 +45,7 @@
 		61812E2F276807E600616866 /* PieceColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E2D276807E600616866 /* PieceColor.swift */; };
 		61812E3227681DFC00616866 /* Fen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E3127681DFC00616866 /* Fen.swift */; };
 		61812E3327681DFC00616866 /* Fen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E3127681DFC00616866 /* Fen.swift */; };
+		618D83BE2BBAECC000583944 /* ValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F5D2B9A86BC00790CF7 /* ValidationError.swift */; };
 		61A919242BA1F83E00AD371E /* MoveFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A919232BA1F83E00AD371E /* MoveFactory.swift */; };
 		61A919252BA1F83E00AD371E /* MoveFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A919232BA1F83E00AD371E /* MoveFactory.swift */; };
 		61B0B43B2B94F5F20085DB48 /* Pawn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B43A2B94F5F20085DB48 /* Pawn.swift */; };
@@ -76,6 +77,10 @@
 		61EA625D2BA7988B009A0300 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EA625B2BA7988B009A0300 /* ResultView.swift */; };
 		61EA625F2BA8FDA3009A0300 /* ResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EA625E2BA8FDA3009A0300 /* ResultModel.swift */; };
 		61EA62602BA8FDA3009A0300 /* ResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EA625E2BA8FDA3009A0300 /* ResultModel.swift */; };
+		61EA62652BAA0ACC009A0300 /* PromotionChooseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EA62642BAA0ACC009A0300 /* PromotionChooseView.swift */; };
+		61EA62662BAA0ACC009A0300 /* PromotionChooseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EA62642BAA0ACC009A0300 /* PromotionChooseView.swift */; };
+		61EA62682BAA0ED2009A0300 /* FigureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EA62672BAA0ED2009A0300 /* FigureView.swift */; };
+		61EA62692BAA0ED2009A0300 /* FigureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EA62672BAA0ED2009A0300 /* FigureView.swift */; };
 		61F163ED2B9D165200C48BAC /* ChessFigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F163EC2B9D165200C48BAC /* ChessFigure.swift */; };
 		61F163EE2B9D165200C48BAC /* ChessFigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F163EC2B9D165200C48BAC /* ChessFigure.swift */; };
 		61FA7FC12BA52A37002CA3D2 /* FenParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7FC02BA52A37002CA3D2 /* FenParser.swift */; };
@@ -110,7 +115,7 @@
 		61772370274284FF00169D3D /* SwiftChess.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftChess.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		61772372274284FF00169D3D /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
 		617723A327429C9300169D3D /* BoardBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardBackgroundView.swift; sourceTree = "<group>"; };
-		617723A62742ABB800169D3D /* FigureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigureView.swift; sourceTree = "<group>"; };
+		617723A62742ABB800169D3D /* BoardFigureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardFigureView.swift; sourceTree = "<group>"; };
 		61812E202767F0A900616866 /* FigureModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigureModel.swift; sourceTree = "<group>"; };
 		61812E232767F42000616866 /* BoardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardModel.swift; sourceTree = "<group>"; };
 		61812E262767FDA900616866 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
@@ -139,6 +144,8 @@
 		61EA62582BA7452F009A0300 /* PositionFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionFactory.swift; sourceTree = "<group>"; };
 		61EA625B2BA7988B009A0300 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
 		61EA625E2BA8FDA3009A0300 /* ResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultModel.swift; sourceTree = "<group>"; };
+		61EA62642BAA0ACC009A0300 /* PromotionChooseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromotionChooseView.swift; sourceTree = "<group>"; };
+		61EA62672BAA0ED2009A0300 /* FigureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigureView.swift; sourceTree = "<group>"; };
 		61F163EC2B9D165200C48BAC /* ChessFigure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessFigure.swift; sourceTree = "<group>"; };
 		61FA7FC02BA52A37002CA3D2 /* FenParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FenParser.swift; sourceTree = "<group>"; };
 		61FA7FC32BA52AAF002CA3D2 /* FenBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FenBuilder.swift; sourceTree = "<group>"; };
@@ -232,10 +239,12 @@
 			isa = PBXGroup;
 			children = (
 				617723A327429C9300169D3D /* BoardBackgroundView.swift */,
-				617723A62742ABB800169D3D /* FigureView.swift */,
+				617723A62742ABB800169D3D /* BoardFigureView.swift */,
 				61812E262767FDA900616866 /* BoardView.swift */,
 				614FFC69277780130082F892 /* MoveIndicatorView.swift */,
 				61EA625B2BA7988B009A0300 /* ResultView.swift */,
+				61EA62642BAA0ACC009A0300 /* PromotionChooseView.swift */,
+				61EA62672BAA0ED2009A0300 /* FigureView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -445,7 +454,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				618D83BE2BBAECC000583944 /* ValidationError.swift in Sources */,
 				61B0B4412B94F8850085DB48 /* Rook.swift in Sources */,
+				61EA62652BAA0ACC009A0300 /* PromotionChooseView.swift in Sources */,
 				6157321C2BA5F21E0048EDDF /* Pgn.swift in Sources */,
 				61B32F592B9A53DB00790CF7 /* Field.swift in Sources */,
 				61B0B4472B94F92E0085DB48 /* King.swift in Sources */,
@@ -461,6 +472,7 @@
 				61A919242BA1F83E00AD371E /* MoveFactory.swift in Sources */,
 				61B0B4442B94F8DB0085DB48 /* Queen.swift in Sources */,
 				61B0B4502B95DEB00085DB48 /* ChessBoard.swift in Sources */,
+				61EA62682BAA0ED2009A0300 /* FigureView.swift in Sources */,
 				61812E2B2768078E00616866 /* PieceType.swift in Sources */,
 				61B32F612B9CC5D700790CF7 /* Position.swift in Sources */,
 				61FA7FC42BA52AAF002CA3D2 /* FenBuilder.swift in Sources */,
@@ -468,7 +480,7 @@
 				61812E242767F42000616866 /* BoardModel.swift in Sources */,
 				61812E2E276807E600616866 /* PieceColor.swift in Sources */,
 				61B0B4532B95E1A90085DB48 /* MoveType.swift in Sources */,
-				617723A72742ABB800169D3D /* FigureView.swift in Sources */,
+				617723A72742ABB800169D3D /* BoardFigureView.swift in Sources */,
 				61EA62592BA7452F009A0300 /* PositionFactory.swift in Sources */,
 				617723A427429C9300169D3D /* BoardBackgroundView.swift in Sources */,
 				61B0B44A2B94FAE60085DB48 /* Knight.swift in Sources */,
@@ -492,6 +504,7 @@
 				61EA625D2BA7988B009A0300 /* ResultView.swift in Sources */,
 				61B32F5A2B9A53DB00790CF7 /* Field.swift in Sources */,
 				61B0B4482B94F92E0085DB48 /* King.swift in Sources */,
+				61EA62662BAA0ACC009A0300 /* PromotionChooseView.swift in Sources */,
 				61EA62602BA8FDA3009A0300 /* ResultModel.swift in Sources */,
 				61B0B43C2B94F5F20085DB48 /* Pawn.swift in Sources */,
 				61812E3327681DFC00616866 /* Fen.swift in Sources */,
@@ -503,6 +516,7 @@
 				61812E222767F0A900616866 /* FigureModel.swift in Sources */,
 				61EA625A2BA7452F009A0300 /* PositionFactory.swift in Sources */,
 				61B0B4452B94F8DB0085DB48 /* Queen.swift in Sources */,
+				61EA62692BAA0ED2009A0300 /* FigureView.swift in Sources */,
 				61B0B4512B95DEB00085DB48 /* ChessBoard.swift in Sources */,
 				6157321D2BA5F21E0048EDDF /* Pgn.swift in Sources */,
 				61F163EE2B9D165200C48BAC /* ChessFigure.swift in Sources */,
@@ -510,7 +524,7 @@
 				61812E252767F42000616866 /* BoardModel.swift in Sources */,
 				61812E2F276807E600616866 /* PieceColor.swift in Sources */,
 				61B0B4542B95E1A90085DB48 /* MoveType.swift in Sources */,
-				617723A82742ABB800169D3D /* FigureView.swift in Sources */,
+				617723A82742ABB800169D3D /* BoardFigureView.swift in Sources */,
 				617723A527429C9300169D3D /* BoardBackgroundView.swift in Sources */,
 				61B0B44B2B94FAE60085DB48 /* Knight.swift in Sources */,
 				61B0B43F2B94F80F0085DB48 /* Bishop.swift in Sources */,

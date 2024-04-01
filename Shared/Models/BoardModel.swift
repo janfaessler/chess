@@ -8,6 +8,7 @@ class BoardModel : ObservableObject {
     @Published var figures:[FigureModel] = []
     @Published var focus:FigureModel?
     @Published var result:ResultModel
+    @Published var moveToPromote:Move?
     
     private var board:ChessBoard
 
@@ -30,7 +31,23 @@ class BoardModel : ObservableObject {
             return
         }
         
-        try moveAndUpdateModel(move)
+        if move.type == .Promotion {
+            moveToPromote = move
+        } else {
+            try doMove(move)
+        }
+    }
+    
+    func doMove(_ move: Move) throws {
+        try board.move(move)
+        figures = getFigures()
+        result = ResultModel(board.getGameState())
+    }
+    
+    func doPromote(_ to:PieceType) throws {
+        moveToPromote?.promoteTo = to
+        try doMove(moveToPromote!)
+        moveToPromote = nil
     }
     
     func getLegalMoves() -> [Move] {
@@ -49,6 +66,9 @@ class BoardModel : ObservableObject {
         if focus != nil {
             focus = nil
         }
+    }
+    func shouldShowPromotionView() -> Bool {
+        return moveToPromote != nil
     }
     
     private func moveAndUpdateModel(_ move: Move) throws {
