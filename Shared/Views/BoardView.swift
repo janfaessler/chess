@@ -5,7 +5,7 @@ struct BoardView: View {
     @ObservedObject var model = BoardModel()
     
     init(_ size:CGFloat) {
-        fieldSize = 100
+        fieldSize = size
     }
     
     var body: some View {
