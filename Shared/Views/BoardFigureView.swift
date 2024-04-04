@@ -9,6 +9,7 @@ struct BoardFigureView: View {
 
     @State var x:CGFloat? = 0
     @State var y:CGFloat? = 0
+    @State var zIndex:Double = 0
     
     init(size: CGFloat, figure:FigureModel, board:BoardModel) {
         fieldSize = size
@@ -18,6 +19,7 @@ struct BoardFigureView: View {
     
     var body: some View {
         FigureView(size: fieldSize, type: figure.getType(), color: figure.getColor())
+            .zIndex(zIndex)
             .offset(x: getOffsetX(), y: getOffsetY())
             .gesture(
                 DragGesture()
@@ -32,15 +34,15 @@ struct BoardFigureView: View {
     func onDragChanged(_ gesture: DragGesture.Value) {
         board.clearFocus()
         setOffset(x: gesture.translation.width, y: gesture.translation.height)
+        zIndex = 1
     }
     
     func onDragEnd(_ gesture: _ChangedGesture<DragGesture>.Value) {
         let row = calculateDeltaRow(gesture.translation.height)
         let file = calculateDeltaFile(gesture.translation.width)
-        do {
-            try board.move(figure: figure, deltaRow: row, deltaFile: file)
-        } catch {}
+        try? board.move(figure: figure, deltaRow: row, deltaFile: file)
         resetOffset()
+        zIndex = 0
     }
 
     func calculateDeltaRow(_ height:CGFloat) -> Int {

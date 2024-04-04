@@ -26,6 +26,7 @@ struct MoveIndicatorView: View {
         
     }
     
+    
     func getOffsetX() -> CGFloat {
         return calcOffset(forLine: move.file)
     }

@@ -67,6 +67,15 @@ class BoardModel : ObservableObject {
             focus = nil
         }
     }
+    
+    func moveFocusFigureTo(row: Int, file:Int) throws {
+        guard let figure = focus else { return }
+        let deltarow = row - figure.row
+        let deltafile = file - figure.file
+        try move(figure: figure, deltaRow: deltarow, deltaFile: deltafile)
+        clearFocus()
+    }
+    
     func shouldShowPromotionView() -> Bool {
         return moveToPromote != nil
     }

@@ -2,15 +2,17 @@ import SwiftUI
 
 struct BoardBackgroundView: View {
     
+    @ObservedObject var model:BoardModel
     @State var lightColor:Color
     @State var darkColor:Color
     
     var fieldSize:CGFloat
     
-    init(light:Color, dark:Color, size: CGFloat) {
-        lightColor = light;
-        darkColor = dark;
+    init(size: CGFloat, board:BoardModel) {
+        lightColor =  Color(red: 0.8, green: 0.8, blue: 0.5);
+        darkColor = .brown;
         fieldSize = size;
+        model = board;
     }
     
     var body: some View {
@@ -29,10 +31,17 @@ struct BoardBackgroundView: View {
         return Rectangle()
             .fill(getColor(row: row, file: file))
             .frame(width: fieldSize, height: fieldSize)
+            .onTapGesture { onTab(row: row, file: file) }
+
+    }
+    
+    func onTab(row: Int, file:Int) {
+        try? model.moveFocusFigureTo(row: (9-row), file: file)
     }
     
     func getColor(row: Int, file: Int) -> Color {
         let odd = (row + file) % 2 == 0
         return odd ? lightColor : darkColor
     }
+    
 }

@@ -10,9 +10,7 @@ struct BoardView: View {
     
     var body: some View {
         ZStack (alignment: .topLeading) {
-            BoardBackgroundView(light: Color(red: 0.8, green: 0.8, blue: 0.5), dark: .brown, size: fieldSize).onTapGesture {
-                model.clearFocus()
-            }
+            BoardBackgroundView(size: fieldSize, board: model)
 
             ForEach(model.figures) { figure in
                 BoardFigureView(size: fieldSize, figure: figure, board: model)
@@ -20,6 +18,9 @@ struct BoardView: View {
             
             ForEach(model.getLegalMoves()) { move in
                 MoveIndicatorView(move, fieldSize)
+                    .onTapGesture {
+                        try? model.moveFocusFigureTo(row: move.row, file: move.file)
+                    }
             }
             
             PromotionChooseView(model, fieldSize)
