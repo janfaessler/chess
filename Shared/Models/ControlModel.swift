@@ -15,6 +15,11 @@ public class ControlModel : ObservableObject {
         return moves
     }
     
+    func start() {
+        currentMove = 0
+        updatePosition()
+    }
+    
     func back() {
         if currentMove > 0 {
             currentMove -= 1
@@ -27,6 +32,11 @@ public class ControlModel : ObservableObject {
             currentMove += 1
             updatePosition()
         }
+    }
+    
+    func end() {
+        currentMove = moves.count
+        updatePosition()
     }
     
     private func updatePosition() {

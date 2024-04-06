@@ -91,6 +91,10 @@
 		61EA62692BAA0ED2009A0300 /* FigureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EA62672BAA0ED2009A0300 /* FigureView.swift */; };
 		61F163ED2B9D165200C48BAC /* ChessFigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F163EC2B9D165200C48BAC /* ChessFigure.swift */; };
 		61F163EE2B9D165200C48BAC /* ChessFigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F163EC2B9D165200C48BAC /* ChessFigure.swift */; };
+		61F609042BC208B1009BDC38 /* ControlButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609032BC208B1009BDC38 /* ControlButtonView.swift */; };
+		61F609052BC208B1009BDC38 /* ControlButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609032BC208B1009BDC38 /* ControlButtonView.swift */; };
+		61F609072BC20C1B009BDC38 /* MoveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609062BC20C1B009BDC38 /* MoveListView.swift */; };
+		61F609082BC20C1B009BDC38 /* MoveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609062BC20C1B009BDC38 /* MoveListView.swift */; };
 		61FA7FC12BA52A37002CA3D2 /* FenParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7FC02BA52A37002CA3D2 /* FenParser.swift */; };
 		61FA7FC22BA52A37002CA3D2 /* FenParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7FC02BA52A37002CA3D2 /* FenParser.swift */; };
 		61FA7FC42BA52AAF002CA3D2 /* FenBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7FC32BA52AAF002CA3D2 /* FenBuilder.swift */; };
@@ -159,6 +163,8 @@
 		61EA62642BAA0ACC009A0300 /* PromotionChooseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromotionChooseView.swift; sourceTree = "<group>"; };
 		61EA62672BAA0ED2009A0300 /* FigureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigureView.swift; sourceTree = "<group>"; };
 		61F163EC2B9D165200C48BAC /* ChessFigure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessFigure.swift; sourceTree = "<group>"; };
+		61F609032BC208B1009BDC38 /* ControlButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlButtonView.swift; sourceTree = "<group>"; };
+		61F609062BC20C1B009BDC38 /* MoveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveListView.swift; sourceTree = "<group>"; };
 		61FA7FC02BA52A37002CA3D2 /* FenParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FenParser.swift; sourceTree = "<group>"; };
 		61FA7FC32BA52AAF002CA3D2 /* FenBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FenBuilder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -312,6 +318,8 @@
 				618D83BF2BC178FF00583944 /* ControlView.swift */,
 				618D83C32BC17E0100583944 /* MoveView.swift */,
 				618D83C62BC17FFE00583944 /* RowView.swift */,
+				61F609032BC208B1009BDC38 /* ControlButtonView.swift */,
+				61F609062BC20C1B009BDC38 /* MoveListView.swift */,
 			);
 			path = Control;
 			sourceTree = "<group>";
@@ -520,6 +528,8 @@
 				61EA62592BA7452F009A0300 /* PositionFactory.swift in Sources */,
 				617723A427429C9300169D3D /* BoardBackgroundView.swift in Sources */,
 				61B0B44A2B94FAE60085DB48 /* Knight.swift in Sources */,
+				61F609042BC208B1009BDC38 /* ControlButtonView.swift in Sources */,
+				61F609072BC20C1B009BDC38 /* MoveListView.swift in Sources */,
 				61B0B43E2B94F80F0085DB48 /* Bishop.swift in Sources */,
 				61EA625F2BA8FDA3009A0300 /* ResultModel.swift in Sources */,
 				614FFC6A277780130082F892 /* MoveIndicatorView.swift in Sources */,
@@ -566,6 +576,8 @@
 				61B0B4542B95E1A90085DB48 /* MoveType.swift in Sources */,
 				617723A82742ABB800169D3D /* BoardFigureView.swift in Sources */,
 				617723A527429C9300169D3D /* BoardBackgroundView.swift in Sources */,
+				61F609052BC208B1009BDC38 /* ControlButtonView.swift in Sources */,
+				61F609082BC20C1B009BDC38 /* MoveListView.swift in Sources */,
 				61B0B44B2B94FAE60085DB48 /* Knight.swift in Sources */,
 				61B0B43F2B94F80F0085DB48 /* Bishop.swift in Sources */,
 				614FFC6B277780130082F892 /* MoveIndicatorView.swift in Sources */,

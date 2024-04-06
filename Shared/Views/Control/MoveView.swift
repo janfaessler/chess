@@ -14,7 +14,7 @@ struct MoveView: View {
         Text(move)
             .fontWeight(highlight ? .bold : .regular)
             .frame(width: width, height: 20)
-            .background(highlight ? .red : .gray)
+            .background(highlight ? .gray.opacity(0.5) : .gray)
     }
 }
 
