@@ -42,6 +42,10 @@ public class ChessBoard {
             return .DrawByInsufficientMaterial
         }
         
+        if position.getMoveClock() == 0 {
+            return .NotStarted
+        }
+        
         if isThreefoldRepetition() {
             return .DrawByRepetition
         }
@@ -51,7 +55,7 @@ public class ChessBoard {
         }
         
         if playerHasLegalMove() {
-            return position.getMoveClock() > 0 ? .Running : .NotStarted
+            return .Running
         }
 
         if isKingInCheck() {
@@ -330,7 +334,11 @@ public class ChessBoard {
             }
             
             if isCheck {
-                logInfo.append("+")
+                if getGameState() == .Running {
+                    logInfo.append("+")
+                } else {
+                    logInfo.append("#")
+                }
             }
         }
         logger.log("\(logInfo)")

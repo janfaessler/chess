@@ -289,7 +289,7 @@ final class NotationTests: ChessTestBase {
         try moveAndAssert(notation: "Bxg5+", toField: "g5", type: .bishop, color: .white)
         try moveAndAssert(notation: "Nf6", toField: "f6", type: .knight, color: .black)
         
-        try moveAndAssert(notation: "Bxf6+", toField: "f6", type: .bishop, color: .white)
+        try moveAndAssert(notation: "Bxf6#", toField: "f6", type: .bishop, color: .white)
         
         try assertMoves()
         

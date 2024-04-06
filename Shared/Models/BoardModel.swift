@@ -5,6 +5,9 @@ class BoardModel : ObservableObject {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "BoardModel")
     
+    typealias MoveNotification = (String) -> ()
+    private var moveNotifcations:[MoveNotification] = []
+    
     @Published var figures:[FigureModel] = []
     @Published var focus:FigureModel?
     @Published var result:ResultModel
@@ -38,8 +41,11 @@ class BoardModel : ObservableObject {
         }
     }
     
+
+    
     func doMove(_ move: Move) throws {
         try board.move(move)
+        notifyMoveDone(move.info())
         figures = getFigures()
         result = ResultModel(board.getGameState())
     }
@@ -80,6 +86,14 @@ class BoardModel : ObservableObject {
         return moveToPromote != nil
     }
     
+    func getMoveLog() -> [String] {
+        return board.getMoveLog()
+    }
+    
+    func addMoveListener(_ listener:@escaping MoveNotification) {
+        moveNotifcations += [listener]
+    }
+    
     private func moveAndUpdateModel(_ move: Move) throws {
         try board.move(move)
         figures = getFigures()
@@ -89,5 +103,11 @@ class BoardModel : ObservableObject {
     private func getFigures() -> [FigureModel] {
         let figures = board.getFigures()
         return figures.map({ FigureModel($0) })
+    }
+    
+    private func notifyMoveDone(_ move:String) {
+        for event in moveNotifcations {
+            event(move)
+        }
     }
 }

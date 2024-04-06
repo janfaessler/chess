@@ -2,10 +2,11 @@ import SwiftUI
 
 struct BoardView: View {
     let fieldSize:CGFloat
-    @ObservedObject var model = BoardModel()
+    @ObservedObject var model:BoardModel
     
-    init(_ size:CGFloat) {
-        fieldSize = size
+    init(_ size:CGFloat, board:BoardModel) {
+        fieldSize = size / 8
+        model = board
     }
     
     var body: some View {
@@ -33,6 +34,6 @@ struct BoardView: View {
 
 struct BoardView_Previews: PreviewProvider {
     static var previews: some View {
-        BoardView(100)
+        BoardView(100, board: BoardModel())
     }
 }

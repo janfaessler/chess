@@ -264,6 +264,6 @@ final class RawMovesTests: ChessTestBase {
         
         try captureAndAssert("g5", to: "f6", type: .bishop, color: .white)
         
-        try assertMoves(["e4", "f5", "Bc4", "e6", "h3", "g5", "Qh5+", "Ke7", "e5", "a6","d3","b5", "Bxg5+", "Nf6", "Bxf6+"])
+        try assertMoves(["e4", "f5", "Bc4", "e6", "h3", "g5", "Qh5+", "Ke7", "e5", "a6","d3","b5", "Bxg5+", "Nf6", "Bxf6#"])
     }
 }
