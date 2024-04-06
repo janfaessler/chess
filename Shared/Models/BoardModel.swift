@@ -86,12 +86,22 @@ class BoardModel : ObservableObject {
         return moveToPromote != nil
     }
     
+    func getPosition() -> Position {
+        return board.getPosition()
+    }
+    
     func getMoveLog() -> [String] {
         return board.getMoveLog()
     }
     
     func addMoveListener(_ listener:@escaping MoveNotification) {
         moveNotifcations += [listener]
+    }
+    
+    func updatePosition(_ pos:Position)  {
+        board = ChessBoard(pos)
+        figures = getFigures()
+
     }
     
     private func moveAndUpdateModel(_ move: Move) throws {

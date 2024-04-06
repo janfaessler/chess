@@ -2,7 +2,7 @@ import Foundation
 
 public class Pgn {
     
-    public static func load(_ png:String) -> [Move] {
+    public static func loadMoves(_ png:String) -> [Move] {
         var result:[Move] = []
         for line in png.split(whereSeparator: \.isNewline) {
             if !line.starts(with: "[") {
@@ -15,7 +15,7 @@ public class Pgn {
                     notation = notation.replacing("+", with: "")
                     
                     guard let move = MoveFactory.create(notation, position: cache) else { return nil }
-                    cache = updateBoardCache(move, cache: cache, isCapture: input.contains("x"))
+                    cache = updateBoardCache(move, cache: cache, isCapture: notation.contains("x"))
                     return move
                 })
                 let onlyMoves:[Move] = moves.filter({$0 != nil}) as! [Move]
@@ -24,6 +24,15 @@ public class Pgn {
         }
         return result
 
+    }
+    
+    public static func loadPosition(_ moves:[any StringProtocol]) -> Position? {
+        var position = Fen.loadStartingPosition()
+        for notation in moves {
+            guard let move = MoveFactory.create(notation, position: position) else { return nil }
+            position = updateBoardCache(move, cache: position, isCapture: notation.contains("x"))
+        }
+        return position
     }
     
     private static func updateBoardCache(_ move:Move, cache:Position, isCapture:Bool) -> Position{

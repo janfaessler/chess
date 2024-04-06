@@ -1,8 +1,10 @@
 import Foundation
 
 public class ControlModel : ObservableObject {
+    
+    @Published var currentMove:Int = 0
     @Published var board:BoardModel
-    @Published var positions:[String] = []
+    @Published var moves:[String] = []
     
     init() {
         board = BoardModel()
@@ -10,11 +12,30 @@ public class ControlModel : ObservableObject {
     }
 
     func getMoves() -> [String] {
-        return board.getMoveLog()
+        return moves
+    }
+    
+    func back() {
+        if currentMove > 0 {
+            currentMove -= 1
+            updatePosition()
+        }
+    }
+    
+    func forward() {
+        if currentMove < moves.count {
+            currentMove += 1
+            updatePosition()
+        }
+    }
+    
+    private func updatePosition() {
+        guard let newPosition = Pgn.loadPosition(Array(moves[0..<currentMove])) else { return }
+        board.updatePosition(newPosition)
     }
     
     private func movePlayed(_ move:String) {
-        positions = getMoves()
-        
+        moves += [board.getMoveLog().last!]
+        currentMove += 1
     }
 }

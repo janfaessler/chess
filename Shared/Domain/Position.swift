@@ -126,6 +126,19 @@ public class Position {
         return hasher.finalize()
     }
     
+    public func createWithMove(_ move:Move) -> Position {
+        let capturedPiece = get(atRow: move.getRow(), atFile: move.getFile())
+        
+        var figures = getFigures()
+        figures.removeAll(where: { $0.equals(move.getPiece()) })
+        figures.append(Figure.create(type: move.getPiece().getType(), color: move.getPiece().getColor(), row: move.getRow(), file: move.file, moved: true))
+        
+        let pos = PositionFactory.create(self, afterMove: move, figures: figures, capturedPiece: capturedPiece)
+
+        return pos
+    }
+    
+    
     private func getNextPieceOnRow(from:Field, to:Field) -> (any ChessFigure)? {
         let direction = from.file < to.file ? 1 : -1
         for f in stride(from: from.file + direction, to: to.file, by: direction)  {

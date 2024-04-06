@@ -184,7 +184,7 @@ public class ChessBoard {
         let rowToCheck = isKingMKove ? move.getRow() : king.getRow()
         let fileToCheck = isKingMKove ? move.getFile() : king.getFile()
                 
-        let newPos = createPositionWithMove(move)
+        let newPos = position.createWithMove(move)
         
         return figures.contains(where: {
             if $0.getColor() != position.getColorToMove() {
@@ -196,18 +196,6 @@ public class ChessBoard {
             }
             return false
         })
-    }
-    
-    private func createPositionWithMove(_ move:Move) -> Position {
-        let capturedPiece = position.get(atRow: move.getRow(), atFile: move.getFile())
-        
-        var figures = position.getFigures()
-        figures.removeAll(where: { $0.equals(move.getPiece()) })
-        figures.append(Figure.create(type: move.getPiece().getType(), color: move.getPiece().getColor(), row: move.getRow(), file: move.file, moved: true))
-        
-        let pos = PositionFactory.create(position, afterMove: move, figures: figures, capturedPiece: capturedPiece)
-
-        return pos
     }
     
     private func onlyKingsLeft() -> Bool {
