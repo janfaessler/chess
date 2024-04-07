@@ -95,6 +95,8 @@
 		61F609052BC208B1009BDC38 /* ControlButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609032BC208B1009BDC38 /* ControlButtonView.swift */; };
 		61F609072BC20C1B009BDC38 /* MoveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609062BC20C1B009BDC38 /* MoveListView.swift */; };
 		61F609082BC20C1B009BDC38 /* MoveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609062BC20C1B009BDC38 /* MoveListView.swift */; };
+		61F6090A2BC30775009BDC38 /* NavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609092BC30775009BDC38 /* NavigationView.swift */; };
+		61F6090B2BC30775009BDC38 /* NavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609092BC30775009BDC38 /* NavigationView.swift */; };
 		61FA7FC12BA52A37002CA3D2 /* FenParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7FC02BA52A37002CA3D2 /* FenParser.swift */; };
 		61FA7FC22BA52A37002CA3D2 /* FenParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7FC02BA52A37002CA3D2 /* FenParser.swift */; };
 		61FA7FC42BA52AAF002CA3D2 /* FenBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7FC32BA52AAF002CA3D2 /* FenBuilder.swift */; };
@@ -165,6 +167,7 @@
 		61F163EC2B9D165200C48BAC /* ChessFigure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessFigure.swift; sourceTree = "<group>"; };
 		61F609032BC208B1009BDC38 /* ControlButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlButtonView.swift; sourceTree = "<group>"; };
 		61F609062BC20C1B009BDC38 /* MoveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveListView.swift; sourceTree = "<group>"; };
+		61F609092BC30775009BDC38 /* NavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationView.swift; sourceTree = "<group>"; };
 		61FA7FC02BA52A37002CA3D2 /* FenParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FenParser.swift; sourceTree = "<group>"; };
 		61FA7FC32BA52AAF002CA3D2 /* FenBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FenBuilder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -320,6 +323,7 @@
 				618D83C62BC17FFE00583944 /* MoveRowView.swift */,
 				61F609032BC208B1009BDC38 /* ControlButtonView.swift */,
 				61F609062BC20C1B009BDC38 /* MoveListView.swift */,
+				61F609092BC30775009BDC38 /* NavigationView.swift */,
 			);
 			path = Control;
 			sourceTree = "<group>";
@@ -522,6 +526,7 @@
 				616D3E472BA464D8002D78EE /* GameState.swift in Sources */,
 				61812E242767F42000616866 /* BoardModel.swift in Sources */,
 				61812E2E276807E600616866 /* PieceColor.swift in Sources */,
+				61F6090A2BC30775009BDC38 /* NavigationView.swift in Sources */,
 				61B0B4532B95E1A90085DB48 /* MoveType.swift in Sources */,
 				617723A72742ABB800169D3D /* BoardFigureView.swift in Sources */,
 				618D83C72BC17FFE00583944 /* MoveRowView.swift in Sources */,
@@ -570,6 +575,7 @@
 				6157321D2BA5F21E0048EDDF /* Pgn.swift in Sources */,
 				61F163EE2B9D165200C48BAC /* ChessFigure.swift in Sources */,
 				61812E2C2768078E00616866 /* PieceType.swift in Sources */,
+				61F6090B2BC30775009BDC38 /* NavigationView.swift in Sources */,
 				61812E252767F42000616866 /* BoardModel.swift in Sources */,
 				61812E2F276807E600616866 /* PieceColor.swift in Sources */,
 				618D83C82BC17FFE00583944 /* MoveRowView.swift in Sources */,

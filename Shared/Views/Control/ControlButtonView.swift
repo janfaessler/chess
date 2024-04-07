@@ -14,7 +14,7 @@ struct ControlButtonView: View {
     }
     var body: some View {
         Button { action() } label: {
-            Text(label)
+            Image(systemName: label)
                 .frame(width: size.width, height: size.height)
                 .cornerRadius(0)
                 .background(.gray)
@@ -28,5 +28,5 @@ struct ControlButtonView: View {
 }
 
 #Preview {
-    ControlButtonView("|<", shortcut: .downArrow, size: CGSize(width: 30, height: 30)) {}
+    ControlButtonView("arrow.backward.to.line", shortcut: .downArrow, size: CGSize(width: 30, height: 30)) {}
 }

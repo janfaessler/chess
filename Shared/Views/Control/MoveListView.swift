@@ -18,8 +18,6 @@ struct MoveListView: View {
         }
         .padding(10)
     }
-    
-
 }
 
 
