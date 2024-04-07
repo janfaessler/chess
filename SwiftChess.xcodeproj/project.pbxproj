@@ -97,6 +97,11 @@
 		61F609082BC20C1B009BDC38 /* MoveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609062BC20C1B009BDC38 /* MoveListView.swift */; };
 		61F6090A2BC30775009BDC38 /* NavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609092BC30775009BDC38 /* NavigationView.swift */; };
 		61F6090B2BC30775009BDC38 /* NavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609092BC30775009BDC38 /* NavigationView.swift */; };
+		61F6090E2BC30F5F009BDC38 /* EngineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F6090D2BC30F5F009BDC38 /* EngineView.swift */; };
+		61F6090F2BC30F5F009BDC38 /* EngineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F6090D2BC30F5F009BDC38 /* EngineView.swift */; };
+		61F609152BC333AF009BDC38 /* ChessKitEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 61F609142BC333AF009BDC38 /* ChessKitEngine */; };
+		61F609172BC33C26009BDC38 /* LanParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609162BC33C26009BDC38 /* LanParser.swift */; };
+		61F609182BC33C26009BDC38 /* LanParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609162BC33C26009BDC38 /* LanParser.swift */; };
 		61FA7FC12BA52A37002CA3D2 /* FenParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7FC02BA52A37002CA3D2 /* FenParser.swift */; };
 		61FA7FC22BA52A37002CA3D2 /* FenParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7FC02BA52A37002CA3D2 /* FenParser.swift */; };
 		61FA7FC42BA52AAF002CA3D2 /* FenBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7FC32BA52AAF002CA3D2 /* FenBuilder.swift */; };
@@ -168,6 +173,8 @@
 		61F609032BC208B1009BDC38 /* ControlButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlButtonView.swift; sourceTree = "<group>"; };
 		61F609062BC20C1B009BDC38 /* MoveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveListView.swift; sourceTree = "<group>"; };
 		61F609092BC30775009BDC38 /* NavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationView.swift; sourceTree = "<group>"; };
+		61F6090D2BC30F5F009BDC38 /* EngineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineView.swift; sourceTree = "<group>"; };
+		61F609162BC33C26009BDC38 /* LanParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanParser.swift; sourceTree = "<group>"; };
 		61FA7FC02BA52A37002CA3D2 /* FenParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FenParser.swift; sourceTree = "<group>"; };
 		61FA7FC32BA52AAF002CA3D2 /* FenBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FenBuilder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -184,6 +191,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61F609152BC333AF009BDC38 /* ChessKitEngine in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -220,6 +228,7 @@
 				61772371274284FF00169D3D /* macOS */,
 				61AE78212B991AAD008F56F8 /* SwiftChessTests */,
 				6177236B274284FF00169D3D /* Products */,
+				61F609132BC333AF009BDC38 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -297,6 +306,7 @@
 				61FA7FC32BA52AAF002CA3D2 /* FenBuilder.swift */,
 				6157321B2BA5F21E0048EDDF /* Pgn.swift */,
 				61EA62582BA7452F009A0300 /* PositionFactory.swift */,
+				61F609162BC33C26009BDC38 /* LanParser.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -324,6 +334,7 @@
 				61F609032BC208B1009BDC38 /* ControlButtonView.swift */,
 				61F609062BC20C1B009BDC38 /* MoveListView.swift */,
 				61F609092BC30775009BDC38 /* NavigationView.swift */,
+				61F6090D2BC30F5F009BDC38 /* EngineView.swift */,
 			);
 			path = Control;
 			sourceTree = "<group>";
@@ -353,6 +364,13 @@
 				61B32F582B9A53DB00790CF7 /* Field.swift */,
 			);
 			path = Domain;
+			sourceTree = "<group>";
+		};
+		61F609132BC333AF009BDC38 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -386,8 +404,12 @@
 			buildRules = (
 			);
 			dependencies = (
+				61F609112BC310B4009BDC38 /* PBXTargetDependency */,
 			);
 			name = "SwiftChess (macOS)";
+			packageProductDependencies = (
+				61F609142BC333AF009BDC38 /* ChessKitEngine */,
+			);
 			productName = "SwiftChess (macOS)";
 			productReference = 61772370274284FF00169D3D /* SwiftChess.app */;
 			productType = "com.apple.product-type.application";
@@ -441,6 +463,9 @@
 				Base,
 			);
 			mainGroup = 6177235A274284FE00169D3D;
+			packageReferences = (
+				61F609122BC310DD009BDC38 /* XCRemoteSwiftPackageReference "chesskit-engine" */,
+			);
 			productRefGroup = 6177236B274284FF00169D3D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -515,6 +540,7 @@
 				6177238D274284FF00169D3D /* SwiftChessApp.swift in Sources */,
 				614FFC6D277786560082F892 /* Move.swift in Sources */,
 				61812E212767F0A900616866 /* FigureModel.swift in Sources */,
+				61F6090E2BC30F5F009BDC38 /* EngineView.swift in Sources */,
 				61A919242BA1F83E00AD371E /* MoveFactory.swift in Sources */,
 				618D83C02BC178FF00583944 /* ControlView.swift in Sources */,
 				61B0B4442B94F8DB0085DB48 /* Queen.swift in Sources */,
@@ -531,6 +557,7 @@
 				617723A72742ABB800169D3D /* BoardFigureView.swift in Sources */,
 				618D83C72BC17FFE00583944 /* MoveRowView.swift in Sources */,
 				61EA62592BA7452F009A0300 /* PositionFactory.swift in Sources */,
+				61F609172BC33C26009BDC38 /* LanParser.swift in Sources */,
 				617723A427429C9300169D3D /* BoardBackgroundView.swift in Sources */,
 				61B0B44A2B94FAE60085DB48 /* Knight.swift in Sources */,
 				61F609042BC208B1009BDC38 /* ControlButtonView.swift in Sources */,
@@ -564,6 +591,7 @@
 				61A919252BA1F83E00AD371E /* MoveFactory.swift in Sources */,
 				616D3E482BA464D8002D78EE /* GameState.swift in Sources */,
 				61B0B4572B95F4E00085DB48 /* Figure.swift in Sources */,
+				61F6090F2BC30F5F009BDC38 /* EngineView.swift in Sources */,
 				6177238E274284FF00169D3D /* SwiftChessApp.swift in Sources */,
 				618D83C12BC178FF00583944 /* ControlView.swift in Sources */,
 				614FFC6E277786560082F892 /* Move.swift in Sources */,
@@ -580,6 +608,7 @@
 				61812E2F276807E600616866 /* PieceColor.swift in Sources */,
 				618D83C82BC17FFE00583944 /* MoveRowView.swift in Sources */,
 				61B0B4542B95E1A90085DB48 /* MoveType.swift in Sources */,
+				61F609182BC33C26009BDC38 /* LanParser.swift in Sources */,
 				617723A82742ABB800169D3D /* BoardFigureView.swift in Sources */,
 				617723A527429C9300169D3D /* BoardBackgroundView.swift in Sources */,
 				61F609052BC208B1009BDC38 /* ControlButtonView.swift in Sources */,
@@ -599,6 +628,10 @@
 			isa = PBXTargetDependency;
 			target = 6177236F274284FF00169D3D /* SwiftChess (macOS) */;
 			targetProxy = 61AE78242B991AAD008F56F8 /* PBXContainerItemProxy */;
+		};
+		61F609112BC310B4009BDC38 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 61F609102BC310B4009BDC38 /* ChessKitEngine */;
 		};
 /* End PBXTargetDependency section */
 
@@ -928,6 +961,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		61F6090C2BC30F27009BDC38 /* XCRemoteSwiftPackageReference "chesskit-engine" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/chesskit-app/chesskit-engine";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.0;
+			};
+		};
+		61F609122BC310DD009BDC38 /* XCRemoteSwiftPackageReference "chesskit-engine" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/chesskit-app/chesskit-engine";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		61F609102BC310B4009BDC38 /* ChessKitEngine */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61F6090C2BC30F27009BDC38 /* XCRemoteSwiftPackageReference "chesskit-engine" */;
+			productName = ChessKitEngine;
+		};
+		61F609142BC333AF009BDC38 /* ChessKitEngine */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61F609122BC310DD009BDC38 /* XCRemoteSwiftPackageReference "chesskit-engine" */;
+			productName = ChessKitEngine;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6177235B274284FE00169D3D /* Project object */;
 }

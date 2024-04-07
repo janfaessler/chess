@@ -73,6 +73,6 @@ public struct Move:Identifiable, Equatable {
         if (type == .Castle) {
             return file == King.CastleKingsidePosition ? King.CastleKingsideNotation : King.CastleQueensideNotation
         }
-        return "\(fileName)\(row)";
+        return "\(piece.ident())\(fileName)\(row)";
     }
 }
