@@ -50,8 +50,8 @@
 		618D83C12BC178FF00583944 /* ControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618D83BF2BC178FF00583944 /* ControlView.swift */; };
 		618D83C42BC17E0100583944 /* MoveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618D83C32BC17E0100583944 /* MoveView.swift */; };
 		618D83C52BC17E0100583944 /* MoveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618D83C32BC17E0100583944 /* MoveView.swift */; };
-		618D83C72BC17FFE00583944 /* RowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618D83C62BC17FFE00583944 /* RowView.swift */; };
-		618D83C82BC17FFE00583944 /* RowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618D83C62BC17FFE00583944 /* RowView.swift */; };
+		618D83C72BC17FFE00583944 /* MoveRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618D83C62BC17FFE00583944 /* MoveRowView.swift */; };
+		618D83C82BC17FFE00583944 /* MoveRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618D83C62BC17FFE00583944 /* MoveRowView.swift */; };
 		618D83CB2BC18C9900583944 /* ControlModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618D83CA2BC18C9900583944 /* ControlModel.swift */; };
 		618D83CC2BC18C9900583944 /* ControlModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618D83CA2BC18C9900583944 /* ControlModel.swift */; };
 		61A919242BA1F83E00AD371E /* MoveFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A919232BA1F83E00AD371E /* MoveFactory.swift */; };
@@ -136,7 +136,7 @@
 		61812E3127681DFC00616866 /* Fen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fen.swift; sourceTree = "<group>"; };
 		618D83BF2BC178FF00583944 /* ControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlView.swift; sourceTree = "<group>"; };
 		618D83C32BC17E0100583944 /* MoveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveView.swift; sourceTree = "<group>"; };
-		618D83C62BC17FFE00583944 /* RowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowView.swift; sourceTree = "<group>"; };
+		618D83C62BC17FFE00583944 /* MoveRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveRowView.swift; sourceTree = "<group>"; };
 		618D83CA2BC18C9900583944 /* ControlModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlModel.swift; sourceTree = "<group>"; };
 		61A919232BA1F83E00AD371E /* MoveFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveFactory.swift; sourceTree = "<group>"; };
 		61A919262BA1F8ED00AD371E /* MoveFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveFactoryTests.swift; sourceTree = "<group>"; };
@@ -317,7 +317,7 @@
 			children = (
 				618D83BF2BC178FF00583944 /* ControlView.swift */,
 				618D83C32BC17E0100583944 /* MoveView.swift */,
-				618D83C62BC17FFE00583944 /* RowView.swift */,
+				618D83C62BC17FFE00583944 /* MoveRowView.swift */,
 				61F609032BC208B1009BDC38 /* ControlButtonView.swift */,
 				61F609062BC20C1B009BDC38 /* MoveListView.swift */,
 			);
@@ -524,7 +524,7 @@
 				61812E2E276807E600616866 /* PieceColor.swift in Sources */,
 				61B0B4532B95E1A90085DB48 /* MoveType.swift in Sources */,
 				617723A72742ABB800169D3D /* BoardFigureView.swift in Sources */,
-				618D83C72BC17FFE00583944 /* RowView.swift in Sources */,
+				618D83C72BC17FFE00583944 /* MoveRowView.swift in Sources */,
 				61EA62592BA7452F009A0300 /* PositionFactory.swift in Sources */,
 				617723A427429C9300169D3D /* BoardBackgroundView.swift in Sources */,
 				61B0B44A2B94FAE60085DB48 /* Knight.swift in Sources */,
@@ -572,7 +572,7 @@
 				61812E2C2768078E00616866 /* PieceType.swift in Sources */,
 				61812E252767F42000616866 /* BoardModel.swift in Sources */,
 				61812E2F276807E600616866 /* PieceColor.swift in Sources */,
-				618D83C82BC17FFE00583944 /* RowView.swift in Sources */,
+				618D83C82BC17FFE00583944 /* MoveRowView.swift in Sources */,
 				61B0B4542B95E1A90085DB48 /* MoveType.swift in Sources */,
 				617723A82742ABB800169D3D /* BoardFigureView.swift in Sources */,
 				617723A527429C9300169D3D /* BoardBackgroundView.swift in Sources */,
@@ -727,7 +727,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -757,7 +757,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

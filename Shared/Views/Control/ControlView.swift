@@ -11,32 +11,29 @@ struct ControlView: View {
     }
     
     var body: some View {
-
-        MoveListView(size, model: model)
-            .frame(width: size.width, height: size.height)
-            .toolbar {
-                ToolbarItem(placement: .secondaryAction) {
-                    ControlButtonView("|<", shortcut: .downArrow, size: CGSize(width: size.width / 4, height: 30)) {
-                        model.start()
-                    }
+        
+        VStack(alignment: .leading, spacing: 0) {
+            MoveListView(size, model: model)
+            Spacer()
+            
+            HStack(alignment: .center, spacing: 0) {
+                ControlButtonView("|<", shortcut: .downArrow, size: CGSize(width: size.width / 5, height: 30)) {
+                    model.start()
                 }
-                ToolbarItem(placement: .secondaryAction) {
-                    ControlButtonView("<", shortcut: .leftArrow, size: CGSize(width: size.width / 4, height: 30)) {
-                        model.back()
-                    }
+                ControlButtonView("<", shortcut: .leftArrow, size: CGSize(width: size.width / 4, height: 30)) {
+                    model.back()
                 }
-                ToolbarItem(placement: .secondaryAction) {
-                    ControlButtonView(">", shortcut: .rightArrow, size: CGSize(width: size.width / 4, height: 30)) {
-                        model.forward()
-                    }
+                ControlButtonView(">", shortcut: .rightArrow, size: CGSize(width: size.width / 4, height: 30)) {
+                    model.forward()
                 }
-                ToolbarItem(placement: .secondaryAction) {
-                    ControlButtonView(">|", shortcut: .upArrow, size: CGSize(width: size.width / 4, height: 30)) {
-                        model.end()
-                    }
+                ControlButtonView(">|", shortcut: .upArrow, size: CGSize(width: size.width / 4, height: 30)) {
+                    model.end()
                 }
             }
+            .frame(width: size.width, height: 30)
+        }
     }
+        
 }
 
 #Preview {

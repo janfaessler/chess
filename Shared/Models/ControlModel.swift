@@ -39,6 +39,11 @@ public class ControlModel : ObservableObject {
         updatePosition()
     }
     
+    func goToMove(_ index:Int) {
+        currentMove = index
+        updatePosition()
+    }
+    
     private func updatePosition() {
         guard let newPosition = Pgn.loadPosition(Array(moves[0..<currentMove])) else { return }
         board.updatePosition(newPosition)
