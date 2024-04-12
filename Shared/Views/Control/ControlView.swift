@@ -18,7 +18,7 @@ struct ControlView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            EngineView(engineSize, model: model)
+            EngineView(engineSize, model: model.lines)
             MoveListView(moveListSize, model: model)
             Spacer()
             NavigationView(navigationSize, model: model)

@@ -3,6 +3,11 @@ import Foundation
 public class LanParser {
     
     private init() {}
+// case "e1g1":    self = .wK
+// case "e1c1":    self = .wQ
+// case "e8g8":    self = .bK
+//case "e8c8":    self = .bQ
+    
     
     public static func parse(lan: String, position: Position) -> Move? {
         
@@ -23,7 +28,7 @@ public class LanParser {
         
         
         guard var move = figure.createMove(endSquareString) else { return nil }
-        guard figure.isMovePossible(move, position: position) else {return nil }
+        guard figure.isMovePossible(move, position: position) else { return nil }
         
         if promotedPiece != nil {
             move.promoteTo = promotedPiece!

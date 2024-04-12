@@ -3,17 +3,23 @@ import SwiftUI
 struct EngineView: View {
     
     let size:CGSize
-    @ObservedObject var model:ControlModel
+    var model:[EngineLine]
     
-    init (_ size:CGSize, model:ControlModel) {
+    init (_ size:CGSize, model:[EngineLine]) {
         self.size = size
-        self.model = model
+        self.model = model.sorted(by: { $0.id < $1.id })
     }
     var body: some View {
-        Text(model.engineEval)
-    }
-}
+        VStack  {
+            ForEach(model) { x in
+                Text("\(x.score) \(x.line)")
+                    .frame(width: size.width, alignment: .leading)
+                    
+                
+            }
+        }
+        .frame(width: size.width)
+        .padding()
 
-#Preview {
-    EngineView(CGSize(width: 200, height: 30), model:ControlModel())
+    }
 }
