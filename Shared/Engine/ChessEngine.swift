@@ -44,7 +44,7 @@ final class ChessEngine {
             
             lines.removeAll(where: { $0.id == lineNumber })
             lines += [line]
-            notifyEval(lines)
+            notifyEval(lines.sorted(by: { $0.id < $1.id }))
         default:
             break
         }

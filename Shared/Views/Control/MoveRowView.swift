@@ -5,7 +5,7 @@ struct MoveRowView: View {
     let positions:ArraySlice<String>
     let highlight:PieceColor?
     let model:ControlModel
-    init(_ index:Int, width:CGFloat, model:ControlModel) {
+    init(_ index:Int, model:ControlModel) {
         self.index = index
         self.model = model
         positions = model.moves[index...(model.moves.count > index + 1 ? index + 1 : index)]
@@ -28,7 +28,7 @@ struct MoveRowView: View {
                 }
                 Spacer()
             }
-            .frame(width: geo.size.width)
+            .frame(maxWidth: .infinity)
         }.frame(height: 20)
     }
     

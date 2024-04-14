@@ -2,20 +2,18 @@ import SwiftUI
 
 struct ControlButtonView: View {
     let action: () -> Void
-    let size:CGSize
     let label:String
     let shortcut:KeyEquivalent
 
-    init(_ label:String, shortcut:KeyEquivalent, size:CGSize, action: @escaping  () -> Void) {
+    init(_ label:String, shortcut:KeyEquivalent, action: @escaping  () -> Void) {
         self.action = action
-        self.size = size
         self.label = label
         self.shortcut = shortcut
     }
     var body: some View {
         Button { action() } label: {
             Image(systemName: label)
-                .frame(width: size.width, height: size.height)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .cornerRadius(0)
                 .background(.gray)
                 .fontWeight(.heavy)
@@ -28,5 +26,5 @@ struct ControlButtonView: View {
 }
 
 #Preview {
-    ControlButtonView("arrow.backward.to.line", shortcut: .downArrow, size: CGSize(width: 30, height: 30)) {}
+    ControlButtonView("arrow.backward.to.line", shortcut: .downArrow) {}
 }

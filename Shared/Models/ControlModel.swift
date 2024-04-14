@@ -1,23 +1,26 @@
-import Foundation
+import SwiftUI
 import os
 
 public class ControlModel : ObservableObject {
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "ControlModel")
+    private let minControlWidth:CGFloat = 200
 
     @Published var currentMove:Int = 0
-    @Published var board:BoardModel
     @Published var moves:[String] = []
     @Published var engineEval:String = ""
     @Published var lines:[EngineLine] = []
+    
+    @ObservedObject var board = BoardModel()
+    private var engine:ChessEngine = ChessEngine()
+    
 
-    var engine:ChessEngine
-    
-    
     init() {
-        engine = ChessEngine()
-        board = BoardModel()
         engine.addEvalListener(updateEval)
         board.addMoveListener(movePlayed)
+    }
+    
+    var navigationbuttonSize:CGSize {
+        CGSize(width: minControlWidth / 4, height: 30)
     }
 
     func getMoves() -> [String] {
@@ -51,6 +54,10 @@ public class ControlModel : ObservableObject {
     func goToMove(_ index:Int) {
         currentMove = index
         updatePosition()
+    }
+    
+    func getBoardSize(_ geo:GeometryProxy) -> CGFloat {
+        return min(geo.size.width - minControlWidth, geo.size.height)
     }
     
     private func updatePosition() {
