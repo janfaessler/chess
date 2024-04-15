@@ -41,8 +41,6 @@ class BoardModel : ObservableObject {
         }
     }
     
-
-    
     func doMove(_ move: Move) throws {
         try board.move(move)
         notifyMoveDone(move.info())
@@ -90,8 +88,8 @@ class BoardModel : ObservableObject {
         return board.getPosition()
     }
     
-    func getMoveLog() -> [String] {
-        return board.getMoveLog()
+    func getMoves() -> [Move] {
+        return board.getMoves()
     }
     
     func addMoveListener(_ listener:@escaping MoveNotification) {

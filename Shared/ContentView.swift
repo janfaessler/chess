@@ -8,7 +8,6 @@ struct ContentView: View {
                 BoardView(model.getBoardSize(geo), board:model.board)
                 ControlView(model: model)
             }
-            
         }
     }
 }

@@ -6,7 +6,7 @@ public class ControlModel : ObservableObject {
     private let minControlWidth:CGFloat = 200
 
     @Published var currentMove:Int = 0
-    @Published var moves:[String] = []
+    @Published var realMoves:[Move] = []
     @Published var engineEval:String = ""
     @Published var lines:[EngineLine] = []
     
@@ -19,12 +19,12 @@ public class ControlModel : ObservableObject {
         board.addMoveListener(movePlayed)
     }
     
+    var moveListColumns:[GridItem] {
+        [GridItem(.fixed(20)), GridItem(.flexible()), GridItem(.flexible())]
+    }
+    
     var navigationbuttonSize:CGSize {
         CGSize(width: minControlWidth / 4, height: 30)
-    }
-
-    func getMoves() -> [String] {
-        return moves
     }
     
     func start() {
@@ -40,14 +40,14 @@ public class ControlModel : ObservableObject {
     }
     
     func forward() {
-        if currentMove < moves.count {
+        if currentMove < realMoves.count {
             currentMove += 1
             updatePosition()
         }
     }
     
     func end() {
-        currentMove = moves.count
+        currentMove = realMoves.count
         updatePosition()
     }
     
@@ -60,14 +60,30 @@ public class ControlModel : ObservableObject {
         return min(geo.size.width - minControlWidth, geo.size.height)
     }
     
+    func isCurrentMove(_ index:Int) -> Bool {
+        currentMove == (index + 1)
+    }
+    
+    func getMoveDescription(_ index:Int) -> String {
+        realMoves[index].info()
+    }
+    
+    func isNewRow(_ index:Int) -> Bool {
+        index % 2 == 0
+    }
+    
+    func getRowDescriptionText(_ index:Int) -> String {
+        "\(index / 2 + 1)."
+    }
+    
     private func updatePosition() {
-        guard let newPosition = Pgn.loadPosition(Array(moves[0..<currentMove])) else { return }
+        guard let newPosition = Pgn.loadPosition(Array(realMoves.map({ $0.info() })[0..<currentMove])) else { return }
         board.updatePosition(newPosition)
         engine.newPosition(newPosition)
     }
     
     private func movePlayed(_ move:String) {
-        moves += [board.getMoveLog().last!]
+        realMoves += [board.getMoves().last!]
         currentMove += 1
         engine.newPosition(board.getPosition())
     }

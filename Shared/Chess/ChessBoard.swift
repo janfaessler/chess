@@ -78,6 +78,10 @@ public class ChessBoard {
         return position.getFigures()
     }
     
+    public func getMoves() -> [Move] {
+        return moves
+    }
+    
     public func getMoveLog() -> [String] {
         return moveLog
     }
