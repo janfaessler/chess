@@ -17,6 +17,3 @@ struct ControlView: View {
 #Preview {
     ControlView(model: ControlModel())
 }
-
-
-

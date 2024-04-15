@@ -4,7 +4,7 @@ public class ControlModel : ObservableObject {
     private let minControlWidth:CGFloat = 200
 
     @Published var currentMove:Int = 0
-    @Published var realMoves:[Move] = []
+    @Published var moves:[Move] = []
     @Published var engineEval:String = ""
     @Published var lines:[EngineLine] = []
     
@@ -38,14 +38,14 @@ public class ControlModel : ObservableObject {
     }
     
     func forward() {
-        if currentMove < realMoves.count {
+        if currentMove < moves.count {
             currentMove += 1
             updatePosition()
         }
     }
     
     func end() {
-        currentMove = realMoves.count
+        currentMove = moves.count
         updatePosition()
     }
     
@@ -63,7 +63,7 @@ public class ControlModel : ObservableObject {
     }
     
     func getMoveDescription(_ index:Int) -> String {
-        realMoves[index].info()
+        moves[index].info()
     }
     
     func isNewRow(_ index:Int) -> Bool {
@@ -75,13 +75,13 @@ public class ControlModel : ObservableObject {
     }
     
     private func updatePosition() {
-        guard let newPosition = Pgn.loadPosition(Array(realMoves.map({ $0.info() })[0..<currentMove])) else { return }
+        guard let newPosition = Pgn.loadPosition(Array(moves.map({ $0.info() })[0..<currentMove])) else { return }
         board.updatePosition(newPosition)
         engine.newPosition(newPosition)
     }
     
     private func movePlayed(_ move:String) {
-        realMoves += [board.getMoves().last!]
+        moves += [board.getMoves().last!]
         currentMove += 1
         engine.newPosition(board.getPosition())
     }

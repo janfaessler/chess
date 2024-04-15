@@ -10,7 +10,7 @@ struct MoveListView: View {
         ScrollView {
             ScrollViewReader { scrollView in
                 LazyVGrid(columns: model.moveListColumns, alignment: .leading) {
-                        ForEach(Array(model.realMoves.enumerated()), id: \.element.id) { index, move in
+                        ForEach(Array(model.moves.enumerated()), id: \.element.id) { index, move in
                             if model.isNewRow(index) {
                                 Text(model.getRowDescriptionText(index))
                             }
@@ -23,7 +23,7 @@ struct MoveListView: View {
                         Spacer().id(bottomID)
                 }
                 .padding(10)
-                .onChange(of: model.realMoves.count) {
+                .onChange(of: model.moves.count) {
                     scrollView.scrollTo(bottomID, anchor: .top)
                 }
             }
