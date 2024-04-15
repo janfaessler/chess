@@ -3,11 +3,6 @@ import Foundation
 public class LanParser {
     
     private init() {}
-// case "e1g1":    self = .wK
-// case "e1c1":    self = .wQ
-// case "e8g8":    self = .bK
-//case "e8c8":    self = .bQ
-    
     
     public static func parse(lan: String, position: Position) -> Move? {
         
@@ -17,7 +12,6 @@ public class LanParser {
         
         let endSquareIndex = lan.index(startSquareIndex, offsetBy: 2)
         let endSquareString = String(lan[startSquareIndex..<endSquareIndex])
-        guard let end = Field(endSquareString) else { return nil }
         
         var promotedPiece: PieceType?
         
