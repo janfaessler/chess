@@ -1,8 +1,6 @@
 import SwiftUI
-import os
 
 public class ControlModel : ObservableObject {
-    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "ControlModel")
     private let minControlWidth:CGFloat = 200
 
     @Published var currentMove:Int = 0
