@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct ContentView: View {
+    
     @ObservedObject var model = ControlModel()
+    
     var body: some View {
         GeometryReader{ geo in
             HStack(alignment: .top, spacing:0) {

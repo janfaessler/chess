@@ -23,26 +23,20 @@ struct PromotionChooseView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     
                     FigureView(size: fieldSize, type: .queen, color: getColor())
-                        .onTapGesture { promote(to: .queen) }
+                        .onTapGesture { try? board.doPromote(.queen) }
                     FigureView(size: fieldSize, type: .knight, color: getColor())
-                        .onTapGesture { promote(to: .knight) }
+                        .onTapGesture { try? board.doPromote(.knight) }
                     FigureView(size: fieldSize, type: .rook, color: getColor())
-                        .onTapGesture { promote(to: .rook) }
+                        .onTapGesture { try? board.doPromote(.rook) }
                     FigureView(size: fieldSize, type: .bishop, color: getColor())
-                        .onTapGesture { promote(to: .bishop) }
+                        .onTapGesture { try? board.doPromote(.bishop) }
                 }
             }
             .offset(x: getOffsetX(), y: getOffsetY())
-            
         }
         
     }
-    
-    func promote(to:PieceType) {
-        do {
-            try board.doPromote(to)
-        } catch {}
-    }
+
     
     func getColor() -> PieceColor {
         return board.moveToPromote!.piece.getColor()

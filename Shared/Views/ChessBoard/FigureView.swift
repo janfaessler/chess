@@ -15,13 +15,8 @@ struct FigureView: View {
     }
     
     var body: some View {
-        Image(getImageName())
+        Image("\(figureColor)_\(figureType)")
             .resizable()
             .frame(width: fieldSize, height: fieldSize, alignment: .topLeading)
     }
-
-    func getImageName() -> String {
-        return "\(figureColor)_\(figureType)"
-    }
-    
 }

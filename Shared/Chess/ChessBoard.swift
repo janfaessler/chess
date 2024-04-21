@@ -91,21 +91,9 @@ public class ChessBoard {
     }
     
     private func IsMoveLegalMoveOnTheBoard(_ target:Move) -> Bool {
-        guard isMoveInBoard(target) else {
-            logger.debug("move '\(target.info())' would jump out of the board")
-            return false
-        }
-        
-        guard target.piece.isMovePossible(target, position: position) else {
-            logger.debug("move '\(target.info())' is not possible")
-            return false
-        }
-        
-        guard !doesMovePutOwnKingInCheck(target) else {
-            logger.debug("move '\(target.info())' would set own king in check")
-            return false
-        }
-        
+        guard isMoveInBoard(target) else { return false }
+        guard target.piece.isMovePossible(target, position: position) else { return false }
+        guard !doesMovePutOwnKingInCheck(target) else { return false }
         return true
     }
     

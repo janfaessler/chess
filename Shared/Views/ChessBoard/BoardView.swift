@@ -12,9 +12,13 @@ struct BoardView: View {
     var body: some View {
         ZStack (alignment: .topLeading) {
             BoardBackgroundView(size: fieldSize, board: model)
+                .onTapGesture { location in
+                    model.moveFocusFigureTo(location, fieldSize: fieldSize)
+                }
+
 
             ForEach(model.figures) { figure in
-                BoardFigureView(size: fieldSize, figure: figure, board: model)
+                BoardFigureView(fieldSize: fieldSize, figure: figure)
             }
             
             ForEach(model.getLegalMoves()) { move in
@@ -26,14 +30,12 @@ struct BoardView: View {
             
             PromotionChooseView(model, fieldSize)
             
-            ResultView(model.result)
+            ResultView(model: model.result)
                 .frame(width: fieldSize * 8, height: fieldSize * 8)
         }
     }
 }
 
-struct BoardView_Previews: PreviewProvider {
-    static var previews: some View {
-        BoardView(100, board: BoardModel())
-    }
+#Preview {
+    BoardView(100, board:BoardModel())
 }

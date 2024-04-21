@@ -3,13 +3,8 @@ import SwiftUI
 struct ResultView: View {
     
     let model:ResultModel
-    
-    init (_ model: ResultModel) {
-        self.model = model
-    }
 
     var body: some View {
-        
         if model.shouldDisplay() {
             ZStack {
                 RoundedRectangle(cornerSize: CGSize(width: 30, height: 30))
@@ -26,9 +21,8 @@ struct ResultView: View {
                 .shadow(radius: 10)
         }
     }
-
 }
 
 #Preview {
-    ResultView(ResultModel(.DrawBy50MoveRule))
+    ResultView(model: ResultModel(.DrawBy50MoveRule))
 }
