@@ -11,7 +11,7 @@ struct BoardBackgroundView: View {
                     ForEach(1...8, id: \.self) { file in
                         ZStack {
                             Rectangle()
-                                .fill(model.getColor(row: row, file: file))
+                                .fill(model.getFieldColor(row: row, file: file))
                             
                             if row == 8 {
                                 Text(model.getFileName(file))

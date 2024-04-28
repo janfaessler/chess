@@ -36,7 +36,7 @@ class BoardModel : ObservableObject {
         return moveToPromote != nil
     }
     
-    func getColor(row: Int, file: Int) -> Color {
+    func getFieldColor(row: Int, file: Int) -> Color {
         let odd = (row + file) % 2 == 0
         return odd ? lightColor : darkColor
     }
