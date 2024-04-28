@@ -1,41 +1,35 @@
 import SwiftUI
 
 struct BoardView: View {
-    let fieldSize:CGFloat
+
     @ObservedObject var model:BoardModel
     
-    init(_ size:CGFloat, board:BoardModel) {
-        fieldSize = size / 8
-        model = board
-    }
-    
     var body: some View {
-        ZStack (alignment: .topLeading) {
-            BoardBackgroundView(size: fieldSize, board: model)
-                .onTapGesture { location in
-                    model.moveFocusFigureTo(location, fieldSize: fieldSize)
+        GeometryReader { geo in
+            let fieldSize = geo.size.width / 8
+            ZStack (alignment: .topLeading) {
+                BoardBackgroundView(model: model)
+       
+                ForEach(model.figures) { figure in
+                    BoardFigureView(fieldSize: fieldSize, figure: figure)
                 }
-
-
-            ForEach(model.figures) { figure in
-                BoardFigureView(fieldSize: fieldSize, figure: figure)
+                
+                ForEach(model.getLegalMoves()) { move in
+                    MoveIndicatorView(move: move, fieldSize: fieldSize)
+                }
+                
+                PromotionChooseView(board: model, fieldSize: fieldSize)
+                
+                ResultView(model: model.result)
             }
-            
-            ForEach(model.getLegalMoves()) { move in
-                MoveIndicatorView(move, fieldSize)
-                    .onTapGesture {
-                        try? model.moveFocusFigureTo(row: move.row, file: move.file)
-                    }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .onTapGesture { location in
+                model.moveFocusFigureTo(location, fieldSize: fieldSize)
             }
-            
-            PromotionChooseView(model, fieldSize)
-            
-            ResultView(model: model.result)
-                .frame(width: fieldSize * 8, height: fieldSize * 8)
         }
     }
 }
 
 #Preview {
-    BoardView(100, board:BoardModel())
+    BoardView(model:BoardModel())
 }

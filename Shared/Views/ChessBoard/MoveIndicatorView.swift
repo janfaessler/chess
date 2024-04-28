@@ -5,10 +5,10 @@ struct MoveIndicatorView: View {
     let fieldSize:CGFloat
     let move:Move
 
-    init (_ m:Move, _ size:CGFloat) {
-        move = m
-        self.size = size * 0.25
-        self.fieldSize = size
+    init (move:Move, fieldSize:CGFloat) {
+        self.move = move
+        self.size = fieldSize * 0.25
+        self.fieldSize = fieldSize
 
     }
     var body: some View {

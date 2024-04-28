@@ -28,6 +28,14 @@ class BoardModel : ObservableObject {
         .brown
     }
     
+    var promotionColor: PieceColor {
+        moveToPromote!.piece.getColor()
+    }
+    
+    var shouldShowPromotionView:Bool {
+        return moveToPromote != nil
+    }
+    
     func getColor(row: Int, file: Int) -> Color {
         let odd = (row + file) % 2 == 0
         return odd ? lightColor : darkColor
@@ -47,30 +55,21 @@ class BoardModel : ObservableObject {
         "\(9-row)"
     }
     
-    func move(figure: FigureModel, deltaRow:Int, deltaFile:Int)  throws {
+    func move(figure: FigureModel, deltaRow:Int, deltaFile:Int) {
         
         guard figure.getColor() == board.getColorToMove() else {
-            logger.error("other player has to move first")
             return
         }
         
         guard let move = figure.getMove(deltaRow: deltaRow, deltaFile: deltaFile) else {
-            logger.error("no possible move found")
             return
         }
         
         if move.type == .Promotion {
             moveToPromote = move
         } else {
-            try doMove(move)
+            try? doMove(move)
         }
-    }
-    
-    func doMove(_ move: Move) throws {
-        try board.move(move)
-        notifyMoveDone(move.info())
-        figures = getFigures()
-        result = ResultModel(board.getGameState())
     }
     
     func doPromote(_ to:PieceType) throws {
@@ -97,10 +96,6 @@ class BoardModel : ObservableObject {
         }
     }
     
-    func shouldShowPromotionView() -> Bool {
-        return moveToPromote != nil
-    }
-    
     func getPosition() -> Position {
         return board.getPosition()
     }
@@ -119,17 +114,22 @@ class BoardModel : ObservableObject {
     }
     
     func moveFocusFigureTo(_ location: CGPoint, fieldSize:CGFloat) {
+        guard let figure = focus else { return }
+
         let row = Int(9 - location.y / fieldSize)
         let file = Int(1 + location.x / fieldSize)
-        try? moveFocusFigureTo(row: row, file: file)
-    }
-    
-    func moveFocusFigureTo(row: Int, file:Int) throws {
-        guard let figure = focus else { return }
         let deltarow = row - figure.row
         let deltafile = file - figure.file
-        try move(figure: figure, deltaRow: deltarow, deltaFile: deltafile)
+        
+        move(figure: figure, deltaRow: deltarow, deltaFile: deltafile)
         clearFocus()
+    }
+    
+    private func doMove(_ move: Move) throws {
+        try board.move(move)
+        notifyMoveDone(move.info())
+        figures = getFigures()
+        result = ResultModel(board.getGameState())
     }
     
     private func moveAndUpdateModel(_ move: Move) throws {

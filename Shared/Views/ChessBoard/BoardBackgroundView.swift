@@ -4,13 +4,6 @@ struct BoardBackgroundView: View {
     
     @ObservedObject var model:BoardModel
     
-    var fieldSize:CGFloat
-    
-    init(size: CGFloat, board:BoardModel) {
-        fieldSize = size;
-        model = board;
-    }
-    
     var body: some View {
         VStack(spacing: 0.0) {
             ForEach(1...8, id: \.self) { row in
@@ -19,7 +12,6 @@ struct BoardBackgroundView: View {
                         ZStack {
                             Rectangle()
                                 .fill(model.getColor(row: row, file: file))
-                                .frame(width: fieldSize, height: fieldSize)
                             
                             if row == 8 {
                                 Text(model.getFileName(file))
@@ -27,7 +19,7 @@ struct BoardBackgroundView: View {
                                     .font(.largeTitle)
                                     .foregroundStyle(model.getTextColor(row: row, file: file))
                                     .padding(3)
-                                    .frame(width: fieldSize, height: fieldSize, alignment: .bottomTrailing)
+                                    .frame(maxWidth: .infinity,  maxHeight: .infinity, alignment: .bottomTrailing)
                             }
                             
                             if file == 1 {
@@ -36,7 +28,7 @@ struct BoardBackgroundView: View {
                                     .font(.largeTitle)
                                     .foregroundStyle(model.getTextColor(row: row, file: file))
                                     .padding(3)
-                                    .frame(width: fieldSize, height: fieldSize, alignment: .topLeading)
+                                    .frame(maxWidth: .infinity,  maxHeight: .infinity, alignment: .topLeading)
                             }
                         }
                     }

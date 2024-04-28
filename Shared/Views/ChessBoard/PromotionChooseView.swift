@@ -3,45 +3,35 @@ import SwiftUI
 struct PromotionChooseView: View {
     
     @ObservedObject var board:BoardModel
-    var fieldSize:CGFloat
+    let fieldSize:CGFloat
     
-    init(_ b:BoardModel, _ size:CGFloat) {
-        board = b
-        fieldSize = size
-    }
-
     var body: some View {
         
-        if board.shouldShowPromotionView() {
+        if board.shouldShowPromotionView {
             
             ZStack(alignment: .topLeading)  {
                 Rectangle()
                     .fill(.gray)
-                    .frame(width: fieldSize, height: fieldSize * 4)
                     .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
                 
                 VStack(alignment: .leading, spacing: 0) {
                     
-                    FigureView(size: fieldSize, type: .queen, color: getColor())
+                    FigureView(size: fieldSize, type: .queen, color: board.promotionColor)
                         .onTapGesture { try? board.doPromote(.queen) }
-                    FigureView(size: fieldSize, type: .knight, color: getColor())
+                    FigureView(size: fieldSize, type: .knight, color: board.promotionColor)
                         .onTapGesture { try? board.doPromote(.knight) }
-                    FigureView(size: fieldSize, type: .rook, color: getColor())
+                    FigureView(size: fieldSize, type: .rook, color: board.promotionColor)
                         .onTapGesture { try? board.doPromote(.rook) }
-                    FigureView(size: fieldSize, type: .bishop, color: getColor())
+                    FigureView(size: fieldSize, type: .bishop, color: board.promotionColor)
                         .onTapGesture { try? board.doPromote(.bishop) }
                 }
             }
+            .frame(width: fieldSize, height: fieldSize * 4)
             .offset(x: getOffsetX(), y: getOffsetY())
         }
         
     }
 
-    
-    func getColor() -> PieceColor {
-        return board.moveToPromote!.piece.getColor()
-    }
-    
     func getOffsetX() -> CGFloat {
         return calcOffset(board.moveToPromote!.file)
     }
