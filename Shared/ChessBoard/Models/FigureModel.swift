@@ -23,7 +23,7 @@ class FigureModel : Identifiable, ObservableObject {
     func onDragEnd(_ gesture: _ChangedGesture<DragGesture>.Value, fieldSize:CGFloat) {
         let row = calculateDeltaRow(gesture.translation.height, fieldSize: fieldSize)
         let file = calculateDeltaFile(gesture.translation.width, fieldSize: fieldSize)
-        try? board.move(figure: self, deltaRow: row, deltaFile: file)
+        board.move(figure: self, deltaRow: row, deltaFile: file)
         resetOffset()
         zIndex = 0
     }

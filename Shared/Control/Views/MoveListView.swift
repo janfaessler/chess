@@ -10,17 +10,17 @@ struct MoveListView: View {
         ScrollView {
             ScrollViewReader { scrollView in
                 LazyVGrid(columns: model.moveListColumns, alignment: .leading) {
-                        ForEach(Array(model.moves.enumerated()), id: \.element.id) { index, move in
-                            if model.isNewRow(index) {
-                                Text(model.getRowDescriptionText(index))
-                            }
-                            
-                            MoveView(model: model, index: index) {
-                                model.goToMove(index + 1)
-                            }
+                    ForEach(model.moves, id: \.id) { move in
+                        if move.move.piece.getColor() == .white {
+                            Text(model.getRowDescriptionText(move.id))
                         }
                         
-                        Spacer().id(bottomID)
+                        MoveView(model: model, id: move.id) {
+                            model.goToMove(move.id)
+                        }
+                    }
+                    
+                    Spacer().id(bottomID)
                 }
                 .padding(10)
                 .onChange(of: model.moves.count) {

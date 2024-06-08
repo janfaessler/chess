@@ -3,19 +3,19 @@ import SwiftUI
 struct MoveView: View {
     
     let model:ControlModel
-    let index:Int
+    let id:UUID
     let action: () -> Void
     
     var body: some View {
         
         Button {
-            model.goToMove(index + 1)
+            model.goToMove(id)
         } label: {
-            Text(model.getMoveDescription(index))
-                .fontWeight(model.isCurrentMove(index) ? .bold : .regular)
+            Text(model.getMoveDescription(id))
+                .fontWeight(model.isCurrentMove(id) ? .bold : .regular)
                 .padding(3)
                 .frame(maxWidth: .infinity)
-                .background(model.isCurrentMove(index)  ? .gray.opacity(0.5) : .gray)
+                .background(model.isCurrentMove(id)  ? .gray.opacity(0.5) : .gray)
         }.buttonStyle(.plain)
     
     }
