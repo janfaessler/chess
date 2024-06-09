@@ -13,10 +13,8 @@ struct MoveListView: View {
                         ForEach(1...model.moveCount, id: \.self) { i in
                             GridRow {
                                 Text("\(i).")
-                                if model.hasMoved(i, color: .white) {
-                                    MoveView(model: model, id: model.getMove(i, color: .white).id) {
-                                        model.goToMove(model.getMove(i, color: .white).id)
-                                    }
+                                MoveView(model: model, id: model.getMove(i, color: .white).id) {
+                                    model.goToMove(model.getMove(i, color: .white).id)
                                 }
                                 if model.hasMoved(i, color: .black) {
                                     MoveView(model: model, id: model.getMove(i, color: .black).id) {
