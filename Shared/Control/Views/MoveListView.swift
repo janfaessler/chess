@@ -17,17 +17,13 @@ struct MoveListView: View {
                                     MoveView(model: model, id: model.getMove(i, color: .white).id) {
                                         model.goToMove(model.getMove(i, color: .white).id)
                                     }
-                                } else {
-                                    Text("...")
-                                        .frame(maxWidth: .infinity)
-                                        .foregroundColor(.clear)
                                 }
                                 if model.hasMoved(i, color: .black) {
                                     MoveView(model: model, id: model.getMove(i, color: .black).id) {
                                         model.goToMove(model.getMove(i, color: .black).id)
                                     }
                                 } else {
-                                    Text("...")
+                                    Rectangle()
                                         .frame(maxWidth: .infinity)
                                         .foregroundColor(.clear)
                                 }
