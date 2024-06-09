@@ -9,7 +9,7 @@ struct MoveView: View {
     var body: some View {
         
         Button {
-            model.goToMove(id)
+            action()
         } label: {
             Text(model.getMoveDescription(id))
                 .fontWeight(model.isCurrentMove(id) ? .bold : .regular)

@@ -1,6 +1,9 @@
 import SwiftUI
+import os
 
 public class ControlModel : ObservableObject {
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "ControlModel")
+
     private let minControlWidth:CGFloat = 200
 
     @Published var currentMove:UUID?
@@ -10,7 +13,6 @@ public class ControlModel : ObservableObject {
     
     @ObservedObject var board = BoardModel()
     private var engine:ChessEngine = ChessEngine()
-    
 
     init() {
         engine.addEvalListener(updateEval)
@@ -25,6 +27,13 @@ public class ControlModel : ObservableObject {
         CGSize(width: minControlWidth / 4, height: 30)
     }
     
+    var moveCount:Int {
+        let moveCount = Float(moves.count / 2)
+        let roundedCount = moveCount.rounded(.up)
+        let result = Int(roundedCount) + moves.count % 2
+        return result
+    }
+    
     func start() {
         currentMove = moves.first?.id
         updatePosition()
@@ -33,6 +42,7 @@ public class ControlModel : ObservableObject {
     func back() {
         guard currentMove != nil else { return }
         guard let moveIndex = moves.firstIndex(where: { move in move.id == currentMove}) else { return }
+        guard moveIndex > 0 else { return }
         currentMove = moves[moves.index(before: moveIndex)].id
         updatePosition()
     }
@@ -75,6 +85,30 @@ public class ControlModel : ObservableObject {
     func getRowDescriptionText(_ id:UUID) -> String {
         guard let index = moves.firstIndex(where: { move in move.id == id}) else { return "??" }
         return "\(index / 2 + 1)."
+    }
+    
+    func getMove(_ number:Int, color:PieceColor) -> MoveContainer {
+        let moveIndex = getMoveIndex(number, color: color)
+        return moves[moveIndex]
+    }
+    
+    func hasMoved(_ number:Int, color:PieceColor) -> Bool {
+        let moveIndex = getMoveIndex(number, color: color)
+        return moves.count > moveIndex
+    }
+    
+    private func getMoveIndex(_ number:Int, color:PieceColor) -> Int {
+        if color == .white {
+            if number == 1 {
+                return number - 1
+            }
+            return number * 2 - 2
+        } else {
+            if number == 1 {
+                return number
+            }
+            return number * 2 - 1
+        }
     }
     
     private func updatePosition() {

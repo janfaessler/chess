@@ -6,21 +6,38 @@ struct MoveListView: View {
     @Namespace var bottomID
 
     var body: some View {
-
         ScrollView {
             ScrollViewReader { scrollView in
-                LazyVGrid(columns: model.moveListColumns, alignment: .leading) {
-                    ForEach(model.moves, id: \.id) { move in
-                        if move.move.piece.getColor() == .white {
-                            Text(model.getRowDescriptionText(move.id))
-                        }
-                        
-                        MoveView(model: model, id: move.id) {
-                            model.goToMove(move.id)
+                Grid {
+                    if model.moveCount > 0 {
+                        ForEach(1...model.moveCount, id: \.self) { i in
+                            GridRow {
+                                Text("\(i).")
+                                if model.hasMoved(i, color: .white) {
+                                    MoveView(model: model, id: model.getMove(i, color: .white).id) {
+                                        model.goToMove(model.getMove(i, color: .white).id)
+                                    }
+                                } else {
+                                    Text("...")
+                                        .frame(maxWidth: .infinity)
+                                        .foregroundColor(.clear)
+                                }
+                                if model.hasMoved(i, color: .black) {
+                                    MoveView(model: model, id: model.getMove(i, color: .black).id) {
+                                        model.goToMove(model.getMove(i, color: .black).id)
+                                    }
+                                } else {
+                                    Text("...")
+                                        .frame(maxWidth: .infinity)
+                                        .foregroundColor(.clear)
+                                }
+                            }
                         }
                     }
-                    
-                    Spacer().id(bottomID)
+                    GridRow {
+                        Spacer().id(bottomID)
+
+                    }.gridCellColumns(3)
                 }
                 .padding(10)
                 .onChange(of: model.moves.count) {
