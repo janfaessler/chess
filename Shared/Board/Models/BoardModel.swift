@@ -5,7 +5,7 @@ class BoardModel : ObservableObject {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "BoardModel")
     
-    typealias MoveNotification = (String) -> ()
+    typealias MoveNotification = (Move) -> ()
     private var moveNotifcations:[MoveNotification] = []
     
     @Published var figures:[FigureModel] = []
@@ -127,7 +127,7 @@ class BoardModel : ObservableObject {
     
     private func doMove(_ move: Move) throws {
         try board.move(move)
-        notifyMoveDone(move.info())
+        notifyMoveDone(move)
         figures = getFigures()
         result = ResultModel(board.getGameState())
     }
@@ -143,7 +143,7 @@ class BoardModel : ObservableObject {
         return figures.map({ FigureModel($0, board: self) })
     }
     
-    private func notifyMoveDone(_ move:String) {
+    private func notifyMoveDone(_ move:Move) {
         for event in moveNotifcations {
             event(move)
         }

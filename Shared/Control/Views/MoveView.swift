@@ -2,7 +2,7 @@ import SwiftUI
 
 struct MoveView: View {
     
-    let model:ControlModel
+    let model:MoveListModel
     let id:UUID
     let action: () -> Void
     

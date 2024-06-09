@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		614C6BF82C15EBC700B4F930 /* MoveListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6BF72C15EBC700B4F930 /* MoveListModel.swift */; };
 		614FFC6B277780130082F892 /* MoveIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC69277780130082F892 /* MoveIndicatorView.swift */; };
 		614FFC6E277786560082F892 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC6C277786560082F892 /* Move.swift */; };
 		6157321D2BA5F21E0048EDDF /* Pgn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6157321B2BA5F21E0048EDDF /* Pgn.swift */; };
@@ -76,6 +77,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		614C6BF72C15EBC700B4F930 /* MoveListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveListModel.swift; sourceTree = "<group>"; };
 		614FFC69277780130082F892 /* MoveIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveIndicatorView.swift; sourceTree = "<group>"; };
 		614FFC6C277786560082F892 /* Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
 		6157321B2BA5F21E0048EDDF /* Pgn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pgn.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 			children = (
 				618D16A12C14FCA100D70B01 /* MoveContainer.swift */,
 				618D83CA2BC18C9900583944 /* ControlModel.swift */,
+				614C6BF72C15EBC700B4F930 /* MoveListModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -465,6 +468,7 @@
 				61EA625D2BA7988B009A0300 /* ResultView.swift in Sources */,
 				61B32F5A2B9A53DB00790CF7 /* Field.swift in Sources */,
 				618D83C52BC17E0100583944 /* MoveView.swift in Sources */,
+				614C6BF82C15EBC700B4F930 /* MoveListModel.swift in Sources */,
 				61B0B4482B94F92E0085DB48 /* King.swift in Sources */,
 				61EA62662BAA0ACC009A0300 /* PromotionChooseView.swift in Sources */,
 				61EA62602BA8FDA3009A0300 /* ResultModel.swift in Sources */,

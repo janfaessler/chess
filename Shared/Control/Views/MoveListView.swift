@@ -2,7 +2,7 @@ import SwiftUI
 
 struct MoveListView: View {
     
-    @ObservedObject var model:ControlModel
+    @ObservedObject var model:MoveListModel
     @Namespace var bottomID
 
     var body: some View {
