@@ -162,29 +162,17 @@
 			isa = PBXGroup;
 			children = (
 				61F609192BC7EC30009BDC38 /* Engine */,
-				612CDBD72C15092F00877DF2 /* Model */,
+				614C6BF92C15F3E900B4F930 /* MoveList */,
 				612CDBD92C15096D00877DF2 /* Views */,
+				618D83CA2BC18C9900583944 /* ControlModel.swift */,
 			);
 			path = Control;
-			sourceTree = "<group>";
-		};
-		612CDBD72C15092F00877DF2 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				618D16A12C14FCA100D70B01 /* MoveContainer.swift */,
-				618D83CA2BC18C9900583944 /* ControlModel.swift */,
-				614C6BF72C15EBC700B4F930 /* MoveListModel.swift */,
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		612CDBD92C15096D00877DF2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				618D83C32BC17E0100583944 /* MoveView.swift */,
 				61F609092BC30775009BDC38 /* BoardNavigationView.swift */,
-				61F6090D2BC30F5F009BDC38 /* EngineView.swift */,
-				61F609062BC20C1B009BDC38 /* MoveListView.swift */,
 				61F609032BC208B1009BDC38 /* ControlButtonView.swift */,
 				618D83BF2BC178FF00583944 /* ControlView.swift */,
 			);
@@ -198,6 +186,25 @@
 				617723A92742AC7400169D3D /* Views */,
 			);
 			path = Board;
+			sourceTree = "<group>";
+		};
+		614C6BF92C15F3E900B4F930 /* MoveList */ = {
+			isa = PBXGroup;
+			children = (
+				614C6BFA2C15F45000B4F930 /* Views */,
+				618D16A12C14FCA100D70B01 /* MoveContainer.swift */,
+				614C6BF72C15EBC700B4F930 /* MoveListModel.swift */,
+			);
+			path = MoveList;
+			sourceTree = "<group>";
+		};
+		614C6BFA2C15F45000B4F930 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				618D83C32BC17E0100583944 /* MoveView.swift */,
+				61F609062BC20C1B009BDC38 /* MoveListView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		6157320A2BA5EB4C0048EDDF /* Figures */ = {
@@ -339,8 +346,9 @@
 		61F609192BC7EC30009BDC38 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
-				61F6091A2BC7EC41009BDC38 /* ChessEngine.swift */,
 				61F609212BC7F52C009BDC38 /* EngineLine.swift */,
+				61F6090D2BC30F5F009BDC38 /* EngineView.swift */,
+				61F6091A2BC7EC41009BDC38 /* ChessEngine.swift */,
 			);
 			path = Engine;
 			sourceTree = "<group>";
