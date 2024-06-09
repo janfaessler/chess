@@ -22,17 +22,14 @@ public class MoveListModel : ObservableObject {
     
     func back() {
         guard currentMove != nil else { return }
-        guard let moveIndex = moves.firstIndex(where: { move in move.id == currentMove}) else { return }
-        guard moveIndex > 0 else { return }
-        currentMove = moves[moves.index(before: moveIndex)].id
+        guard let lastMove = getPreviousMove() else { return }
+        currentMove = lastMove.id
         updatePosition()
     }
     
     func forward() {
-        guard let moveIndex = moves.firstIndex(where: { move in move.id == currentMove}) else { return }
-        let nextMoveIndex = moves.index(after: moveIndex)
-        guard moves.count > nextMoveIndex else { return }
-        currentMove = moves[nextMoveIndex].id
+        guard let nextMove = getNextMove() else { return }
+        currentMove = nextMove.id
         updatePosition()
     }
     
@@ -68,9 +65,8 @@ public class MoveListModel : ObservableObject {
     }
     
     func getPosition() -> Position? {
-        guard let moveIndex = moves.firstIndex(where: { move in move.id == currentMove}) else { return nil }
-        guard let newPosition = Pgn.loadPosition(Array(moves.map({ $0.move.info() })[0..<moveIndex])) else { return nil }
-        return newPosition
+        let notations = getMoveNotations(getPlayedMoves())
+        return Pgn.loadPosition(notations)
     }
     
     func isCurrentMove(_ id:UUID) -> Bool {
@@ -78,12 +74,35 @@ public class MoveListModel : ObservableObject {
     }
     
     func getMoveDescription(_ id:UUID) -> String {
-        guard let moveIndex = moves.firstIndex(where: { move in move.id == id}) else { return "???" }
-        return moves[moveIndex].move.info()
+        guard let moveContainer = getMoveContainer(withId: id) else { return "???" }
+        return moveContainer.move.info()
     }
     
     func addPositionChangeListener(_ listener:@escaping PositionChangeNotification) {
         positionChangeNotification += [listener]
+    }
+    
+    private func getPreviousMove() -> MoveContainer? {
+        guard let moveIndex = moves.firstIndex(where: { move in move.id == currentMove}) else { return nil }
+        guard moveIndex > 0 else { return nil }
+        return moves[moves.index(before: moveIndex)]
+    }
+    
+    private func getNextMove() -> MoveContainer? {
+        guard let moveIndex = moves.firstIndex(where: { move in move.id == currentMove}) else { return nil }
+        let nextMoveIndex = moves.index(after: moveIndex)
+        guard moves.count > nextMoveIndex else { return  nil}
+        return moves[nextMoveIndex]
+    }
+    
+    private func getPlayedMoves() -> [MoveContainer] {
+        guard let moveIndex = moves.firstIndex(where: { move in move.id == currentMove}) else { return [] }
+        return Array(moves[0..<moveIndex])
+    }
+    
+    private func getMoveContainer(withId:UUID) -> MoveContainer? {
+        guard let moveIndex = moves.firstIndex(where: { move in move.id == withId}) else { return nil }
+        return moves[moveIndex]
     }
     
     private func getMoveIndex(_ number:Int, color:PieceColor) -> Int {
@@ -105,5 +124,8 @@ public class MoveListModel : ObservableObject {
         for event in positionChangeNotification {
             event(position)
         }
+    }
+    private func getMoveNotations(_ moves:[MoveContainer]) -> [String] {
+        return moves.map({ $0.move.info() })
     }
 }
