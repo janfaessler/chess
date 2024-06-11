@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		614C6BF82C15EBC700B4F930 /* MoveListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6BF72C15EBC700B4F930 /* MoveListModel.swift */; };
+		614C6BFC2C18A04100B4F930 /* RowContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6BFB2C18A04100B4F930 /* RowContainer.swift */; };
 		614FFC6B277780130082F892 /* MoveIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC69277780130082F892 /* MoveIndicatorView.swift */; };
 		614FFC6E277786560082F892 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC6C277786560082F892 /* Move.swift */; };
 		6157321D2BA5F21E0048EDDF /* Pgn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6157321B2BA5F21E0048EDDF /* Pgn.swift */; };
@@ -78,6 +79,7 @@
 
 /* Begin PBXFileReference section */
 		614C6BF72C15EBC700B4F930 /* MoveListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveListModel.swift; sourceTree = "<group>"; };
+		614C6BFB2C18A04100B4F930 /* RowContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowContainer.swift; sourceTree = "<group>"; };
 		614FFC69277780130082F892 /* MoveIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveIndicatorView.swift; sourceTree = "<group>"; };
 		614FFC6C277786560082F892 /* Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
 		6157321B2BA5F21E0048EDDF /* Pgn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pgn.swift; sourceTree = "<group>"; };
@@ -194,6 +196,7 @@
 				614C6BFA2C15F45000B4F930 /* Views */,
 				618D16A12C14FCA100D70B01 /* MoveContainer.swift */,
 				614C6BF72C15EBC700B4F930 /* MoveListModel.swift */,
+				614C6BFB2C18A04100B4F930 /* RowContainer.swift */,
 			);
 			path = MoveList;
 			sourceTree = "<group>";
@@ -506,6 +509,7 @@
 				61F609182BC33C26009BDC38 /* LanParser.swift in Sources */,
 				617723A82742ABB800169D3D /* BoardFigureView.swift in Sources */,
 				617723A527429C9300169D3D /* BoardBackgroundView.swift in Sources */,
+				614C6BFC2C18A04100B4F930 /* RowContainer.swift in Sources */,
 				61F609052BC208B1009BDC38 /* ControlButtonView.swift in Sources */,
 				61F609082BC20C1B009BDC38 /* MoveListView.swift in Sources */,
 				61B0B44B2B94FAE60085DB48 /* Knight.swift in Sources */,

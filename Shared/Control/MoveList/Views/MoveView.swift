@@ -3,7 +3,7 @@ import SwiftUI
 struct MoveView: View {
     
     let model:MoveListModel
-    let id:UUID
+    let move:MoveContainer
     let action: () -> Void
     
     var body: some View {
@@ -11,11 +11,11 @@ struct MoveView: View {
         Button {
             action()
         } label: {
-            Text(model.getMoveDescription(id))
-                .fontWeight(model.isCurrentMove(id) ? .bold : .regular)
+            Text(model.getMoveDescription(move))
+                .fontWeight(model.isCurrentMove(move) ? .bold : .regular)
                 .padding(3)
                 .frame(maxWidth: .infinity)
-                .background(model.isCurrentMove(id)  ? .gray.opacity(0.5) : .gray)
+                .background(model.isCurrentMove(move)  ? .gray.opacity(0.5) : .gray)
         }.buttonStyle(.plain)
     
     }
