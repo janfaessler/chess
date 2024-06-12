@@ -50,7 +50,7 @@ public class MoveListModel : ObservableObject {
         updatePosition()
     }
     
-    func goToMove(_ move:MoveContainer) {
+    public func goToMove(_ move:MoveContainer) {
         currentMove = move
         history.removeAll()
         guard let index = moves.firstIndex(where: { $0.white == currentMove || $0.black == currentMove}) else {
@@ -82,7 +82,7 @@ public class MoveListModel : ObservableObject {
         return Pgn.loadPosition(notations)
     }
     
-    func isCurrentMove(_ container:MoveContainer) -> Bool {
+    public func isCurrentMove(_ container:MoveContainer?) -> Bool {
         currentMove == container
     }
     
@@ -137,14 +137,6 @@ public class MoveListModel : ObservableObject {
         self.currentMove = container
         parrentMoves[container.id] = lastMove
         history.append(container)
-    }
-    
-    private func addVariation(_ move: Move, toMove: inout MoveContainer) {
-        let cointainer = MoveContainer(move: move)
-        let variation = move.info()
-        toMove.variations[variation] = [cointainer]
-        self.currentMove = cointainer
-        parrentMoves[cointainer.id] = toMove
     }
     
     private func updateHistory() {
