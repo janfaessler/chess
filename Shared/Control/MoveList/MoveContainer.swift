@@ -1,10 +1,10 @@
 import Foundation
 
-class MoveContainer : Identifiable, Equatable {
-    let id: UUID = UUID()
-    let move: Move
-    var variations: [String:[MoveContainer]]
-    var note:String?
+public class MoveContainer : Identifiable, Equatable {
+    public let id: UUID = UUID()
+    public let move: Move
+    public var variations: [String:[MoveContainer]]
+    public var note:String?
     
     init(move: Move, variations: [String:[MoveContainer]] = [:], note: String? = nil) {
         self.move = move
@@ -12,7 +12,7 @@ class MoveContainer : Identifiable, Equatable {
         self.note = note
     }
 
-    func getVariation(_ ofMove:MoveContainer) -> String? {
+    public func getVariation(_ ofMove:MoveContainer) -> String? {
         for variation in variations {
             if variation.value.contains(where: { $0.id == ofMove.id}) {
                 return variation.key
@@ -21,7 +21,7 @@ class MoveContainer : Identifiable, Equatable {
         return nil
     }
     
-    static func == (lhs: MoveContainer, rhs: MoveContainer) -> Bool {
+    public static func == (lhs: MoveContainer, rhs: MoveContainer) -> Bool {
         lhs.id == rhs.id
     }
 }

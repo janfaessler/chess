@@ -11,8 +11,11 @@ public class MoveListModel : ObservableObject {
     private var history: [MoveContainer] = []
     private var parrentMoves:[UUID:MoveContainer] = [:]
     
-    @Published var moves:[RowContainer] = []
-    @Published var currentMove:MoveContainer?
+    @Published public var moves:[RowContainer] = []
+    @Published public var currentMove:MoveContainer?
+    
+    public init() {}
+    
     
     var moveCount:Int {
         let moveCount = Float(moves.count / 2)
@@ -21,27 +24,27 @@ public class MoveListModel : ObservableObject {
         return result
     }
     
-    func start() {
+    public func start() {
         history.removeAll()
         currentMove = nil
         updatePosition()
     }
     
-    func back() {
+    public func back() {
         guard history.isEmpty == false else { return }
         history.removeLast()
         self.currentMove = history.last
         updatePosition()
     }
     
-    func forward() {
+    public func forward() {
         guard let nextMove = getNextMove(currentMove) else { return }
         self.currentMove = nextMove
         updateHistory()
         updatePosition()
     }
     
-    func end() {
+    public func end() {
         currentMove = moves.last!.hasBlackMoved() ? moves.last!.black : moves.last!.white
         recreateTopLevelHistory()
         updatePosition()
@@ -63,7 +66,7 @@ public class MoveListModel : ObservableObject {
         updatePosition()
     }
     
-    func movePlayed(_ move:Move) {
+    public func movePlayed(_ move:Move) {
         let container = MoveContainer(move: move)
 
         if isTopLevelMove(container) {
