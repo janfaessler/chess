@@ -121,6 +121,28 @@ final class MoveListTests: XCTestCase {
         XCTAssertEqual(testee.currentMove?.move, moveBc5)
         testee.forward()
         XCTAssertEqual(testee.currentMove?.move, moveBc4)
+        
+        boardCache = try XCTUnwrap(Pgn.loadPosition(try XCTUnwrap(["e4", "e5", "Nc3", "Bc5", "Bc4"])))
+        let moveD6 = try XCTUnwrap(MoveFactory.create("d6", position: try XCTUnwrap(boardCache)))
+        testee.movePlayed(moveD6)
+        XCTAssertEqual(testee.currentMove?.move, moveD6)
+        XCTAssertEqual(testee.moves[1].white?.variations["Bc5"]?[0].moveNumber, 1)
+        XCTAssertEqual(testee.moves[1].white?.variations["Bc5"]?[0].black!.move, moveBc5)
+        XCTAssertEqual(testee.moves[1].white?.variations["Bc5"]?[1].moveNumber, 2)
+        XCTAssertEqual(testee.moves[1].white?.variations["Bc5"]?[1].white!.move, moveBc4)
+        XCTAssertEqual(testee.moves[1].white?.variations["Bc5"]?[1].black!.move, moveD6)
+        
+        boardCache = try XCTUnwrap(Pgn.loadPosition(try XCTUnwrap(["e4", "e5", "Nc3", "Bc5", "Bc4", "d6"])))
+        let moveD3 = try XCTUnwrap(MoveFactory.create("d3", position: try XCTUnwrap(boardCache)))
+        testee.movePlayed(moveD3)
+        XCTAssertEqual(testee.currentMove?.move, moveD3)
+        XCTAssertEqual(testee.moves[1].white?.variations["Bc5"]?[0].moveNumber, 1)
+        XCTAssertEqual(testee.moves[1].white?.variations["Bc5"]?[0].black!.move, moveBc5)
+        XCTAssertEqual(testee.moves[1].white?.variations["Bc5"]?[1].moveNumber, 2)
+        XCTAssertEqual(testee.moves[1].white?.variations["Bc5"]?[1].white!.move, moveBc4)
+        XCTAssertEqual(testee.moves[1].white?.variations["Bc5"]?[1].black!.move, moveD6)
+        XCTAssertEqual(testee.moves[1].white?.variations["Bc5"]?[2].moveNumber, 3)
+        XCTAssertEqual(testee.moves[1].white?.variations["Bc5"]?[2].white!.move, moveD3)
     }
     
     func testGoToMoveWithTwoVariations() throws {

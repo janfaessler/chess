@@ -223,8 +223,6 @@ public class MoveListModel : ObservableObject {
             }
 
             let nextIndex = moves.index(after: index)
-            guard nextIndex < moves.count else { return nil }
-
             return moves[nextIndex].white
         }
         guard let parentMove = parrentMoves[fromContainer.id] else { return nil }
@@ -241,10 +239,6 @@ public class MoveListModel : ObservableObject {
         let nextMoveIndex = inVariation.index(after: rowIndex)
         guard inVariation.count > nextMoveIndex else { return  nil}
         return inVariation[nextMoveIndex].white
-    }
-    
-    private func getIndex(_ container:MoveContainer, inVariation: [MoveContainer]) -> Int? {
-        return inVariation.firstIndex(where: { $0.id == container.id})
     }
     
     private func updatePosition()  {
