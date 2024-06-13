@@ -17,14 +17,14 @@ struct MoveListView: View {
                             
                             if row.hasWhiteVariations() {
                                 GridRow {
-                                    VariationView(move: row.white)
+                                    VariationView(model: model, move: row.white!)
                                 }.gridCellColumns(3)
                             }
                            
                             if row.hasBlackVariations() {
                                 GridRow {
-                                    VariationView(move: row.black!)
-                                }
+                                    VariationView(model: model, move: row.black!)
+                                }.gridCellColumns(3)
                             }
                         }
                     }

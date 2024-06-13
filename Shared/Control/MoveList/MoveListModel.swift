@@ -58,7 +58,9 @@ public class MoveListModel : ObservableObject {
             return
         }
         for row in moves[moves.startIndex...index] {
-            history.append(row.white)
+            if row.hasWhiteMoved() {
+                history.append(row.white!)
+            }
             if row.hasBlackMoved() && currentMove != row.white{
                 history.append(row.black!)
             }
@@ -115,16 +117,37 @@ public class MoveListModel : ObservableObject {
         guard let lastMove = currentMove else { return }
         let parentMove = parrentMoves[lastMove.id]
         
-        let moveInVariation = parentMove?.variations.keys.first(where: { $0 == lastMove.move.info() })
+        let moveInVariation = parentMove?.getVariation(lastMove)
+        
         
         if moveInVariation == nil {
-            lastMove.variations[container.move.info()] = [container]
+            var rowContainer:RowContainer
+            if lastMove.move.piece.getColor() == .black {
+                rowContainer = RowContainer(moveNumber: 1, white: container)
+            } else {
+                rowContainer = RowContainer(moveNumber: 1, black: container)
+            }
+
+            lastMove.variations[container.move.info()] = [rowContainer]
+            parrentMoves[container.id] = lastMove
         } else {
-            parentMove!.variations[moveInVariation!]?.append(container)
+            var rowContainer:RowContainer
+            let rowNumber = (parentMove!.variations[moveInVariation!]?.count ?? 1) + 1
+            if lastMove.move.piece.getColor() == .black {
+                rowContainer = RowContainer(moveNumber: rowNumber, white: container)
+                parentMove!.variations[moveInVariation!]?.append(rowContainer)
+            } else {
+                if parentMove!.variations[moveInVariation!]!.last?.black == nil {
+                    parentMove!.variations[moveInVariation!]!.last!.black = container
+                } else {
+                    rowContainer = RowContainer(moveNumber: rowNumber, black: container)
+                    parentMove!.variations[moveInVariation!]?.append(rowContainer)
+                }
+            }
+            parrentMoves[container.id] = parrentMoves[lastMove.id]
         }
         
         self.currentMove = container
-        parrentMoves[container.id] = lastMove
         history.append(container)
     }
     
@@ -136,7 +159,9 @@ public class MoveListModel : ObservableObject {
     private func recreateTopLevelHistory() {
         history.removeAll()
         for row in moves {
-            history.append(row.white)
+            if row.hasWhiteMoved() {
+                history.append(row.white!)
+            }
             if row.hasBlackMoved() && currentMove != row.white {
                 history.append(row.black!)
             }
@@ -153,9 +178,14 @@ public class MoveListModel : ObservableObject {
             guard let parrentMove = parrentMoves[currentMove.id] else { return }
             guard let variationName = parrentMove.getVariation(currentMove) else { return }
             guard let variation = parrentMove.variations[variationName] else { return }
-            guard let moveIndex = variation.firstIndex(of: currentMove) else { return }
-            for move in variation[variation.startIndex...moveIndex].reversed() {
-                reverseHistory.append(move)
+            guard let rowIndex = variation.firstIndex(where: { $0.white == currentMove || $0.black == currentMove }) else { return }
+            for row in variation[variation.startIndex...rowIndex].reversed() {
+                if row.hasBlackMoved() {
+                    reverseHistory.append(row.black!)
+                }
+                if row.hasWhiteMoved() {
+                    reverseHistory.append(row.white!)
+                }
             }
             currentMove = parrentMove
         }
@@ -164,7 +194,9 @@ public class MoveListModel : ObservableObject {
             if row.hasBlackMoved() {
                 reverseHistory.append(row.black!)
             }
-            reverseHistory.append(row.white)
+            if row.hasWhiteMoved() {
+                reverseHistory.append(row.white!)
+            }
         }
         
         history.append(contentsOf: reverseHistory.reversed())
@@ -175,7 +207,7 @@ public class MoveListModel : ObservableObject {
             return moves.first?.white
         }
         if !parrentMoves.contains(where: { $0.key == fromContainer.id}) {
-            guard let index = moves.firstIndex(where: { $0.white.id == fromContainer.id || $0.black?.id == fromContainer.id }) else { return nil }
+            guard let index = moves.firstIndex(where: { $0.white?.id == fromContainer.id || $0.black?.id == fromContainer.id }) else { return nil }
     
             guard fromContainer == moves[index].black else {
                 return moves[index].black
@@ -191,12 +223,15 @@ public class MoveListModel : ObservableObject {
         return getNextMove(fromContainer, inVariation: parentMove.variations[variation]!)
     }
         
-    private func getNextMove(_ fromContainer:MoveContainer?, inVariation:[MoveContainer]) -> MoveContainer? {
+    private func getNextMove(_ fromContainer:MoveContainer?, inVariation:[RowContainer]) -> MoveContainer? {
         guard let fromContainer = fromContainer else { return nil }
-        guard let moveIndex = inVariation.firstIndex(where: { $0.id == fromContainer.id}) else { return nil }
-        let nextMoveIndex = inVariation.index(after: moveIndex)
+        guard let rowIndex = inVariation.firstIndex(where: { $0.white == fromContainer || $0.black == fromContainer}) else { return nil }
+        guard fromContainer != inVariation[rowIndex].white else {
+            return inVariation[rowIndex].black
+        }
+        let nextMoveIndex = inVariation.index(after: rowIndex)
         guard inVariation.count > nextMoveIndex else { return  nil}
-        return inVariation[nextMoveIndex]
+        return inVariation[nextMoveIndex].white
     }
     
     private func getIndex(_ container:MoveContainer, inVariation: [MoveContainer]) -> Int? {

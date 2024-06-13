@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct VariationView: View {
+    @ObservedObject var model:MoveListModel
     @ObservedObject var move:MoveContainer
     
     var body: some View {
@@ -18,7 +19,7 @@ struct VariationView: View {
     func getVariations(_ container:MoveContainer?) -> [String] {
         var variations:[String] = []
         for v in container!.variations.values {
-            variations.append(Array(v).map({ $0.move.info() }).joined(separator: ","))
+            variations.append(Array(v).map({ "\($0.moveNumber) \($0.white?.move.info() ?? "..."),\($0.black?.move.info() ?? "")"  }).joined(separator: " "))
         }
         return variations
     }

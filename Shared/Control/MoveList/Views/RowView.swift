@@ -6,8 +6,8 @@ struct RowView: View {
     
     var body: some View {
         Text("\(row.moveNumber).")
-        MoveView(model: model, move: row.white) {
-            model.goToMove(row.white)
+        MoveView(model: model, move: row.white!) {
+            model.goToMove(row.white!)
         }
         if row.hasBlackMoved() {
             MoveView(model: model, move: row.black!) {

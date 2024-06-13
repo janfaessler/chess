@@ -3,10 +3,10 @@ import Foundation
 public class MoveContainer : Identifiable, Equatable, ObservableObject {
     public let id: UUID = UUID()
     public let move: Move
-    @Published public var variations: [String:[MoveContainer]]
-    public var note:String?
+    @Published public var variations: [String:[RowContainer]]
+    @Published public var note:String?
     
-    init(move: Move, variations: [String:[MoveContainer]] = [:], note: String? = nil) {
+    init(move: Move, variations: [String:[RowContainer]] = [:], note: String? = nil) {
         self.move = move
         self.variations = variations
         self.note = note
@@ -14,7 +14,7 @@ public class MoveContainer : Identifiable, Equatable, ObservableObject {
 
     public func getVariation(_ ofMove:MoveContainer) -> String? {
         for variation in variations {
-            if variation.value.contains(where: { $0.id == ofMove.id}) {
+            if variation.value.contains(where: { $0.white?.id == ofMove.id || $0.black?.id == ofMove.id }) {
                 return variation.key
             }
         }
