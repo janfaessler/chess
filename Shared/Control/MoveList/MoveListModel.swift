@@ -68,8 +68,9 @@ public class MoveListModel : ObservableObject {
     
     public func movePlayed(_ move:Move) {
         let container = MoveContainer(move: move)
+        let blackHasLastTopLevelMove = moves.last?.black != nil
 
-        if isTopLevelMove(container) {
+        if (blackHasLastTopLevelMove && currentMove == moves.last?.black) || (!blackHasLastTopLevelMove && moves.last?.white == currentMove) {
             addTopLevelMove(container)
         } else {
             addVariationMove(container)
@@ -92,18 +93,6 @@ public class MoveListModel : ObservableObject {
     
     func addPositionChangeListener(_ listener:@escaping PositionChangeNotification) {
         positionChangeNotification += [listener]
-    }
-    
-    private func isTopLevelMove(_ container:MoveContainer?) -> Bool {
-        guard !moves.isEmpty else { return true }
-        guard let container = container else { return true }
-        
-        if moves.contains(where: { $0.white.id == container.id || $0.black?.id == container.id}) {
-            return true
-        }
-        let currentContainer = moves.first(where: { $0.white == currentMove || $0.black == currentMove})
-
-        return currentContainer == moves.last
     }
     
     private func addTopLevelMove(_ container: MoveContainer) {
@@ -185,7 +174,7 @@ public class MoveListModel : ObservableObject {
         guard let fromContainer = fromContainer else {
             return moves.first?.white
         }
-        if isTopLevelMove(fromContainer) {
+        if !parrentMoves.contains(where: { $0.key == fromContainer.id}) {
             guard let index = moves.firstIndex(where: { $0.white.id == fromContainer.id || $0.black?.id == fromContainer.id }) else { return nil }
     
             guard fromContainer == moves[index].black else {

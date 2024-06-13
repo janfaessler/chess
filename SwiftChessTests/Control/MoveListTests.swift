@@ -38,7 +38,7 @@ final class MoveListTests: XCTestCase {
         XCTAssertNil(testee.currentMove)
     }
     
-    func testMoveVariation() throws {
+    func testMoveVariationOnBlack() throws {
         let testMoves = ["e4", "e5", "Nc3", "Nc6"]
         
         for move in testMoves {
@@ -51,6 +51,7 @@ final class MoveListTests: XCTestCase {
         testee.back()
         XCTAssertEqual(testee.currentMove?.move.info(), "e5")
         
+        boardCache = try XCTUnwrap(Pgn.loadPosition(try XCTUnwrap(["e4", "e5"])))
         let moveBc4 = try XCTUnwrap(MoveFactory.create("Bc4", position: try XCTUnwrap(boardCache)))
         testee.movePlayed(moveBc4)
         XCTAssertEqual(testee.currentMove?.move.info(), "Bc4")
@@ -65,9 +66,40 @@ final class MoveListTests: XCTestCase {
         XCTAssertEqual(testee.moves[0].black?.variations["Bc4"]?[1].move, moveBc5)
 
         testee.back()
-        XCTAssertEqual(testee.currentMove?.move.info(), "Bc4")
+        XCTAssertEqual(testee.currentMove?.move, moveBc4)
         testee.forward()
-        XCTAssertEqual(testee.currentMove?.move.info(), "Bc5")
+        XCTAssertEqual(testee.currentMove?.move, moveBc5)
+    }
+    
+    func testMoveVariationOnWhite() throws {
+        let testMoves = ["e4", "e5", "Nc3", "Nc6"]
+        
+        for move in testMoves {
+            try playAndAssertMove(move)
+        }
+        
+        let testee = try XCTUnwrap(testee)
+        testee.back()
+        XCTAssertEqual(testee.currentMove?.move.info(), "Nc3")
+        
+        boardCache = try XCTUnwrap(Pgn.loadPosition(try XCTUnwrap(["e4", "e5", "Nc3"])))
+        let moveBc5 = try XCTUnwrap(MoveFactory.create("Bc5", position: try XCTUnwrap(boardCache)))
+        testee.movePlayed(moveBc5)
+        XCTAssertEqual(testee.currentMove?.move, moveBc5)
+        XCTAssertEqual(testee.moves[1].white.variations["Bc5"]?[0].move, moveBc5)
+
+        
+        boardCache = try XCTUnwrap(Pgn.loadPosition(try XCTUnwrap(["e4", "e5", "Nc3", "Bc5"])))
+        let moveBc4 = try XCTUnwrap(MoveFactory.create("Bc4", position: try XCTUnwrap(boardCache)))
+        testee.movePlayed(moveBc4)
+        XCTAssertEqual(testee.currentMove?.move, moveBc4)
+        XCTAssertEqual(testee.moves[1].white.variations["Bc5"]?[0].move, moveBc5)
+        XCTAssertEqual(testee.moves[1].white.variations["Bc5"]?[1].move, moveBc4)
+
+        testee.back()
+        XCTAssertEqual(testee.currentMove?.move, moveBc5)
+        testee.forward()
+        XCTAssertEqual(testee.currentMove?.move, moveBc4)
     }
     
     func testGoToMoveWithTwoVariations() throws {

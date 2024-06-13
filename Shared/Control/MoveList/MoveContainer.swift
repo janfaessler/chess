@@ -1,9 +1,9 @@
 import Foundation
 
-public class MoveContainer : Identifiable, Equatable {
+public class MoveContainer : Identifiable, Equatable, ObservableObject {
     public let id: UUID = UUID()
     public let move: Move
-    public var variations: [String:[MoveContainer]]
+    @Published public var variations: [String:[MoveContainer]]
     public var note:String?
     
     init(move: Move, variations: [String:[MoveContainer]] = [:], note: String? = nil) {

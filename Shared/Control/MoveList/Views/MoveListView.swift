@@ -12,34 +12,18 @@ struct MoveListView: View {
                     if model.moveCount > 0 {
                         ForEach(model.moves, id: \.moveNumber) { row in
                             GridRow {
-                                Text("\(row.moveNumber).")
-                                MoveView(model: model, move: row.white) {
-                                    model.goToMove(row.white)
-                                }
-                                if row.hasBlackMoved() {
-                                    MoveView(model: model, move: row.black!) {
-                                        model.goToMove(row.black!)
-                                    }
-                                } else {
-                                    Rectangle()
-                                        .frame(maxWidth: .infinity)
-                                        .foregroundColor(.clear)
-                                }
+                                RowView(model: model, row: row)
                             }
                             
-                            if hasVariations(row.white) {
-                                ForEach(getVariations(row.white), id: \.self) { variation in
-                                    GridRow {
-                                        Text(variation)
-                                    }.gridCellColumns(3)
-                                }
+                            if row.hasWhiteVariations() {
+                                GridRow {
+                                    VariationView(move: row.white)
+                                }.gridCellColumns(3)
                             }
-                            
-                            if hasVariations(row.black) {
-                                ForEach(getVariations(row.black), id: \.self) { variation in
-                                    GridRow {
-                                        Text(variation)
-                                    }.gridCellColumns(3)
+                           
+                            if row.hasBlackVariations() {
+                                GridRow {
+                                    VariationView(move: row.black!)
                                 }
                             }
                         }
@@ -57,15 +41,5 @@ struct MoveListView: View {
         }
     }
     
-    func hasVariations(_ container:MoveContainer?) -> Bool {
-        container?.variations.count ?? 0 > 0
-    }
-    
-    func getVariations(_ container:MoveContainer?) -> [String] {
-        var variations:[String] = []
-        for v in container!.variations.values {
-            variations.append(Array(v).map({ $0.move.info() }).joined(separator: ","))
-        }
-        return variations
-    }
+
 }
