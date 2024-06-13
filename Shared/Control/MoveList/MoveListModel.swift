@@ -116,39 +116,48 @@ public class MoveListModel : ObservableObject {
     private func addVariationMove(_ container:MoveContainer) {
         guard let lastMove = currentMove else { return }
         let parentMove = parrentMoves[lastMove.id]
-        
         let moveInVariation = parentMove?.getVariation(lastMove)
-        
-        
         if moveInVariation == nil {
-            var rowContainer:RowContainer
-            if lastMove.move.piece.getColor() == .black {
-                rowContainer = RowContainer(moveNumber: 1, white: container)
-            } else {
-                rowContainer = RowContainer(moveNumber: 1, black: container)
-            }
-
-            lastMove.variations[container.move.info()] = [rowContainer]
-            parrentMoves[container.id] = lastMove
+            addNewVariation(container, to: lastMove)
         } else {
-            var rowContainer:RowContainer
-            let rowNumber = (parentMove!.variations[moveInVariation!]?.count ?? 1) + 1
-            if lastMove.move.piece.getColor() == .black {
-                rowContainer = RowContainer(moveNumber: rowNumber, white: container)
-                parentMove!.variations[moveInVariation!]?.append(rowContainer)
-            } else {
-                if parentMove!.variations[moveInVariation!]!.last?.black == nil {
-                    parentMove!.variations[moveInVariation!]!.last!.black = container
-                } else {
-                    rowContainer = RowContainer(moveNumber: rowNumber, black: container)
-                    parentMove!.variations[moveInVariation!]?.append(rowContainer)
-                }
-            }
-            parrentMoves[container.id] = parrentMoves[lastMove.id]
+            appendVariation(container, to: parentMove!, variation: moveInVariation!, lastMove: lastMove)
         }
         
         self.currentMove = container
         history.append(container)
+    }
+    
+    private func createRowContainer(_ container: MoveContainer, moveNumber:Int = 1) -> RowContainer {
+        var rowContainer:RowContainer
+        if container.move.piece.getColor() == .white {
+            rowContainer = RowContainer(moveNumber: moveNumber, white: container)
+        } else {
+            rowContainer = RowContainer(moveNumber: moveNumber, black: container)
+        }
+        return rowContainer
+    }
+    
+    private func appendVariation(_ container: MoveContainer, to: MoveContainer, variation: String, lastMove: MoveContainer) {
+        let rowNumber = (to.variations[variation]?.count ?? 1) + 1
+        if container.move.piece.getColor() == .white {
+            let rowContainer = createRowContainer(container, moveNumber: rowNumber)
+            to.variations[variation]?.append(rowContainer)
+        } else {
+            if to.variations[variation]!.last?.black == nil {
+                to.variations[variation]!.last!.black = container
+            } else {
+                let rowContainer = createRowContainer(container, moveNumber: rowNumber)
+                to.variations[variation]?.append(rowContainer)
+            }
+        }
+        parrentMoves[container.id] = to
+    }
+    
+    private func addNewVariation( _ container: MoveContainer, to: MoveContainer) {
+        let rowContainer = createRowContainer(container)
+        
+        to.variations[container.move.info()] = [rowContainer]
+        parrentMoves[container.id] = to
     }
     
     private func updateHistory() {
