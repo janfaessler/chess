@@ -38,8 +38,6 @@ final class MoveListTests: XCTestCase {
         XCTAssertNil(testee.currentMove)
     }
     
-
-    
     func testMoveVariationOnBlack() throws {
         let testMoves = ["e4", "e5", "Nc3", "Nc6"]
         
@@ -73,12 +71,14 @@ final class MoveListTests: XCTestCase {
         let moveD6 = try createMove("d6", previousMoves: ["e4", "e5", "Bc4", "Bc5", "d3"])
         testee.movePlayed(moveD6)
         XCTAssertEqual(testee.currentMove?.move, moveD6)
-        XCTAssertEqual(testee.moves[0].black?.variations["Bc4"]?[0].moveNumber, 1)
-        XCTAssertEqual(testee.moves[0].black?.variations["Bc4"]?[0].white!.move, moveBc4)
-        XCTAssertEqual(testee.moves[0].black?.variations["Bc4"]?[0].black!.move, moveBc5)
-        XCTAssertEqual(testee.moves[0].black?.variations["Bc4"]?[1].moveNumber, 2)
-        XCTAssertEqual(testee.moves[0].black?.variations["Bc4"]?[1].white!.move, moveD3)
-        XCTAssertEqual(testee.moves[0].black?.variations["Bc4"]?[1].black!.move, moveD6)
+        
+        let variation = testee.moves[0].black?.variations["Bc4"]
+        XCTAssertEqual(variation?[0].moveNumber, 1)
+        XCTAssertEqual(variation?[0].white!.move, moveBc4)
+        XCTAssertEqual(variation?[0].black!.move, moveBc5)
+        XCTAssertEqual(variation?[1].moveNumber, 2)
+        XCTAssertEqual(variation?[1].white!.move, moveD3)
+        XCTAssertEqual(variation?[1].black!.move, moveD6)
     }
     
     func testMoveVariationOnWhite() throws {
@@ -113,13 +113,14 @@ final class MoveListTests: XCTestCase {
         testee.movePlayed(moveD3)
         XCTAssertEqual(testee.currentMove?.move, moveD3)
         
-        XCTAssertEqual(testee.moves[1].white?.variations["Bc5"]?[0].moveNumber, 1)
-        XCTAssertEqual(testee.moves[1].white?.variations["Bc5"]?[0].black!.move, moveBc5)
-        XCTAssertEqual(testee.moves[1].white?.variations["Bc5"]?[1].moveNumber, 2)
-        XCTAssertEqual(testee.moves[1].white?.variations["Bc5"]?[1].white!.move, moveBc4)
-        XCTAssertEqual(testee.moves[1].white?.variations["Bc5"]?[1].black!.move, moveD6)
-        XCTAssertEqual(testee.moves[1].white?.variations["Bc5"]?[2].moveNumber, 3)
-        XCTAssertEqual(testee.moves[1].white?.variations["Bc5"]?[2].white!.move, moveD3)
+        let variation = testee.moves[1].white?.variations["Bc5"]
+        XCTAssertEqual(variation?[0].moveNumber, 1)
+        XCTAssertEqual(variation?[0].black!.move, moveBc5)
+        XCTAssertEqual(variation?[1].moveNumber, 2)
+        XCTAssertEqual(variation?[1].white!.move, moveBc4)
+        XCTAssertEqual(variation?[1].black!.move, moveD6)
+        XCTAssertEqual(variation?[2].moveNumber, 3)
+        XCTAssertEqual(variation?[2].white!.move, moveD3)
     }
     
     func testGoToMoveWithTwoVariations() throws {
@@ -155,11 +156,13 @@ final class MoveListTests: XCTestCase {
         testee.goToMove(try XCTUnwrap(testee.moves[0].black?.variations["Bc4"]?[0].white))
         XCTAssertEqual(testee.currentMove?.move, moveBc4)
         
+        let variationD3 = testee.moves[0].black?.variations["d3"]
+        XCTAssertEqual(variationD3?[0].white!.move, moveD3)
+        XCTAssertEqual(variationD3?[0].black!.move, moveD6)
         
-        XCTAssertEqual(testee.moves[0].black?.variations["d3"]?[0].white!.move, moveD3)
-        XCTAssertEqual(testee.moves[0].black?.variations["d3"]?[0].black!.move, moveD6)
-        XCTAssertEqual(testee.moves[0].black?.variations["Bc4"]?[0].white!.move, moveBc4)
-        XCTAssertEqual(testee.moves[0].black?.variations["Bc4"]?[0].black!.move, moveBc5)
+        let variationBc4 = testee.moves[0].black?.variations["Bc4"]
+        XCTAssertEqual(variationBc4?[0].white!.move, moveBc4)
+        XCTAssertEqual(variationBc4?[0].black!.move, moveBc5)
 
     }
     
