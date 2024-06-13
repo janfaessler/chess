@@ -6,8 +6,10 @@ struct VariationView: View {
     
     var body: some View {
         if hasVariations(move) {
-            ForEach(getVariations(move), id: \.self) { variation in
-                Text(variation)
+            VStack {
+                ForEach(getVariations(move), id: \.self) { variation in
+                    Text(variation)
+                }
             }
         }   
     }
