@@ -1,5 +1,5 @@
 {
-  "originHash" : "f268eed68259bbd9c684419ecebe8d3905775f8cdb14e48c54d864954913ec33",
+  "originHash" : "f39dcf5bd61e1586c3b287bbaf6c28123be79a6031a38bc7eadd72efb7eee282",
   "pins" : [
     {
       "identity" : "chesskit-engine",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "24f9364de45c35a9ff1e702f58ffd84e76dd1ba1",
         "version" : "0.3.0"
+      }
+    },
+    {
+      "identity" : "wrappinghstack",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/dkk/WrappingHStack",
+      "state" : {
+        "revision" : "425d9488ba55f58f0b34498c64c054c77fc2a44b",
+        "version" : "2.2.11"
       }
     }
   ],

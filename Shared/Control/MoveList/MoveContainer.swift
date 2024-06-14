@@ -21,6 +21,14 @@ public class MoveContainer : Identifiable, Equatable, ObservableObject {
         return nil
     }
     
+    public func hasVariations() -> Bool {
+       variations.count > 0
+    }
+    
+    public func getVariations() -> [String] {
+        variations.keys.map({ $0 })
+    }
+    
     public static func == (lhs: MoveContainer, rhs: MoveContainer) -> Bool {
         lhs.id == rhs.id
     }
