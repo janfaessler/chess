@@ -54,6 +54,7 @@ public class MoveListModel : ObservableObject {
         history.removeAll()
         guard let index = moves.firstIndex(where: { $0.white == currentMove || $0.black == currentMove}) else {
             recreateVariationHistory()
+            updatePosition()
             return
         }
         for row in moves[moves.startIndex...index] {
@@ -215,7 +216,7 @@ public class MoveListModel : ObservableObject {
             guard let variation = parrentMove.variations[variationName] else { return }
             guard let rowIndex = variation.firstIndex(where: { $0.white == currentMove || $0.black == currentMove }) else { return }
             for row in variation[variation.startIndex...rowIndex].reversed() {
-                if row.hasBlackMoved() {
+                if row.hasBlackMoved() && row.white != currentMove {
                     reverseHistory.append(row.black!)
                 }
                 if row.hasWhiteMoved() {
@@ -226,7 +227,7 @@ public class MoveListModel : ObservableObject {
         }
         guard let topLevelIndex = moves.firstIndex(where: { $0.white == currentMove || $0.black == currentMove }) else { return }
         for row in moves[moves.startIndex...topLevelIndex].reversed() {
-            if row.hasBlackMoved() {
+            if row.hasBlackMoved() && row.white != currentMove {
                 reverseHistory.append(row.black!)
             }
             if row.hasWhiteMoved() {
