@@ -11,7 +11,7 @@ struct MoveView: View {
         Button {
             action()
         } label: {
-            Text(model.getMoveDescription(move))
+            Text(move.move.info())
                 .fontWeight(model.isCurrentMove(move) ? .bold : .regular)
                 .padding(3)
                 .frame(maxWidth: .infinity)

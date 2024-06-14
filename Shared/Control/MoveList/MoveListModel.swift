@@ -16,7 +16,6 @@ public class MoveListModel : ObservableObject {
     
     public init() {}
     
-    
     var moveCount:Int {
         let moveCount = Float(moves.count / 2)
         let roundedCount = moveCount.rounded(.up)
@@ -71,6 +70,12 @@ public class MoveListModel : ObservableObject {
     public func movePlayed(_ move:Move) {
         let container = MoveContainer(move: move)
         let blackHasLastTopLevelMove = moves.last?.black != nil
+        
+        let nextMove = getNextMove(currentMove)
+        if move == nextMove?.move {
+            replayMove(nextMove!)
+            return
+        }
 
         if (blackHasLastTopLevelMove && currentMove == moves.last?.black) || (!blackHasLastTopLevelMove && moves.last?.white == currentMove) {
             addTopLevelMove(container)
@@ -89,12 +94,13 @@ public class MoveListModel : ObservableObject {
         currentMove == container
     }
     
-    func getMoveDescription(_ container:MoveContainer) -> String {
-        return container.move.info()
-    }
-    
     func addPositionChangeListener(_ listener:@escaping PositionChangeNotification) {
         positionChangeNotification += [listener]
+    }
+    
+    private func replayMove(_ nextMove: MoveContainer) {
+        currentMove = nextMove
+        history.append(nextMove)
     }
     
     private func addTopLevelMove(_ container: MoveContainer) {
@@ -117,7 +123,7 @@ public class MoveListModel : ObservableObject {
         guard let lastMove = currentMove else { return }
         let parentMove = parrentMoves[lastMove.id]
         let moveInVariation = parentMove?.getVariation(lastMove)
-        if moveInVariation == nil {
+        if  shouldCreateNewVariation(container) {
             addNewVariation(container, to: lastMove)
         } else {
             appendVariation(container, to: parentMove!, variation: moveInVariation!, lastMove: lastMove)
@@ -125,6 +131,31 @@ public class MoveListModel : ObservableObject {
         
         self.currentMove = container
         history.append(container)
+    }
+    
+    private func shouldCreateNewVariation(_ container:MoveContainer) -> Bool {
+        guard let lastMove = currentMove,
+              let parentMove = parrentMoves[lastMove.id],
+              let lastMoveVariation = parentMove.getVariation(lastMove),
+              let variation = parentMove.variations[lastMoveVariation],
+              container.move.piece.getColor() != lastMove.move.piece.getColor(),
+              let rowIndexInVariation = variation.firstIndex(where: { $0.white == lastMove || $0.black == lastMove })
+        else { return true }
+        
+        
+        let rowContainer = variation[rowIndexInVariation]
+        
+        if lastMove == rowContainer.white {
+            return rowContainer.hasBlackMoved()
+        }
+        
+        if rowIndexInVariation + 1 == variation.endIndex {
+            return false
+        }
+        
+        let nextRowIndexInVariation = variation.index(after: rowIndexInVariation)
+        let nextRow = variation[nextRowIndexInVariation]
+        return nextRow.white?.move.info() != currentMove?.move.info()
     }
     
     private func createRowContainer(_ container: MoveContainer, moveNumber:Int = 1) -> RowContainer {
@@ -143,12 +174,7 @@ public class MoveListModel : ObservableObject {
             let rowContainer = createRowContainer(container, moveNumber: rowNumber)
             to.variations[variation]?.append(rowContainer)
         } else {
-            if to.variations[variation]!.last?.black == nil {
-                to.variations[variation]!.last!.black = container
-            } else {
-                let rowContainer = createRowContainer(container, moveNumber: rowNumber)
-                to.variations[variation]?.append(rowContainer)
-            }
+            to.variations[variation]!.last!.black = container
         }
         parrentMoves[container.id] = to
     }
@@ -223,6 +249,7 @@ public class MoveListModel : ObservableObject {
             }
 
             let nextIndex = moves.index(after: index)
+            if nextIndex == moves.count { return nil }
             return moves[nextIndex].white
         }
         guard let parentMove = parrentMoves[fromContainer.id] else { return nil }
