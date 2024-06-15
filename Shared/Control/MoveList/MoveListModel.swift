@@ -61,7 +61,7 @@ public class MoveListModel : ObservableObject {
             if row.hasWhiteMoved() {
                 history.append(row.white!)
             }
-            if row.hasBlackMoved() && currentMove != row.white{
+            if row.hasBlackMoved() && currentMove != row.white {
                 history.append(row.black!)
             }
         }

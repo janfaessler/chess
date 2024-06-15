@@ -19,7 +19,6 @@ struct VariationView: View {
                         VariationMoveView(model: model, move: row.black!)
                     }
                 }
-                
             }
         }
     }

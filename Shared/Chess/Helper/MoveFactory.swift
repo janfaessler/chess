@@ -125,6 +125,7 @@ public class MoveFactory {
         return promotionParts.first!
     }
     private static func getField(_ input:any StringProtocol) -> (any StringProtocol)? {
+        let input = String(input).replacing(checkIndicator, with: "")
         let captureParts = input.split(separator: captureSeparator)
         let promotionParts = captureParts.last?.split(separator: promotionSeparator)
         return promotionParts?.first

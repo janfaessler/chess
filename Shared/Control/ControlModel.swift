@@ -18,6 +18,28 @@ public class ControlModel : ObservableObject {
         engine.addEvalListener(updateEval)
         board.addMoveListener(movePlayed)
         moves.addPositionChangeListener(positionChange)
+        loadPgnPosition()
+    }
+    
+    private func loadPgnPosition() {
+        if let filepath = Bundle.main.path(forResource: "carlsen-magnus_vs_caruana-fabiano_07-jun-2024", ofType: "pgn") {
+            do {
+                let contents = try String(contentsOfFile: filepath)
+                let moves = Pgn.loadMoves(contents)
+                for move in moves {
+                    movePlayed(move)
+                }
+                logger.info("\(contents)")
+            } catch {
+                logger.info("contents could not be loaded")
+
+                // contents could not be loaded
+            }
+        } else {
+            // example.txt not found!
+            logger.info("not found!")
+
+        }
     }
     
     var moveListColumns:[GridItem] {

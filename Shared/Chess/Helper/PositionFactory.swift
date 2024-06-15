@@ -35,12 +35,16 @@ public class PositionFactory {
     
     private static func canCastle(afterMove:Move, color:PieceColor, rookStartingFile:Int, capturedPiece:(any ChessFigure)?, oldPosition:Position) -> Bool {
     
+        let oldState = getOldCastlingState(oldPosition, color: color, rookStartingFile: rookStartingFile)
+        
+        if oldState == false { return false }
+        
         if afterMove.piece.getColor() == color && afterMove.piece.getType() == .king {
             return false
         }
         
         if afterMove.piece.getColor() == color && afterMove.piece.getType() == .rook {
-            return afterMove.piece.getFile() != rookStartingFile
+            return afterMove.piece.getFile() != rookStartingFile && getOldCastlingState(oldPosition, color: color, rookStartingFile: rookStartingFile)
         }
         
         if color == .white {
@@ -55,7 +59,7 @@ public class PositionFactory {
             }
         }
         
-        return getOldCastlingState(oldPosition, color: color, rookStartingFile: rookStartingFile)
+        return oldState
 
     }
     

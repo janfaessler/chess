@@ -15,6 +15,7 @@
 		614FFC6B277780130082F892 /* MoveIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC69277780130082F892 /* MoveIndicatorView.swift */; };
 		614FFC6E277786560082F892 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC6C277786560082F892 /* Move.swift */; };
 		6157321D2BA5F21E0048EDDF /* Pgn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6157321B2BA5F21E0048EDDF /* Pgn.swift */; };
+		615FD1E52C1D8FD10013FF77 /* carlsen-magnus_vs_caruana-fabiano_07-jun-2024.pgn in Resources */ = {isa = PBXBuildFile; fileRef = 615FD1E42C1D8FD10013FF77 /* carlsen-magnus_vs_caruana-fabiano_07-jun-2024.pgn */; };
 		616D3E482BA464D8002D78EE /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E462BA464D8002D78EE /* GameState.swift */; };
 		6177238E274284FF00169D3D /* SwiftChessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61772362274284FE00169D3D /* SwiftChessApp.swift */; };
 		61772390274284FF00169D3D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61772363274284FE00169D3D /* ContentView.swift */; };
@@ -39,6 +40,8 @@
 		619375E52BDE7873005A616D /* NotationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E422BA352BF002D78EE /* NotationTests.swift */; };
 		619375E62BDE7873005A616D /* GameStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E492BA46683002D78EE /* GameStateTests.swift */; };
 		619375E72BDE7873005A616D /* FenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6157321E2BA65BC50048EDDF /* FenTests.swift */; };
+		619B657F2C1DF59D00C44FC9 /* PgnMove.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619B657E2C1DF59D00C44FC9 /* PgnMove.swift */; };
+		619B65812C1DF68000C44FC9 /* PgnRegex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619B65802C1DF68000C44FC9 /* PgnRegex.swift */; };
 		61A919252BA1F83E00AD371E /* MoveFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A919232BA1F83E00AD371E /* MoveFactory.swift */; };
 		61B0B43C2B94F5F20085DB48 /* Pawn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B43A2B94F5F20085DB48 /* Pawn.swift */; };
 		61B0B43F2B94F80F0085DB48 /* Bishop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B43D2B94F80F0085DB48 /* Bishop.swift */; };
@@ -92,6 +95,7 @@
 		614FFC6C277786560082F892 /* Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
 		6157321B2BA5F21E0048EDDF /* Pgn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pgn.swift; sourceTree = "<group>"; };
 		6157321E2BA65BC50048EDDF /* FenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FenTests.swift; sourceTree = "<group>"; };
+		615FD1E42C1D8FD10013FF77 /* carlsen-magnus_vs_caruana-fabiano_07-jun-2024.pgn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "carlsen-magnus_vs_caruana-fabiano_07-jun-2024.pgn"; sourceTree = "<group>"; };
 		616D3E402BA35241002D78EE /* PositionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionTests.swift; sourceTree = "<group>"; };
 		616D3E422BA352BF002D78EE /* NotationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotationTests.swift; sourceTree = "<group>"; };
 		616D3E462BA464D8002D78EE /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
@@ -114,6 +118,8 @@
 		618D83C32BC17E0100583944 /* MoveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveView.swift; sourceTree = "<group>"; };
 		618D83CA2BC18C9900583944 /* ControlModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlModel.swift; sourceTree = "<group>"; };
 		619375D72BDE783D005A616D /* SwiftChessTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftChessTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		619B657E2C1DF59D00C44FC9 /* PgnMove.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PgnMove.swift; sourceTree = "<group>"; };
+		619B65802C1DF68000C44FC9 /* PgnRegex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PgnRegex.swift; sourceTree = "<group>"; };
 		61A919232BA1F83E00AD371E /* MoveFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveFactory.swift; sourceTree = "<group>"; };
 		61A919262BA1F8ED00AD371E /* MoveFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveFactoryTests.swift; sourceTree = "<group>"; };
 		61AE78222B991AAD008F56F8 /* RawMovesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawMovesTests.swift; sourceTree = "<group>"; };
@@ -264,6 +270,7 @@
 		6177235A274284FE00169D3D = {
 			isa = PBXGroup;
 			children = (
+				615FD1E42C1D8FD10013FF77 /* carlsen-magnus_vs_caruana-fabiano_07-jun-2024.pgn */,
 				61AE78292B991BE8008F56F8 /* SwiftChess (macOS).xctestplan */,
 				6177235F274284FE00169D3D /* Shared */,
 				61772371274284FF00169D3D /* macOS */,
@@ -349,6 +356,8 @@
 				6157321B2BA5F21E0048EDDF /* Pgn.swift */,
 				61EA62582BA7452F009A0300 /* PositionFactory.swift */,
 				61F609162BC33C26009BDC38 /* LanParser.swift */,
+				619B657E2C1DF59D00C44FC9 /* PgnMove.swift */,
+				619B65802C1DF68000C44FC9 /* PgnRegex.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -483,6 +492,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				615FD1E52C1D8FD10013FF77 /* carlsen-magnus_vs_caruana-fabiano_07-jun-2024.pgn in Resources */,
 				61772394274284FF00169D3D /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -511,6 +521,7 @@
 				61EA625D2BA7988B009A0300 /* ResultView.swift in Sources */,
 				614C6C042C1A53D000B4F930 /* VariationView.swift in Sources */,
 				61B32F5A2B9A53DB00790CF7 /* Field.swift in Sources */,
+				619B65812C1DF68000C44FC9 /* PgnRegex.swift in Sources */,
 				618D83C52BC17E0100583944 /* MoveView.swift in Sources */,
 				614C6BF82C15EBC700B4F930 /* MoveListModel.swift in Sources */,
 				61B0B4482B94F92E0085DB48 /* King.swift in Sources */,
@@ -549,6 +560,7 @@
 				61F609082BC20C1B009BDC38 /* MoveListView.swift in Sources */,
 				61B0B44B2B94FAE60085DB48 /* Knight.swift in Sources */,
 				61B0B43F2B94F80F0085DB48 /* Bishop.swift in Sources */,
+				619B657F2C1DF59D00C44FC9 /* PgnMove.swift in Sources */,
 				614FFC6B277780130082F892 /* MoveIndicatorView.swift in Sources */,
 				61812E282767FDA900616866 /* BoardView.swift in Sources */,
 				61772390274284FF00169D3D /* ContentView.swift in Sources */,
