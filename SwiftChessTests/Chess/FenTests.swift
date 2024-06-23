@@ -13,7 +13,7 @@ final class FenTests: XCTestCase {
 
     func testExample() throws {
         let fens = [
-            Fen.StartSetup,
+            PositionFactory.startingPositionFen,
             "8/5k2/8/3K4/8/8/8/8 w - - 0 1",
             "8/5k2/8/3K1b2/8/8/8/8 w - - 0 1",
             "8/5k2/8/3K4/8/2B5/8/8 w - - 0 1",
@@ -26,10 +26,10 @@ final class FenTests: XCTestCase {
         ]
         
         for fen in fens {
-            let pos = Fen.loadPosition(fen)
+            let pos = PositionFactory.loadPosition(fen)
             let board = ChessBoard(pos)
             let exportedPosition = board.getPosition()
-            let exportedFen = Fen.create(exportedPosition)
+            let exportedFen = FenBuilder.create(exportedPosition)
             
             XCTAssertEqual(fen, exportedFen)
         }

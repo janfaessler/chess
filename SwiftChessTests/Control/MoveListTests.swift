@@ -9,7 +9,7 @@ final class MoveListTests: XCTestCase {
     
     override func setUpWithError() throws {
         testee = MoveListModel()
-        boardCache = Fen.loadStartingPosition()
+        boardCache = PositionFactory.startingPosition()
         moves = []
     }
 

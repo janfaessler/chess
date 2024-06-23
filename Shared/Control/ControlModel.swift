@@ -35,7 +35,7 @@ public class ControlModel : ObservableObject {
     func openPgn(urls: [URL]) {
         moves.reset()
         guard let filepath = urls.first else { return }
-        var pgn = getFileContent(filepath)
+        let pgn = getFileContent(filepath)
         let moves = MoveFactory.loadMoves(pgn)
         for move in moves {
             movePlayed(move)

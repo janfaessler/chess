@@ -14,8 +14,8 @@ public class MoveFactory {
 
     public static func loadMoves(_ pgn:String) -> [Move] {
         var result:[Move] = []
-        var cache = Fen.loadStartingPosition()
-        for pgnmove in Pgn.parse(pgn) {
+        var cache = PositionFactory.startingPosition()
+        for pgnmove in PgnParser.parse(pgn) {
             let move = MoveFactory.create(pgnmove.move, position: cache)
             if  move != nil {
                 result += [move!]

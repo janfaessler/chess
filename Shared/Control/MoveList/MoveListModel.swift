@@ -86,7 +86,7 @@ public class MoveListModel : ObservableObject {
     }
     
     func getPosition() -> Position? {
-        guard currentMove != nil else { return Fen.loadStartingPosition() }
+        guard currentMove != nil else { return PositionFactory.startingPosition() }
         let notations = getMoveNotations()
         return PositionFactory.loadPosition(notations)
     }

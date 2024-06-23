@@ -9,7 +9,7 @@ final class ChessEngine {
     private let lineNumbers = 3
     private let engine:Engine
     private var lines:[EngineLine] = []
-    private var pos:Position = Fen.loadStartingPosition()
+    private var pos:Position = PositionFactory.startingPosition()
 
     init() {
         engine = Engine(type: .stockfish)

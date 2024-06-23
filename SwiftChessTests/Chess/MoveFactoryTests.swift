@@ -6,7 +6,7 @@ final class MoveFactoryTests: XCTestCase {
     private var boardCache:Position?
     
     override func setUpWithError() throws {
-        boardCache = Fen.loadStartingPosition();
+        boardCache = PositionFactory.startingPosition();
     }
 
     func testPawnMoves() throws {

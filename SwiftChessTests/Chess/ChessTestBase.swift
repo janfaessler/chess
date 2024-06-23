@@ -7,7 +7,7 @@ class ChessTestBase: XCTestCase {
     var moveLog:[String] = []
 
     override func setUpWithError() throws {
-        testee = ChessBoard(Fen.loadStartingPosition())
+        testee = ChessBoard(PositionFactory.startingPosition())
     }
     
     override func tearDownWithError() throws {
@@ -301,6 +301,6 @@ class ChessTestBase: XCTestCase {
     }
     
     func loadFen(_ fen:String) {
-        testee = ChessBoard(Fen.loadPosition(fen))
+        testee = ChessBoard(PositionFactory.loadPosition(fen))
     }
 }

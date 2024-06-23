@@ -2,8 +2,18 @@ import Foundation
 
 public class PositionFactory {
     
+    public static let startingPositionFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    
+    public static func startingPosition() -> Position {
+        return FenParser.parse(startingPositionFen)
+    }
+    
+    public static func loadPosition(_ fen:String) -> Position {
+        return FenParser.parse(fen)
+    }
+    
     public static func loadPosition(_ moves:[any StringProtocol]) -> Position? {
-        var position = Fen.loadStartingPosition()
+        var position = startingPosition()
         for notation in moves {
             guard let move = MoveFactory.create(notation, position: position) else { return nil }
             position = getPosition(move, cache: position, isCapture: notation.contains("x"))

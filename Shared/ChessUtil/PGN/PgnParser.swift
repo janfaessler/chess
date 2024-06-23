@@ -2,27 +2,32 @@ import Foundation
 import RegexBuilder
 import os
 
-public class Pgn {
+public class PgnParser {
     
     public static func parse(_ pgn:String) -> [PgnMove] {
-        let cleanedPgn = clean(pgn)
         
-        return parsePgnString(cleanedPgn)
+        return parseGame(pgn)
     }
     
-    private static func parsePgnString(_ cleanedPgn: String) -> [PgnMove] {
+    private static func parseGame(_ pgn: String) -> [PgnMove] {
+        let cleanedPgn = clean(pgn)
+
         let variations = parseVariations(cleanedPgn)
         let pgnWithoutVariations = removeVariations(cleanedPgn, variations: variations)
+        return parseMoves(pgnWithoutVariations, variations)
+    }
+    
+    private static func parseMoves(_ pgnWithoutVariations: String, _ variations: [String]) -> [PgnMove] {
         let movesArray = parse(PgnRegex.line, input: pgnWithoutVariations)
         var moves:[PgnMove] = []
         for line in movesArray {
             let moveNumber = parseMoveNumber(line)
-            moves += parseLine(line, variations: variations.filter{ $0.hasPrefix("\(moveNumber).")})
+            moves += parseMovePair(line, variations: variations.filter{ $0.hasPrefix("\(moveNumber).")})
         }
         return moves
     }
     
-    private static func parseLine(_ line: String, variations:[String]) -> [PgnMove] {
+    private static func parseMovePair(_ line: String, variations:[String]) -> [PgnMove] {
         let moveStrings = parse(PgnRegex.move, input: line)
         let moveNumber = parseMoveNumber(line)
         
@@ -46,7 +51,7 @@ public class Pgn {
     private static func parseMove(_ input: String, variatioinInput:[String]) -> PgnMove {
         let notation = parseNotation(input)
         let comment = parseComment(input)
-        let variations = variatioinInput.map{ parsePgnString($0) }
+        let variations = variatioinInput.map{ parseGame($0) }
         return PgnMove(move: notation, variations: variations, comment: comment)
     }
     
