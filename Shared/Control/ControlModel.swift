@@ -20,21 +20,6 @@ public class ControlModel : ObservableObject {
         moves.addPositionChangeListener(positionChange)
     }
     
-    public func openPgn(urls: [URL]) {
-        moves.reset()
-        guard let filepath = urls.first else { return }
-        do {
-            let contents = try String(contentsOfFile: filepath.path())
-            let moves = Pgn.loadMoves(contents)
-            for move in moves {
-                movePlayed(move)
-            }
-            logger.info("\(contents)")
-        } catch {
-            logger.info("contents could not be loaded")
-        }
-    }
-    
     var moveListColumns:[GridItem] {
         [GridItem(.fixed(20)), GridItem(.flexible()), GridItem(.flexible())]
     }
@@ -45,6 +30,17 @@ public class ControlModel : ObservableObject {
     
     func getBoardSize(_ geo:GeometryProxy) -> CGFloat {
         return min(geo.size.width - minControlWidth, geo.size.height)
+    }
+    
+    func openPgn(urls: [URL]) {
+        moves.reset()
+        guard let filepath = urls.first else { return }
+        var pgn = getFileContent(filepath)
+        let moves = MoveFactory.loadMoves(pgn)
+        for move in moves {
+            movePlayed(move)
+        }
+        self.moves.start()
     }
     
     private func updatePosition() {
@@ -66,5 +62,16 @@ public class ControlModel : ObservableObject {
     private func updateEval(_ eval:[EngineLine]) {
         self.lines.removeAll()
         self.lines.append(contentsOf: eval)
+    }
+    
+    private func getFileContent(_ url:URL) -> String {
+        let path = url.path(percentEncoded: false)
+        do {
+            var encoding:String.Encoding = String.Encoding.utf8
+            return try String(contentsOfFile: path, usedEncoding: &encoding)
+        } catch {
+            logger.info("content of path <\(path)> could not be loaded: \(error)")
+        }
+        return ""
     }
 }

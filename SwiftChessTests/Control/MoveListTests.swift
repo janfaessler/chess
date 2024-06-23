@@ -340,7 +340,7 @@ final class MoveListTests: XCTestCase {
     }
     
     private func createMove(_ notation:String, previousMoves:[String]) throws -> Move  {
-        let position = try XCTUnwrap(Pgn.loadPosition(previousMoves))
+        let position = try XCTUnwrap(PositionFactory.loadPosition(previousMoves))
         let move = try XCTUnwrap(MoveFactory.create(notation, position: try XCTUnwrap(position)))
         return move
     }
@@ -361,7 +361,7 @@ final class MoveListTests: XCTestCase {
         let moveToCompare = move.getPiece().getColor() == .white ? rowContainer.white?.move : rowContainer.black?.move
         
         moves?.append(moveString)
-        boardCache = try XCTUnwrap(Pgn.loadPosition(try XCTUnwrap(moves)))
+        boardCache = try XCTUnwrap(PositionFactory.loadPosition(try XCTUnwrap(moves)))
         
         guard testee.currentMove?.move != move || moveToCompare != move else {
             return

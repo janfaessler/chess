@@ -11,8 +11,19 @@ public class MoveFactory {
     private static let ShortCastleTargetFile = "g"
     private static let LongCastleTargetFile = "c"
     
-    private static func isNotAPawnMove(_ input: any StringProtocol) -> Bool {
-        return Array(input).first?.isUppercase ?? false
+
+    public static func loadMoves(_ pgn:String) -> [Move] {
+        var result:[Move] = []
+        var cache = Fen.loadStartingPosition()
+        for pgnmove in Pgn.parse(pgn) {
+            let move = MoveFactory.create(pgnmove.move, position: cache)
+            if  move != nil {
+                result += [move!]
+                cache = PositionFactory.getPosition(move!, cache: cache, isCapture: pgnmove.move.contains("x"))
+            }
+        }
+        
+        return result
     }
     
     public static func create(_ input:any StringProtocol, position:Position) -> Move? {
@@ -129,6 +140,10 @@ public class MoveFactory {
         let captureParts = input.split(separator: captureSeparator)
         let promotionParts = captureParts.last?.split(separator: promotionSeparator)
         return promotionParts?.first
+    }
+    
+    private static func isNotAPawnMove(_ input: any StringProtocol) -> Bool {
+        return Array(input).first?.isUppercase ?? false
     }
     
     private static func isPromotion(_ input:any StringProtocol) -> Bool {

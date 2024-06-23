@@ -2,6 +2,35 @@ import Foundation
 
 public class PositionFactory {
     
+    public static func loadPosition(_ moves:[any StringProtocol]) -> Position? {
+        var position = Fen.loadStartingPosition()
+        for notation in moves {
+            guard let move = MoveFactory.create(notation, position: position) else { return nil }
+            position = getPosition(move, cache: position, isCapture: notation.contains("x"))
+        }
+        return position
+    }
+    
+    public static func getPosition(_ move:Move, cache:Position, isCapture:Bool) -> Position{
+        var figures:[any ChessFigure] = cache.getFigures()
+        let fig = figures.first(where: { $0.equals(move.getPiece())})!
+        let capturedPiece = cache.get(atRow: move.getRow(), atFile: move.getFile())
+        fig.move(row: move.getRow(), file: move.getFile())
+        figures.removeAll(where: {$0.equals(move.getPiece())})
+        figures.append(fig)
+        if move.getType() == .Castle {
+            if move.getFile() == King.CastleQueensidePosition{
+                let rook = figures.first(where: { $0.equals(Rook(color: fig.getColor(), row: fig.getRow(), file: Rook.CastleQueensideStartingFile))})!
+                rook.move(row: move.getRow(), file: Rook.CastleQueensideEndFile)
+            } else {
+                let rook = figures.first(where: { $0.equals(Rook(color: fig.getColor(), row: fig.getRow(), file: Rook.CastleKingsideStartingFile))})!
+                rook.move(row: move.getRow(), file: Rook.CastleKingsideEndFile)
+            }
+        }
+        
+        return PositionFactory.create(cache, afterMove: move, figures: figures, capturedPiece: capturedPiece)
+    }
+    
     public static func create(
         _ oldPosition:Position,
         afterMove:Move,

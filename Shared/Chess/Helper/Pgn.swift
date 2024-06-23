@@ -3,32 +3,9 @@ import RegexBuilder
 import os
 
 public class Pgn {
-
-    public static func loadMoves(_ pgn:String) -> [Move] {
-        var result:[Move] = []
-        var cache = Fen.loadStartingPosition()
-        for pgnmove in parse(pgn) {
-            let move = MoveFactory.create(pgnmove.move, position: cache)
-            if  move != nil {
-                result += [move!]
-                cache = updateBoardCache(move!, cache: cache, isCapture: pgnmove.move.contains("x"))
-            }
-        }
-        
-        return result
-    }
-    
-    public static func loadPosition(_ moves:[any StringProtocol]) -> Position? {
-        var position = Fen.loadStartingPosition()
-        for notation in moves {
-            guard let move = MoveFactory.create(notation, position: position) else { return nil }
-            position = updateBoardCache(move, cache: position, isCapture: notation.contains("x"))
-        }
-        return position
-    }
     
     public static func parse(_ pgn:String) -> [PgnMove] {
-        let cleanedPgn = pgn.replacing("\n\n", with: " ").replacing("\n\r", with: " ").replacing("\n", with: " ").replacing("\r", with: " ")
+        let cleanedPgn = clean(pgn)
         
         return parsePgnString(cleanedPgn)
     }
@@ -138,27 +115,7 @@ public class Pgn {
             .map{ String(input[$0.range.lowerBound..<$0.range.upperBound]).trimmingCharacters(in: .whitespacesAndNewlines) }
     }
     
-    
-    
-
-    
-    private static func updateBoardCache(_ move:Move, cache:Position, isCapture:Bool) -> Position{
-        var figures:[any ChessFigure] = cache.getFigures()
-        let fig = figures.first(where: { $0.equals(move.getPiece())})!
-        let capturedPiece = cache.get(atRow: move.getRow(), atFile: move.getFile())
-        fig.move(row: move.getRow(), file: move.getFile())
-        figures.removeAll(where: {$0.equals(move.getPiece())})
-        figures.append(fig)
-        if move.getType() == .Castle {
-            if move.getFile() == King.CastleQueensidePosition{
-                let rook = figures.first(where: { $0.equals(Rook(color: fig.getColor(), row: fig.getRow(), file: Rook.CastleQueensideStartingFile))})!
-                rook.move(row: move.getRow(), file: Rook.CastleQueensideEndFile)
-            } else {
-                let rook = figures.first(where: { $0.equals(Rook(color: fig.getColor(), row: fig.getRow(), file: Rook.CastleKingsideStartingFile))})!
-                rook.move(row: move.getRow(), file: Rook.CastleKingsideEndFile)
-            }
-        }
-        
-        return PositionFactory.create(cache, afterMove: move, figures: figures, capturedPiece: capturedPiece)
+    private static func clean(_ pgn: String) -> String {
+        return pgn.replacing("\n\n", with: " ").replacing("\n\r", with: " ").replacing("\n", with: " ").replacing("\r", with: " ")
     }
 }
