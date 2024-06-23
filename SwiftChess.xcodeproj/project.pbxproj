@@ -16,6 +16,7 @@
 		614FFC6B277780130082F892 /* MoveIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC69277780130082F892 /* MoveIndicatorView.swift */; };
 		614FFC6E277786560082F892 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC6C277786560082F892 /* Move.swift */; };
 		6157321D2BA5F21E0048EDDF /* PgnParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6157321B2BA5F21E0048EDDF /* PgnParser.swift */; };
+		616BA6AF2C287E3B0015D3CD /* PgnMovesParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616BA6AE2C287E3B0015D3CD /* PgnMovesParser.swift */; };
 		616D3E482BA464D8002D78EE /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E462BA464D8002D78EE /* GameState.swift */; };
 		6177238E274284FF00169D3D /* SwiftChessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61772362274284FE00169D3D /* SwiftChessApp.swift */; };
 		61772390274284FF00169D3D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61772363274284FE00169D3D /* ContentView.swift */; };
@@ -94,6 +95,7 @@
 		614FFC6C277786560082F892 /* Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
 		6157321B2BA5F21E0048EDDF /* PgnParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PgnParser.swift; sourceTree = "<group>"; };
 		6157321E2BA65BC50048EDDF /* FenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FenTests.swift; sourceTree = "<group>"; };
+		616BA6AE2C287E3B0015D3CD /* PgnMovesParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PgnMovesParser.swift; sourceTree = "<group>"; };
 		616D3E402BA35241002D78EE /* PositionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionTests.swift; sourceTree = "<group>"; };
 		616D3E422BA352BF002D78EE /* NotationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotationTests.swift; sourceTree = "<group>"; };
 		616D3E462BA464D8002D78EE /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
@@ -281,6 +283,7 @@
 				6157321B2BA5F21E0048EDDF /* PgnParser.swift */,
 				619B657E2C1DF59D00C44FC9 /* PgnMove.swift */,
 				619B65802C1DF68000C44FC9 /* PgnRegex.swift */,
+				616BA6AE2C287E3B0015D3CD /* PgnMovesParser.swift */,
 			);
 			path = PGN;
 			sourceTree = "<group>";
@@ -566,6 +569,7 @@
 				6177238E274284FF00169D3D /* SwiftChessApp.swift in Sources */,
 				618D83C12BC178FF00583944 /* ControlView.swift in Sources */,
 				618D16A22C14FCA100D70B01 /* MoveContainer.swift in Sources */,
+				616BA6AF2C287E3B0015D3CD /* PgnMovesParser.swift in Sources */,
 				614FFC6E277786560082F892 /* Move.swift in Sources */,
 				61812E222767F0A900616866 /* FigureModel.swift in Sources */,
 				61EA625A2BA7452F009A0300 /* PositionFactory.swift in Sources */,

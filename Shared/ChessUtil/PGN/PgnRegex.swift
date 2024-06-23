@@ -16,8 +16,6 @@ public class PgnRegex {
                 move
             }
         }
-        
-    
     }.anchorsMatchLineEndings()
     
     public static let move =  Regex {
@@ -138,6 +136,4 @@ public class PgnRegex {
             }
         }
     }
-    
-    
 }
