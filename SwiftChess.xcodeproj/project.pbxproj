@@ -302,6 +302,15 @@
 			path = LAN;
 			sourceTree = "<group>";
 		};
+		616BA6AD2C287DB20015D3CD /* Factories */ = {
+			isa = PBXGroup;
+			children = (
+				61A919232BA1F83E00AD371E /* MoveFactory.swift */,
+				61EA62582BA7452F009A0300 /* PositionFactory.swift */,
+			);
+			path = Factories;
+			sourceTree = "<group>";
+		};
 		6177235A274284FE00169D3D = {
 			isa = PBXGroup;
 			children = (
@@ -381,15 +390,6 @@
 			path = Enums;
 			sourceTree = "<group>";
 		};
-		61812E3027681DE400616866 /* Helper */ = {
-			isa = PBXGroup;
-			children = (
-				61A919232BA1F83E00AD371E /* MoveFactory.swift */,
-				61EA62582BA7452F009A0300 /* PositionFactory.swift */,
-			);
-			path = Helper;
-			sourceTree = "<group>";
-		};
 		61AE78212B991AAD008F56F8 /* SwiftChessTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -402,7 +402,7 @@
 		61B0B44C2B95D7160085DB48 /* Chess */ = {
 			isa = PBXGroup;
 			children = (
-				61812E3027681DE400616866 /* Helper */,
+				616BA6AD2C287DB20015D3CD /* Factories */,
 				61812E292768077900616866 /* Enums */,
 				6157320A2BA5EB4C0048EDDF /* Figures */,
 				61B32F602B9CC5D700790CF7 /* Position.swift */,
