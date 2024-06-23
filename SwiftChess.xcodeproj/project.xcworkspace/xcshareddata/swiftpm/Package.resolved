@@ -1,5 +1,5 @@
 {
-  "originHash" : "f39dcf5bd61e1586c3b287bbaf6c28123be79a6031a38bc7eadd72efb7eee282",
+  "originHash" : "490a0962dd4055860be71d1c725b2e3d5de6e2604a5eb219172ab44f963712bf",
   "pins" : [
     {
       "identity" : "chesskit-engine",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "24f9364de45c35a9ff1e702f58ffd84e76dd1ba1",
         "version" : "0.3.0"
+      }
+    },
+    {
+      "identity" : "filepicker",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/markrenaud/FilePicker",
+      "state" : {
+        "revision" : "720f8cb5ca0c0efc982ed381afc84ba3e8b3214e",
+        "version" : "1.0.1"
       }
     },
     {

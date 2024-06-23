@@ -5,11 +5,9 @@ import os
 public class Pgn {
 
     public static func loadMoves(_ pgn:String) -> [Move] {
-        
-        var moves = parse(pgn)
         var result:[Move] = []
         var cache = Fen.loadStartingPosition()
-        for pgnmove in moves {
+        for pgnmove in parse(pgn) {
             let move = MoveFactory.create(pgnmove.move, position: cache)
             if  move != nil {
                 result += [move!]

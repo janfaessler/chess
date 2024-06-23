@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6106C2BA2C1F800A00D67A00 /* FilePicker in Frameworks */ = {isa = PBXBuildFile; productRef = 6106C2B92C1F800A00D67A00 /* FilePicker */; };
 		614C6BF82C15EBC700B4F930 /* MoveListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6BF72C15EBC700B4F930 /* MoveListModel.swift */; };
 		614C6BFC2C18A04100B4F930 /* RowContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6BFB2C18A04100B4F930 /* RowContainer.swift */; };
 		614C6C002C19ACE300B4F930 /* MoveListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6BFF2C19ACE300B4F930 /* MoveListTests.swift */; };
@@ -161,6 +162,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6106C2BA2C1F800A00D67A00 /* FilePicker in Frameworks */,
 				61EF1DF22C1CD7AA00A21268 /* WrappingHStack in Frameworks */,
 				61F609152BC333AF009BDC38 /* ChessKitEngine in Frameworks */,
 			);
@@ -422,6 +424,7 @@
 			packageProductDependencies = (
 				61F609142BC333AF009BDC38 /* ChessKitEngine */,
 				61EF1DF12C1CD7AA00A21268 /* WrappingHStack */,
+				6106C2B92C1F800A00D67A00 /* FilePicker */,
 			);
 			productName = "SwiftChess (macOS)";
 			productReference = 61772370274284FF00169D3D /* SwiftChess.app */;
@@ -476,6 +479,7 @@
 			packageReferences = (
 				61F609122BC310DD009BDC38 /* XCRemoteSwiftPackageReference "chesskit-engine" */,
 				61EF1DF02C1CD76C00A21268 /* XCRemoteSwiftPackageReference "WrappingHStack" */,
+				6106C2B82C1F7FE500D67A00 /* XCRemoteSwiftPackageReference "FilePicker" */,
 			);
 			productRefGroup = 6177236B274284FF00169D3D /* Products */;
 			projectDirPath = "";
@@ -861,6 +865,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6106C2B82C1F7FE500D67A00 /* XCRemoteSwiftPackageReference "FilePicker" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/markrenaud/FilePicker";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.1;
+			};
+		};
 		61EF1DF02C1CD76C00A21268 /* XCRemoteSwiftPackageReference "WrappingHStack" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/dkk/WrappingHStack";
@@ -888,6 +900,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6106C2B92C1F800A00D67A00 /* FilePicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6106C2B82C1F7FE500D67A00 /* XCRemoteSwiftPackageReference "FilePicker" */;
+			productName = FilePicker;
+		};
 		61EF1DF12C1CD7AA00A21268 /* WrappingHStack */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 61EF1DF02C1CD76C00A21268 /* XCRemoteSwiftPackageReference "WrappingHStack" */;

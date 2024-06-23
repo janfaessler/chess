@@ -95,6 +95,16 @@ public class MoveListModel : ObservableObject {
         currentMove == container
     }
     
+    public func atStartPosition() -> Bool {
+        currentMove == nil
+    }
+    
+    public func reset() {
+        currentMove = nil
+        moves.removeAll()
+        history.removeAll()
+    }
+    
     func addPositionChangeListener(_ listener:@escaping PositionChangeNotification) {
         positionChangeNotification += [listener]
     }
