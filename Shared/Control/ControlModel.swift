@@ -36,9 +36,8 @@ public class ControlModel : ObservableObject {
         moves.reset()
         guard let filepath = urls.first else { return }
         let pgn = getFileContent(filepath)
-        let moves = MoveFactory.loadMoves(pgn)
-        for move in moves {
-            movePlayed(move)
+        for pgnmove in PgnParser.parse(pgn) {
+            movePlayed(pgnmove.move)
         }
         self.moves.start()
     }
@@ -49,8 +48,8 @@ public class ControlModel : ObservableObject {
         engine.newPosition(newPosition)
     }
     
-    private func movePlayed(_ move:Move) {
-        moves.movePlayed(move)
+    private func movePlayed(_ notation:String) {
+        moves.movePlayed(notation)
         engine.newPosition(board.getPosition())
     }
     

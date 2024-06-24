@@ -48,8 +48,6 @@ public class MoveFactory {
         }
     }
     
-    
-    
     private static func createPieceMove(_ input: any StringProtocol, _ color: PieceColor, _ cache: Position) -> Move? {
         
         let cleanedInput = clean(input)

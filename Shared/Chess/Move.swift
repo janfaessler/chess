@@ -75,4 +75,8 @@ public struct Move:Identifiable, Equatable {
         }
         return "\(piece.ident())\(fileName)\(row)";
     }
+    
+    public func isCastling() -> Bool {
+        return piece.getType() == .king && type == .Castle
+    }
 }

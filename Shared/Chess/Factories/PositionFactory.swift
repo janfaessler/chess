@@ -60,7 +60,7 @@ public class PositionFactory {
     }
     
     private static func createColorToMove(_ move:Move) -> PieceColor {
-        return  move.piece.getColor() == .white ? .black : .white
+        return move.piece.getColor() == .white ? .black : .white
     }
     
     private static func createEnPassantTarget(_ move:Move) -> Field? {

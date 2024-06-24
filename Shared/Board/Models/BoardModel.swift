@@ -5,7 +5,7 @@ class BoardModel : ObservableObject {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "BoardModel")
     
-    typealias MoveNotification = (Move) -> ()
+    typealias MoveNotification = (String) -> ()
     private var moveNotifcations:[MoveNotification] = []
     
     @Published var figures:[FigureModel] = []
@@ -144,8 +144,9 @@ class BoardModel : ObservableObject {
     }
     
     private func notifyMoveDone(_ move:Move) {
+        let notation = NotationFactory.generate(move, position: board.getPosition())
         for event in moveNotifcations {
-            event(move)
+            event(notation)
         }
     }
 }

@@ -68,8 +68,9 @@ public class MoveListModel : ObservableObject {
         updatePosition()
     }
     
-    public func movePlayed(_ move:Move) {
-        let container = MoveContainer(move: move)
+    public func movePlayed(_ move:String) {
+        let color = currentMove?.color == .white ? PieceColor.black : PieceColor.white
+        let container = MoveContainer(move: move, color: color)
         let blackHasLastTopLevelMove = moves.last?.black != nil
         
         let nextMove = getNextMove(currentMove)
@@ -149,7 +150,7 @@ public class MoveListModel : ObservableObject {
               let parentMove = parrentMoves[lastMove.id],
               let lastMoveVariation = parentMove.getVariation(lastMove),
               let variation = parentMove.variations[lastMoveVariation],
-              container.move.piece.getColor() != lastMove.move.piece.getColor(),
+              container.color != lastMove.color,
               let rowIndexInVariation = variation.firstIndex(where: { $0.white == lastMove || $0.black == lastMove })
         else { return true }
         
@@ -166,12 +167,12 @@ public class MoveListModel : ObservableObject {
         
         let nextRowIndexInVariation = variation.index(after: rowIndexInVariation)
         let nextRow = variation[nextRowIndexInVariation]
-        return nextRow.white?.move.info() != currentMove?.move.info()
+        return nextRow.white?.move != currentMove?.move
     }
     
     private func createRowContainer(_ container: MoveContainer, moveNumber:Int = 1) -> RowContainer {
         var rowContainer:RowContainer
-        if container.move.piece.getColor() == .white {
+        if container.color == .white {
             rowContainer = RowContainer(moveNumber: moveNumber, white: container)
         } else {
             rowContainer = RowContainer(moveNumber: moveNumber, black: container)
@@ -181,7 +182,7 @@ public class MoveListModel : ObservableObject {
     
     private func appendVariation(_ container: MoveContainer, to: MoveContainer, variation: String, lastMove: MoveContainer) {
         let rowNumber = (to.variations[variation]?.count ?? 1) + 1
-        if container.move.piece.getColor() == .white {
+        if container.color == .white {
             let rowContainer = createRowContainer(container, moveNumber: rowNumber)
             to.variations[variation]?.append(rowContainer)
         } else {
@@ -193,7 +194,7 @@ public class MoveListModel : ObservableObject {
     private func addNewVariation( _ container: MoveContainer, to: MoveContainer) {
         let rowContainer = createRowContainer(container)
         
-        to.variations[container.move.info()] = [rowContainer]
+        to.variations[container.move] = [rowContainer]
         parrentMoves[container.id] = to
     }
     
@@ -287,6 +288,6 @@ public class MoveListModel : ObservableObject {
     }
     
     private func getMoveNotations() -> [String] {
-        return history.map({ $0.move.info() })
+        return history.map({ $0.move })
     }
 }

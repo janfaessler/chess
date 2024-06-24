@@ -55,7 +55,7 @@ final class NotationTests: ChessTestBase {
         try moveAndAssert(notation: "dxe7", toField: "e7", type: .pawn, color: .white)
         try moveAndAssert(notation: "c5", toField: "c5", type:.pawn, color: .black, moveType: .Double)
 
-        try moveAndAssert(notation: "exd8=Q+", toField: "d8", type: .queen, color: .white)
+        try moveAndAssert(notation: "exd8=Q+", toField: "d8", type: .queen, color: .white, moveType: .Promotion)
         
         try assertMoves()
 
@@ -302,7 +302,7 @@ final class NotationTests: ChessTestBase {
             try testee?.move(move)
         }
         
-        try moveAndAssert(notation: "bxa8=N+", toField: "a8", type: .knight, color: .white)
+        try moveAndAssert(notation: "bxa8=N+", toField: "a8", type: .knight, color: .white, moveType: .Promotion)
         try moveAndAssert(notation: "Kb7", toField: "b7", type: .king, color: .black)
         try moveAndAssert(notation: "Nxb6", toField: "b6", type: .knight, color: .white)
     }

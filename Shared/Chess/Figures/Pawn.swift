@@ -82,16 +82,12 @@ public class Pawn : Figure {
         let figureToCaptureOnRight = cache.isNotEmpty(atRow: row, atFile: rightFile)
         
         
-        let canEnPassant = canEnPassant(move, cache:cache)
+        let canEnPassant = cache.canEnPassant(move)
         
         return (figureToCaptureOnLeft && leftFile == move.file) || (figureToCaptureOnRight && rightFile == move.file) || canEnPassant
     }
     
-    private func canEnPassant(_ move:Move, cache:Position) -> Bool {
-        guard let target = cache.getEnPassentTarget() else { return false }
-        
-        return move.getField() == target
-    }
+
     
     private func moveDoesNotChangeFile(_ move:Move) -> Bool {
         return move.file == move.piece.getFile()

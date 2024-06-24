@@ -20,7 +20,7 @@
     {
       "target" : {
         "containerPath" : "container:SwiftChess.xcodeproj",
-        "identifier" : "61AE781F2B991AAD008F56F8",
+        "identifier" : "619375D62BDE783D005A616D",
         "name" : "SwiftChessTests"
       }
     }

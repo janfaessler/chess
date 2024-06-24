@@ -8,7 +8,7 @@ struct VariationMoveView: View {
         Button {
             model.goToMove(move)
         } label: {
-            Text("\(move.move.info())")
+            Text("\(move.move)")
         }
         .buttonStyle(.plain)
         

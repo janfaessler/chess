@@ -2,14 +2,16 @@ import Foundation
 
 public class MoveContainer : Identifiable, Equatable, ObservableObject {
     public let id: UUID = UUID()
-    public let move: Move
+    public let move: String
+    public let color:PieceColor
     @Published public var variations: [String:[RowContainer]]
     @Published public var note:String?
     
-    init(move: Move, variations: [String:[RowContainer]] = [:], note: String? = nil) {
+    init(move: String, color:PieceColor, variations: [String:[RowContainer]] = [:], note: String? = nil) {
         self.move = move
         self.variations = variations
         self.note = note
+        self.color = color
     }
 
     public func getVariation(_ ofMove:MoveContainer) -> String? {
