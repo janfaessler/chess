@@ -212,6 +212,15 @@
 			path = Board;
 			sourceTree = "<group>";
 		};
+		614643FF2C31D2200041E1BE /* structs */ = {
+			isa = PBXGroup;
+			children = (
+				614643FB2C31C1C70041E1BE /* PgnGame.swift */,
+				619B657E2C1DF59D00C44FC9 /* PgnMove.swift */,
+			);
+			path = structs;
+			sourceTree = "<group>";
+		};
 		614C6BF92C15F3E900B4F930 /* MoveList */ = {
 			isa = PBXGroup;
 			children = (
@@ -286,12 +295,11 @@
 		616BA6AA2C287C7F0015D3CD /* PGN */ = {
 			isa = PBXGroup;
 			children = (
-				6157321B2BA5F21E0048EDDF /* PgnParser.swift */,
-				619B657E2C1DF59D00C44FC9 /* PgnMove.swift */,
+				614643FF2C31D2200041E1BE /* structs */,
 				619B65802C1DF68000C44FC9 /* PgnRegex.swift */,
 				616BA6AE2C287E3B0015D3CD /* PgnMovesParser.swift */,
-				614643FB2C31C1C70041E1BE /* PgnGame.swift */,
 				614643FD2C31D1540041E1BE /* PgnGameParser.swift */,
+				6157321B2BA5F21E0048EDDF /* PgnParser.swift */,
 			);
 			path = PGN;
 			sourceTree = "<group>";
