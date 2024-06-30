@@ -215,7 +215,7 @@ class ChessTestBase: XCTestCase {
     func assertPossibleMoves(
         forFigure:any ChessFigure,
         moves:[Move],
-        message: ([String], [String]) -> String = { "moves [\($0)] and [\($1)] are not equal" },
+        message: () -> String = { "moves are not equal" },
         file: StaticString = #filePath,
         line: UInt = #line
     ) throws {
@@ -228,7 +228,7 @@ class ChessTestBase: XCTestCase {
             return
         }
             
-        XCTFail(message(possibleMoves.map({$0.info()}), moves.map({$0.info()})), file: file, line: line)
+        XCTFail(file: file, line: line)
     }
 
     func assertFigureExists(

@@ -16,7 +16,7 @@ public class PositionFactory {
         var position = startingPosition()
         for notation in moves {
             guard let move = MoveFactory.create(notation, position: position) else { return nil }
-            position = getPosition(move, cache: position, isCapture: notation.contains("x"))
+            position = getPosition(move, cache: position, isCapture: notation.contains(NotationFactory.Capture))
         }
         return position
     }

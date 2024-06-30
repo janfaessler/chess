@@ -66,16 +66,6 @@ public struct Move:Identifiable, Equatable {
         return piece
     }
     
-    public func info() -> String {
-        guard let scalar = UnicodeScalar(file+96) else { return "XXX" }
-        let fileName = Character(scalar)
-        
-        if (type == .Castle) {
-            return file == King.CastleKingsidePosition ? King.CastleKingsideNotation : King.CastleQueensideNotation
-        }
-        return "\(piece.ident())\(fileName)\(row)";
-    }
-    
     public func isCastling() -> Bool {
         return piece.getType() == .king && type == .Castle
     }

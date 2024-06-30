@@ -3,8 +3,6 @@ import Foundation
 public class King : Figure {
     
     public static let Ident = "K"
-    public static let CastleQueensideNotation = "O-O-O"
-    public static let CastleKingsideNotation = "O-O"
     public static let CastleQueensidePosition = 3
     public static let CastleKingsidePosition = 7
     

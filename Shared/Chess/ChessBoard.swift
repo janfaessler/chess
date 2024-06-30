@@ -24,7 +24,7 @@ public class ChessBoard {
 
     public func move(_ move:Move) throws {
         guard position.IsMoveLegalMoveOnTheBoard(move) else {
-            logger.error("move (\(move.piece.ident())\(move.piece.getFieldInfo()) -> \(move.info())) is not allowed")
+            logger.error("move (\(move.piece.ident())\(move.piece.getFieldInfo()) -> \(NotationFactory.generate(move, position: self.position))) is not allowed")
             throw ValidationError.MoveNotLegalMoveOnTheBoard
         }
         

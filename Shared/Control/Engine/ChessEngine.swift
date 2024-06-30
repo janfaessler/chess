@@ -82,13 +82,6 @@ final class ChessEngine {
     }
     
     private func getNotation(move:Move, isCapture:Bool) -> String {
-        if isCapture {
-            return (move.piece.getType() == .pawn ? move.piece.getField().getFileName() : move.piece.ident()) + "x" + move.getFieldInfo()
-        }
-        return move.info()
-
+        return NotationFactory.generate(move, position: pos)
     }
 }
-
-
-

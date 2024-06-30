@@ -2,6 +2,13 @@ import Foundation
 
 public class NotationFactory {
     
+    public static let LongCastle = "O-O-O"
+    public static let ShortCastle = "O-O"
+    public static let Capture:Character = "x"
+    public static let Promotion:Character = "="
+    public static let Check:Character = "+"
+    public static let Checkmate:Character = "#"
+    
     public static func generate(_ move:Move, position:Position) -> String {
         guard !move.isCastling() else { 
             return getCastlingNotation(move, position:position)
@@ -17,9 +24,9 @@ public class NotationFactory {
     
     private static func getCastlingNotation(_ move:Move, position:Position) -> String {
         if position.isLongCastling(move) {
-            return King.CastleQueensideNotation
+            return LongCastle
         } else if position.isShortCastling(move) {
-            return King.CastleKingsideNotation
+            return ShortCastle
         }
         return ""
     }
@@ -37,7 +44,7 @@ public class NotationFactory {
     }
     
     private static func getCheckIdentifier(_ move:Move, position: Position) -> String {
-        return position.isCheckMate(move) ? "#" : (position.isCheck(move) ? "+" : "")
+        return position.isCheckMate(move) ? String(Checkmate) : (position.isCheck(move) ? String(Check) : "")
     }
     
     private static func getPromotionIdentifier(_ move:Move) -> String {
@@ -59,7 +66,7 @@ public class NotationFactory {
     }
     
     private static func getCaptureIdentifier(_ move:Move, position:Position) -> String {
-        return isCapture(move, position: position) ? "x" : ""
+        return isCapture(move, position: position) ? String(Capture) : ""
     }
     
     private static func getDuplicateIdentifier(_ move: Move, position: Position) -> String {

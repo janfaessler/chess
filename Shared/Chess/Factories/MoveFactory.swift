@@ -2,10 +2,7 @@ import Foundation
 
 public class MoveFactory {
     
-    private static let captureSeparator:Character = "x"
-    private static let promotionSeparator:Character = "="
-    private static let checkIndicator:Character = "+"
-    private static let checkmateIndicator:Character = "#"
+    
     private static let whiteStartingRow = "1"
     private static let blackStartingRow = "8"
     private static let ShortCastleTargetFile = "g"
@@ -19,7 +16,7 @@ public class MoveFactory {
             let move = MoveFactory.create(pgnmove.move, position: cache)
             if  move != nil {
                 result += [move!]
-                cache = PositionFactory.getPosition(move!, cache: cache, isCapture: pgnmove.move.contains("x"))
+                cache = PositionFactory.getPosition(move!, cache: cache, isCapture: pgnmove.move.contains(NotationFactory.Capture))
             }
         }
         
@@ -41,7 +38,7 @@ public class MoveFactory {
         let kingRow = getRowOfKing(color)
         let kingFile = getFileOfKing(input)
         let fig = getFigure(targetField: "\(kingFile)\(kingRow)", type: .king, color: color, cache: cache)
-        if String(input) == King.CastleKingsideNotation {
+        if String(input) == NotationFactory.ShortCastle {
             return fig?.createMove("\(kingFile)\(kingRow)", type: .Castle)
         } else {
             return fig?.createMove("\(kingFile)\(kingRow)", type: .Castle)
@@ -130,13 +127,13 @@ public class MoveFactory {
         let hasRowInfo = hasRowInfo(input)
         let offset = hasFileInfo || hasRowInfo ? 2 : 1
         let fieldStartIndex =  input.index(input.startIndex, offsetBy: offset, limitedBy: input.endIndex)!
-        let promotionParts = input[fieldStartIndex...].split(separator: promotionSeparator)
+        let promotionParts = input[fieldStartIndex...].split(separator:NotationFactory.Promotion)
         return promotionParts.first!
     }
     private static func getField(_ input:any StringProtocol) -> (any StringProtocol)? {
-        let input = String(input).replacing(checkIndicator, with: "")
-        let captureParts = input.split(separator: captureSeparator)
-        let promotionParts = captureParts.last?.split(separator: promotionSeparator)
+        let input = String(input).replacing(NotationFactory.Check, with: "")
+        let captureParts = input.split(separator: NotationFactory.Capture)
+        let promotionParts = captureParts.last?.split(separator: NotationFactory.Promotion)
         return promotionParts?.first
     }
     
@@ -145,18 +142,18 @@ public class MoveFactory {
     }
     
     private static func isPromotion(_ input:any StringProtocol) -> Bool {
-        let captureParts = input.split(separator: captureSeparator)
-        let promotionParts = captureParts.last!.split(separator: promotionSeparator)
+        let captureParts = input.split(separator: NotationFactory.Capture)
+        let promotionParts = captureParts.last!.split(separator: NotationFactory.Promotion)
         return promotionParts.count > 1
     }
     
     private static func getPromotToFigure(_ input:any StringProtocol) -> PieceType {
-        let promotionParts = input.split(separator: promotionSeparator)
+        let promotionParts = input.split(separator: NotationFactory.Promotion)
         return getPieceType(clean(promotionParts.last!)) ?? .queen
     }
     
     private static func isCastlingMove(_ input:any StringProtocol) -> Bool {
-        return String(input) == King.CastleQueensideNotation || String(input) == King.CastleKingsideNotation
+        return String(input) == NotationFactory.LongCastle || String(input) == NotationFactory.ShortCastle
     }
     
     private static func getEndOfPieceIdentIndex(_ input: any StringProtocol) -> String.Index? {
@@ -168,7 +165,7 @@ public class MoveFactory {
     }
     
     private static func getFileOfKing(_ input: any StringProtocol) -> String {
-        return String(input) == King.CastleKingsideNotation ? ShortCastleTargetFile : LongCastleTargetFile
+        return String(input) == NotationFactory.ShortCastle ? ShortCastleTargetFile : LongCastleTargetFile
     }
     
     private static func hasFileInfo(_ input: any StringProtocol) -> Bool {
@@ -184,7 +181,7 @@ public class MoveFactory {
     }
     
     private static func clean(_ input: any StringProtocol) -> String {
-        return String(input.filter({ $0 != checkIndicator && $0 != checkmateIndicator && $0 != captureSeparator }))
+        return String(input.filter({ $0 != NotationFactory.Check && $0 != NotationFactory.Checkmate && $0 != NotationFactory.Capture }))
     }
 }
 
