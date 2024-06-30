@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		6100737B2C28918D009B2527 /* NotationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6100737A2C28918D009B2527 /* NotationFactory.swift */; };
 		6106C2BA2C1F800A00D67A00 /* FilePicker in Frameworks */ = {isa = PBXBuildFile; productRef = 6106C2B92C1F800A00D67A00 /* FilePicker */; };
+		614643FC2C31C1C70041E1BE /* PgnGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614643FB2C31C1C70041E1BE /* PgnGame.swift */; };
+		614643FE2C31D1540041E1BE /* PgnGameParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614643FD2C31D1540041E1BE /* PgnGameParser.swift */; };
 		614C6BF82C15EBC700B4F930 /* MoveListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6BF72C15EBC700B4F930 /* MoveListModel.swift */; };
 		614C6BFC2C18A04100B4F930 /* RowContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6BFB2C18A04100B4F930 /* RowContainer.swift */; };
 		614C6C002C19ACE300B4F930 /* MoveListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6BFF2C19ACE300B4F930 /* MoveListTests.swift */; };
@@ -88,6 +90,8 @@
 
 /* Begin PBXFileReference section */
 		6100737A2C28918D009B2527 /* NotationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotationFactory.swift; sourceTree = "<group>"; };
+		614643FB2C31C1C70041E1BE /* PgnGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PgnGame.swift; sourceTree = "<group>"; };
+		614643FD2C31D1540041E1BE /* PgnGameParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PgnGameParser.swift; sourceTree = "<group>"; };
 		614C6BF72C15EBC700B4F930 /* MoveListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveListModel.swift; sourceTree = "<group>"; };
 		614C6BFB2C18A04100B4F930 /* RowContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowContainer.swift; sourceTree = "<group>"; };
 		614C6BFF2C19ACE300B4F930 /* MoveListTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveListTests.swift; sourceTree = "<group>"; };
@@ -286,6 +290,8 @@
 				619B657E2C1DF59D00C44FC9 /* PgnMove.swift */,
 				619B65802C1DF68000C44FC9 /* PgnRegex.swift */,
 				616BA6AE2C287E3B0015D3CD /* PgnMovesParser.swift */,
+				614643FB2C31C1C70041E1BE /* PgnGame.swift */,
+				614643FD2C31D1540041E1BE /* PgnGameParser.swift */,
 			);
 			path = PGN;
 			sourceTree = "<group>";
@@ -570,7 +576,9 @@
 				61F6090F2BC30F5F009BDC38 /* EngineView.swift in Sources */,
 				61EF1DEF2C1C94B100A21268 /* VariationMoveView.swift in Sources */,
 				6177238E274284FF00169D3D /* SwiftChessApp.swift in Sources */,
+				614643FC2C31C1C70041E1BE /* PgnGame.swift in Sources */,
 				618D83C12BC178FF00583944 /* ControlView.swift in Sources */,
+				614643FE2C31D1540041E1BE /* PgnGameParser.swift in Sources */,
 				618D16A22C14FCA100D70B01 /* MoveContainer.swift in Sources */,
 				616BA6AF2C287E3B0015D3CD /* PgnMovesParser.swift in Sources */,
 				614FFC6E277786560082F892 /* Move.swift in Sources */,

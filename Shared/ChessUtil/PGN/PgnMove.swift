@@ -1,8 +1,8 @@
 import Foundation
 
 public struct PgnMove {
-    let id = UUID()
-    let move:String
-    let variations:[[PgnMove]]
-    let comment:String?
+    public let id = UUID()
+    public let move:String
+    public let variations:[[PgnMove]]
+    public let comment:String?
 }

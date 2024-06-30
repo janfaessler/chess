@@ -3,6 +3,23 @@ import RegexBuilder
 
 public class PgnRegex {
     
+    public static func parse(_ r:some RegexComponent, input:String) -> [String] {
+        input.matches(of: r)
+            .map{ String(input[$0.range.lowerBound..<$0.range.upperBound]).trimmingCharacters(in: .whitespacesAndNewlines) }
+    }
+    
+    
+    public static func parseGames(_ input:String) -> [String] {
+        var startIndex = input.startIndex
+        return input
+            .matches(of: PgnRegex.result)
+            .map {
+                let game = String(input[startIndex..<$0.range.upperBound]).trimmingCharacters(in: .whitespacesAndNewlines)
+                startIndex = $0.range.upperBound
+                return game
+            }
+    }
+    
     public static let line = Regex {
         Repeat(1...) {
             One(.digit)

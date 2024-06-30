@@ -36,7 +36,8 @@ public class ControlModel : ObservableObject {
         moves.reset()
         guard let filepath = urls.first else { return }
         let pgn = getFileContent(filepath)
-        for pgnmove in PgnParser.parse(pgn) {
+        let game = PgnParser.parse(pgn)
+        for pgnmove in game.first!.moves {
             movePlayed(pgnmove.move)
         }
         self.moves.start()

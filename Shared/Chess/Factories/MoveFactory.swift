@@ -1,27 +1,11 @@
 import Foundation
 
 public class MoveFactory {
-    
-    
+
     private static let whiteStartingRow = "1"
     private static let blackStartingRow = "8"
     private static let ShortCastleTargetFile = "g"
     private static let LongCastleTargetFile = "c"
-    
-
-    public static func loadMoves(_ pgn:String) -> [Move] {
-        var result:[Move] = []
-        var cache = PositionFactory.startingPosition()
-        for pgnmove in PgnParser.parse(pgn) {
-            let move = MoveFactory.create(pgnmove.move, position: cache)
-            if  move != nil {
-                result += [move!]
-                cache = PositionFactory.getPosition(move!, cache: cache, isCapture: pgnmove.move.contains(NotationFactory.Capture))
-            }
-        }
-        
-        return result
-    }
     
     public static func create(_ input:any StringProtocol, position:Position) -> Move? {
         let color = position.getColorToMove()

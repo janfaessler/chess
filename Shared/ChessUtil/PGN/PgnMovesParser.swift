@@ -4,14 +4,14 @@ import os
 
 public class PgnMovesParser {
 
-    static func parse(_ pgn: String) -> [PgnMove] {
+    public static func parse(_ pgn: String) -> [PgnMove] {
         let variations = parseVariations(pgn)
         let pgnWithoutVariations = removeVariations(pgn, variations: variations)
         return parseMoves(pgnWithoutVariations, variations)
     }
     
     private static func parseMoves(_ pgnWithoutVariations: String, _ variations: [String]) -> [PgnMove] {
-        let movesArray = parse(PgnRegex.line, input: pgnWithoutVariations)
+        let movesArray = PgnRegex.parse(PgnRegex.line, input: pgnWithoutVariations)
         var moves:[PgnMove] = []
         for line in movesArray {
             let moveNumber = parseMoveNumber(line)
@@ -21,7 +21,7 @@ public class PgnMovesParser {
     }
     
     private static func parseMovePair(_ line: String, variations:[String]) -> [PgnMove] {
-        let moveStrings = parse(PgnRegex.move, input: line)
+        let moveStrings = PgnRegex.parse(PgnRegex.move, input: line)
         let moveNumber = parseMoveNumber(line)
         
         let whiteString:String? = line.hasPrefix("\(moveNumber)...") == false ? moveStrings[0] : nil
@@ -54,7 +54,7 @@ public class PgnMovesParser {
     }
     
     private static func parseNotation(_ input:String) -> String {
-        let result = parse(PgnRegex.notation, input:input)
+        let result = PgnRegex.parse(PgnRegex.notation, input:input)
         return "\(result.first!)"
     }
     
@@ -106,10 +106,5 @@ public class PgnMovesParser {
         return pgnWithoutVariations
             .replacing("   ", with: " ")
             .replacing("  ", with: " ");
-    }
-    
-    private static func parse(_ r:some RegexComponent, input:String) -> [String] {
-        input.matches(of: r)
-            .map{ String(input[$0.range.lowerBound..<$0.range.upperBound]).trimmingCharacters(in: .whitespacesAndNewlines) }
     }
 }
