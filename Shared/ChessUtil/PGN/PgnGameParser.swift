@@ -3,14 +3,14 @@ import Foundation
 public class PgnGameParser {
     
     public static func parse(_ pgn: String) -> PgnGame {
-        var headers:[String] = []
+        var headerStrings:[String] = []
         var gameString = ""
         var gameComment:String?
         
         pgn.enumerateLines(invoking: { line, _ in
             guard !line.isEmpty else { return }
             if line.starts(with: "[") {
-                headers += [line.trimmingCharacters(in: ["[","]"])]
+                headerStrings += [line.trimmingCharacters(in: ["[","]"])]
             }
             if line.starts(with: "{") {
                 gameComment = parseComment(line)
@@ -23,8 +23,28 @@ public class PgnGameParser {
         let moves = PgnMovesParser.parse(pgn)
         
         let result = PgnRegex.parse(PgnRegex.result, input: pgn).first
+        let header = parseHeaders(headerStrings)
         
-        return PgnGame(headers: headers, moves: moves, result: result ?? "", comment: gameComment)
+        return PgnGame(headers: header, moves: moves, result: result ?? "", comment: gameComment)
+    }
+    
+    private static func parseHeaders(_ input:[String]) -> [String:String] {
+        var results:[String:String] = [:]
+        for line in input {
+            let parts = line.split(separator: " ")
+            guard
+                let startMarkerIndex = line.firstIndex(of: "\""),
+                let endMarkerIndex = line.lastIndex(of: "\"")
+            else { continue }
+            let contentStartIndex = line.index(after: startMarkerIndex)
+            let contentEndIndex = line.index(before: endMarkerIndex)
+            guard contentStartIndex < contentEndIndex else {
+                results[String(parts[0])] = ""
+                continue
+            }
+            results[String(parts[0])] = String(line[contentStartIndex...contentEndIndex])
+        }
+        return results
     }
     
     private static func parseComment(_ input:String) -> String {

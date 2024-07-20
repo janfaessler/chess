@@ -8,7 +8,8 @@ public class ControlModel : ObservableObject {
 
     @Published var engineEval:String = ""
     @Published var lines:[EngineLine] = []
-    
+    @Published var games:[PgnGame] = []
+
     @ObservedObject var board = BoardModel()
     @ObservedObject var moves = MoveListModel()
     
@@ -32,15 +33,24 @@ public class ControlModel : ObservableObject {
         return min(geo.size.width - minControlWidth, geo.size.height)
     }
     
-    func openPgn(urls: [URL]) {
+    func openFiles(urls: [URL]) async {
+        games = await loadGames(urls)
+        guard let firstGame = games.first else { return }
+        openGame(firstGame)
+    }
+    
+    func openGame(_ game: PgnGame) {
         moves.reset()
-        guard let filepath = urls.first else { return }
-        let pgn = getFileContent(filepath)
-        let game = PgnParser.parse(pgn)
-        for pgnmove in game.first!.moves {
+        for pgnmove in game.moves {
             movePlayed(pgnmove.move)
         }
         self.moves.start()
+    }
+    
+    private func loadGames(_ urls:[URL]) async -> [PgnGame] {
+        guard let filepath = urls.first else { return [] }
+        let pgn = getFileContent(filepath)
+        return PgnParser.parse(pgn)
     }
     
     private func updatePosition() {

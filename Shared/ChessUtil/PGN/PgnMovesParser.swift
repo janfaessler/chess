@@ -101,10 +101,13 @@ public class PgnMovesParser {
     private static func removeVariations(_ input:String, variations:[String]) -> String {
         var pgnWithoutVariations:String = input
         for variation in variations {
-            pgnWithoutVariations = pgnWithoutVariations.replacing(variation, with:"")
+            pgnWithoutVariations = pgnWithoutVariations
+                .replacing("\(variation)", with:"")
         }
         return pgnWithoutVariations
             .replacing("   ", with: " ")
-            .replacing("  ", with: " ");
+            .replacing("  ", with: " ")
+            .replacing("(", with: "")
+            .replacing(")", with: "")
     }
 }

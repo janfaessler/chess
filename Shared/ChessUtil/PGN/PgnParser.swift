@@ -15,16 +15,16 @@ public class PgnParser {
         var gameParsingStarted = false
         pgn.enumerateLines(invoking: { line, _ in
             guard !line.isEmpty else { return }
-            if gameParsingStarted && line.starts(with: "[") {
+            if gameParsingStarted && line.starts(with: "[Event ") {
                 games += [currentGame]
                 currentGame = line
                 gameParsingStarted = false
             } else {
                 if !line.starts(with:  "[") {
                     gameParsingStarted = true
-                    currentGame += " \(line)"
+                    currentGame += " \(line) "
                 } else {
-                    currentGame += "\(line)\r\n"
+                    currentGame += "\(line) \r\n"
                 }
             }
         })

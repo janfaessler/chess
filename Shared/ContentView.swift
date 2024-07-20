@@ -7,9 +7,9 @@ struct ContentView: View {
     var body: some View {
         GeometryReader{ geo in
             HStack(alignment: .top, spacing:0) {
-                let boardSize = model.getBoardSize(geo)
                 BoardView(model:model.board)
-                    .frame(width: boardSize, height: boardSize)
+                    .frame(width: model.getBoardSize(geo), 
+                           height: model.getBoardSize(geo))
                 ControlView(model: model)
             }
         }
