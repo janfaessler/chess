@@ -78,17 +78,7 @@ final class PgnParserTests: XCTestCase {
         XCTAssertEqual(game.moves[4].variations[0][3].move, "Nc6")
         XCTAssertEqual(game.moves[4].variations[0][3].variations[0][0].move, "e6")
 
-        
         XCTAssertEqual(game.moves[5].move, "dxe4")
         
-    }
-
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
-            }
-        }
     }
 }
