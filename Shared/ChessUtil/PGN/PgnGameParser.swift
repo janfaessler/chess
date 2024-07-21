@@ -9,14 +9,15 @@ public class PgnGameParser {
         
         pgn.enumerateLines(invoking: { line, _ in
             guard !line.isEmpty else { return }
-            if line.starts(with: "[") {
-                headerStrings += [line.trimmingCharacters(in: ["[","]"])]
+            let input = String(line.trimmingPrefix(" "))
+            if input.starts(with: "[") {
+                headerStrings += [input.trimmingCharacters(in: ["[","]"])]
             }
-            if line.starts(with: "{") {
-                gameComment = parseComment(line)
-                gameString += parseLineAfterComment(line)
+            if input.starts(with: "{") {
+                gameComment = parseComment(input)
+                gameString += parseLineAfterComment(input)
             } else {
-                gameString += line
+                gameString += input
             }
         })
         
@@ -51,7 +52,7 @@ public class PgnGameParser {
         let commentEndMarkIndex = input.firstIndex(of: "}")!
         let startCommentIndex = input.index(after: input.startIndex)
         let endCommentIndex = input.index(before: commentEndMarkIndex)
-        return String(input[startCommentIndex...endCommentIndex])
+        return String(input[startCommentIndex...endCommentIndex]).trimmingCharacters(in: [" "])
     }
     
     private static func parseLineAfterComment(_ input:String) -> String {

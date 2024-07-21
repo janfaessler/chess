@@ -28,6 +28,7 @@ public class PgnParser {
                 }
             }
         })
+        games += [currentGame]
         return games
     }
 

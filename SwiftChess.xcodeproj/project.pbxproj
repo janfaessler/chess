@@ -18,6 +18,7 @@
 		614C6C042C1A53D000B4F930 /* VariationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6C032C1A53D000B4F930 /* VariationView.swift */; };
 		614FFC6B277780130082F892 /* MoveIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC69277780130082F892 /* MoveIndicatorView.swift */; };
 		614FFC6E277786560082F892 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC6C277786560082F892 /* Move.swift */; };
+		6156C4B22C4C5EBB000CEB63 /* PgnParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6156C4B12C4C5EBB000CEB63 /* PgnParserTests.swift */; };
 		6157321D2BA5F21E0048EDDF /* PgnParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6157321B2BA5F21E0048EDDF /* PgnParser.swift */; };
 		616BA6AF2C287E3B0015D3CD /* PgnMovesParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616BA6AE2C287E3B0015D3CD /* PgnMovesParser.swift */; };
 		616D3E482BA464D8002D78EE /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E462BA464D8002D78EE /* GameState.swift */; };
@@ -100,6 +101,7 @@
 		614C6C032C1A53D000B4F930 /* VariationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariationView.swift; sourceTree = "<group>"; };
 		614FFC69277780130082F892 /* MoveIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveIndicatorView.swift; sourceTree = "<group>"; };
 		614FFC6C277786560082F892 /* Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
+		6156C4B12C4C5EBB000CEB63 /* PgnParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PgnParserTests.swift; sourceTree = "<group>"; };
 		6157321B2BA5F21E0048EDDF /* PgnParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PgnParser.swift; sourceTree = "<group>"; };
 		6157321E2BA65BC50048EDDF /* FenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FenTests.swift; sourceTree = "<group>"; };
 		616BA6AE2C287E3B0015D3CD /* PgnMovesParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PgnMovesParser.swift; sourceTree = "<group>"; };
@@ -270,6 +272,14 @@
 			path = Control;
 			sourceTree = "<group>";
 		};
+		6156C4B02C4C5E9F000CEB63 /* ChessUtil */ = {
+			isa = PBXGroup;
+			children = (
+				6156C4B12C4C5EBB000CEB63 /* PgnParserTests.swift */,
+			);
+			path = ChessUtil;
+			sourceTree = "<group>";
+		};
 		6157320A2BA5EB4C0048EDDF /* Figures */ = {
 			isa = PBXGroup;
 			children = (
@@ -416,6 +426,7 @@
 		61AE78212B991AAD008F56F8 /* SwiftChessTests */ = {
 			isa = PBXGroup;
 			children = (
+				6156C4B02C4C5E9F000CEB63 /* ChessUtil */,
 				614C6BFD2C19AC9800B4F930 /* Chess */,
 				614C6BFE2C19ACB700B4F930 /* Control */,
 			);
@@ -635,6 +646,7 @@
 				619375E52BDE7873005A616D /* NotationTests.swift in Sources */,
 				614C6C002C19ACE300B4F930 /* MoveListTests.swift in Sources */,
 				619375E62BDE7873005A616D /* GameStateTests.swift in Sources */,
+				6156C4B22C4C5EBB000CEB63 /* PgnParserTests.swift in Sources */,
 				619375E72BDE7873005A616D /* FenTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

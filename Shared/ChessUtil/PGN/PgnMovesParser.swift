@@ -15,7 +15,7 @@ public class PgnMovesParser {
         var moves:[PgnMove] = []
         for line in movesArray {
             let moveNumber = parseMoveNumber(line)
-            moves += parseMovePair(line, variations: variations.filter{ $0.hasPrefix("\(moveNumber).")})
+             moves += parseMovePair(line, variations: variations.filter{ $0.hasPrefix("\(moveNumber).")})
         }
         return moves
     }
@@ -66,7 +66,7 @@ public class PgnMovesParser {
             return nil
         }
 
-        return String(input[input.index(after:startIndex)..<input.index(before: endIndex)])
+        return String(input[input.index(after:startIndex)...input.index(before: endIndex)]).trimmingCharacters(in: [" "])
 
     }
     
@@ -74,8 +74,24 @@ public class PgnMovesParser {
         var variations:[String] = []
         var current:String = ""
         var variationCount = 0
+        var comment = false
         for char in input {
-            if char == "(" {
+            if char == "{" {
+                if variationCount > 0 {
+                    current.append(char)
+                }
+                comment = true
+            } else if char == "}" {
+                if variationCount > 0 {
+                    current.append(char)
+                }
+                comment = false
+            } else if comment {
+                if variationCount > 0 {
+                    current.append(char)
+                }
+                continue
+            } else if char == "(" {
                 if variationCount > 0 {
                     current.append(char)
                 }
@@ -88,7 +104,7 @@ public class PgnMovesParser {
                 }
                 
                 if variationCount == 0 {
-                    variations.append(current)
+                    variations.append(current.trimmingCharacters(in: [" "]))
                     current = ""
                 }
             } else if variationCount > 0 {
@@ -113,7 +129,5 @@ public class PgnMovesParser {
             
         }
         return pgnWithoutVariations
-            .replacing("   ", with: " ")
-            .replacing("  ", with: " ")
     }
 }
