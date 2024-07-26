@@ -126,10 +126,11 @@ class BoardModel : ObservableObject {
     }
     
     private func doMove(_ move: Move) throws {
+        let positionBeforeMove = board.getPosition()
         try board.move(move)
-        notifyMoveDone(move)
         figures = getFigures()
         result = ResultModel(board.getGameState())
+        notifyMoveDone(move, position: positionBeforeMove)
     }
     
     private func moveAndUpdateModel(_ move: Move) throws {
@@ -143,8 +144,8 @@ class BoardModel : ObservableObject {
         return figures.map({ FigureModel($0, board: self) })
     }
     
-    private func notifyMoveDone(_ move:Move) {
-        let notation = NotationFactory.generate(move, position: board.getPosition())
+    private func notifyMoveDone(_ move:Move, position:Position) {
+        let notation = NotationFactory.generate(move, position: position)
         for event in moveNotifcations {
             event(notation)
         }
