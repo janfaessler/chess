@@ -106,6 +106,11 @@ public class MoveListModel : ObservableObject {
         history.removeAll()
     }
     
+    public func updateMoveList(_ input:[RowContainer]) {
+        reset()
+        moves = input
+    }
+    
     func addPositionChangeListener(_ listener:@escaping PositionChangeNotification) {
         positionChangeNotification += [listener]
     }

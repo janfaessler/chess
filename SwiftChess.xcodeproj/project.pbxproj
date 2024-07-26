@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		6100737B2C28918D009B2527 /* NotationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6100737A2C28918D009B2527 /* NotationFactory.swift */; };
 		6106C2BA2C1F800A00D67A00 /* FilePicker in Frameworks */ = {isa = PBXBuildFile; productRef = 6106C2B92C1F800A00D67A00 /* FilePicker */; };
+		613B4AD92C4D416C007736D7 /* ContainerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613B4AD82C4D416C007736D7 /* ContainerFactory.swift */; };
 		614643FC2C31C1C70041E1BE /* PgnGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614643FB2C31C1C70041E1BE /* PgnGame.swift */; };
 		614643FE2C31D1540041E1BE /* PgnGameParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614643FD2C31D1540041E1BE /* PgnGameParser.swift */; };
 		614C6BF82C15EBC700B4F930 /* MoveListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6BF72C15EBC700B4F930 /* MoveListModel.swift */; };
@@ -92,6 +93,7 @@
 
 /* Begin PBXFileReference section */
 		6100737A2C28918D009B2527 /* NotationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotationFactory.swift; sourceTree = "<group>"; };
+		613B4AD82C4D416C007736D7 /* ContainerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerFactory.swift; sourceTree = "<group>"; };
 		614643FB2C31C1C70041E1BE /* PgnGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PgnGame.swift; sourceTree = "<group>"; };
 		614643FD2C31D1540041E1BE /* PgnGameParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PgnGameParser.swift; sourceTree = "<group>"; };
 		614C6BF72C15EBC700B4F930 /* MoveListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveListModel.swift; sourceTree = "<group>"; };
@@ -233,6 +235,7 @@
 				618D16A12C14FCA100D70B01 /* MoveContainer.swift */,
 				614C6BF72C15EBC700B4F930 /* MoveListModel.swift */,
 				614C6BFB2C18A04100B4F930 /* RowContainer.swift */,
+				613B4AD82C4D416C007736D7 /* ContainerFactory.swift */,
 			);
 			path = MoveList;
 			sourceTree = "<group>";
@@ -614,6 +617,7 @@
 				614C6C022C1A527800B4F930 /* RowView.swift in Sources */,
 				6157321D2BA5F21E0048EDDF /* PgnParser.swift in Sources */,
 				61F163EE2B9D165200C48BAC /* ChessFigure.swift in Sources */,
+				613B4AD92C4D416C007736D7 /* ContainerFactory.swift in Sources */,
 				61812E2C2768078E00616866 /* PieceType.swift in Sources */,
 				61F6090B2BC30775009BDC38 /* BoardNavigationView.swift in Sources */,
 				61812E252767F42000616866 /* BoardModel.swift in Sources */,

@@ -40,11 +40,7 @@ public class ControlModel : ObservableObject {
     }
     
     func openGame(_ game: PgnGame) {
-        moves.reset()
-        for pgnmove in game.moves {
-            movePlayed(pgnmove.move)
-        }
-        self.moves.start()
+        moves.updateMoveList(ContainerFactory.create(game))
     }
     
     private func loadGames(_ urls:[URL]) async -> [PgnGame] {
