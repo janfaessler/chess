@@ -11,15 +11,15 @@ public class MoveListModel : ObservableObject {
     private var history: [MoveContainer] = []
     private var parrentMoves:[UUID:MoveContainer] = [:]
     
-    @Published public var moves:[RowContainer] = []
+    @Published public var rows:[RowContainer] = []
     @Published public var currentMove:MoveContainer?
     
     public init() {}
     
     var moveCount:Int {
-        let moveCount = Float(moves.count / 2)
+        let moveCount = Float(rows.count / 2)
         let roundedCount = moveCount.rounded(.up)
-        let result = Int(roundedCount) + moves.count % 2
+        let result = Int(roundedCount) + rows.count % 2
         return result
     }
     
@@ -44,7 +44,7 @@ public class MoveListModel : ObservableObject {
     }
     
     public func end() {
-        currentMove = moves.last!.hasBlackMoved() ? moves.last!.black : moves.last!.white
+        currentMove = rows.last!.hasBlackMoved() ? rows.last!.black : rows.last!.white
         recreateTopLevelHistory()
         updatePosition()
     }
@@ -52,12 +52,12 @@ public class MoveListModel : ObservableObject {
     public func goToMove(_ move:MoveContainer) {
         currentMove = move
         history.removeAll()
-        guard let index = moves.firstIndex(where: { $0.white == currentMove || $0.black == currentMove}) else {
+        guard let index = rows.firstIndex(where: { $0.white == currentMove || $0.black == currentMove}) else {
             recreateVariationHistory()
             updatePosition()
             return
         }
-        for row in moves[moves.startIndex...index] {
+        for row in rows[rows.startIndex...index] {
             if row.hasWhiteMoved() {
                 history.append(row.white!)
             }
@@ -71,7 +71,7 @@ public class MoveListModel : ObservableObject {
     public func movePlayed(_ move:String) {
         let color = currentMove?.color == .white ? PieceColor.black : PieceColor.white
         let container = MoveContainer(move: move, color: color)
-        let blackHasLastTopLevelMove = moves.last?.black != nil
+        let blackHasLastTopLevelMove = rows.last?.black != nil
         
         let nextMove = getNextMove(currentMove)
         if move == nextMove?.move {
@@ -79,14 +79,14 @@ public class MoveListModel : ObservableObject {
             return
         }
 
-        if (blackHasLastTopLevelMove && currentMove == moves.last?.black) || (!blackHasLastTopLevelMove && moves.last?.white == currentMove) {
+        if (blackHasLastTopLevelMove && currentMove == rows.last?.black) || (!blackHasLastTopLevelMove && rows.last?.white == currentMove) {
             addTopLevelMove(container)
         } else {
             addVariationMove(container)
         }
     }
     
-    func getPosition() -> Position? {
+    public func getPosition() -> Position? {
         guard currentMove != nil else { return PositionFactory.startingPosition() }
         let notations = getMoveNotations()
         return PositionFactory.loadPosition(notations)
@@ -102,13 +102,18 @@ public class MoveListModel : ObservableObject {
     
     public func reset() {
         currentMove = nil
-        moves.removeAll()
+        rows.removeAll()
         history.removeAll()
     }
     
     public func updateMoveList(_ input:[RowContainer]) {
         reset()
-        moves = input
+        rows = input
+        createVariationCache()
+    }
+    
+    public func getMoveNotations() -> [String] {
+        history.map({ $0.move })
     }
     
     func addPositionChangeListener(_ listener:@escaping PositionChangeNotification) {
@@ -121,16 +126,16 @@ public class MoveListModel : ObservableObject {
     }
     
     private func addTopLevelMove(_ container: MoveContainer) {
-        guard moves.count > 0 else {
-            moves += [RowContainer(moveNumber: 1, white: container)]
+        guard rows.count > 0 else {
+            rows += [RowContainer(moveNumber: 1, white: container)]
             currentMove = container
             updateHistory()
             return
         }
-        if moves[moves.index(before: moves.endIndex)].hasBlackMoved() == true {
-            moves += [RowContainer(moveNumber: moves.count + 1, white: container)]
+        if rows[rows.index(before: rows.endIndex)].hasBlackMoved() == true {
+            rows += [RowContainer(moveNumber: rows.count + 1, white: container)]
         } else {
-            moves[moves.index(before: moves.endIndex)].black = container
+            rows[rows.index(before: rows.endIndex)].black = container
         }
         currentMove = container
         updateHistory()
@@ -210,7 +215,7 @@ public class MoveListModel : ObservableObject {
     
     private func recreateTopLevelHistory() {
         history.removeAll()
-        for row in moves {
+        for row in rows {
             if row.hasWhiteMoved() {
                 history.append(row.white!)
             }
@@ -241,8 +246,8 @@ public class MoveListModel : ObservableObject {
             }
             currentMove = parrentMove
         }
-        guard let topLevelIndex = moves.firstIndex(where: { $0.white == currentMove || $0.black == currentMove }) else { return }
-        for row in moves[moves.startIndex...topLevelIndex].reversed() {
+        guard let topLevelIndex = rows.firstIndex(where: { $0.white == currentMove || $0.black == currentMove }) else { return }
+        for row in rows[rows.startIndex...topLevelIndex].reversed() {
             if row.hasBlackMoved() && row.white != currentMove {
                 reverseHistory.append(row.black!)
             }
@@ -256,18 +261,18 @@ public class MoveListModel : ObservableObject {
     
     private func getNextMove(_ fromContainer:MoveContainer?) -> MoveContainer? {
         guard let fromContainer = fromContainer else {
-            return moves.first?.white
+            return rows.first?.white
         }
         if !parrentMoves.contains(where: { $0.key == fromContainer.id}) {
-            guard let index = moves.firstIndex(where: { $0.white?.id == fromContainer.id || $0.black?.id == fromContainer.id }) else { return nil }
+            guard let index = rows.firstIndex(where: { $0.white?.id == fromContainer.id || $0.black?.id == fromContainer.id }) else { return nil }
     
-            guard fromContainer == moves[index].black else {
-                return moves[index].black
+            guard fromContainer == rows[index].black else {
+                return rows[index].black
             }
 
-            let nextIndex = moves.index(after: index)
-            if nextIndex == moves.count { return nil }
-            return moves[nextIndex].white
+            let nextIndex = rows.index(after: index)
+            if nextIndex == rows.count { return nil }
+            return rows[nextIndex].white
         }
         guard let parentMove = parrentMoves[fromContainer.id] else { return nil }
         guard let variation = parentMove.getVariation(fromContainer) else { return nil }
@@ -292,7 +297,37 @@ public class MoveListModel : ObservableObject {
         }
     }
     
-    private func getMoveNotations() -> [String] {
-        return history.map({ $0.move })
+    private func createVariationCache() {
+        for row in rows {
+            if row.hasWhiteVariations() {
+                createCacheForVariations(row.white!)
+            }
+            if row.hasBlackVariations() {
+                createCacheForVariations(row.black!)
+            }
+        }
+    }
+    
+    private func createCacheForVariations(_ move: MoveContainer) {
+        let variations = move.variations
+        for name in variations.keys {
+            guard let variation = variations[name] else { continue }
+            for row in variation {
+                createCacheForVariations(row, to: move)
+            }
+        }
+    }
+    
+    private func createCacheForVariations(_ row: RowContainer, to:MoveContainer) {
+        if row.hasWhiteMoved() {
+            guard let move = row.white else { return }
+            parrentMoves[move.id] = to
+            createCacheForVariations(move)
+        }
+        if row.hasBlackMoved() {
+            guard let move = row.black else { return }
+            parrentMoves[move.id] = to
+            createCacheForVariations(move)
+        }
     }
 }

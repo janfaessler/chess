@@ -47,6 +47,7 @@
 		619375E72BDE7873005A616D /* FenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6157321E2BA65BC50048EDDF /* FenTests.swift */; };
 		619B657F2C1DF59D00C44FC9 /* PgnMove.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619B657E2C1DF59D00C44FC9 /* PgnMove.swift */; };
 		619B65812C1DF68000C44FC9 /* PgnRegex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619B65802C1DF68000C44FC9 /* PgnRegex.swift */; };
+		619E5F112C53CF5F00803C61 /* ContainerFactoryTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619E5F102C53CF5F00803C61 /* ContainerFactoryTest.swift */; };
 		61A919252BA1F83E00AD371E /* MoveFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A919232BA1F83E00AD371E /* MoveFactory.swift */; };
 		61B0B43C2B94F5F20085DB48 /* Pawn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B43A2B94F5F20085DB48 /* Pawn.swift */; };
 		61B0B43F2B94F80F0085DB48 /* Bishop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0B43D2B94F80F0085DB48 /* Bishop.swift */; };
@@ -130,6 +131,7 @@
 		619375D72BDE783D005A616D /* SwiftChessTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftChessTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		619B657E2C1DF59D00C44FC9 /* PgnMove.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PgnMove.swift; sourceTree = "<group>"; };
 		619B65802C1DF68000C44FC9 /* PgnRegex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PgnRegex.swift; sourceTree = "<group>"; };
+		619E5F102C53CF5F00803C61 /* ContainerFactoryTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerFactoryTest.swift; sourceTree = "<group>"; };
 		61A919232BA1F83E00AD371E /* MoveFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveFactory.swift; sourceTree = "<group>"; };
 		61A919262BA1F8ED00AD371E /* MoveFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveFactoryTests.swift; sourceTree = "<group>"; };
 		61AE78222B991AAD008F56F8 /* RawMovesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawMovesTests.swift; sourceTree = "<group>"; };
@@ -271,6 +273,7 @@
 			isa = PBXGroup;
 			children = (
 				614C6BFF2C19ACE300B4F930 /* MoveListTests.swift */,
+				619E5F102C53CF5F00803C61 /* ContainerFactoryTest.swift */,
 			);
 			path = Control;
 			sourceTree = "<group>";
@@ -644,6 +647,7 @@
 			files = (
 				619375E02BDE7873005A616D /* RawMovesTests.swift in Sources */,
 				619375E12BDE7873005A616D /* FieldTest.swift in Sources */,
+				619E5F112C53CF5F00803C61 /* ContainerFactoryTest.swift in Sources */,
 				619375E22BDE7873005A616D /* ChessTestBase.swift in Sources */,
 				619375E32BDE7873005A616D /* MoveFactoryTests.swift in Sources */,
 				619375E42BDE7873005A616D /* PositionTests.swift in Sources */,

@@ -14,7 +14,7 @@ struct MoveListView: View {
                         Spacer().id(topiD)
                     }.gridCellColumns(3)
                     if model.moveCount > 0 {
-                        ForEach(model.moves, id: \.moveNumber) { row in
+                        ForEach(model.rows, id: \.moveNumber) { row in
                             GridRow {
                                 RowView(model: model, row: row).id(row.white?.id).id(row.black?.id)
                             }
@@ -40,7 +40,7 @@ struct MoveListView: View {
                     }.gridCellColumns(3)
                 }
                 .padding(10)
-                .onChange(of: model.moves.count) {
+                .onChange(of: model.rows.count) {
                     scrollView.scrollTo(bottomID, anchor: .top)
                 }
                 .onChange(of: model.currentMove) {
