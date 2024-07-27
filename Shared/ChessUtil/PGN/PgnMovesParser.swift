@@ -121,11 +121,10 @@ public class PgnMovesParser {
             guard let variationLowerBound = variationRange?.lowerBound,
                   let variationUpperBound = variationRange?.upperBound
             else { continue }
-        
-            let variationStartMarker = pgnWithoutVariations.index(before: variationLowerBound)
-            let variationEndMarker = pgnWithoutVariations.index(after: variationUpperBound)
+            let beforeVariation = pgnWithoutVariations[..<variationLowerBound].trimmingCharacters(in: [" ", "("])
+            let afterVariation = pgnWithoutVariations[variationUpperBound...].trimmingCharacters(in: [" ", ")"])
             
-            pgnWithoutVariations = "\(pgnWithoutVariations[...variationStartMarker]) \(pgnWithoutVariations[variationEndMarker...])"
+            pgnWithoutVariations = "\(beforeVariation) \(afterVariation)"
             
         }
         return pgnWithoutVariations

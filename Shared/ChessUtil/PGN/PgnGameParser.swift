@@ -12,16 +12,15 @@ public class PgnGameParser {
             let input = String(line.trimmingPrefix(" "))
             if input.starts(with: "[") {
                 headerStrings += [input.trimmingCharacters(in: ["[","]"])]
-            }
-            if input.starts(with: "{") {
+            } else if input.starts(with: "{") {
                 gameComment = parseComment(input)
                 gameString += parseLineAfterComment(input)
             } else {
                 gameString += input
             }
         })
-        
-        let moves = PgnMovesParser.parse(pgn)
+        gameString = gameString.replacingOccurrences(of: "  ", with: " ")
+        let moves = PgnMovesParser.parse(gameString)
         
         let result = PgnRegex.parse(PgnRegex.result, input: pgn).first
         let header = parseHeaders(headerStrings)
