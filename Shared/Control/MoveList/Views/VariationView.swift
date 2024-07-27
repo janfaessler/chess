@@ -1,5 +1,4 @@
 import SwiftUI
-import WrappingHStack
 
 struct VariationView: View {
     @ObservedObject var model:MoveListModel

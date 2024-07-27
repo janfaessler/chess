@@ -68,7 +68,6 @@
 		61EA62692BAA0ED2009A0300 /* FigureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EA62672BAA0ED2009A0300 /* FigureView.swift */; };
 		61ED578C2C4BDC3300302C92 /* GamesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61ED578B2C4BDC3300302C92 /* GamesView.swift */; };
 		61EF1DEF2C1C94B100A21268 /* VariationMoveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EF1DEE2C1C94B100A21268 /* VariationMoveView.swift */; };
-		61EF1DF22C1CD7AA00A21268 /* WrappingHStack in Frameworks */ = {isa = PBXBuildFile; productRef = 61EF1DF12C1CD7AA00A21268 /* WrappingHStack */; };
 		61F163EE2B9D165200C48BAC /* ChessFigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F163EC2B9D165200C48BAC /* ChessFigure.swift */; };
 		61F609052BC208B1009BDC38 /* ControlButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609032BC208B1009BDC38 /* ControlButtonView.swift */; };
 		61F609082BC20C1B009BDC38 /* MoveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609062BC20C1B009BDC38 /* MoveListView.swift */; };
@@ -175,7 +174,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6106C2BA2C1F800A00D67A00 /* FilePicker in Frameworks */,
-				61EF1DF22C1CD7AA00A21268 /* WrappingHStack in Frameworks */,
 				61F609152BC333AF009BDC38 /* ChessKitEngine in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -489,7 +487,6 @@
 			name = "SwiftChess (macOS)";
 			packageProductDependencies = (
 				61F609142BC333AF009BDC38 /* ChessKitEngine */,
-				61EF1DF12C1CD7AA00A21268 /* WrappingHStack */,
 				6106C2B92C1F800A00D67A00 /* FilePicker */,
 			);
 			productName = "SwiftChess (macOS)";
@@ -544,7 +541,6 @@
 			mainGroup = 6177235A274284FE00169D3D;
 			packageReferences = (
 				61F609122BC310DD009BDC38 /* XCRemoteSwiftPackageReference "chesskit-engine" */,
-				61EF1DF02C1CD76C00A21268 /* XCRemoteSwiftPackageReference "WrappingHStack" */,
 				6106C2B82C1F7FE500D67A00 /* XCRemoteSwiftPackageReference "FilePicker" */,
 			);
 			productRefGroup = 6177236B274284FF00169D3D /* Products */;
@@ -947,14 +943,6 @@
 				minimumVersion = 1.0.1;
 			};
 		};
-		61EF1DF02C1CD76C00A21268 /* XCRemoteSwiftPackageReference "WrappingHStack" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/dkk/WrappingHStack";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.2.11;
-			};
-		};
 		61F6090C2BC30F27009BDC38 /* XCRemoteSwiftPackageReference "chesskit-engine" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/chesskit-app/chesskit-engine";
@@ -978,11 +966,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6106C2B82C1F7FE500D67A00 /* XCRemoteSwiftPackageReference "FilePicker" */;
 			productName = FilePicker;
-		};
-		61EF1DF12C1CD7AA00A21268 /* WrappingHStack */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 61EF1DF02C1CD76C00A21268 /* XCRemoteSwiftPackageReference "WrappingHStack" */;
-			productName = WrappingHStack;
 		};
 		61F609102BC310B4009BDC38 /* ChessKitEngine */ = {
 			isa = XCSwiftPackageProductDependency;
