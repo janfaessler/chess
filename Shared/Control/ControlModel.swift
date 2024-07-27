@@ -9,6 +9,8 @@ public class ControlModel : ObservableObject {
     @Published var engineEval:String = ""
     @Published var lines:[EngineLine] = []
     @Published var games:[PgnGame] = []
+    
+    @Published var game:PgnGame? = nil
 
     @ObservedObject var board = BoardModel()
     @ObservedObject var moves = MoveListModel()
@@ -35,11 +37,12 @@ public class ControlModel : ObservableObject {
     
     func openFiles(urls: [URL]) async {
         games = await loadGames(urls)
-        guard let firstGame = games.first else { return }
-        openGame(firstGame)
+        game = games.first
+        openGame()
     }
     
-    func openGame(_ game: PgnGame) {
+    func openGame() {
+        guard let game = game else { return }
         moves.updateMoveList(ContainerFactory.create(game))
     }
     

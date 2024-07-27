@@ -1,6 +1,6 @@
 import Foundation
 
-public struct PgnGame : Identifiable {
+public struct PgnGame : Identifiable, Hashable, Equatable {
     public let id = UUID()
     public let headers:[String:String]
     public let moves:[PgnMove]
@@ -12,5 +12,13 @@ public struct PgnGame : Identifiable {
               let black = headers["Black"]
         else { return headers["Event"] ?? "???" }
         return "\(white) - \(black)"
+    }
+    
+    public static func == (lhs: PgnGame, rhs: PgnGame) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }

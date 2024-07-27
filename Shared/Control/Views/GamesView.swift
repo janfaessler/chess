@@ -1,26 +1,48 @@
 import SwiftUI
+import FilePicker
 
 struct GamesView: View {
     @ObservedObject var model:ControlModel
 
     var body: some View {
-        ScrollView {
-            LazyVStack{
-                ForEach(model.games) { game in
-                    ZStack {
-                        Button {
-                            model.openGame(game)
-                        } label: {
-                            Text(game.getTitle())
-                                .fontWeight(.regular)
-                                .padding(3)
-                                .frame(maxWidth: .infinity)
-                                .background(.gray.opacity(0.5))
-                        }.buttonStyle(.plain)
-                    
-                    }
+        HStack {
+            Picker(selection: $model.game) {
+                Text("No Option").tag(Optional<PgnGame>(nil))
+                ForEach(model.games, id:\.self ) { game in
+                    Text(game.getTitle()).tag(game as PgnGame?)
+                 }
+            } label: {
+                PgnLoaderView() { urls in
+                    await model.openFiles(urls: urls)
                 }
+            }.onChange(of: model.game) {
+                model.openGame()
             }
         }
+    }
+}
+
+struct PgnLoaderView: View {
+    let action: ([URL]) async -> Void
+    @State var buttonText = "Select PGN"
+
+    init(_ action: @escaping  ([URL]) async -> Void) {
+        self.action = action
+    }
+    
+    var body: some View {
+        FilePicker(types: [.plainText], allowMultiple: false) { urls in
+            buttonText = "loading..."
+            Task {
+                await action(urls)
+                buttonText = urls.first?.lastPathComponent ??  "Select PGN"
+            }
+        } label: {
+            HStack {
+                Image(systemName: "doc.on.doc")
+                Text(buttonText)
+            }
+        }
+    
     }
 }
