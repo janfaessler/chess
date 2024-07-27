@@ -12,11 +12,27 @@ struct VariationView: View {
                     ZStack {
                         Rectangle()
                             .foregroundColor(.black)
-                            .cornerRadius(5.0)
+                            .border(.white)
+                            .clipShape(.rect(cornerRadius: 10))
                         VStack {
                             ForEach(move.getVariation(variation), id: \.moveNumber) { row in
-                                HStack {
-                                    RowView(model: model, row: row).id(row.white?.id).id(row.black?.id)
+                                VStack {
+                                    HStack {
+                                        RowView(model: model, row: row).id(row.white?.id).id(row.black?.id)
+                                    }
+                                    if row.hasWhiteVariations() {
+                                        GridRow {
+                                            VariationView(model: model, move: row.white!)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                        }.gridCellColumns(3)
+                                    }
+                                   
+                                    if row.hasBlackVariations() {
+                                        GridRow {
+                                            VariationView(model: model, move: row.black!)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                        }.gridCellColumns(3)
+                                    }
                                 }
                             }
                         }.padding(10)
