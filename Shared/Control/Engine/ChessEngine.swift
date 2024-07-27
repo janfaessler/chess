@@ -10,23 +10,28 @@ final class ChessEngine {
     private let engine:Engine
     private var lines:[EngineLine] = []
     private var pos:Position = PositionFactory.startingPosition()
+    
+    private let queue = DispatchQueue.main
+    private var workItem:DispatchWorkItem? = DispatchWorkItem(block: {})
+    private var delay = TimeInterval(1.0)
 
     init() {
         engine = Engine(type: .stockfish)
         engine.receiveResponse = handleEngineResponse
         engine.start()
         engine.send(command: .setoption(id: "MultiPV", value: "\(lineNumbers)"))
-        for i in 0..<lineNumbers {
-            lines = [EngineLine(id: i, score: "-", line: "")]
-        }
+
     }
     
     public func newPosition(_ pos:Position) {
         guard engine.isRunning else { return }
-        self.pos = pos
         engine.send(command: .stop)
-        engine.send(command: .position(.fen(FenBuilder.create(pos))))
-        engine.send(command: .go(depth: 15))
+        lines.removeAll()
+        debounce {
+            self.engine.send(command: .position(.fen(FenBuilder.create(pos))))
+            self.engine.send(command: .go(depth: 15))
+        }
+        self.pos = pos        
     }
     
     public func addEvalListener(_ listener:@escaping EvalNotification) {
@@ -83,5 +88,19 @@ final class ChessEngine {
     
     private func getNotation(move:Move, isCapture:Bool) -> String {
         return NotationFactory.generate(move, position: pos)
+    }
+    
+    private func debounce(action: @escaping () -> Void) {
+        workItem?.cancel()
+
+        // Create a new work item
+        workItem = DispatchWorkItem {
+            action()
+        }
+
+        // Schedule the work item after the delay
+        if let workItem = workItem {
+            queue.asyncAfter(deadline: .now() + delay, execute: workItem)
+        }
     }
 }

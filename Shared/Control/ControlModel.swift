@@ -61,8 +61,8 @@ public class ControlModel : ObservableObject {
     }
     
     private func positionChange(_ pos:Position) {
-        engine.newPosition(pos)
         board.updatePosition(pos)
+        engine.newPosition(pos)
     }
     
     private func updateEval(_ eval:[EngineLine]) {
