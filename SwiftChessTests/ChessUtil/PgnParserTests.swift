@@ -37,7 +37,7 @@ final class PgnParserTests: XCTestCase {
         XCTAssertEqual(game.moves[2].variations[0][3].comment, "moep")
         
         XCTAssertEqual(game.moves[2].variations[0][3].variations[0][0].move, "dxe4")
-        XCTAssertEqual(game.moves[2].variations[0][3].variations[0][0].comment, "bla bla ( sbla )  bla.")
+        XCTAssertEqual(game.moves[2].variations[0][3].variations[0][0].comment, "bla bla ( sbla ) bla.")
         XCTAssertEqual(game.moves[2].variations[0][3].variations[0][1].move, "Nxe4")
         XCTAssertEqual(game.moves[2].variations[0][3].variations[0][2].move, "Nf6")
         
@@ -59,7 +59,7 @@ final class PgnParserTests: XCTestCase {
 
         XCTAssertEqual(game.moves[3].move, "d5")
         XCTAssertEqual(game.moves[4].move, "Nc3")
-        XCTAssertEqual(game.moves[4].comment, "bla bla  ( 3. e5 ) .")
+        XCTAssertEqual(game.moves[4].comment, "bla bla ( 3. e5 ) .")
         
         XCTAssertEqual(game.moves[4].variations[0][0].move, "e5")
         XCTAssertEqual(game.moves[4].variations[0][0].comment, "fu bar 3..c5!")
