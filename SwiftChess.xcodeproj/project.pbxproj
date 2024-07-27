@@ -245,10 +245,10 @@
 		614C6BFA2C15F45000B4F930 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				61F609062BC20C1B009BDC38 /* MoveListView.swift */,
 				618D83C32BC17E0100583944 /* MoveView.swift */,
 				614C6C012C1A527800B4F930 /* RowView.swift */,
 				614C6C032C1A53D000B4F930 /* VariationView.swift */,
-				61F609062BC20C1B009BDC38 /* MoveListView.swift */,
 				61EF1DEE2C1C94B100A21268 /* VariationMoveView.swift */,
 			);
 			path = Views;
@@ -522,7 +522,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1530;
-				LastUpgradeCheck = 1530;
+				LastUpgradeCheck = 1540;
 				TargetAttributes = {
 					6177236F274284FF00169D3D = {
 						CreatedOnToolsVersion = 13.1;
@@ -678,6 +678,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -739,6 +740,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
