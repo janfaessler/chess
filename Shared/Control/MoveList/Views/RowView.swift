@@ -6,9 +6,19 @@ struct RowView: View {
     
     var body: some View {
         Text("\(row.moveNumber).")
-        MoveView(model: model, move: row.white!) {
-            model.goToMove(row.white!)
+        if row.hasWhiteMoved() {
+            MoveView(model: model, move: row.white!) {
+                model.goToMove(row.white!)
+            }
+        } else {
+            VStack {
+                Rectangle()
+                    .frame(maxWidth: .infinity)
+                    .foregroundColor(.clear)
+                Text("...")
+            }
         }
+
         if row.hasBlackMoved() {
             MoveView(model: model, move: row.black!) {
                 model.goToMove(row.black!)
