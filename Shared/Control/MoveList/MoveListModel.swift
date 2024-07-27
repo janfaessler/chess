@@ -220,36 +220,35 @@ public class MoveListModel : ObservableObject {
     
     private func recreateVariationHistory()  {
         history.removeAll()
-        var reverseHistory: [MoveContainer] = []
-
         guard var currentMove = currentMove else { return }
-        
+        var reverseHistory: [MoveContainer] = []
         while parrentMoves.keys.contains(where: { $0 == currentMove.id }) {
             guard let parrentMove = parrentMoves[currentMove.id] else { return }
             guard let variationName = parrentMove.getVariation(currentMove) else { return }
             guard let variation = parrentMove.variations[variationName] else { return }
             guard let rowIndex = variation.firstIndex(where: { $0.white == currentMove || $0.black == currentMove }) else { return }
-            for row in variation[variation.startIndex...rowIndex].reversed() {
-                if row.hasBlackMoved() && row.white != currentMove {
-                    reverseHistory.append(row.black!)
-                }
-                if row.hasWhiteMoved() {
-                    reverseHistory.append(row.white!)
-                }
-            }
+            
+            reverseHistory.append(contentsOf: getReversedHistory(Array(variation[variation.startIndex...rowIndex]), toMove: currentMove))
             currentMove = parrentMove
         }
+       
         guard let topLevelIndex = rows.firstIndex(where: { $0.white == currentMove || $0.black == currentMove }) else { return }
-        for row in rows[rows.startIndex...topLevelIndex].reversed() {
-            if row.hasBlackMoved() && row.white != currentMove && row.black != currentMove  {
+        reverseHistory.append(contentsOf: getReversedHistory(Array(rows[rows.startIndex...topLevelIndex]), toMove: currentMove))
+        history.append(contentsOf: reverseHistory.reversed())
+        history.append(self.currentMove!)
+    }
+    
+    private func getReversedHistory(_ rows:[RowContainer], toMove:MoveContainer) -> [MoveContainer] {
+        var reverseHistory: [MoveContainer] = []
+        for row in rows.reversed() {
+            if row.hasBlackMoved() && row.white != toMove && row.black != toMove {
                 reverseHistory.append(row.black!)
             }
-            if row.hasWhiteMoved() && row.white != currentMove {
+            if row.hasWhiteMoved() && row.white != toMove {
                 reverseHistory.append(row.white!)
             }
         }
-        
-        history.append(contentsOf: reverseHistory.reversed())
+        return reverseHistory
     }
     
     private func getNextMove(_ fromContainer:MoveContainer?) -> MoveContainer? {
