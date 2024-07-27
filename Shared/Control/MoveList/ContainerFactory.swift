@@ -10,13 +10,12 @@ public class ContainerFactory {
         var containers:[RowContainer] = []
         var color = startingColor
         var moveNumber = startingMoveNumber
-        var lastMoveContainer:MoveContainer?
         for move in moves {
             let moveContainer = MoveContainer(move: move.move, color: color, note: move.comment)
             
             for variation in move.variations {
                 guard let variationName = variation.first?.move else { continue }
-                lastMoveContainer?.variations[variationName] = getRowContainers(variation, startingColor: color, startingMoveNumber: moveNumber)
+                moveContainer.variations[variationName] = getRowContainers(variation, startingColor: color, startingMoveNumber: moveNumber)
             }
             
             if color == .white {
@@ -30,7 +29,6 @@ public class ContainerFactory {
                 moveNumber += 1
             }
             color = flipColor(color)
-            lastMoveContainer = moveContainer
         }
         return containers
     }

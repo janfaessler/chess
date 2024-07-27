@@ -45,26 +45,13 @@ public class MoveListModel : ObservableObject {
     
     public func end() {
         currentMove = rows.last!.hasBlackMoved() ? rows.last!.black : rows.last!.white
-        recreateTopLevelHistory()
+        recreateHistory()
         updatePosition()
     }
     
     public func goToMove(_ move:MoveContainer) {
         currentMove = move
-        history.removeAll()
-        guard let index = rows.firstIndex(where: { $0.white == currentMove || $0.black == currentMove}) else {
-            recreateVariationHistory()
-            updatePosition()
-            return
-        }
-        for row in rows[rows.startIndex...index] {
-            if row.hasWhiteMoved() {
-                history.append(row.white!)
-            }
-            if row.hasBlackMoved() && currentMove != row.white {
-                history.append(row.black!)
-            }
-        }
+        recreateHistory()
         updatePosition()
     }
     
@@ -142,13 +129,13 @@ public class MoveListModel : ObservableObject {
     }
     
     private func addVariationMove(_ container:MoveContainer) {
-        guard let lastMove = currentMove else { return }
-        let parentMove = parrentMoves[lastMove.id]
-        let moveInVariation = parentMove?.getVariation(lastMove)
+        guard let nextMove = getNextMove(currentMove) ?? currentMove else { return }
+        let parentMove = parrentMoves[nextMove.id]
+        let moveInVariation = parentMove?.getVariation(nextMove)
         if  shouldCreateNewVariation(container) {
-            addNewVariation(container, to: lastMove)
+            addNewVariation(container, to: nextMove)
         } else {
-            appendVariation(container, to: parentMove!, variation: moveInVariation!, lastMove: lastMove)
+            appendVariation(container, to: parentMove!, variation: moveInVariation!, lastMove: nextMove)
         }
         
         self.currentMove = container
@@ -191,7 +178,7 @@ public class MoveListModel : ObservableObject {
     }
     
     private func appendVariation(_ container: MoveContainer, to: MoveContainer, variation: String, lastMove: MoveContainer) {
-        let rowNumber = (to.variations[variation]?.count ?? 1) + 1
+        let rowNumber = Int(history.count / 2) + 1
         if container.color == .white {
             let rowContainer = createRowContainer(container, moveNumber: rowNumber)
             to.variations[variation]?.append(rowContainer)
@@ -202,7 +189,8 @@ public class MoveListModel : ObservableObject {
     }
     
     private func addNewVariation( _ container: MoveContainer, to: MoveContainer) {
-        let rowContainer = createRowContainer(container)
+        let moveNumber = Int(history.count / 2) + 1
+        let rowContainer = createRowContainer(container, moveNumber: moveNumber)
         
         to.variations[container.move] = [rowContainer]
         parrentMoves[container.id] = to
@@ -213,9 +201,14 @@ public class MoveListModel : ObservableObject {
         history.append(currentMove)
     }
     
-    private func recreateTopLevelHistory() {
+    private func recreateHistory() {
         history.removeAll()
-        for row in rows {
+        guard let index = rows.firstIndex(where: { $0.white == currentMove || $0.black == currentMove}) else {
+            recreateVariationHistory()
+            updatePosition()
+            return
+        }
+        for row in rows[rows.startIndex...index] {
             if row.hasWhiteMoved() {
                 history.append(row.white!)
             }
@@ -248,10 +241,10 @@ public class MoveListModel : ObservableObject {
         }
         guard let topLevelIndex = rows.firstIndex(where: { $0.white == currentMove || $0.black == currentMove }) else { return }
         for row in rows[rows.startIndex...topLevelIndex].reversed() {
-            if row.hasBlackMoved() && row.white != currentMove {
+            if row.hasBlackMoved() && row.white != currentMove && row.black != currentMove  {
                 reverseHistory.append(row.black!)
             }
-            if row.hasWhiteMoved() {
+            if row.hasWhiteMoved() && row.white != currentMove {
                 reverseHistory.append(row.white!)
             }
         }

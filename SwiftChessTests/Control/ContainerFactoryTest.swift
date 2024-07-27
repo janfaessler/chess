@@ -10,13 +10,13 @@ final class ContainerFactoryTest: XCTestCase {
         
         XCTAssertEqual(containers[0].white?.move, "e4")
         XCTAssertEqual(containers[0].black?.move, "e5")
-        XCTAssertEqual(containers[0].black?.variations["d3"]?[0].white?.move, "d3")
-        XCTAssertEqual(containers[0].black?.variations["d3"]?[0].black?.move, "d6")
-        
         XCTAssertEqual(containers[1].white?.move, "Nc3")
-        XCTAssertEqual(containers[1].white?.variations["d6"]?[0].black?.move, "d6")
-        XCTAssertEqual(containers[1].white?.variations["d6"]?[1].white?.move, "d3")
+        XCTAssertEqual(containers[1].white?.variations["d3"]?[0].white?.move, "d3")
+        XCTAssertEqual(containers[1].white?.variations["d3"]?[0].black?.move, "d6")
         XCTAssertEqual(containers[1].black?.move, "Nf6")
+        XCTAssertEqual(containers[1].black?.variations["d6"]?[0].black?.move, "d6")
+        XCTAssertEqual(containers[1].black?.variations["d6"]?[1].white?.move, "d3")
+
     }
 
 }
