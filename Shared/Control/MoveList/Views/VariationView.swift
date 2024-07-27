@@ -7,17 +7,21 @@ struct VariationView: View {
     
     var body: some View {
         if move.hasVariations() {
-            ZStack {
-                Rectangle()
-                    .foregroundColor(.black)
-                    .cornerRadius(5.0)
-                VStack {
-                    ForEach(getElements(move), id: \.moveNumber) { row in
-                        HStack {
-                            RowView(model: model, row: row).id(row.white?.id).id(row.black?.id)
-                        }
+            VStack {
+                ForEach(move.getVariations(), id: \.self) { variation in
+                    ZStack {
+                        Rectangle()
+                            .foregroundColor(.black)
+                            .cornerRadius(5.0)
+                        VStack {
+                            ForEach(move.getVariation(variation), id: \.moveNumber) { row in
+                                HStack {
+                                    RowView(model: model, row: row).id(row.white?.id).id(row.black?.id)
+                                }
+                            }
+                        }.padding(10)
                     }
-                }.padding(10)
+                }
             }
         }
     }
