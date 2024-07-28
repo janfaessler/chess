@@ -6,6 +6,7 @@ struct RowView: View {
     
     var body: some View {
         Text("\(row.moveNumber).")
+            .frame(minWidth: 20)
         if row.hasWhiteMoved() {
             MoveView(model: model, move: row.white!) {
                 model.goToMove(row.white!)
