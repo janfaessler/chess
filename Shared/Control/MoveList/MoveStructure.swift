@@ -96,11 +96,11 @@ public class MoveStructure {
 
     private func addTopLevelMove(_ container: MoveModel) {
         guard rows.count > 0 else {
-            rows += [MovePairModel(moveNumber: 1, white: container)]
+            rows += [MovePairModel.create(container, moveNumber: 1)]
             return
         }
         if rows[rows.index(before: rows.endIndex)].hasBlackMoved() == true {
-            rows += [MovePairModel(moveNumber: rows.count + 1, white: container)]
+            rows += [MovePairModel.create(container, moveNumber: rows.count + 1)]
         } else {
             rows[rows.index(before: rows.endIndex)].black = container
         }
@@ -141,7 +141,7 @@ public class MoveStructure {
     
     private func addNewVariation( _ container: MoveModel, to: MoveModel) {
         let moveNumber = number(of:to)
-        let rowContainer = createRowContainer(container, moveNumber: moveNumber)
+        let rowContainer = MovePairModel.create(container, moveNumber: moveNumber)
         
         to.addVariation(container.move, variation: [rowContainer])
         parrentMoves[container.id] = to
@@ -149,24 +149,13 @@ public class MoveStructure {
     
     private func appendVariation(_ container: MoveModel, nextMove: MoveModel) {
         guard let to = parrentMoves[nextMove.id] else { return }
-        guard let moveInVariation = to.getVariationName(nextMove) else { return }
+        guard let variationName = to.getVariationName(nextMove) else { return }
         if container.color == .white {
-            let rowContainer = createRowContainer(container, moveNumber: number(of: nextMove) + 1)
-            to.appendVariation(rowContainer, variation: moveInVariation)
+            let rowContainer = MovePairModel.create(container, moveNumber: number(of: nextMove) + 1)
+            to.appendVariation(rowContainer, variation: variationName)
         } else {
-            to.appendVariation(container, variation: moveInVariation)
+            to.appendVariation(container, variation: variationName)
         }
         parrentMoves[container.id] = to
     }
-    
-    private func createRowContainer(_ container: MoveModel, moveNumber:Int = 1) -> MovePairModel {
-        var rowContainer:MovePairModel
-        if container.color == .white {
-            rowContainer = MovePairModel(moveNumber: moveNumber, white: container)
-        } else {
-            rowContainer = MovePairModel(moveNumber: moveNumber, black: container)
-        }
-        return rowContainer
-    }
-
 }

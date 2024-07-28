@@ -4,8 +4,9 @@ public class MoveModel : Identifiable, Equatable, ObservableObject {
     public let id: UUID = UUID()
     public let move: String
     public let color:PieceColor
+    public var note:String?
+    
     private var variations: [String:[MovePairModel]]
-    @Published public var note:String?
     
     init(move: String, color:PieceColor, variations: [String:[MovePairModel]] = [:], note: String? = nil) {
         self.move = move
@@ -38,14 +39,11 @@ public class MoveModel : Identifiable, Equatable, ObservableObject {
     }
     
     public func appendVariation(_ container: MoveModel, variation: String) {
-        
         variations[variation]!.last!.black = container
-
     }
     
     public func appendVariation(_ container: MovePairModel, variation: String) {
         variations[variation]?.append(container)
-
     }
     
     public func hasVariations() -> Bool {

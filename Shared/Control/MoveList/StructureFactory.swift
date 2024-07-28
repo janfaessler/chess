@@ -21,10 +21,10 @@ public class StructureFactory {
             }
             
             if color == .white {
-                containers += [MovePairModel(moveNumber: moveNumber, white: moveContainer)]
+                containers += [MovePairModel.create(moveContainer, moveNumber: moveNumber)]
             } else {
                 if containers.count == 0 {
-                    containers += [MovePairModel(moveNumber: moveNumber)]
+                    containers += [MovePairModel.create(moveNumber: moveNumber)]
                 }
                 let lastContainer = containers[containers.index(before: containers.endIndex)]
                 lastContainer.black = moveContainer
