@@ -6,14 +6,18 @@ public class MoveListModel : ObservableObject {
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "MoveListModel")
     
     typealias PositionChangeNotification = (Position) -> ()
-    private var positionChangeNotification:[PositionChangeNotification] = []
+    private var positionChangeNotification:[PositionChangeNotification]
     
-    private let structure = MoveStructure()
-    private let history = MoveHistory()
+    private let structure:MoveStructure
+    private let history:MoveHistory
     
     @Published public var currentMove:MoveModel?
     
-    public init() {}
+    public init() {
+        structure = MoveStructure()
+        history = MoveHistory()
+        positionChangeNotification = []
+    }
     
     public var moveCount:Int {
         structure.count
@@ -75,10 +79,6 @@ public class MoveListModel : ObservableObject {
     
     public func isCurrentMove(_ container:MoveModel?) -> Bool {
         currentMove == container
-    }
-    
-    public func atStartPosition() -> Bool {
-        currentMove == nil
     }
 
     public func set(_ input:MoveStructure) {

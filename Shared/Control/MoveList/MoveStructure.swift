@@ -59,10 +59,6 @@ public class MoveStructure {
         }
     }
     
-    public func clear() {
-        rows.removeAll()
-    }
-    
     public func set(_ input:MoveStructure) {
         rows = input.list
         parrentMoves = input.parrentMoves
