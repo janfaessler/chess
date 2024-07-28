@@ -13,14 +13,14 @@ public class ControlModel : ObservableObject {
     @Published var game:PgnGame? = nil
 
     @ObservedObject var board = BoardModel()
-    @ObservedObject var moves = MoveListModel()
+    @ObservedObject var moveList = MoveListModel()
     
     private var engine:ChessEngine = ChessEngine()
 
     init() {
         engine.addEvalListener(updateEval)
         board.addMoveListener(movePlayed)
-        moves.addPositionChangeListener(positionChange)
+        moveList.addPositionChangeListener(positionChange)
     }
     
     var moveListColumns:[GridItem] {
@@ -43,7 +43,8 @@ public class ControlModel : ObservableObject {
     
     func openGame() {
         guard let game = game else { return }
-        moves.updateMoveList(StructureFactory.create(game))
+        let structure = StructureFactory.create(game)
+        moveList.set(structure)
     }
     
     private func loadGames(_ urls:[URL]) async -> [PgnGame] {
@@ -53,13 +54,13 @@ public class ControlModel : ObservableObject {
     }
     
     private func updatePosition() {
-        guard let newPosition = moves.getPosition() else { return }
+        guard let newPosition = moveList.getPosition() else { return }
         board.updatePosition(newPosition)
         engine.newPosition(newPosition)
     }
     
     private func movePlayed(_ notation:String) {
-        moves.movePlayed(notation)
+        moveList.movePlayed(notation)
         engine.newPosition(board.getPosition())
     }
     

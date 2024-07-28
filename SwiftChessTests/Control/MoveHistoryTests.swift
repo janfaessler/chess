@@ -17,7 +17,7 @@ final class MoveHistoryTests: XCTestCase {
         let containers = StructureFactory.create(game)
         
         
-        testee.updateMoveList(containers)
+        testee.set(containers)
         
         testee.end()
         XCTAssertEqual(testee.getMoveNotations(), ["e4", "e5", "Nc3", "Nf6"])
@@ -81,7 +81,7 @@ final class MoveHistoryTests: XCTestCase {
         let containers = StructureFactory.create(game)
         
         let testee = try XCTUnwrap(testee)
-        testee.updateMoveList(containers)
+        testee.set(containers)
         
         XCTAssertEqual(testee.list[0].white?.move, "e4")
         XCTAssertEqual(testee.list[0].black?.move, "e5")

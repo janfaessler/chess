@@ -7,16 +7,16 @@ struct BoardNavigationView: View {
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
             ControlButtonView("arrow.backward.to.line", shortcut: .downArrow) {
-                model.moves.start()
+                model.moveList.start()
             }
             ControlButtonView("arrow.backward", shortcut: .leftArrow) {
-                model.moves.back()
+                model.moveList.back()
             }
             ControlButtonView("arrow.forward", shortcut: .rightArrow) {
-                model.moves.forward()
+                model.moveList.forward()
             }
             ControlButtonView("arrow.forward.to.line", shortcut: .upArrow) {
-                model.moves.end()
+                model.moveList.end()
             }
         }
         .frame(height: 30)

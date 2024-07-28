@@ -10,7 +10,7 @@ struct ControlView: View {
             GamesView(model: model)
             EngineView(lines: model.lines)
             Text(getCommentText())
-            MoveListView(model: model.moves)
+            MoveListView(model: model.moveList)
             Spacer()
             BoardNavigationView(model: model)
         }
@@ -18,7 +18,7 @@ struct ControlView: View {
     
     func getCommentText() -> String {
 
-        guard let currentMove = model.moves.currentMove else {
+        guard let currentMove = model.moveList.currentMove else {
             return model.game?.comment ?? ""
         }
         

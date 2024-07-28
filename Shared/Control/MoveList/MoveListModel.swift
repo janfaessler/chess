@@ -54,12 +54,13 @@ public class MoveListModel : ObservableObject {
     }
     
     public func movePlayed(_ move:String) {
-        let color = currentMove?.color == .white ? PieceColor.black : PieceColor.white
         let nextMove = structure.get(after: currentMove)
         if move == nextMove?.move {
-            replayMove(nextMove!)
+            currentMove = nextMove
+            history.add(nextMove!)
             return
         }
+        let color = currentMove?.color == .white ? PieceColor.black : PieceColor.white
         let container = MoveModel(move: move, color: color)
         structure.add(container, currentMove: currentMove)
         history.add(container)
@@ -79,15 +80,10 @@ public class MoveListModel : ObservableObject {
     public func atStartPosition() -> Bool {
         currentMove == nil
     }
-    
-    public func reset() {
+
+    public func set(_ input:MoveStructure) {
         currentMove = nil
-        structure.clear()
         history.clear()
-    }
-    
-    public func updateMoveList(_ input:MoveStructure) {
-        reset()
         structure.set(input)
     }
     
@@ -97,11 +93,6 @@ public class MoveListModel : ObservableObject {
     
     func addPositionChangeListener(_ listener:@escaping PositionChangeNotification) {
         positionChangeNotification += [listener]
-    }
-    
-    private func replayMove(_ nextMove: MoveModel) {
-        currentMove = nextMove
-        history.add(nextMove)
     }
     
     private func updatePosition()  {
