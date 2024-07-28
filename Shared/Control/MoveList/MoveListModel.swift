@@ -8,8 +8,9 @@ public class MoveListModel : ObservableObject {
     typealias PositionChangeNotification = (Position) -> ()
     private var positionChangeNotification:[PositionChangeNotification] = []
     
-    private var history: [MoveContainer] = []
     private var parrentMoves:[UUID:MoveContainer] = [:]
+    
+    private let moves = MoveStack()
     
     @Published public var rows:[RowContainer] = []
     @Published public var currentMove:MoveContainer?
@@ -24,34 +25,32 @@ public class MoveListModel : ObservableObject {
     }
     
     public func start() {
-        history.removeAll()
+        moves.clear()
         currentMove = nil
         updatePosition()
     }
     
     public func back() {
-        guard history.isEmpty == false else { return }
-        history.removeLast()
-        self.currentMove = history.last
+        currentMove = moves.pop()
         updatePosition()
     }
     
     public func forward() {
         guard let nextMove = getNextMove(currentMove) else { return }
         self.currentMove = nextMove
-        updateHistory()
+        moves.add(nextMove)
         updatePosition()
     }
     
     public func end() {
         currentMove = rows.last!.hasBlackMoved() ? rows.last!.black : rows.last!.white
-        recreateHistory()
+        moves.createHistory(ofMove: currentMove, inStructure: rows, parrentMoves: parrentMoves)
         updatePosition()
     }
     
     public func goToMove(_ move:MoveContainer) {
         currentMove = move
-        recreateHistory()
+        moves.createHistory(ofMove: currentMove, inStructure: rows, parrentMoves: parrentMoves)
         updatePosition()
     }
     
@@ -90,7 +89,7 @@ public class MoveListModel : ObservableObject {
     public func reset() {
         currentMove = nil
         rows.removeAll()
-        history.removeAll()
+        moves.clear()
     }
     
     public func updateMoveList(_ input:[RowContainer]) {
@@ -100,7 +99,7 @@ public class MoveListModel : ObservableObject {
     }
     
     public func getMoveNotations() -> [String] {
-        history.map({ $0.move })
+        moves.list().map({ $0.move })
     }
     
     func addPositionChangeListener(_ listener:@escaping PositionChangeNotification) {
@@ -109,14 +108,14 @@ public class MoveListModel : ObservableObject {
     
     private func replayMove(_ nextMove: MoveContainer) {
         currentMove = nextMove
-        history.append(nextMove)
+        moves.add(nextMove)
     }
     
     private func addTopLevelMove(_ container: MoveContainer) {
         guard rows.count > 0 else {
             rows += [RowContainer(moveNumber: 1, white: container)]
             currentMove = container
-            updateHistory()
+            moves.add(container)
             return
         }
         if rows[rows.index(before: rows.endIndex)].hasBlackMoved() == true {
@@ -125,7 +124,7 @@ public class MoveListModel : ObservableObject {
             rows[rows.index(before: rows.endIndex)].black = container
         }
         currentMove = container
-        updateHistory()
+        moves.add(container)
     }
     
     private func addVariationMove(_ container:MoveContainer) {
@@ -139,7 +138,7 @@ public class MoveListModel : ObservableObject {
         }
         
         self.currentMove = container
-        history.append(container)
+        moves.add(container)
     }
     
     private func shouldCreateNewVariation(_ container:MoveContainer) -> Bool {
@@ -178,7 +177,7 @@ public class MoveListModel : ObservableObject {
     }
     
     private func appendVariation(_ container: MoveContainer, to: MoveContainer, variation: String, lastMove: MoveContainer) {
-        let rowNumber = Int(history.count / 2) + 1
+        let rowNumber = moves.rowNumber()
         if container.color == .white {
             let rowContainer = createRowContainer(container, moveNumber: rowNumber)
             to.variations[variation]?.append(rowContainer)
@@ -189,66 +188,11 @@ public class MoveListModel : ObservableObject {
     }
     
     private func addNewVariation( _ container: MoveContainer, to: MoveContainer) {
-        let moveNumber = Int(history.count / 2) + 1
+        let moveNumber = moves.rowNumber()
         let rowContainer = createRowContainer(container, moveNumber: moveNumber)
         
         to.variations[container.move] = [rowContainer]
         parrentMoves[container.id] = to
-    }
-    
-    private func updateHistory() {
-        guard let currentMove = currentMove else { return }
-        history.append(currentMove)
-    }
-    
-    private func recreateHistory() {
-        history.removeAll()
-        guard let index = rows.firstIndex(where: { $0.white == currentMove || $0.black == currentMove}) else {
-            recreateVariationHistory()
-            updatePosition()
-            return
-        }
-        for row in rows[rows.startIndex...index] {
-            if row.hasWhiteMoved() {
-                history.append(row.white!)
-            }
-            if row.hasBlackMoved() && currentMove != row.white {
-                history.append(row.black!)
-            }
-        }
-    }
-    
-    private func recreateVariationHistory()  {
-        history.removeAll()
-        guard var currentMove = currentMove else { return }
-        var reverseHistory: [MoveContainer] = []
-        while parrentMoves.keys.contains(where: { $0 == currentMove.id }) {
-            guard let parrentMove = parrentMoves[currentMove.id] else { return }
-            guard let variationName = parrentMove.getVariation(currentMove) else { return }
-            guard let variation = parrentMove.variations[variationName] else { return }
-            guard let rowIndex = variation.firstIndex(where: { $0.white == currentMove || $0.black == currentMove }) else { return }
-            
-            reverseHistory.append(contentsOf: getReversedHistory(Array(variation[variation.startIndex...rowIndex]), toMove: currentMove))
-            currentMove = parrentMove
-        }
-       
-        guard let topLevelIndex = rows.firstIndex(where: { $0.white == currentMove || $0.black == currentMove }) else { return }
-        reverseHistory.append(contentsOf: getReversedHistory(Array(rows[rows.startIndex...topLevelIndex]), toMove: currentMove))
-        history.append(contentsOf: reverseHistory.reversed())
-        history.append(self.currentMove!)
-    }
-    
-    private func getReversedHistory(_ rows:[RowContainer], toMove:MoveContainer) -> [MoveContainer] {
-        var reverseHistory: [MoveContainer] = []
-        for row in rows.reversed() {
-            if row.hasBlackMoved() && row.white != toMove && row.black != toMove {
-                reverseHistory.append(row.black!)
-            }
-            if row.hasWhiteMoved() && row.white != toMove {
-                reverseHistory.append(row.white!)
-            }
-        }
-        return reverseHistory
     }
     
     private func getNextMove(_ fromContainer:MoveContainer?) -> MoveContainer? {
