@@ -83,10 +83,10 @@ final class MoveStackTests: XCTestCase {
         let testee = try XCTUnwrap(testee)
         testee.updateMoveList(containers)
         
-        XCTAssertEqual(testee.rows[0].white?.move, "e4")
-        XCTAssertEqual(testee.rows[0].black?.move, "e5")
+        XCTAssertEqual(testee.list[0].white?.move, "e4")
+        XCTAssertEqual(testee.list[0].black?.move, "e5")
         
-        let d5variation = testee.rows[0].black?.variations["d5"]
+        let d5variation = testee.list[0].black?.variations["d5"]
         XCTAssertEqual(d5variation?[0].black?.move, "d5")
         XCTAssertEqual(d5variation?[1].white?.move, "d3")
         
@@ -94,15 +94,15 @@ final class MoveStackTests: XCTestCase {
         XCTAssertEqual(a3variation?[0].white?.move, "a3")
         XCTAssertEqual(a3variation?[0].black?.move, "a6")
         
-        XCTAssertEqual(testee.rows[1].white?.move, "Nc3")
+        XCTAssertEqual(testee.list[1].white?.move, "Nc3")
         
-        let Nf3variation = testee.rows[1].white?.variations["Nf3"]
+        let Nf3variation = testee.list[1].white?.variations["Nf3"]
         XCTAssertEqual(Nf3variation?[0].white?.move, "Nf3")
         XCTAssertEqual(Nf3variation?[0].black?.move, "Nf6")
         XCTAssertEqual(Nf3variation?[1].white?.move, "b3")
         XCTAssertEqual(Nf3variation?[1].black?.move, "b6")
         
-        XCTAssertEqual(testee.rows[1].black?.move, "Nf6")
+        XCTAssertEqual(testee.list[1].black?.move, "Nf6")
         
         testee.start()
         XCTAssertNil(testee.currentMove)

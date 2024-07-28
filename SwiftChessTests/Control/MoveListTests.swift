@@ -64,7 +64,7 @@ final class MoveListTests: XCTestCase {
         testee.movePlayed("d6")
         XCTAssertEqual(testee.currentMove?.move, "d6")
         
-        let variation = testee.rows[1].white?.variations["Bc4"]
+        let variation = testee.list[1].white?.variations["Bc4"]
         XCTAssertEqual(variation?[0].moveNumber, 2)
         XCTAssertEqual(variation?[0].white!.move, "Bc4")
         XCTAssertEqual(variation?[0].white!.variations.count, 0)
@@ -110,7 +110,7 @@ final class MoveListTests: XCTestCase {
         testee.movePlayed("d3")
         XCTAssertEqual(testee.currentMove?.move, "d3")
         
-        let variation = testee.rows[1].black?.variations["Bc5"]
+        let variation = testee.list[1].black?.variations["Bc5"]
         XCTAssertEqual(variation?[0].moveNumber, 2)
         XCTAssertNil(variation?[0].white)
         XCTAssertEqual(variation?[0].black!.move, "Bc5")
@@ -135,7 +135,7 @@ final class MoveListTests: XCTestCase {
             testee.movePlayed(move)
         }
         
-        let variationStart = try XCTUnwrap(testee.rows[0].black)
+        let variationStart = try XCTUnwrap(testee.list[0].black)
         testee.goToMove(variationStart)
         XCTAssertEqual(testee.currentMove?.move, variationStart.move)
         
@@ -154,17 +154,17 @@ final class MoveListTests: XCTestCase {
         testee.movePlayed("d6")
         XCTAssertEqual(testee.currentMove?.move, "d6")
         
-        testee.goToMove(try XCTUnwrap(testee.rows[1].white?.variations["Bc4"]?[0].white))
+        testee.goToMove(try XCTUnwrap(testee.list[1].white?.variations["Bc4"]?[0].white))
         XCTAssertEqual(testee.currentMove?.move, "Bc4")
         
-        XCTAssertEqual(testee.rows[1].white?.variations.count, 2)
-        let variationD3 = testee.rows[1].white?.variations["d3"]
+        XCTAssertEqual(testee.list[1].white?.variations.count, 2)
+        let variationD3 = testee.list[1].white?.variations["d3"]
         XCTAssertEqual(variationD3?[0].white!.move, "d3")
         XCTAssertEqual(variationD3?[0].white!.variations.count, 0)
         XCTAssertEqual(variationD3?[0].black!.move, "d6")
         XCTAssertEqual(variationD3?[0].black!.variations.count, 0)
 
-        let variationBc4 = testee.rows[1].white?.variations["Bc4"]
+        let variationBc4 = testee.list[1].white?.variations["Bc4"]
         XCTAssertEqual(variationBc4?[0].white!.move, "Bc4")
         XCTAssertEqual(variationBc4?[0].white!.variations.count, 0)
         XCTAssertEqual(variationBc4?[0].black!.move, "Bc5")
@@ -214,8 +214,8 @@ final class MoveListTests: XCTestCase {
         testee.movePlayed("Be2")
         XCTAssertEqual(testee.currentMove?.move, "Be2")
         
-        XCTAssertEqual(testee.rows[1].black?.variations.count, 1)
-        let variation = testee.rows[1].black?.variations["Bc5"]
+        XCTAssertEqual(testee.list[1].black?.variations.count, 1)
+        let variation = testee.list[1].black?.variations["Bc5"]
         XCTAssertEqual(variation?[0].moveNumber, 2)
         XCTAssertEqual(variation?[0].black!.move, "Bc5")
         XCTAssertEqual(variation?[0].black!.variations.count, 0)
@@ -287,8 +287,8 @@ final class MoveListTests: XCTestCase {
         XCTAssertEqual(testee.currentMove?.move, "d3")
         
         
-        XCTAssertEqual(testee.rows[1].white!.variations.count, 1)
-        let variation = testee.rows[1].white?.variations["Bc4"]
+        XCTAssertEqual(testee.list[1].white!.variations.count, 1)
+        let variation = testee.list[1].white?.variations["Bc4"]
         XCTAssertEqual(variation?[0].moveNumber, 2)
         XCTAssertEqual(variation?[0].white!.move, "Bc4")
         XCTAssertEqual(variation?[0].white!.variations.count, 0)

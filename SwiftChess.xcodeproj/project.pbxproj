@@ -61,7 +61,7 @@
 		61B32F5A2B9A53DB00790CF7 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F582B9A53DB00790CF7 /* Field.swift */; };
 		61B32F5F2B9A873500790CF7 /* ValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F5D2B9A86BC00790CF7 /* ValidationError.swift */; };
 		61B32F622B9CC5D700790CF7 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B32F602B9CC5D700790CF7 /* Position.swift */; };
-		61DB83C52C55C60800E2BAC4 /* MoveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DB83C42C55C60800E2BAC4 /* MoveStack.swift */; };
+		61DB83C52C55C60800E2BAC4 /* MoveHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DB83C42C55C60800E2BAC4 /* MoveHistory.swift */; };
 		61EA625A2BA7452F009A0300 /* PositionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EA62582BA7452F009A0300 /* PositionFactory.swift */; };
 		61EA625D2BA7988B009A0300 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EA625B2BA7988B009A0300 /* ResultView.swift */; };
 		61EA62602BA8FDA3009A0300 /* ResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EA625E2BA8FDA3009A0300 /* ResultModel.swift */; };
@@ -71,6 +71,7 @@
 		61EF1DEF2C1C94B100A21268 /* VariationMoveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EF1DEE2C1C94B100A21268 /* VariationMoveView.swift */; };
 		61F163EE2B9D165200C48BAC /* ChessFigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F163EC2B9D165200C48BAC /* ChessFigure.swift */; };
 		61F35D082C55D4A80087956C /* MoveStackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F35D072C55D4A80087956C /* MoveStackTests.swift */; };
+		61F35D0A2C55D7E50087956C /* MoveStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F35D092C55D7E50087956C /* MoveStructure.swift */; };
 		61F609052BC208B1009BDC38 /* ControlButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609032BC208B1009BDC38 /* ControlButtonView.swift */; };
 		61F609082BC20C1B009BDC38 /* MoveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609062BC20C1B009BDC38 /* MoveListView.swift */; };
 		61F6090B2BC30775009BDC38 /* BoardNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609092BC30775009BDC38 /* BoardNavigationView.swift */; };
@@ -151,7 +152,7 @@
 		61B32F5B2B9A7D7E00790CF7 /* ChessTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessTestBase.swift; sourceTree = "<group>"; };
 		61B32F5D2B9A86BC00790CF7 /* ValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationError.swift; sourceTree = "<group>"; };
 		61B32F602B9CC5D700790CF7 /* Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
-		61DB83C42C55C60800E2BAC4 /* MoveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveStack.swift; sourceTree = "<group>"; };
+		61DB83C42C55C60800E2BAC4 /* MoveHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveHistory.swift; sourceTree = "<group>"; };
 		61EA62582BA7452F009A0300 /* PositionFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionFactory.swift; sourceTree = "<group>"; };
 		61EA625B2BA7988B009A0300 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
 		61EA625E2BA8FDA3009A0300 /* ResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultModel.swift; sourceTree = "<group>"; };
@@ -161,6 +162,7 @@
 		61EF1DEE2C1C94B100A21268 /* VariationMoveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariationMoveView.swift; sourceTree = "<group>"; };
 		61F163EC2B9D165200C48BAC /* ChessFigure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessFigure.swift; sourceTree = "<group>"; };
 		61F35D072C55D4A80087956C /* MoveStackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveStackTests.swift; sourceTree = "<group>"; };
+		61F35D092C55D7E50087956C /* MoveStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveStructure.swift; sourceTree = "<group>"; };
 		61F609032BC208B1009BDC38 /* ControlButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlButtonView.swift; sourceTree = "<group>"; };
 		61F609062BC20C1B009BDC38 /* MoveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveListView.swift; sourceTree = "<group>"; };
 		61F609092BC30775009BDC38 /* BoardNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardNavigationView.swift; sourceTree = "<group>"; };
@@ -240,7 +242,8 @@
 				614C6BF72C15EBC700B4F930 /* MoveListModel.swift */,
 				614C6BFB2C18A04100B4F930 /* RowContainer.swift */,
 				613B4AD82C4D416C007736D7 /* ContainerFactory.swift */,
-				61DB83C42C55C60800E2BAC4 /* MoveStack.swift */,
+				61DB83C42C55C60800E2BAC4 /* MoveHistory.swift */,
+				61F35D092C55D7E50087956C /* MoveStructure.swift */,
 			);
 			path = MoveList;
 			sourceTree = "<group>";
@@ -617,7 +620,8 @@
 				61EA625A2BA7452F009A0300 /* PositionFactory.swift in Sources */,
 				61ED578C2C4BDC3300302C92 /* GamesView.swift in Sources */,
 				61B0B4452B94F8DB0085DB48 /* Queen.swift in Sources */,
-				61DB83C52C55C60800E2BAC4 /* MoveStack.swift in Sources */,
+				61DB83C52C55C60800E2BAC4 /* MoveHistory.swift in Sources */,
+				61F35D0A2C55D7E50087956C /* MoveStructure.swift in Sources */,
 				61EA62692BAA0ED2009A0300 /* FigureView.swift in Sources */,
 				61B0B4512B95DEB00085DB48 /* ChessBoard.swift in Sources */,
 				614C6C022C1A527800B4F930 /* RowView.swift in Sources */,

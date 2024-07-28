@@ -13,7 +13,7 @@ struct MoveListView: View {
                     Spacer().id(topiD)
                 }.gridCellColumns(3)
                 if model.moveCount > 0 {
-                    ForEach(model.rows, id: \.moveNumber) { row in
+                    ForEach(model.list, id: \.moveNumber) { row in
                         GridRow {
                             RowView(model: model, row: row).id(row.white?.id).id(row.black?.id)
                         }
