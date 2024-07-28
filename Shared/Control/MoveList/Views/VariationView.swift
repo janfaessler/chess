@@ -13,25 +13,23 @@ struct VariationView: View {
                             .foregroundColor(.black)
                             .border(.white)
                             .clipShape(.rect(cornerRadius: 10))
-                        VStack {
+                        Grid {
                             ForEach(move.getVariation(variation), id: \.moveNumber) { row in
-                                VStack {
-                                    HStack {
-                                        RowView(model: model, row: row).id(row.white?.id).id(row.black?.id)
-                                    }
-                                    if row.hasWhiteVariations() {
-                                        GridRow {
-                                            VariationView(model: model, move: row.white!)
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                        }.gridCellColumns(3)
-                                    }
-                                   
-                                    if row.hasBlackVariations() {
-                                        GridRow {
-                                            VariationView(model: model, move: row.black!)
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                        }.gridCellColumns(3)
-                                    }
+                                GridRow {
+                                    RowView(model: model, row: row).id(row.white?.id).id(row.black?.id)
+                                }
+                                if row.hasWhiteVariations() {
+                                    GridRow {
+                                        VariationView(model: model, move: row.white!)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                    }.gridCellColumns(3)
+                                }
+                               
+                                if row.hasBlackVariations() {
+                                    GridRow {
+                                        VariationView(model: model, move: row.black!)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                    }.gridCellColumns(3)
                                 }
                             }
                         }.padding(10)
