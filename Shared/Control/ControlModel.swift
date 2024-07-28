@@ -43,7 +43,7 @@ public class ControlModel : ObservableObject {
     
     func openGame() {
         guard let game = game else { return }
-        moves.updateMoveList(ContainerFactory.create(game))
+        moves.updateMoveList(StructureFactory.create(game))
     }
     
     private func loadGames(_ urls:[URL]) async -> [PgnGame] {

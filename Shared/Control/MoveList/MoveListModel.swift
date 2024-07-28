@@ -11,7 +11,7 @@ public class MoveListModel : ObservableObject {
     private let structure = MoveStructure()
     private let history = MoveHistory()
     
-    @Published public var currentMove:MoveContainer?
+    @Published public var currentMove:MoveModel?
     
     public init() {}
     
@@ -19,7 +19,7 @@ public class MoveListModel : ObservableObject {
         structure.count
     }
     
-    public var list:[RowContainer] {
+    public var list:[MovePairModel] {
         structure.list
     }
     
@@ -47,7 +47,7 @@ public class MoveListModel : ObservableObject {
         updatePosition()
     }
     
-    public func goToMove(_ move:MoveContainer) {
+    public func goToMove(_ move:MoveModel) {
         currentMove = move
         history.createHistory(ofMove: currentMove, inStructure: structure)
         updatePosition()
@@ -60,7 +60,7 @@ public class MoveListModel : ObservableObject {
             replayMove(nextMove!)
             return
         }
-        let container = MoveContainer(move: move, color: color)
+        let container = MoveModel(move: move, color: color)
         structure.add(container, currentMove: currentMove)
         history.add(container)
         currentMove = container
@@ -72,7 +72,7 @@ public class MoveListModel : ObservableObject {
         return PositionFactory.loadPosition(notations)
     }
     
-    public func isCurrentMove(_ container:MoveContainer?) -> Bool {
+    public func isCurrentMove(_ container:MoveModel?) -> Bool {
         currentMove == container
     }
     
@@ -86,7 +86,7 @@ public class MoveListModel : ObservableObject {
         history.clear()
     }
     
-    public func updateMoveList(_ input:[RowContainer]) {
+    public func updateMoveList(_ input:MoveStructure) {
         reset()
         structure.set(input)
     }
@@ -99,7 +99,7 @@ public class MoveListModel : ObservableObject {
         positionChangeNotification += [listener]
     }
     
-    private func replayMove(_ nextMove: MoveContainer) {
+    private func replayMove(_ nextMove: MoveModel) {
         currentMove = nextMove
         history.add(nextMove)
     }

@@ -2,7 +2,7 @@ import SwiftUI
 
 struct VariationView: View {
     @ObservedObject var model:MoveListModel
-    @ObservedObject var move:MoveContainer
+    @ObservedObject var move:MoveModel
     
     var body: some View {
         if move.hasVariations() {
@@ -41,9 +41,9 @@ struct VariationView: View {
         }
     }
     
-    func getElements(_ move:MoveContainer) -> [RowContainer] {
+    func getElements(_ move:MoveModel) -> [MovePairModel] {
         let key = move.getVariations().first!
-        var rows:[RowContainer] = []
+        var rows:[MovePairModel] = []
         if move.variations.keys.contains(key) {
             for row in move.variations[key]! {
                 rows.append(row)

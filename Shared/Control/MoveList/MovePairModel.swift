@@ -1,11 +1,11 @@
 import Foundation
 
-public class RowContainer : ObservableObject, Equatable {
+public class MovePairModel : ObservableObject, Equatable {
     public let moveNumber:Int
-    public var white:MoveContainer?
-    public var black:MoveContainer?
+    public var white:MoveModel?
+    public var black:MoveModel?
     
-    init(moveNumber: Int, white: MoveContainer? = nil, black: MoveContainer? = nil) {
+    init(moveNumber: Int, white: MoveModel? = nil, black: MoveModel? = nil) {
         self.moveNumber = moveNumber
         self.white = white
         self.black = black
@@ -27,7 +27,7 @@ public class RowContainer : ObservableObject, Equatable {
         black?.variations.count ?? 0 > 0
     }
     
-    public static func == (lhs: RowContainer, rhs: RowContainer) -> Bool {
+    public static func == (lhs: MovePairModel, rhs: MovePairModel) -> Bool {
         lhs.moveNumber == rhs.moveNumber && lhs.white?.id == rhs.white?.id && lhs.black?.id == rhs.black?.id
     }
 }

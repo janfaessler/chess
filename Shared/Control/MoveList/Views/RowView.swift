@@ -2,7 +2,7 @@ import SwiftUI
 
 struct RowView: View {
     @ObservedObject var model:MoveListModel
-    @ObservedObject var row:RowContainer
+    @ObservedObject var row:MovePairModel
     
     var body: some View {
         Text("\(row.moveNumber).")

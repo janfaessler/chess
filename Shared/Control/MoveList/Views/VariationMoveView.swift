@@ -2,7 +2,7 @@ import SwiftUI
 
 struct VariationMoveView: View {
     @ObservedObject var model:MoveListModel
-    @ObservedObject var move:MoveContainer
+    @ObservedObject var move:MoveModel
     
     var body: some View {
         Button {

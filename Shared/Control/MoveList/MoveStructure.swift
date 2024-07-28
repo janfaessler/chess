@@ -1,10 +1,15 @@
 import Foundation
 
 public class MoveStructure {
-    private var rows:[RowContainer] = []
-    private var parrentMoves:[UUID:MoveContainer] = [:]
+    private var rows:[MovePairModel]
+    private var parrentMoves:[UUID:MoveModel]
     
-    public var last:MoveContainer? {
+    init(rows: [MovePairModel] = [], parrentMoves: [UUID : MoveModel] = [:]) {
+        self.rows = rows
+        self.parrentMoves = parrentMoves
+    }
+    
+    public var last:MoveModel? {
         rows.last!.hasBlackMoved() ? rows.last!.black : rows.last!.white
     }
     
@@ -15,11 +20,11 @@ public class MoveStructure {
         return result
     }
     
-    public var list:[RowContainer] {
+    public var list:[MovePairModel] {
         rows
     }
     
-    public func get(after:MoveContainer?) -> MoveContainer? {
+    public func get(after:MoveModel?) -> MoveModel? {
         guard let fromContainer = after else {
             return rows.first?.white
         }
@@ -39,12 +44,12 @@ public class MoveStructure {
         return getNextMove(fromContainer, inVariation: parentMove.variations[variation]!)
     }
     
-    public func range(to:MoveContainer) -> [RowContainer] {
+    public func range(to:MoveModel) -> [MovePairModel] {
         guard let index = rows.firstIndex(where: { $0.white == to || $0.black == to }) else { return [] }
         return Array(rows[rows.startIndex...index])
     }
     
-    public func add(_ move:MoveContainer, currentMove:MoveContainer?) {
+    public func add(_ move:MoveModel, currentMove:MoveModel?) {
         let blackHasLastTopLevelMove = rows.last?.black != nil
 
         if (blackHasLastTopLevelMove && currentMove == rows.last?.black) || (!blackHasLastTopLevelMove && rows.last?.white == currentMove) {
@@ -58,16 +63,16 @@ public class MoveStructure {
         rows.removeAll()
     }
     
-    public func set(_ input:[RowContainer]) {
-        rows = input
-        createVariationCache()
+    public func set(_ input:MoveStructure) {
+        rows = input.list
+        parrentMoves = input.parrentMoves
     }
     
-    public func parrent(of:MoveContainer) -> MoveContainer? {
+    public func parrent(of:MoveModel) -> MoveModel? {
         parrentMoves[of.id]
     }
     
-    public func number(of:MoveContainer) -> Int {
+    public func number(of:MoveModel) -> Int {
         let move = of
         guard let parrent = parrent(of: move) else {
             guard let index = rows.firstIndex(where: { $0.white?.id == move.id || $0.black?.id == move.id }) else { return 1 }
@@ -79,7 +84,7 @@ public class MoveStructure {
         return variation[index].moveNumber
     }
     
-    private func getNextMove(_ fromContainer:MoveContainer?, inVariation:[RowContainer]) -> MoveContainer? {
+    private func getNextMove(_ fromContainer:MoveModel?, inVariation:[MovePairModel]) -> MoveModel? {
         guard let fromContainer = fromContainer else { return nil }
         guard let rowIndex = inVariation.firstIndex(where: { $0.white == fromContainer || $0.black == fromContainer}) else { return nil }
         guard fromContainer != inVariation[rowIndex].white else {
@@ -90,19 +95,19 @@ public class MoveStructure {
         return inVariation[nextMoveIndex].white
     }
 
-    private func addTopLevelMove(_ container: MoveContainer) {
+    private func addTopLevelMove(_ container: MoveModel) {
         guard rows.count > 0 else {
-            rows += [RowContainer(moveNumber: 1, white: container)]
+            rows += [MovePairModel(moveNumber: 1, white: container)]
             return
         }
         if rows[rows.index(before: rows.endIndex)].hasBlackMoved() == true {
-            rows += [RowContainer(moveNumber: rows.count + 1, white: container)]
+            rows += [MovePairModel(moveNumber: rows.count + 1, white: container)]
         } else {
             rows[rows.index(before: rows.endIndex)].black = container
         }
     }
     
-    private func addVariationMove(_ container:MoveContainer, currentMove:MoveContainer?) {
+    private func addVariationMove(_ container:MoveModel, currentMove:MoveModel?) {
         guard let nextMove = get(after: currentMove) ?? currentMove else { return }
         let parentMove = parrentMoves[nextMove.id]
         let moveInVariation = parentMove?.getVariation(nextMove)
@@ -113,7 +118,7 @@ public class MoveStructure {
         }
     }
     
-    private func shouldCreateNewVariation(_ container:MoveContainer, currentMove:MoveContainer?) -> Bool {
+    private func shouldCreateNewVariation(_ container:MoveModel, currentMove:MoveModel?) -> Bool {
         guard let lastMove = currentMove,
               let parentMove = parrentMoves[lastMove.id],
               let lastMoveVariation = parentMove.getVariation(lastMove),
@@ -138,7 +143,7 @@ public class MoveStructure {
         return nextRow.white?.move != currentMove?.move
     }
     
-    private func appendVariation(_ container: MoveContainer, to: MoveContainer, variation: String, lastMove: MoveContainer) {
+    private func appendVariation(_ container: MoveModel, to: MoveModel, variation: String, lastMove: MoveModel) {
         
         if container.color == .white {
             let moveNumber = number(of: lastMove) + 1
@@ -150,7 +155,7 @@ public class MoveStructure {
         parrentMoves[container.id] = to
     }
     
-    private func addNewVariation( _ container: MoveContainer, to: MoveContainer) {
+    private func addNewVariation( _ container: MoveModel, to: MoveModel) {
         let moveNumber = number(of:to)
         let rowContainer = createRowContainer(container, moveNumber: moveNumber)
         
@@ -158,46 +163,12 @@ public class MoveStructure {
         parrentMoves[container.id] = to
     }
     
-    private func createVariationCache() {
-        for row in rows {
-            if row.hasWhiteVariations() {
-                createCacheForVariations(row.white!)
-            }
-            if row.hasBlackVariations() {
-                createCacheForVariations(row.black!)
-            }
-        }
-    }
-    
-    private func createCacheForVariations(_ move: MoveContainer) {
-        let variations = move.variations
-        for name in variations.keys {
-            guard let variation = variations[name] else { continue }
-            for row in variation {
-                createCacheForVariations(row, to: move)
-            }
-        }
-    }
-    
-    private func createCacheForVariations(_ row: RowContainer, to:MoveContainer) {
-        if row.hasWhiteMoved() {
-            guard let move = row.white else { return }
-            parrentMoves[move.id] = to
-            createCacheForVariations(move)
-        }
-        if row.hasBlackMoved() {
-            guard let move = row.black else { return }
-            parrentMoves[move.id] = to
-            createCacheForVariations(move)
-        }
-    }
-    
-    private func createRowContainer(_ container: MoveContainer, moveNumber:Int = 1) -> RowContainer {
-        var rowContainer:RowContainer
+    private func createRowContainer(_ container: MoveModel, moveNumber:Int = 1) -> MovePairModel {
+        var rowContainer:MovePairModel
         if container.color == .white {
-            rowContainer = RowContainer(moveNumber: moveNumber, white: container)
+            rowContainer = MovePairModel(moveNumber: moveNumber, white: container)
         } else {
-            rowContainer = RowContainer(moveNumber: moveNumber, black: container)
+            rowContainer = MovePairModel(moveNumber: moveNumber, black: container)
         }
         return rowContainer
     }

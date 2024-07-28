@@ -14,7 +14,7 @@ final class MoveHistoryTests: XCTestCase {
         let testee = try XCTUnwrap(testee)
                 
         let game = PgnGameParser.parse("1. e4 e5 2. Nc3 Nf6")
-        let containers = ContainerFactory.create(game)
+        let containers = StructureFactory.create(game)
         
         
         testee.updateMoveList(containers)
@@ -78,7 +78,7 @@ final class MoveHistoryTests: XCTestCase {
     
     func testUpdateMoves() throws {
         let game = PgnGameParser.parse("1. e4 e5 ( 1... d5 2. d3 ( 2. a3 a6 ) )2. Nc3 ( 2. Nf3 Nf6 3. b3 b6 )  Nf6")
-        let containers = ContainerFactory.create(game)
+        let containers = StructureFactory.create(game)
         
         let testee = try XCTUnwrap(testee)
         testee.updateMoveList(containers)

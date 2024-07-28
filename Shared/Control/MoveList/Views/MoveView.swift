@@ -3,7 +3,7 @@ import SwiftUI
 struct MoveView: View {
     
     let model:MoveListModel
-    let move:MoveContainer
+    let move:MoveModel
     let action: () -> Void
     
     var body: some View {

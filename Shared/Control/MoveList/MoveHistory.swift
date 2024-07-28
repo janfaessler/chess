@@ -1,9 +1,9 @@
 import Foundation
 
 public class MoveHistory {
-    private var history: [MoveContainer]
+    private var history: [MoveModel]
     
-    public init(history: [MoveContainer] = []) {
+    public init(history: [MoveModel] = []) {
         self.history = history
     }
 
@@ -11,17 +11,17 @@ public class MoveHistory {
         history.removeAll()
     }
     
-    public func pop() -> MoveContainer? {
+    public func pop() -> MoveModel? {
         guard history.isEmpty == false else { return nil }
         history.removeLast()
         return history.last
     }
     
-    public func add(_ move:MoveContainer) {
+    public func add(_ move:MoveModel) {
         history.append(move)
     }
     
-    public var list:[MoveContainer] {
+    public var list:[MoveModel] {
         history
     }
     
@@ -29,9 +29,9 @@ public class MoveHistory {
         Int(history.count / 2) + 1
     }
     
-    public func createHistory(ofMove:MoveContainer?, inStructure:MoveStructure) {
+    public func createHistory(ofMove:MoveModel?, inStructure:MoveStructure) {
         history.removeAll()
-        var reverseHistory: [MoveContainer] = []
+        var reverseHistory: [MoveModel] = []
         guard var move = ofMove else { return }
         while  inStructure.parrent(of: move) != nil {
             guard let parrentMove = inStructure.parrent(of: move) else { return }
@@ -46,7 +46,7 @@ public class MoveHistory {
         history.append(ofMove!)
     }
     
-    private func getReversedVariationHistory(ofMove:MoveContainer, inStructure:MoveStructure) -> [MoveContainer] {
+    private func getReversedVariationHistory(ofMove:MoveModel, inStructure:MoveStructure) -> [MoveModel] {
         guard let parrentMove = inStructure.parrent(of: ofMove) else { return [] }
         guard let variationName = parrentMove.getVariation(ofMove) else { return [] }
         guard let variation = parrentMove.variations[variationName] else { return [] }
@@ -54,8 +54,8 @@ public class MoveHistory {
         return getReversedHistory(Array(variation[variation.startIndex...rowIndex]), toMove: ofMove)
     }
     
-    private func getReversedHistory(_ rows:[RowContainer], toMove:MoveContainer) -> [MoveContainer] {
-        var reverseHistory: [MoveContainer] = []
+    private func getReversedHistory(_ rows:[MovePairModel], toMove:MoveModel) -> [MoveModel] {
+        var reverseHistory: [MoveModel] = []
         for row in rows.reversed() {
             if row.hasBlackMoved() && row.white != toMove && row.black != toMove {
                 reverseHistory.append(row.black!)
