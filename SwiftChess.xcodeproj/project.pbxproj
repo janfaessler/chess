@@ -239,14 +239,10 @@
 		614C6BF92C15F3E900B4F930 /* MoveList */ = {
 			isa = PBXGroup;
 			children = (
+				61F35D0E2C56935D0087956C /* History */,
+				61F35D0D2C56934D0087956C /* Structure */,
 				614C6BFA2C15F45000B4F930 /* Views */,
-				618D16A12C14FCA100D70B01 /* MoveModel.swift */,
 				614C6BF72C15EBC700B4F930 /* MoveListModel.swift */,
-				614C6BFB2C18A04100B4F930 /* MovePairModel.swift */,
-				613B4AD82C4D416C007736D7 /* StructureFactory.swift */,
-				61DB83C42C55C60800E2BAC4 /* MoveHistory.swift */,
-				61F35D092C55D7E50087956C /* MoveStructure.swift */,
-				61F35D0B2C5691820087956C /* HistoryFactory.swift */,
 			);
 			path = MoveList;
 			sourceTree = "<group>";
@@ -254,11 +250,11 @@
 		614C6BFA2C15F45000B4F930 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				61F609062BC20C1B009BDC38 /* MoveListView.swift */,
 				618D83C32BC17E0100583944 /* MoveView.swift */,
 				614C6C012C1A527800B4F930 /* RowView.swift */,
 				614C6C032C1A53D000B4F930 /* VariationView.swift */,
 				61EF1DEE2C1C94B100A21268 /* VariationMoveView.swift */,
+				61F609062BC20C1B009BDC38 /* MoveListView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -461,6 +457,26 @@
 				61B32F582B9A53DB00790CF7 /* Field.swift */,
 			);
 			path = Chess;
+			sourceTree = "<group>";
+		};
+		61F35D0D2C56934D0087956C /* Structure */ = {
+			isa = PBXGroup;
+			children = (
+				618D16A12C14FCA100D70B01 /* MoveModel.swift */,
+				614C6BFB2C18A04100B4F930 /* MovePairModel.swift */,
+				613B4AD82C4D416C007736D7 /* StructureFactory.swift */,
+				61F35D092C55D7E50087956C /* MoveStructure.swift */,
+			);
+			path = Structure;
+			sourceTree = "<group>";
+		};
+		61F35D0E2C56935D0087956C /* History */ = {
+			isa = PBXGroup;
+			children = (
+				61F35D0B2C5691820087956C /* HistoryFactory.swift */,
+				61DB83C42C55C60800E2BAC4 /* MoveHistory.swift */,
+			);
+			path = History;
 			sourceTree = "<group>";
 		};
 		61F609192BC7EC30009BDC38 /* Engine */ = {
