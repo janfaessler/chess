@@ -14,7 +14,7 @@
 		614643FE2C31D1540041E1BE /* PgnGameParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614643FD2C31D1540041E1BE /* PgnGameParser.swift */; };
 		614C6BF82C15EBC700B4F930 /* MoveListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6BF72C15EBC700B4F930 /* MoveListModel.swift */; };
 		614C6BFC2C18A04100B4F930 /* RowContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6BFB2C18A04100B4F930 /* RowContainer.swift */; };
-		614C6C002C19ACE300B4F930 /* MoveListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6BFF2C19ACE300B4F930 /* MoveListTests.swift */; };
+		614C6C002C19ACE300B4F930 /* MoveStructureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6BFF2C19ACE300B4F930 /* MoveStructureTests.swift */; };
 		614C6C022C1A527800B4F930 /* RowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6C012C1A527800B4F930 /* RowView.swift */; };
 		614C6C042C1A53D000B4F930 /* VariationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6C032C1A53D000B4F930 /* VariationView.swift */; };
 		614FFC6B277780130082F892 /* MoveIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC69277780130082F892 /* MoveIndicatorView.swift */; };
@@ -70,7 +70,7 @@
 		61ED578C2C4BDC3300302C92 /* GamesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61ED578B2C4BDC3300302C92 /* GamesView.swift */; };
 		61EF1DEF2C1C94B100A21268 /* VariationMoveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EF1DEE2C1C94B100A21268 /* VariationMoveView.swift */; };
 		61F163EE2B9D165200C48BAC /* ChessFigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F163EC2B9D165200C48BAC /* ChessFigure.swift */; };
-		61F35D082C55D4A80087956C /* MoveStackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F35D072C55D4A80087956C /* MoveStackTests.swift */; };
+		61F35D082C55D4A80087956C /* MoveHistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F35D072C55D4A80087956C /* MoveHistoryTests.swift */; };
 		61F35D0A2C55D7E50087956C /* MoveStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F35D092C55D7E50087956C /* MoveStructure.swift */; };
 		61F609052BC208B1009BDC38 /* ControlButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609032BC208B1009BDC38 /* ControlButtonView.swift */; };
 		61F609082BC20C1B009BDC38 /* MoveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609062BC20C1B009BDC38 /* MoveListView.swift */; };
@@ -101,7 +101,7 @@
 		614643FD2C31D1540041E1BE /* PgnGameParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PgnGameParser.swift; sourceTree = "<group>"; };
 		614C6BF72C15EBC700B4F930 /* MoveListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveListModel.swift; sourceTree = "<group>"; };
 		614C6BFB2C18A04100B4F930 /* RowContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowContainer.swift; sourceTree = "<group>"; };
-		614C6BFF2C19ACE300B4F930 /* MoveListTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveListTests.swift; sourceTree = "<group>"; };
+		614C6BFF2C19ACE300B4F930 /* MoveStructureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveStructureTests.swift; sourceTree = "<group>"; };
 		614C6C012C1A527800B4F930 /* RowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowView.swift; sourceTree = "<group>"; };
 		614C6C032C1A53D000B4F930 /* VariationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariationView.swift; sourceTree = "<group>"; };
 		614FFC69277780130082F892 /* MoveIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveIndicatorView.swift; sourceTree = "<group>"; };
@@ -161,7 +161,7 @@
 		61ED578B2C4BDC3300302C92 /* GamesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesView.swift; sourceTree = "<group>"; };
 		61EF1DEE2C1C94B100A21268 /* VariationMoveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariationMoveView.swift; sourceTree = "<group>"; };
 		61F163EC2B9D165200C48BAC /* ChessFigure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessFigure.swift; sourceTree = "<group>"; };
-		61F35D072C55D4A80087956C /* MoveStackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveStackTests.swift; sourceTree = "<group>"; };
+		61F35D072C55D4A80087956C /* MoveHistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveHistoryTests.swift; sourceTree = "<group>"; };
 		61F35D092C55D7E50087956C /* MoveStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveStructure.swift; sourceTree = "<group>"; };
 		61F609032BC208B1009BDC38 /* ControlButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlButtonView.swift; sourceTree = "<group>"; };
 		61F609062BC20C1B009BDC38 /* MoveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveListView.swift; sourceTree = "<group>"; };
@@ -278,9 +278,9 @@
 		614C6BFE2C19ACB700B4F930 /* Control */ = {
 			isa = PBXGroup;
 			children = (
-				614C6BFF2C19ACE300B4F930 /* MoveListTests.swift */,
+				614C6BFF2C19ACE300B4F930 /* MoveStructureTests.swift */,
 				619E5F102C53CF5F00803C61 /* ContainerFactoryTest.swift */,
-				61F35D072C55D4A80087956C /* MoveStackTests.swift */,
+				61F35D072C55D4A80087956C /* MoveHistoryTests.swift */,
 			);
 			path = Control;
 			sourceTree = "<group>";
@@ -659,8 +659,8 @@
 				619375E32BDE7873005A616D /* MoveFactoryTests.swift in Sources */,
 				619375E42BDE7873005A616D /* PositionTests.swift in Sources */,
 				619375E52BDE7873005A616D /* NotationTests.swift in Sources */,
-				61F35D082C55D4A80087956C /* MoveStackTests.swift in Sources */,
-				614C6C002C19ACE300B4F930 /* MoveListTests.swift in Sources */,
+				61F35D082C55D4A80087956C /* MoveHistoryTests.swift in Sources */,
+				614C6C002C19ACE300B4F930 /* MoveStructureTests.swift in Sources */,
 				619375E62BDE7873005A616D /* GameStateTests.swift in Sources */,
 				6156C4B22C4C5EBB000CEB63 /* PgnParserTests.swift in Sources */,
 				619375E72BDE7873005A616D /* FenTests.swift in Sources */,

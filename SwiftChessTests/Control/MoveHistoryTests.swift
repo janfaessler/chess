@@ -1,7 +1,7 @@
 import XCTest
 import SwiftChess
 
-final class MoveStackTests: XCTestCase {
+final class MoveHistoryTests: XCTestCase {
     
     var testee:MoveListModel?
     
