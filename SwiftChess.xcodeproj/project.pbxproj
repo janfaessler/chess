@@ -375,8 +375,8 @@
 				61B0B44C2B95D7160085DB48 /* Chess */,
 				612CDBDB2C150B8F00877DF2 /* Board */,
 				612CDBD62C15091F00877DF2 /* Control */,
-				61772362274284FE00169D3D /* SwiftChessApp.swift */,
 				61772363274284FE00169D3D /* ContentView.swift */,
+				61772362274284FE00169D3D /* SwiftChessApp.swift */,
 				61772365274284FF00169D3D /* Assets.xcassets */,
 			);
 			path = Shared;

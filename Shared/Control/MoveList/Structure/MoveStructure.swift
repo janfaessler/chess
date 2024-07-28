@@ -59,11 +59,6 @@ public class MoveStructure {
         }
     }
     
-    public func set(_ input:MoveStructure) {
-        rows = input.list
-        parrentMoves = input.parrentMoves
-    }
-    
     public func parrent(of:MoveModel) -> MoveModel? {
         parrentMoves[of.id]
     }

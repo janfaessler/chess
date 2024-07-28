@@ -44,7 +44,7 @@ public class ControlModel : ObservableObject {
     func openGame() {
         guard let game = game else { return }
         let structure = StructureFactory.create(game)
-        moveList.set(structure)
+        moveList.load(structure)
     }
     
     private func loadGames(_ urls:[URL]) async -> [PgnGame] {

@@ -8,7 +8,7 @@ public class MoveListModel : ObservableObject {
     typealias PositionChangeNotification = (Position) -> ()
     private var positionChangeNotification:[PositionChangeNotification]
     
-    private let structure:MoveStructure
+    private var structure:MoveStructure
     private var history:MoveHistory
     
     @Published public var currentMove:MoveModel?
@@ -81,10 +81,10 @@ public class MoveListModel : ObservableObject {
         currentMove == container
     }
 
-    public func set(_ input:MoveStructure) {
+    public func load(_ structure:MoveStructure) {
         currentMove = nil
         history.clear()
-        structure.set(input)
+        self.structure = structure
     }
     
     public func getMoveNotations() -> [String] {
