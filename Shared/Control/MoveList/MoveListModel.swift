@@ -9,7 +9,7 @@ public class MoveListModel : ObservableObject {
     private var positionChangeNotification:[PositionChangeNotification]
     
     private let structure:MoveStructure
-    private let history:MoveHistory
+    private var history:MoveHistory
     
     @Published public var currentMove:MoveModel?
     
@@ -47,13 +47,13 @@ public class MoveListModel : ObservableObject {
     
     public func end() {
         currentMove = structure.last
-        history.createHistory(ofMove: currentMove, inStructure: structure)
+        history = HistoryFactory.createH(ofMove: currentMove, inStructure: structure)
         updatePosition()
     }
     
     public func goToMove(_ move:MoveModel) {
         currentMove = move
-        history.createHistory(ofMove: currentMove, inStructure: structure)
+        history = HistoryFactory.createH(ofMove: currentMove, inStructure: structure)
         updatePosition()
     }
     
