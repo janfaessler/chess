@@ -20,11 +20,11 @@ public class MovePairModel : ObservableObject, Equatable {
     }
     
     func hasWhiteVariations() -> Bool {
-        white?.variations.count ?? 0 > 0
+        white?.getVariations().count ?? 0 > 0
     }
     
     func hasBlackVariations() -> Bool {
-        black?.variations.count ?? 0 > 0
+        black?.getVariations().count ?? 0 > 0
     }
     
     public static func == (lhs: MovePairModel, rhs: MovePairModel) -> Bool {

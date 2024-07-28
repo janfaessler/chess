@@ -10,11 +10,11 @@ final class StructureFactoryTests: XCTestCase {
         XCTAssertEqual(structure.list[0].white?.move, "e4")
         XCTAssertEqual(structure.list[0].black?.move, "e5")
         XCTAssertEqual(structure.list[1].white?.move, "Nc3")
-        XCTAssertEqual(structure.list[1].white?.variations["d3"]?[0].white?.move, "d3")
-        XCTAssertEqual(structure.list[1].white?.variations["d3"]?[0].black?.move, "d6")
+        XCTAssertEqual(structure.list[1].white?.getVariation("d3")[0].white?.move, "d3")
+        XCTAssertEqual(structure.list[1].white?.getVariation("d3")[0].black?.move, "d6")
         XCTAssertEqual(structure.list[1].black?.move, "Nf6")
-        XCTAssertEqual(structure.list[1].black?.variations["d6"]?[0].black?.move, "d6")
-        XCTAssertEqual(structure.list[1].black?.variations["d6"]?[1].white?.move, "d3")
+        XCTAssertEqual(structure.list[1].black?.getVariation("d6")[0].black?.move, "d6")
+        XCTAssertEqual(structure.list[1].black?.getVariation("d6")[1].white?.move, "d3")
 
     }
 

@@ -17,7 +17,7 @@ public class StructureFactory {
             
             for variation in move.variations {
                 guard let variationName = variation.first?.move else { continue }
-                moveContainer.variations[variationName] = getRowContainers(variation, startingColor: color, startingMoveNumber: moveNumber)
+                moveContainer.addVariation(variationName, variation: getRowContainers(variation, startingColor: color, startingMoveNumber: moveNumber))
             }
             
             if color == .white {
@@ -53,10 +53,8 @@ public class StructureFactory {
     }
     
     private static func createCacheForVariations(_ move: MoveModel, cache:inout [UUID:MoveModel]) {
-        let variations = move.variations
-        for name in variations.keys {
-            guard let variation = variations[name] else { continue }
-            for row in variation {
+        for name in  move.getVariations() {
+            for row in move.getVariation(name)  {
                 createCacheForVariations(row, to: move, cache: &cache)
             }
         }

@@ -40,15 +40,4 @@ struct VariationView: View {
             }
         }
     }
-    
-    func getElements(_ move:MoveModel) -> [MovePairModel] {
-        let key = move.getVariations().first!
-        var rows:[MovePairModel] = []
-        if move.variations.keys.contains(key) {
-            for row in move.variations[key]! {
-                rows.append(row)
-            }
-        }
-        return rows
-    }
 }
