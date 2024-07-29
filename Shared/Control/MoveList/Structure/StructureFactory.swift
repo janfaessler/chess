@@ -42,10 +42,10 @@ public class StructureFactory {
     private static func createVariationCache(_ rows:[MovePairModel]) -> [UUID:MoveModel]  {
         var cache:[UUID:MoveModel] = [:]
         for row in rows {
-            if row.hasWhiteVariations() {
+            if row.hasVariations(.white) {
                 createCacheForVariations(row.white!, cache: &cache)
             }
-            if row.hasBlackVariations() {
+            if row.hasVariations(.black) {
                 createCacheForVariations(row.black!, cache: &cache)
             }
         }

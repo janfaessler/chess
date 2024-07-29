@@ -19,12 +19,14 @@ public class MovePairModel : ObservableObject, Equatable {
         black != nil
     }
     
-    func hasWhiteVariations() -> Bool {
-        white?.getVariations().count ?? 0 > 0
-    }
-    
-    func hasBlackVariations() -> Bool {
-        black?.getVariations().count ?? 0 > 0
+    func hasVariations(_ color:PieceColor) -> Bool {
+        switch color {
+        case .white:
+            return white?.getVariations().count ?? 0 > 0
+        case .black:
+            return black?.getVariations().count ?? 0 > 0
+
+        }
     }
     
     public static func == (lhs: MovePairModel, rhs: MovePairModel) -> Bool {

@@ -14,20 +14,20 @@ struct VariationView: View {
                             .border(.white)
                             .clipShape(.rect(cornerRadius: 10))
                         Grid {
-                            ForEach(move.getVariation(variation), id: \.moveNumber) { row in
+                            ForEach(move.getVariation(variation), id: \.moveNumber) { movePair in
                                 GridRow {
-                                    RowView(model: model, row: row).id(row.white?.id).id(row.black?.id)
+                                    RowView(model: model, row: movePair).id(movePair.white?.id).id(movePair.black?.id)
                                 }
-                                if row.hasWhiteVariations() {
+                                if movePair.hasVariations(.white) {
                                     GridRow {
-                                        VariationView(model: model, move: row.white!)
+                                        VariationView(model: model, move: movePair.white!)
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                     }.gridCellColumns(3)
                                 }
                                
-                                if row.hasBlackVariations() {
+                                if movePair.hasVariations(.black) {
                                     GridRow {
-                                        VariationView(model: model, move: row.black!)
+                                        VariationView(model: model, move: movePair.black!)
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                     }.gridCellColumns(3)
                                 }
