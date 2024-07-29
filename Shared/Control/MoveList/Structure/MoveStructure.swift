@@ -1,11 +1,11 @@
 import Foundation
 
 public class MoveStructure {
-    private var rows:[MovePairModel]
+    private var rows:LineModel
     private var parrentMoves:[UUID:MoveModel]
     
-    init(rows: [MovePairModel] = [], parrentMoves: [UUID : MoveModel] = [:]) {
-        self.rows = rows
+    init(line: LineModel? = nil, parrentMoves: [UUID : MoveModel] = [:]) {
+        self.rows = line ?? LineModel()
         self.parrentMoves = parrentMoves
     }
     
@@ -14,14 +14,15 @@ public class MoveStructure {
     }
     
     public var count:Int {
-        let moveCount = Float(rows.count / 2)
-        let roundedCount = moveCount.rounded(.up)
-        let result = Int(roundedCount) + rows.count % 2
-        return result
+        return rows.count
     }
     
     public var list:[MovePairModel] {
-        rows
+        rows.all
+    }
+    
+    public func range(to:MoveModel) -> [MovePairModel] {
+        rows.range(to: to).all
     }
     
     public func get(after:MoveModel?) -> MoveModel? {
@@ -29,24 +30,15 @@ public class MoveStructure {
             return rows.first?.white
         }
         if !parrentMoves.contains(where: { $0.key == fromContainer.id}) {
-            guard let index = getIndex(fromContainer, inRow: rows) else { return nil }
-    
-            guard fromContainer == rows[index].black else {
-                return rows[index].black
+            guard let index = rows.index(of:fromContainer) else { return nil }
+            guard fromContainer == rows.getMove(index, color: .black) else {
+                return rows.getMove(index, color: .black) 
             }
-
-            let nextIndex = rows.index(after: index)
-            if nextIndex == rows.count { return nil }
-            return rows[nextIndex].white
+            return rows.getMove(index + 1, color: .white)
         }
-        guard let parentMove = parrentMoves[fromContainer.id] else { return nil }
-        guard let variation = parentMove.getVariation(fromContainer) else { return nil }
-        return getNextMove(fromContainer, inVariation: variation)
-    }
-    
-    public func range(to:MoveModel) -> [MovePairModel] {
-        guard let index = getIndex(to, inRow: rows) else { return [] }
-        return Array(rows[rows.startIndex...index])
+        guard let parrentMove = parrentMoves[fromContainer.id] else { return nil }
+        guard let variation = parrentMove.getVariation(fromContainer) else { return nil }
+        return variation.getMove(after: fromContainer)
     }
     
     public func add(_ move:MoveModel, currentMove:MoveModel?) {
@@ -64,32 +56,21 @@ public class MoveStructure {
     public func number(of:MoveModel) -> Int {
         let move = of
         guard let parrent = parrent(of: move) else {
-            return getPairOf(move, inRow: rows)?.moveNumber ?? 1
+            return rows.getPair(of: move)?.moveNumber ?? 1
         }
         guard let variation = parrent.getVariation(move) else { return 1 }
-        return getPairOf(move, inRow: variation)?.moveNumber ?? 1
+        return variation.getPair(of: move)?.moveNumber ?? 1
     }
     
-    private func getNextMove(_ fromContainer:MoveModel?, inVariation:[MovePairModel]) -> MoveModel? {
-        guard let fromContainer = fromContainer else { return nil }
-        guard let rowIndex = getIndex(fromContainer, inRow: inVariation) else { return nil }
-        guard fromContainer != inVariation[rowIndex].white else {
-            return inVariation[rowIndex].black
-        }
-        let nextMoveIndex = inVariation.index(after: rowIndex)
-        guard inVariation.count > nextMoveIndex else { return  nil}
-        return inVariation[nextMoveIndex].white
-    }
-
     private func addTopLevelMove(_ container: MoveModel) {
         guard rows.count > 0 else {
-            rows += [MovePairModel.create(container, moveNumber: 1)]
+            rows.add(MovePairModel.create(container, moveNumber: 1))
             return
         }
-        if rows[rows.index(before: rows.endIndex)].hasBlackMoved() == true {
-            rows += [MovePairModel.create(container, moveNumber: rows.count + 1)]
+        if rows.last?.hasBlackMoved() == true {
+            rows.add(MovePairModel.create(container, moveNumber: rows.count + 1))
         } else {
-            rows[rows.index(before: rows.endIndex)].black = container
+            rows.last?.black = container
         }
     }
     
@@ -112,29 +93,27 @@ public class MoveStructure {
               let parentMove = parrentMoves[lastMove.id],
               let variation = parentMove.getVariation(lastMove),
               container.color != lastMove.color,
-              let rowIndexInVariation = getIndex(lastMove, inRow: variation)
+              let rowContainer = variation.getPair(of: lastMove)
         else { return true }
         
-        let rowContainer = variation[rowIndexInVariation]
         
         if lastMove == rowContainer.white {
             return rowContainer.hasBlackMoved()
         }
         
-        if rowIndexInVariation + 1 == variation.endIndex {
+        if rowContainer == variation.last {
             return false
         }
         
-        let nextRowIndexInVariation = variation.index(after: rowIndexInVariation)
-        let nextRow = variation[nextRowIndexInVariation]
-        return nextRow.white?.move != currentMove?.move
+        let nextRow = variation.getMove(after: rowContainer.black)
+        return nextRow?.move != currentMove?.move
     }
     
     private func addNewVariation( _ container: MoveModel, to: MoveModel) {
         let moveNumber = number(of:to)
         let rowContainer = MovePairModel.create(container, moveNumber: moveNumber)
         
-        to.addVariation(container.move, variation: [rowContainer])
+        to.addVariation(container.move, variation:LineModel([rowContainer]))
         parrentMoves[container.id] = to
     }
     
@@ -148,16 +127,5 @@ public class MoveStructure {
             to.appendVariation(container, variation: variationName)
         }
         parrentMoves[container.id] = to
-    }
-    
-    private func getPairOf(_ move:MoveModel, inRow:[MovePairModel]) -> MovePairModel? {
-        guard let index = getIndex(move, inRow: inRow) else { return nil }
-        guard inRow.count > index else { return nil }
-        return inRow[index]
-    }
-    
-    private func getIndex(_ move:MoveModel, inRow:[MovePairModel]) -> Int? {
-        guard let index = inRow.firstIndex(where: { $0.white?.id == move.id || $0.black?.id == move.id }) else { return nil }
-        return index
     }
 }

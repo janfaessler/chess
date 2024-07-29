@@ -29,7 +29,7 @@ final class ChessEngine {
         lines.removeAll()
         debounce {
             self.engine.send(command: .position(.fen(FenBuilder.create(pos))))
-            self.engine.send(command: .go(depth: 15))
+            self.engine.send(command: .go(depth: 5))
         }
         self.pos = pos        
     }

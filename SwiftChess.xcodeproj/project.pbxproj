@@ -72,6 +72,7 @@
 		61F35D082C55D4A80087956C /* MoveHistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F35D072C55D4A80087956C /* MoveHistoryTests.swift */; };
 		61F35D0A2C55D7E50087956C /* MoveStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F35D092C55D7E50087956C /* MoveStructure.swift */; };
 		61F35D0C2C5691830087956C /* HistoryFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F35D0B2C5691820087956C /* HistoryFactory.swift */; };
+		61F35D102C5814EF0087956C /* LineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F35D0F2C5814EF0087956C /* LineModel.swift */; };
 		61F609052BC208B1009BDC38 /* ControlButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609032BC208B1009BDC38 /* ControlButtonView.swift */; };
 		61F609082BC20C1B009BDC38 /* MoveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609062BC20C1B009BDC38 /* MoveListView.swift */; };
 		61F6090B2BC30775009BDC38 /* BoardNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F609092BC30775009BDC38 /* BoardNavigationView.swift */; };
@@ -163,6 +164,7 @@
 		61F35D072C55D4A80087956C /* MoveHistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveHistoryTests.swift; sourceTree = "<group>"; };
 		61F35D092C55D7E50087956C /* MoveStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveStructure.swift; sourceTree = "<group>"; };
 		61F35D0B2C5691820087956C /* HistoryFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryFactory.swift; sourceTree = "<group>"; };
+		61F35D0F2C5814EF0087956C /* LineModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineModel.swift; sourceTree = "<group>"; };
 		61F609032BC208B1009BDC38 /* ControlButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlButtonView.swift; sourceTree = "<group>"; };
 		61F609062BC20C1B009BDC38 /* MoveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveListView.swift; sourceTree = "<group>"; };
 		61F609092BC30775009BDC38 /* BoardNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardNavigationView.swift; sourceTree = "<group>"; };
@@ -461,6 +463,7 @@
 			children = (
 				618D16A12C14FCA100D70B01 /* MoveModel.swift */,
 				614C6BFB2C18A04100B4F930 /* MovePairModel.swift */,
+				61F35D0F2C5814EF0087956C /* LineModel.swift */,
 				613B4AD82C4D416C007736D7 /* StructureFactory.swift */,
 				61F35D092C55D7E50087956C /* MoveStructure.swift */,
 			);
@@ -659,6 +662,7 @@
 				61B0B43F2B94F80F0085DB48 /* Bishop.swift in Sources */,
 				619B657F2C1DF59D00C44FC9 /* PgnMove.swift in Sources */,
 				614FFC6B277780130082F892 /* MoveIndicatorView.swift in Sources */,
+				61F35D102C5814EF0087956C /* LineModel.swift in Sources */,
 				61812E282767FDA900616866 /* BoardView.swift in Sources */,
 				61772390274284FF00169D3D /* ContentView.swift in Sources */,
 			);

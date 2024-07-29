@@ -27,8 +27,7 @@ public class HistoryFactory {
     private static func getReversedVariationHistory(ofMove:MoveModel, inStructure:MoveStructure) -> [MoveModel] {
         guard let parrentMove = inStructure.parrent(of: ofMove) else { return [] }
         guard let variation = parrentMove.getVariation(ofMove) else { return [] }
-        guard let rowIndex = variation.firstIndex(where: { $0.white == ofMove || $0.black == ofMove }) else { return [] }
-        return getReversedHistory(Array(variation[variation.startIndex...rowIndex]), toMove: ofMove)
+        return getReversedHistory(variation.range(to: ofMove).all, toMove: ofMove)
     }
     
     private static func getReversedHistory(_ rows:[MovePairModel], toMove:MoveModel) -> [MoveModel] {

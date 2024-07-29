@@ -14,7 +14,7 @@ struct VariationView: View {
                             .border(.white)
                             .clipShape(.rect(cornerRadius: 10))
                         Grid {
-                            ForEach(move.getVariation(variation), id: \.moveNumber) { movePair in
+                            ForEach(move.getVariation(variation)!.all, id: \.moveNumber) { movePair in
                                 GridRow {
                                     RowView(model: model, row: movePair).id(movePair.white?.id).id(movePair.black?.id)
                                 }

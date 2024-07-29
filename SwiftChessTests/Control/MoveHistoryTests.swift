@@ -86,17 +86,17 @@ final class MoveHistoryTests: XCTestCase {
         XCTAssertEqual(testee.list[0].white?.move, "e4")
         XCTAssertEqual(testee.list[0].black?.move, "e5")
         
-        let d5variation = testee.list[0].black?.getVariation("d5")
+        let d5variation = testee.list[0].black?.getVariation("d5")?.all
         XCTAssertEqual(d5variation?[0].black?.move, "d5")
         XCTAssertEqual(d5variation?[1].white?.move, "d3")
         
-        let a3variation = d5variation?[1].white?.getVariation("a3")
+        let a3variation = d5variation?[1].white?.getVariation("a3")?.all
         XCTAssertEqual(a3variation?[0].white?.move, "a3")
         XCTAssertEqual(a3variation?[0].black?.move, "a6")
         
         XCTAssertEqual(testee.list[1].white?.move, "Nc3")
         
-        let Nf3variation = testee.list[1].white?.getVariation("Nf3")
+        let Nf3variation = testee.list[1].white?.getVariation("Nf3")?.all
         XCTAssertEqual(Nf3variation?[0].white?.move, "Nf3")
         XCTAssertEqual(Nf3variation?[0].black?.move, "Nf6")
         XCTAssertEqual(Nf3variation?[1].white?.move, "b3")

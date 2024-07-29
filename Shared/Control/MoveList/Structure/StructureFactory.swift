@@ -4,11 +4,11 @@ public class StructureFactory {
 
     public static func create(_ game:PgnGame) -> MoveStructure{
         let rows = getRowContainers(game.moves, startingColor: .white, startingMoveNumber:1)
-        let cache = createVariationCache(rows)
-        return MoveStructure(rows: rows, parrentMoves: cache)
+        let cache = createVariationCache(rows.all)
+        return MoveStructure(line: rows, parrentMoves: cache)
     }
     
-    private static func getRowContainers(_ moves:[PgnMove], startingColor:PieceColor, startingMoveNumber:Int) -> [MovePairModel] {
+    private static func getRowContainers(_ moves:[PgnMove], startingColor:PieceColor, startingMoveNumber:Int) -> LineModel {
         var containers:[MovePairModel] = []
         var color = startingColor
         var moveNumber = startingMoveNumber
@@ -32,7 +32,7 @@ public class StructureFactory {
             }
             color = flipColor(color)
         }
-        return containers
+        return LineModel(containers)
     }
     
     private static func flipColor(_ color: PieceColor) -> PieceColor {
@@ -54,7 +54,8 @@ public class StructureFactory {
     
     private static func createCacheForVariations(_ move: MoveModel, cache:inout [UUID:MoveModel]) {
         for name in  move.getVariations() {
-            for row in move.getVariation(name)  {
+            guard let line = move.getVariation(name) else { continue }
+            for row in line.all  {
                 createCacheForVariations(row, to: move, cache: &cache)
             }
         }
