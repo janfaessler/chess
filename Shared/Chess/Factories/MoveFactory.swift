@@ -47,7 +47,14 @@ public class MoveFactory {
     
     private static func createPawnMove(_ input: any StringProtocol, color:PieceColor, cache: Position) -> Move? {
         guard let field = getField(input) else { return nil }
-        let fig = getFigure(targetField: field, type: .pawn, color: color, cache: cache)
+        var fig:(any ChessFigure)?
+        if hasFileInfo(clean(input)) {
+            let fileInfo = String(Array(input)[0])
+            fig = getFigure(field, withFile: fileInfo, type: .pawn, color: color, cache: cache)
+        } else {
+            fig = getFigure(targetField: field, type: .pawn, color: color, cache: cache)
+
+        }
         if isPromotion(input) {
             let promoteTo = getPromotToFigure(input)
             return fig?.createMove(field, type: .Promotion, promoteTo: promoteTo)
@@ -80,30 +87,27 @@ public class MoveFactory {
     }
     
     private static func getFigure(targetField:any StringProtocol, type:PieceType, color:PieceColor, cache:Position) -> (any ChessFigure)? {
-        let allFigures = cache.getFigures()
-        let figuresOfTypeAndColor = allFigures.filter({ $0.getType() == type && $0.getColor() == color})
-        return figuresOfTypeAndColor.first(where: { $0.createMove(targetField) != nil && $0.isMovePossible($0.createMove(targetField)!, position: cache) })
+        let figures = getFigures(targetField: targetField, type: type, color: color, cache: cache)
+        guard figures.count == 1 else { return nil }
+        return figures.first
     }
     
     private static func getFigure(_ field: any StringProtocol, withRow:String, type: PieceType, color: PieceColor, cache: Position) -> (any ChessFigure)? {
-        
-        return cache.getFigures().first(where: { fig in
-            guard fig.getType() == type && fig.getColor() == color && fig.getRow() == Int(withRow)! else { return false }
-            return fig.isMovePossible(fig.createMove(field)!, position: cache)
-        })
+        let figures = getFigures(targetField: field, type: type, color: color, cache: cache).filter ({ $0.getRow() == Int(withRow) })
+        guard figures.count == 1 else { return nil }
+        return figures.first
     }
     
     private static func getFigure(_ field: any StringProtocol, withFile:String, type: PieceType, color: PieceColor, cache: Position) -> (any ChessFigure)? {
-        
-        let figures = cache.getFigures().filter({fig in
-            return fig.getType() == type && fig.getColor() == color
-        })
-        return figures.first(where: { fig in
-            let fileName = fig.getField().getFileName()
-            guard fileName == withFile else { return false }
-            
-            return fig.isMovePossible(fig.createMove(field)!, position: cache)
-        })
+        let figures = getFigures(targetField: field, type: type, color: color, cache: cache).filter ({ $0.getField().getFileName() == withFile })
+        guard figures.count == 1 else { return nil }
+        return figures.first
+    }
+    
+    private static func getFigures(targetField:any StringProtocol, type:PieceType, color:PieceColor, cache:Position) -> [(any ChessFigure)] {
+        let allFigures = cache.getFigures()
+        let figuresOfTypeAndColor = allFigures.filter({ $0.getType() == type && $0.getColor() == color})
+        return figuresOfTypeAndColor.filter { $0.createMove(targetField) != nil && $0.isMovePossible($0.createMove(targetField)!, position: cache) }
     }
     
     private static func getPieceField(_ input:any StringProtocol) -> (any StringProtocol)? {

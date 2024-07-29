@@ -149,6 +149,28 @@ final class MoveFactoryTests: XCTestCase {
     
     }
     
+    public func testUncertainPawnMove() throws {
+
+        try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .Double)
+        try assertMove("c6", field: "c6", type: .pawn, color: .black)
+        
+        try assertMove("d4", field: "d4", type: .pawn, color: .white, moveType: .Double)
+        try assertMove("d5", field: "d5", type: .pawn, color: .black, moveType: .Double)
+        
+        try assertMove("Nc3", field: "c3", type: .knight, color: .white)
+        try assertMove("dxe4", field: "e4", type: .pawn, color: .black)
+        
+        try assertMove("Nxe4", field: "e4", type: .knight, color: .white)
+        try assertMove("Nf6", field: "f6", type: .knight, color: .black)
+        
+        try assertMove("Nxf6+", field: "f6", type: .knight, color: .white)
+        try assertMove("exf6", field: "f6", type: .pawn, color: .black)
+        
+        XCTAssertTrue(try XCTUnwrap(boardCache).isEmpty(atRow: 5, atFile: 6))
+        XCTAssertFalse(try XCTUnwrap(boardCache).isEmpty(atRow: 7, atFile: 6))
+
+    }
+    
 
     private func assertMove(
         _ moveName:String,
