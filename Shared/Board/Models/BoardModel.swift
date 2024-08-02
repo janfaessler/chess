@@ -3,8 +3,6 @@ import os
 
 class BoardModel : ObservableObject {
     
-    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "BoardModel")
-    
     typealias MoveNotification = (String) -> ()
     private var moveNotifcations:[MoveNotification] = []
     

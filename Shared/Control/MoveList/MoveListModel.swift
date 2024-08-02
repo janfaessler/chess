@@ -2,9 +2,7 @@ import Foundation
 import os
 
 public class MoveListModel : ObservableObject {
-    
-    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "MoveListModel")
-    
+        
     typealias PositionChangeNotification = (Position) -> ()
     private var positionChangeNotification:[PositionChangeNotification]
     
@@ -74,7 +72,6 @@ public class MoveListModel : ObservableObject {
     public func getPosition() -> Position? {
         guard currentMove != nil else { return PositionFactory.startingPosition() }
         let notations = getMoveNotations()
-        logger.info("\(notations.joined(separator: ","))")
         return PositionFactory.loadPosition(notations)
     }
     
