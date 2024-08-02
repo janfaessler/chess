@@ -45,13 +45,13 @@ public class MoveListModel : ObservableObject {
     
     public func end() {
         currentMove = structure.last
-        history = HistoryFactory.createH(ofMove: currentMove, inStructure: structure)
+        history = HistoryFactory.create(ofMove: currentMove, inStructure: structure)
         updatePosition()
     }
     
     public func goToMove(_ move:MoveModel) {
         currentMove = move
-        history = HistoryFactory.createH(ofMove: currentMove, inStructure: structure)
+        history = HistoryFactory.create(ofMove: currentMove, inStructure: structure)
         updatePosition()
     }
     
