@@ -1,15 +1,15 @@
 import SwiftUI
 
-struct RowView: View {
+struct MovePairView: View {
     @ObservedObject var model:MoveListModel
-    @ObservedObject var row:MovePairModel
+    @ObservedObject var pair:MovePairModel
     
     var body: some View {
-        Text("\(row.moveNumber).")
+        Text("\(pair.moveNumber).")
             .frame(minWidth: 20)
-        if row.hasWhiteMoved() {
-            MoveView(model: model, move: row.white!) {
-                model.goToMove(row.white!)
+        if pair.hasWhiteMoved() {
+            MoveView(model: model, move: pair.white!) {
+                model.goToMove(pair.white!)
             }
         } else {
             VStack {
@@ -20,9 +20,9 @@ struct RowView: View {
             }
         }
 
-        if row.hasBlackMoved() {
-            MoveView(model: model, move: row.black!) {
-                model.goToMove(row.black!)
+        if pair.hasBlackMoved() {
+            MoveView(model: model, move: pair.black!) {
+                model.goToMove(pair.black!)
             }
         } else {
             Rectangle()
