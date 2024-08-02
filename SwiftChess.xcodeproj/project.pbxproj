@@ -16,7 +16,7 @@
 		614C6BFC2C18A04100B4F930 /* MovePairModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6BFB2C18A04100B4F930 /* MovePairModel.swift */; };
 		614C6C002C19ACE300B4F930 /* MoveStructureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6BFF2C19ACE300B4F930 /* MoveStructureTests.swift */; };
 		614C6C022C1A527800B4F930 /* MovePairView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6C012C1A527800B4F930 /* MovePairView.swift */; };
-		614C6C042C1A53D000B4F930 /* VariationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6C032C1A53D000B4F930 /* VariationView.swift */; };
+		614C6C042C1A53D000B4F930 /* VariationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6C032C1A53D000B4F930 /* VariationListView.swift */; };
 		614FFC6B277780130082F892 /* MoveIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC69277780130082F892 /* MoveIndicatorView.swift */; };
 		614FFC6E277786560082F892 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614FFC6C277786560082F892 /* Move.swift */; };
 		6156C4B22C4C5EBB000CEB63 /* PgnParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6156C4B12C4C5EBB000CEB63 /* PgnParserTests.swift */; };
@@ -34,6 +34,8 @@
 		61812E2C2768078E00616866 /* PieceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E2A2768078E00616866 /* PieceType.swift */; };
 		61812E2F276807E600616866 /* PieceColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61812E2D276807E600616866 /* PieceColor.swift */; };
 		6181ED802C5D1C3C00B6FAC3 /* LineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6181ED7F2C5D1C3C00B6FAC3 /* LineView.swift */; };
+		6181ED822C5D208900B6FAC3 /* VariationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6181ED812C5D208900B6FAC3 /* VariationView.swift */; };
+		6181ED842C5D288B00B6FAC3 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6181ED832C5D288B00B6FAC3 /* CommentView.swift */; };
 		618D16A22C14FCA100D70B01 /* MoveModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618D16A12C14FCA100D70B01 /* MoveModel.swift */; };
 		618D83C12BC178FF00583944 /* ControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618D83BF2BC178FF00583944 /* ControlView.swift */; };
 		618D83C52BC17E0100583944 /* MoveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618D83C32BC17E0100583944 /* MoveView.swift */; };
@@ -105,7 +107,7 @@
 		614C6BFB2C18A04100B4F930 /* MovePairModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovePairModel.swift; sourceTree = "<group>"; };
 		614C6BFF2C19ACE300B4F930 /* MoveStructureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveStructureTests.swift; sourceTree = "<group>"; };
 		614C6C012C1A527800B4F930 /* MovePairView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovePairView.swift; sourceTree = "<group>"; };
-		614C6C032C1A53D000B4F930 /* VariationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariationView.swift; sourceTree = "<group>"; };
+		614C6C032C1A53D000B4F930 /* VariationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariationListView.swift; sourceTree = "<group>"; };
 		614FFC69277780130082F892 /* MoveIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveIndicatorView.swift; sourceTree = "<group>"; };
 		614FFC6C277786560082F892 /* Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
 		6156C4B12C4C5EBB000CEB63 /* PgnParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PgnParserTests.swift; sourceTree = "<group>"; };
@@ -129,6 +131,8 @@
 		61812E2A2768078E00616866 /* PieceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieceType.swift; sourceTree = "<group>"; };
 		61812E2D276807E600616866 /* PieceColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieceColor.swift; sourceTree = "<group>"; };
 		6181ED7F2C5D1C3C00B6FAC3 /* LineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineView.swift; sourceTree = "<group>"; };
+		6181ED812C5D208900B6FAC3 /* VariationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariationView.swift; sourceTree = "<group>"; };
+		6181ED832C5D288B00B6FAC3 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		618D16A12C14FCA100D70B01 /* MoveModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveModel.swift; sourceTree = "<group>"; };
 		618D83BF2BC178FF00583944 /* ControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlView.swift; sourceTree = "<group>"; };
 		618D83C32BC17E0100583944 /* MoveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveView.swift; sourceTree = "<group>"; };
@@ -216,6 +220,7 @@
 				61F609032BC208B1009BDC38 /* ControlButtonView.swift */,
 				618D83BF2BC178FF00583944 /* ControlView.swift */,
 				61ED578B2C4BDC3300302C92 /* GamesView.swift */,
+				6181ED832C5D288B00B6FAC3 /* CommentView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -254,9 +259,10 @@
 			children = (
 				618D83C32BC17E0100583944 /* MoveView.swift */,
 				614C6C012C1A527800B4F930 /* MovePairView.swift */,
-				614C6C032C1A53D000B4F930 /* VariationView.swift */,
+				614C6C032C1A53D000B4F930 /* VariationListView.swift */,
 				61F609062BC20C1B009BDC38 /* MoveListView.swift */,
 				6181ED7F2C5D1C3C00B6FAC3 /* LineView.swift */,
+				6181ED812C5D208900B6FAC3 /* VariationView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -615,7 +621,8 @@
 				61FA7FC52BA52AAF002CA3D2 /* FenBuilder.swift in Sources */,
 				61B0B4422B94F8850085DB48 /* Rook.swift in Sources */,
 				61EA625D2BA7988B009A0300 /* ResultView.swift in Sources */,
-				614C6C042C1A53D000B4F930 /* VariationView.swift in Sources */,
+				6181ED822C5D208900B6FAC3 /* VariationView.swift in Sources */,
+				614C6C042C1A53D000B4F930 /* VariationListView.swift in Sources */,
 				61B32F5A2B9A53DB00790CF7 /* Field.swift in Sources */,
 				619B65812C1DF68000C44FC9 /* PgnRegex.swift in Sources */,
 				618D83C52BC17E0100583944 /* MoveView.swift in Sources */,
@@ -632,6 +639,7 @@
 				61F6090F2BC30F5F009BDC38 /* EngineView.swift in Sources */,
 				6177238E274284FF00169D3D /* SwiftChessApp.swift in Sources */,
 				614643FC2C31C1C70041E1BE /* PgnGame.swift in Sources */,
+				6181ED842C5D288B00B6FAC3 /* CommentView.swift in Sources */,
 				618D83C12BC178FF00583944 /* ControlView.swift in Sources */,
 				614643FE2C31D1540041E1BE /* PgnGameParser.swift in Sources */,
 				618D16A22C14FCA100D70B01 /* MoveModel.swift in Sources */,

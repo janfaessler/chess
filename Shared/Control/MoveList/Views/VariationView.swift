@@ -1,23 +1,31 @@
 import SwiftUI
 
 struct VariationView: View {
-    @ObservedObject var model:MoveListModel
-    @ObservedObject var move:MoveModel
+    var model:MoveListModel
+    var variation:LineModel
+    var name:String
+    @State private var isDisclosed = false
+
     
     var body: some View {
-        if move.hasVariations() {
-            VStack {
-                ForEach(move.getVariations(), id: \.self) { variation in
-                    ZStack {
-                        Rectangle()
-                            .foregroundColor(.black)
-                            .border(.white)
-                            .clipShape(.rect(cornerRadius: 10))
-                        LineView(model: model, line: move.getVariation(variation)!.all)
-                            .padding(10)
-                    }
-                }
+        VStack {
+            Button(name) {
+                   withAnimation {
+                       isDisclosed.toggle()
+                   }
+               }
+               .buttonStyle(.plain)
+            ZStack {
+                Rectangle()
+                    .foregroundColor(.black)
+                    .border(.white)
+                    .clipShape(.rect(cornerRadius: 10))
+                LineView(model: model, line: variation.all)
+                    .padding(10)
             }
+            .frame(height: isDisclosed ? nil : 0, alignment: .top)
+            .clipped()
         }
+        
     }
 }
