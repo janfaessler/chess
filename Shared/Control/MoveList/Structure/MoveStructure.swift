@@ -27,7 +27,7 @@ public class MoveStructure {
     
     public func get(after:MoveModel?) -> MoveModel? {
         guard let fromContainer = after else {
-            return line.first?.white
+            return line.first
         }
         if !parrentMoves.contains(where: { $0.key == fromContainer.id}) {
             guard let index = line.index(of:fromContainer) else { return nil }
@@ -60,6 +60,21 @@ public class MoveStructure {
         }
         guard let variation = parrent.getVariation(move) else { return 1 }
         return variation.getPair(of: move)?.moveNumber ?? 1
+    }
+    
+    public func move(_ currentMove:MoveModel?, isChildOf:MovePairModel) -> Bool {
+        guard let currentMove = currentMove else { return false }
+        guard currentMove != isChildOf.white,
+              currentMove != isChildOf.black
+        else { return true }
+        
+        var parrentMove = parrent(of: currentMove)
+        while parrentMove != nil {
+            if parrentMove?.id == isChildOf.white?.id { return true }
+            if parrentMove?.id == isChildOf.black?.id { return true }
+            parrentMove = parrent(of:parrentMove!)
+        }
+        return false
     }
     
     private func addTopLevelMove(_ container: MoveModel) {

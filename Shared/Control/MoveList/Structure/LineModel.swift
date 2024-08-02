@@ -7,8 +7,15 @@ public class LineModel {
         self.line = line
     }
     
-    public var first:MovePairModel? {
-        line.first
+    public var first:MoveModel {
+        guard let move = line.first?.white else {
+            return line.first!.black!
+        }
+        return move
+    }
+    
+    public var variationStartNumber: Int {
+        line.first?.moveNumber ?? 0
     }
     
     public var last:MovePairModel? {

@@ -2,7 +2,7 @@ import SwiftUI
 
 struct LineView: View {
     
-    var model:MoveListModel
+    @ObservedObject var model:MoveListModel
     var line:[MovePairModel]
     
     var body: some View {
@@ -12,9 +12,11 @@ struct LineView: View {
                     GridRow {
                         MovePairView(model: model, pair: movePair)
                     }
-                    GridRow {
-                        VariationListView(model: model, movePair: movePair)
-                    }.gridCellColumns(3)
+                    if model.shouldShowVariationList(movePair) {
+                        GridRow {
+                            VariationListView(model: model, movePair: movePair)
+                        }.gridCellColumns(3)
+                    }
                 }
             }
         }

@@ -9,12 +9,21 @@ struct VariationView: View {
     
     var body: some View {
         VStack {
-            Button(name) {
-                   withAnimation {
-                       isDisclosed.toggle()
-                   }
-               }
-               .buttonStyle(.plain)
+            HStack {
+                Text("\(variation.variationStartNumber).")
+                if variation.first.color == .black {
+                    Rectangle().fill(.clear)
+                }
+                MoveView(model: model, move: variation.first) {
+                    withAnimation {
+                        isDisclosed.toggle()
+                    }
+                }
+                if variation.first.color == .white {
+                    Rectangle().fill(.clear)
+                }
+            }.padding(5)
+           
             ZStack {
                 Rectangle()
                     .foregroundColor(.black)

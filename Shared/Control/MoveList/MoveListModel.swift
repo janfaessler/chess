@@ -3,7 +3,7 @@ import os
 
 public class MoveListModel : ObservableObject {
         
-    typealias PositionChangeNotification = (Position) -> ()
+    public typealias PositionChangeNotification = (Position) -> ()
     private var positionChangeNotification:[PositionChangeNotification]
     
     private var structure:MoveStructure
@@ -89,7 +89,14 @@ public class MoveListModel : ObservableObject {
         history.list.map({ $0.move })
     }
     
-    func addPositionChangeListener(_ listener:@escaping PositionChangeNotification) {
+    public func shouldShowVariationList(_ currentPair:MovePairModel) -> Bool {
+        guard currentMove != currentPair.white || currentMove != currentPair.black else { return true }
+        guard structure.move(currentMove, isChildOf:currentPair) else { return false }
+        
+        return true
+    }
+    
+    public func addPositionChangeListener(_ listener:@escaping PositionChangeNotification) {
         positionChangeNotification += [listener]
     }
     
