@@ -23,14 +23,6 @@ public class ControlModel : ObservableObject {
         moveList.addPositionChangeListener(positionChange)
     }
     
-    var moveListColumns:[GridItem] {
-        [GridItem(.fixed(20)), GridItem(.flexible()), GridItem(.flexible())]
-    }
-    
-    var navigationbuttonSize:CGSize {
-        CGSize(width: minControlWidth / 4, height: 30)
-    }
-    
     func getBoardSize(_ geo:GeometryProxy) -> CGFloat {
         return min(geo.size.width - minControlWidth, geo.size.height)
     }
