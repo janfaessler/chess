@@ -1,7 +1,9 @@
 import Foundation
+import os
 
 public class Position {
-    
+    private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Position")
+
     private var cache:[Int:[Int:any ChessFigure]]
     private let colorToMove:PieceColor
     private let enPassantTarget:Field?
@@ -23,7 +25,7 @@ public class Position {
         moveClock:Int,
         halfmoveClock:Int
     ) {
-        self.cache = Position.createCachDictionary(figures)
+        self.cache = Position.createCachDictionary(figures)!
         self.colorToMove = colorToMove
         self.enPassantTarget = enPassantTarget
         self.whiteCanCastleKingside = whiteCanCastleKingside
@@ -180,18 +182,20 @@ public class Position {
         }
     }
     public func checkPromotion(_ move: Move){
-        guard
-            move.piece.getType() == .pawn,
-            pawnHasReachedEndOfTheBoard(move)
-        else { return }
-
-        promote(Pawn(color: move.piece.getColor(), row: move.getRow(), file: move.getFile()),
+        guard move.piece.getType() == .pawn else {
+            return
+        }
+        guard pawnHasReachedEndOfTheBoard(move) else {
+            return
+        }
+        promote(Pawn(color: move.piece.getColor(), row: move.piece.getRow(), file: move.piece.getFile()),
                 to: Figure.create(type: move.promoteTo, color: move.piece.getColor(), row: move.getRow(), file: move.getFile()))
     }
     
-    private func promote(_ pawn: Figure, to:any ChessFigure) {
+    private func promote(_ pawn:any ChessFigure, to:any ChessFigure) {
         clearField(atRow: pawn.getRow(), atFile: pawn.getFile())
         set(to)
+        Position.logger.log("promote: replacing \(pawn.info()) with \(to.info())")
     }
     
     private func doesMovePutOwnKingInCheck(_ move:Move) -> Bool {
@@ -233,9 +237,10 @@ public class Position {
         let capturedPiece = get(atRow: move.getRow(), atFile: move.getFile())
         
         var figures = getFigures()
-        figures.removeAll(where: { $0.equals(move.getPiece()) })
-        figures.append(Figure.create(type: move.getPiece().getType(), color: move.getPiece().getColor(), row: move.getRow(), file: move.file, moved: true))
-        
+        let oldPiece = move.getPiece()
+        let newPiece = Figure.create(type: move.getPiece().getType(), color: move.getPiece().getColor(), row: move.getRow(), file: move.file, moved: true)
+        figures.removeAll(where: { $0.equals(oldPiece) || capturedPiece?.equals($0) == true })
+        figures.append(newPiece)
         let pos = PositionFactory.create(self, afterMove: move, figures: figures, capturedPiece: capturedPiece)
         pos.checkPromotion(move)
         pos.moveRookForCastling(move)
@@ -288,12 +293,16 @@ public class Position {
         return (move.piece.getColor() == .white && move.row == 8) || (move.piece.getColor() == .black && move.row == 1)
     }
     
-    private static func createCachDictionary(_ figures: [any ChessFigure]) -> [Int : [Int : any ChessFigure]] {
+    private static func createCachDictionary(_ figures: [any ChessFigure]) -> [Int : [Int : any ChessFigure]]? {
         var dict:[Int:[Int:any ChessFigure]] = [:]
 
         for f in figures {
             if dict[f.getRow()] == nil {
                 dict[f.getRow()] = [:]
+            }
+            guard dict[f.getRow()]?[f.getFile()] == nil else {
+                Position.logger.error("could not set \(f.info()) because field is occupied by \(dict[f.getRow()]?[f.getFile()]?.info() ?? "")")
+                return nil
             }
             dict[f.getRow()]![f.getFile()] = f
         }

@@ -1,7 +1,6 @@
 import Foundation
 
-public class Figure:Identifiable, Equatable, ChessFigure {
-
+public class Figure:Identifiable, ChessFigure {
     private let type:PieceType
     private let color:PieceColor
     private var moved:Bool
@@ -105,14 +104,6 @@ public class Figure:Identifiable, Equatable, ChessFigure {
     public func hasMoved() -> Bool {
         return moved
     }
-    
-    public static func == (l:Figure, r:Figure) -> Bool {
-        return l.row == r.row && l.file == r.file && l.type == r.type && l.color == r.color
-    }
-    
-    public static func != (l:Figure, r:Figure) -> Bool {
-        return !(l == r)
-    }
 
     public func ident() -> String {
         return ""
@@ -144,5 +135,9 @@ public class Figure:Identifiable, Equatable, ChessFigure {
     
     func isCaptureablePiece(_ move: Move, pieceToCapture: (any ChessFigure)?) -> Bool {
         return move.piece.getColor() != pieceToCapture!.getColor() && pieceToCapture!.getRow() == move.row && pieceToCapture!.getFile() == move.file
+    }
+    
+    public static func == (lhs: Figure, rhs: Figure) -> Bool {
+        lhs.equals(rhs)
     }
 }

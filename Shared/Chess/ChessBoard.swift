@@ -24,10 +24,9 @@ public class ChessBoard {
 
     public func move(_ move:Move) throws {
         guard position.IsMoveLegalMoveOnTheBoard(move) else {
-            logger.error("move (\(move.piece.ident())\(move.piece.getFieldInfo()) -> \(NotationFactory.generate(move, position: self.position))) is not allowed")
+            logger.error("move (\(move.info()) -> \(NotationFactory.generate(move, position: self.position))) is not allowed")
             throw ValidationError.MoveNotLegalMoveOnTheBoard
         }
-        
         LogMove(move)
         try doMove(move)
     }
@@ -106,7 +105,7 @@ public class ChessBoard {
     }
     
     private func updateBoardStates(_ move: Move, capturedPiece: (any ChessFigure)?) {
-        position = PositionFactory.create(position, afterMove: move, capturedPiece: capturedPiece)
+        position = PositionFactory.create(position, afterMove: move, figures: position.getFigures(), capturedPiece: capturedPiece)
         increasePositionCount()
     }
     
@@ -194,7 +193,7 @@ public class ChessBoard {
     
     private func LogMove(_ move: Move) {
         let logInfo = NotationFactory.generate(move, position: position)
-        logger.log("\(logInfo)")
+        logger.log("play \(logInfo) \(move.info())")
         moveLog += [logInfo]
     }
 }

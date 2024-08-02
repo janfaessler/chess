@@ -25,8 +25,8 @@ public class PositionFactory {
         var figures:[any ChessFigure] = cache.getFigures()
         let fig = figures.first(where: { $0.equals(move.getPiece())})!
         let capturedPiece = cache.get(atRow: move.getRow(), atFile: move.getFile())
+        figures.removeAll(where: { $0.equals(move.getPiece()) || capturedPiece?.equals($0) == true })
         fig.move(row: move.getRow(), file: move.getFile())
-        figures.removeAll(where: {$0.equals(move.getPiece())})
         figures.append(fig)
         if move.getType() == .Castle {
             if move.getFile() == King.CastleQueensidePosition{
@@ -44,11 +44,11 @@ public class PositionFactory {
     public static func create(
         _ oldPosition:Position,
         afterMove:Move,
-        figures: [any ChessFigure]? = nil,
+        figures: [any ChessFigure],
         capturedPiece:(any ChessFigure)? = nil
     ) -> Position {
         return Position(
-            figures ?? oldPosition.getFigures(),
+            figures,
             colorToMove: createColorToMove(afterMove),
             enPassantTarget: createEnPassantTarget(afterMove),
             whiteCanCastleKingside: canCastle(afterMove: afterMove, color: .white, rookStartingFile: Rook.CastleKingsideStartingFile, capturedPiece: capturedPiece, oldPosition: oldPosition),

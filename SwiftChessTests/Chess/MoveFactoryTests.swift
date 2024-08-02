@@ -198,8 +198,8 @@ final class MoveFactoryTests: XCTestCase {
         var figures:[any ChessFigure] = cache.getFigures()
         let fig = figures.first(where: { $0.equals(move.getPiece())})!
         let capturedPiece = cache.get(atRow: move.getRow(), atFile: move.getFile())
+        figures.removeAll(where: { $0.equals(move.getPiece()) || capturedPiece?.equals($0) == true })
         fig.move(row: move.getRow(), file: move.getFile())
-        figures.removeAll(where: {$0.equals(move.getPiece())})
         figures.append(fig)
         if move.getType() == .Castle {
             if move.getFile() == King.CastleQueensidePosition{
