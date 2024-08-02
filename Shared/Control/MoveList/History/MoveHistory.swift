@@ -24,8 +24,4 @@ public class MoveHistory {
     public var list:[MoveModel] {
         history
     }
-    
-    public func rowNumber() -> Int {
-        Int(history.count / 2) + 1
-    }
 }

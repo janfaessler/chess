@@ -1,40 +1,40 @@
 import Foundation
 
 public class MoveStructure {
-    private var rows:LineModel
+    private var line:LineModel
     private var parrentMoves:[UUID:MoveModel]
     
     init(line: LineModel? = nil, parrentMoves: [UUID : MoveModel] = [:]) {
-        self.rows = line ?? LineModel()
+        self.line = line ?? LineModel()
         self.parrentMoves = parrentMoves
     }
     
     public var last:MoveModel? {
-        rows.last!.hasBlackMoved() ? rows.last!.black : rows.last!.white
+        line.last!.hasBlackMoved() ? line.last!.black : line.last!.white
     }
     
     public var count:Int {
-        return rows.count
+        return line.count
     }
     
     public var list:[MovePairModel] {
-        rows.all
+        line.all
     }
     
     public func range(to:MoveModel) -> [MovePairModel] {
-        rows.range(to: to).all
+        line.range(to: to).all
     }
     
     public func get(after:MoveModel?) -> MoveModel? {
         guard let fromContainer = after else {
-            return rows.first?.white
+            return line.first?.white
         }
         if !parrentMoves.contains(where: { $0.key == fromContainer.id}) {
-            guard let index = rows.index(of:fromContainer) else { return nil }
-            guard fromContainer == rows.getMove(index, color: .black) else {
-                return rows.getMove(index, color: .black) 
+            guard let index = line.index(of:fromContainer) else { return nil }
+            guard fromContainer == line.getMove(index, color: .black) else {
+                return line.getMove(index, color: .black) 
             }
-            return rows.getMove(index + 1, color: .white)
+            return line.getMove(index + 1, color: .white)
         }
         guard let parrentMove = parrentMoves[fromContainer.id] else { return nil }
         guard let variation = parrentMove.getVariation(fromContainer) else { return nil }
@@ -56,27 +56,27 @@ public class MoveStructure {
     public func number(of:MoveModel) -> Int {
         let move = of
         guard let parrent = parrent(of: move) else {
-            return rows.getPair(of: move)?.moveNumber ?? 1
+            return line.getPair(of: move)?.moveNumber ?? 1
         }
         guard let variation = parrent.getVariation(move) else { return 1 }
         return variation.getPair(of: move)?.moveNumber ?? 1
     }
     
     private func addTopLevelMove(_ container: MoveModel) {
-        guard rows.count > 0 else {
-            rows.add(MovePairModel.create(container, moveNumber: 1))
+        guard line.count > 0 else {
+            line.add(MovePairModel.create(container, moveNumber: 1))
             return
         }
-        if rows.last?.hasBlackMoved() == true {
-            rows.add(MovePairModel.create(container, moveNumber: rows.count + 1))
+        if line.last?.hasBlackMoved() == true {
+            line.add(MovePairModel.create(container, moveNumber: line.count + 1))
         } else {
-            rows.last?.black = container
+            line.last?.black = container
         }
     }
     
     private func shouldAddOnTopLevel(_ move:MoveModel, currentMove: MoveModel?) -> Bool {
-        let blackHasLastTopLevelMove = rows.last?.black != nil
-        return (blackHasLastTopLevelMove && currentMove == rows.last?.black) || (!blackHasLastTopLevelMove && rows.last?.white == currentMove)
+        let blackHasLastTopLevelMove = line.last?.black != nil
+        return (blackHasLastTopLevelMove && currentMove == line.last?.black) || (!blackHasLastTopLevelMove && line.last?.white == currentMove)
     }
     
     private func addVariationMove(_ container:MoveModel, currentMove:MoveModel?) {
