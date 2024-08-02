@@ -100,10 +100,6 @@ class BoardModel : ObservableObject {
         return board.getPosition()
     }
     
-    func getMoves() -> [Move] {
-        return board.getMoves()
-    }
-    
     func addMoveListener(_ listener:@escaping MoveNotification) {
         moveNotifcations += [listener]
     }
@@ -126,11 +122,11 @@ class BoardModel : ObservableObject {
     }
     
     private func doMove(_ move: Move) throws {
-        let positionBeforeMove = board.getPosition()
+        let positionBeforeMove = FenBuilder.create(board.getPosition())
         try board.move(move)
         figures = getFigures()
         result = ResultModel(board.getGameState())
-        notifyMoveDone(move, position: positionBeforeMove)
+        notifyMoveDone(move, fen: positionBeforeMove)
     }
     
     private func moveAndUpdateModel(_ move: Move) throws {
@@ -144,8 +140,8 @@ class BoardModel : ObservableObject {
         return figures.map({ FigureModel($0, board: self) })
     }
     
-    private func notifyMoveDone(_ move:Move, position:Position) {
-        let notation = NotationFactory.generate(move, position: position)
+    private func notifyMoveDone(_ move:Move, fen:String) {
+        let notation = NotationFactory.generate(move, position: FenParser.parse(fen))
         for event in moveNotifcations {
             event(notation)
         }

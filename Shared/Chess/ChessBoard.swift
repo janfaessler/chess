@@ -173,10 +173,6 @@ public class ChessBoard {
         return position.get(atRow: atRow, atFile: atFile) != nil
     }
     
-    private func addFigure(_ to: any ChessFigure) {
-        position.set(to)
-    }
-    
     private func removeFigure(_ figure:any ChessFigure) {
         position.clearField(atRow: figure.getRow(), atFile: figure.getFile())
     }

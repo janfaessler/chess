@@ -13,12 +13,13 @@ public class NotationFactory {
         guard !move.isCastling() else { 
             return getCastlingNotation(move, position:position)
         }
+        let checkIdentifier = getCheckIdentifier(move, position: position)
+
         let piece = getPieceIdentifier(move, position: position)
         let duplicateIdentifier = getDuplicateIdentifier(move, position: position)
         let captureIdentifier = getCaptureIdentifier(move, position: position)
         let field = move.getFieldInfo()
         let promotionIdentifier = getPromotionIdentifier(move)
-        let checkIdentifier = getCheckIdentifier(move, position: position)
         return "\(piece)\(duplicateIdentifier)\(captureIdentifier)\(field)\(promotionIdentifier)\(checkIdentifier)"
     }
     
