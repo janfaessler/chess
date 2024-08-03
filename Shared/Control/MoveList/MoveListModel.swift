@@ -2,6 +2,8 @@ import Foundation
 import os
 
 public class MoveListModel : ObservableObject {
+    
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "MoveListModel")
         
     public typealias PositionChangeNotification = (Position) -> ()
     private var positionChangeNotification:[PositionChangeNotification]
@@ -90,10 +92,37 @@ public class MoveListModel : ObservableObject {
     }
     
     public func shouldShowVariationList(_ currentPair:MovePairModel) -> Bool {
-        guard currentMove != currentPair.white || currentMove != currentPair.black else { return true }
-        guard structure.move(currentMove, isChildOf:currentPair) else { return false }
+        if shouldShowVariationList(currentPair, color: .white) {
+            return true
+        }
+        if shouldShowVariationList(currentPair, color: .black) {
+            return true
+        }
+        return false
+    }
+    
+    public func shouldShowVariationList(_ currentPair:MovePairModel, color:PieceColor) -> Bool {
+        if currentMove == nil {
+            return false
+        }
         
-        return true
+        if color == .white {
+            
+            if currentMove == currentPair.white { return currentMove!.hasVariations() }
+            guard currentPair.white != nil else { return false }
+            if structure.move(currentMove, isChildOf: currentPair.white!) {
+                return true
+            }
+        } else {
+            if currentMove == currentPair.black { return currentMove!.hasVariations() }
+            guard currentPair.black != nil else { return false }
+            if structure.move(currentMove, isChildOf: currentPair.black!) {
+                return true
+            }
+        }
+        
+        
+        return false
     }
     
     public func addPositionChangeListener(_ listener:@escaping PositionChangeNotification) {

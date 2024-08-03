@@ -7,9 +7,9 @@ public class LineModel {
         self.line = line
     }
     
-    public var first:MoveModel {
+    public var first:MoveModel? {
         guard let move = line.first?.white else {
-            return line.first!.black!
+            return line.first?.black
         }
         return move
     }

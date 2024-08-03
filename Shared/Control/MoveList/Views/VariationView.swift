@@ -11,15 +11,15 @@ struct VariationView: View {
         VStack {
             HStack {
                 Text("\(variation.variationStartNumber).")
-                if variation.first.color == .black {
+                if variation.first?.color == .black {
                     Rectangle().fill(.clear)
                 }
-                MoveView(model: model, move: variation.first) {
+                MoveView(model: model, move: variation.first!) {
                     withAnimation {
                         isDisclosed.toggle()
                     }
                 }
-                if variation.first.color == .white {
+                if variation.first?.color == .white {
                     Rectangle().fill(.clear)
                 }
             }.padding(5)

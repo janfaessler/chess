@@ -6,13 +6,13 @@ struct VariationListView: View {
 
     var body: some View {
         VStack {
-            if movePair.hasVariations(.white) {
+            if model.shouldShowVariationList(movePair, color: .white) {
                 ForEach(movePair.white!.getVariations(), id: \.self) { variation in
                     VariationView(model: model, variation: movePair.white!.getVariation(variation)!, name: getName(variation, color: .white))
                 }
             }
             
-            if movePair.hasVariations(.black) {
+            if model.shouldShowVariationList(movePair, color: .black){
                 ForEach(movePair.black!.getVariations(), id: \.self) { variation in
                     VariationView(model: model, variation: movePair.black!.getVariation(variation)!, name: getName(variation, color: .black))
                 }

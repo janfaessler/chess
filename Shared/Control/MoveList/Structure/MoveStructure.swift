@@ -62,16 +62,13 @@ public class MoveStructure {
         return variation.getPair(of: move)?.moveNumber ?? 1
     }
     
-    public func move(_ currentMove:MoveModel?, isChildOf:MovePairModel) -> Bool {
+    public func move(_ currentMove:MoveModel?, isChildOf:MoveModel) -> Bool {
         guard let currentMove = currentMove else { return false }
-        guard currentMove != isChildOf.white,
-              currentMove != isChildOf.black
-        else { return true }
+        guard currentMove != isChildOf else { return true }
         
         var parrentMove = parrent(of: currentMove)
         while parrentMove != nil {
-            if parrentMove?.id == isChildOf.white?.id { return true }
-            if parrentMove?.id == isChildOf.black?.id { return true }
+            if parrentMove?.id == isChildOf.id { return true }
             parrentMove = parrent(of:parrentMove!)
         }
         return false
