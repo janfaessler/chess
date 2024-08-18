@@ -12,7 +12,8 @@ public class MoveListModel : ObservableObject {
     private var history:MoveHistory
     
     @Published public var currentMove:MoveModel?
-    
+    @Published var variation:String?
+
     public init() {
         structure = MoveStructure()
         history = MoveHistory()

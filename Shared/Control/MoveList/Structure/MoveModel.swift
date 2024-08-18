@@ -29,7 +29,7 @@ public class MoveModel : Identifiable, Equatable, ObservableObject {
         return variations[name]
     }
     
-    public func getVariation(_ name:String) -> LineModel?{
+    public func getVariation(_ name:String) -> LineModel? {
         guard let variation = variations[name] else { return LineModel() }
         return variation
     }

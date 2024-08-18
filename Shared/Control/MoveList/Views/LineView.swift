@@ -3,18 +3,23 @@ import SwiftUI
 struct LineView: View {
     
     @ObservedObject var model:MoveListModel
-    var line:[MovePairModel]
+    var line:LineModel
     
     var body: some View {
         Grid(verticalSpacing: 2.5) {
-            if model.moveCount > 0 {
-                ForEach(line, id: \.moveNumber) { movePair in
+            if line.count > 0 {
+                ForEach(line.all, id: \.moveNumber) { movePair in
                     GridRow {
                         MovePairView(model: model, pair: movePair)
                     }
-                    if model.shouldShowVariationList(movePair) {
+                    if model.shouldShowVariationList(movePair, color: .white) {
                         GridRow {
-                            VariationListView(model: model, movePair: movePair)
+                            VariationView(model: model, move: movePair.white!, moveNumber: movePair.moveNumber)
+                        }.gridCellColumns(3)
+                    }
+                    if model.shouldShowVariationList(movePair, color: .black) {
+                        GridRow {
+                            VariationView(model: model, move: movePair.black!, moveNumber: movePair.moveNumber)
                         }.gridCellColumns(3)
                     }
                 }

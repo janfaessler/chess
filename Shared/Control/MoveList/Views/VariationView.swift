@@ -1,40 +1,36 @@
 import SwiftUI
 
 struct VariationView: View {
-    var model:MoveListModel
-    var variation:LineModel
-    var name:String
-    @State private var isDisclosed = false
-
+    @ObservedObject var model:MoveListModel
+    @ObservedObject var move:MoveModel
+    @State var variation:String?
+    var moveNumber:Int
     
     var body: some View {
         VStack {
-            HStack {
-                Text("\(variation.variationStartNumber).")
-                if variation.first?.color == .black {
-                    Rectangle().fill(.clear)
+            Picker(selection: $variation, label: EmptyView()) {
+                ForEach(move.getVariations(), id: \.self) { variation in
+                    Text(getName(variation)).tag(variation as String?)
                 }
-                MoveView(model: model, move: variation.first!) {
-                    withAnimation {
-                        isDisclosed.toggle()
-                    }
-                }
-                if variation.first?.color == .white {
-                    Rectangle().fill(.clear)
-                }
-            }.padding(5)
-           
-            ZStack {
-                Rectangle()
-                    .foregroundColor(.black)
-                    .border(.white)
-                    .clipShape(.rect(cornerRadius: 10))
-                LineView(model: model, line: variation.all)
-                    .padding(10)
             }
-            .frame(height: isDisclosed ? nil : 0, alignment: .top)
-            .clipped()
+            .pickerStyle(.segmented)
+            .padding(5)
+            
+            if variation != nil {
+                GroupBox(label:EmptyView()) {
+                    LineView(model: model, line: move.getVariation(variation!)!)
+                        .padding(10)
+                }
+            }
         }
-        
+    }
+    
+    func getName(_ variation:String) -> String {
+        switch move.color {
+        case .white:
+            return "\(moveNumber). \(variation)"
+        case .black:
+            return "\(moveNumber)... \(variation)"
+        }
     }
 }
