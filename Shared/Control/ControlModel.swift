@@ -11,6 +11,7 @@ public class ControlModel : ObservableObject {
     @Published var games:[PgnGame] = []
     
     @Published var game:PgnGame? = nil
+    @Published var comment:String = ""
 
     @ObservedObject var board = BoardModel()
     @ObservedObject var moveList = MoveListModel()
@@ -37,6 +38,7 @@ public class ControlModel : ObservableObject {
         guard let game = game else { return }
         let structure = StructureFactory.create(game)
         moveList.load(structure)
+        comment = game.comment ?? ""
     }
     
     private func loadGames(_ urls:[URL]) async -> [PgnGame] {
@@ -48,16 +50,19 @@ public class ControlModel : ObservableObject {
     private func updatePosition() {
         guard let newPosition = moveList.getPosition() else { return }
         board.updatePosition(newPosition)
+        comment = moveList.currentMove?.note ?? ""
         engine.newPosition(newPosition)
     }
     
     private func movePlayed(_ notation:String) {
         moveList.movePlayed(notation)
+        comment = moveList.currentMove?.note ?? ""
         engine.newPosition(board.getPosition())
     }
     
     private func positionChange(_ pos:Position) {
         board.updatePosition(pos)
+        comment = moveList.currentMove?.note ?? ""
         engine.newPosition(pos)
     }
     

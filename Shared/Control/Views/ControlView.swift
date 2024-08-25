@@ -9,9 +9,9 @@ struct ControlView: View {
         VStack(alignment: .leading, spacing: 0) {
             GamesView(model: model)
             EngineView(lines: model.lines)
-            CommentView(model: model)
             MoveListView(model: model.moveList)
             Spacer()
+            CommentView(model: model)
             BoardNavigationView(model: model)
         }
     }

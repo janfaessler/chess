@@ -12,12 +12,9 @@ struct MovePairView: View {
                 model.goToMove(pair.white!)
             }
         } else {
-            VStack {
-                Rectangle()
-                    .frame(maxWidth: .infinity)
-                    .foregroundColor(.clear)
-                Text("...")
-            }
+            Text("...")
+                .frame(maxWidth: .infinity)
+
         }
 
         if pair.hasBlackMoved() {

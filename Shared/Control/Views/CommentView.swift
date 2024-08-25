@@ -4,14 +4,10 @@ struct CommentView: View {
     @ObservedObject var model:ControlModel
     
     var body: some View {
-        Text(getCommentText())
-    }
-    func getCommentText() -> String {
-
-        guard let currentMove = model.moveList.currentMove else {
-            return model.game?.comment ?? ""
+        GroupBox(label:Text("Note")) {
+            Text(model.comment)
         }
-        
-        return currentMove.note ??  ""
+        .padding(10)
+        .frame(maxWidth: .infinity)
     }
 }
