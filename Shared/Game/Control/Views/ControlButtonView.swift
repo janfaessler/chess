@@ -5,7 +5,7 @@ struct ControlButtonView: View {
     let label:String
     let shortcut:KeyEquivalent
 
-    init(_ label:String, shortcut:KeyEquivalent, action: @escaping  () -> Void) {
+    init(_ label:String, shortcut:KeyEquivalent, action: @escaping () -> Void) {
         self.action = action
         self.label = label
         self.shortcut = shortcut
@@ -21,7 +21,7 @@ struct ControlButtonView: View {
                 .border(.black)
         }
         .buttonStyle(.plain)
-        .keyboardShortcut(shortcut, modifiers: [])
+       // .keyboardShortcut(shortcut, modifiers: [])
     }
 }
 

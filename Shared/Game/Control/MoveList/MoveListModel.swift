@@ -28,17 +28,20 @@ public class MoveListModel : ObservableObject {
     }
     
     public func start() {
+        logger.info("start")
         history.clear()
         currentMove = nil
         updatePosition()
     }
     
     public func back() {
+        logger.info("back")
         currentMove = history.pop()
         updatePosition()
     }
     
     public func forward() {
+        logger.info("forward")
         guard let nextMove = structure.get(after: currentMove) else { return }
         self.currentMove = nextMove
         history.add(nextMove)
@@ -46,6 +49,7 @@ public class MoveListModel : ObservableObject {
     }
     
     public func end() {
+        logger.info("end")
         currentMove = structure.last
         history = HistoryFactory.create(ofMove: currentMove, inStructure: structure)
         updatePosition()

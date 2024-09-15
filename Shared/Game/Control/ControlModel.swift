@@ -18,33 +18,23 @@ public class ControlModel : ObservableObject {
     
     private var engine:ChessEngine = ChessEngine()
 
-    init() {
+    init(_ game:PgnGame) {
+        self.game = game
         engine.addEvalListener(updateEval)
         board.addMoveListener(movePlayed)
         moveList.addPositionChangeListener(positionChange)
+        openGame()
     }
     
     func getBoardSize(_ geo:GeometryProxy) -> CGFloat {
         return min(geo.size.width - minControlWidth, geo.size.height)
     }
-    
-    func openFiles(urls: [URL]) async {
-        games = await loadGames(urls)
-        game = games.first
-        openGame()
-    }
-    
+
     func openGame() {
         guard let game = game else { return }
         let structure = StructureFactory.create(game)
         moveList.load(structure)
         comment = game.comment ?? ""
-    }
-    
-    private func loadGames(_ urls:[URL]) async -> [PgnGame] {
-        guard let filepath = urls.first else { return [] }
-        let pgn = getFileContent(filepath)
-        return PgnParser.parse(pgn)
     }
     
     private func updatePosition() {
@@ -69,16 +59,5 @@ public class ControlModel : ObservableObject {
     private func updateEval(_ eval:[EngineLine]) {
         self.lines.removeAll()
         self.lines.append(contentsOf: eval)
-    }
-    
-    private func getFileContent(_ url:URL) -> String {
-        let path = url.path(percentEncoded: false)
-        do {
-            var encoding:String.Encoding = String.Encoding.utf8
-            return try String(contentsOfFile: path, usedEncoding: &encoding)
-        } catch {
-            logger.info("content of path <\(path)> could not be loaded: \(error)")
-        }
-        return ""
     }
 }
