@@ -14,16 +14,30 @@ struct NavigationManagerView: View {
 
     var body: some View {
         NavigationSplitView(columnVisibility: $sideBarVisibility) {
-            Button("select PGN") {
+            Button {
                 selectedSideBarItem = .openPgn
                 focused = false
+            } label: {
+                Label("open PGN", systemImage: "plus.circle")
             }
-            List(model.games, id: \.id, selection: $selectedSideBarItem) { selection in
-                NavigationLink(selection.getTitle(), value: SideBarItem.game(selection))
+            .buttonStyle(.plain)
+            List(selection: $selectedSideBarItem) {
+                
+                ForEach(model.games, id: \.id) { set in
+                    Section {
+                        ForEach(set.games, id: \.id) { selection in
+                            NavigationLink(selection.getTitle(), value: SideBarItem.game(selection))
+                        }
+                    } header: {
+                        Label(set.name, systemImage: "folder.fill")
+                    }
+                    
+                }
             }
             .onChange(of: selectedSideBarItem) {
                 focused = true
             }
+            .listStyle(.sidebar)
         } detail:  {
             switch selectedSideBarItem {
                 case .openPgn:
@@ -31,6 +45,7 @@ struct NavigationManagerView: View {
                 case .game(let game):
                 GameView(game)
                     .focused($focused)
+                    .navigationTitle(game.getTitle())
             }
         }.navigationSplitViewStyle(.balanced)
     }

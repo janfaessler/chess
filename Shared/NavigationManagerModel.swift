@@ -1,22 +1,30 @@
 import Foundation
 import os
 
+struct GameSet {
+    let id:UUID =  UUID()
+    let name:String
+    var expanded:Bool
+    var games:[PgnGame] = []
+}
+
 public class NavigationManagerModel : ObservableObject {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "NavigationManagerModel")
     
-    @Published var games:[PgnGame] = []
+    @Published var games:[GameSet] = []
 
     func openFiles(urls: [URL]) async {
-        let games = await loadGames(urls)
-        await MainActor.run {
-            self.games = games
+        for url in urls {
+            let games = await loadGames(url)
+            await MainActor.run {
+                self.games += [GameSet(name: url.lastPathComponent, expanded: true, games: games)]
+            }
         }
     }
 
-    private func loadGames(_ urls:[URL]) async -> [PgnGame] {
-        guard let filepath = urls.first else { return [] }
-        let pgn = getFileContent(filepath)
+    private func loadGames(_ url:URL) async -> [PgnGame] {
+        let pgn = getFileContent(url)
         return PgnParser.parse(pgn)
     }
     

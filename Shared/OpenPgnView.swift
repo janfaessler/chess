@@ -8,7 +8,7 @@ struct OpenPgnView: View {
 
     var body: some View {
         
-        FilePicker(types: [.plainText], allowMultiple: false) { urls in
+        FilePicker(types: [.plainText], allowMultiple: true) { urls in
             buttonText = "loading..."
             Task {
                 await model.openFiles(urls: urls)
