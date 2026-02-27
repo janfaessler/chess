@@ -1,52 +1,100 @@
 import SwiftUI
 
-enum SideBarItem: Hashable {
-    case openPgn
-    case game(PgnGame)
-}
 
 struct NavigationManagerView: View {
     @StateObject var model = NavigationManagerModel()
     
     @State var sideBarVisibility: NavigationSplitViewVisibility = .doubleColumn
     @State var selectedSideBarItem: SideBarItem = .openPgn
-    @FocusState private var focused: Bool
+    @FocusState private var focusOnGame: Bool
 
     var body: some View {
         NavigationSplitView(columnVisibility: $sideBarVisibility) {
-            Button {
-                selectedSideBarItem = .openPgn
-                focused = false
-            } label: {
-                Label("open PGN", systemImage: "plus.circle")
-            }
-            .buttonStyle(.plain)
             List(selection: $selectedSideBarItem) {
-                
-                ForEach(model.games, id: \.id) { set in
+                ForEach(model.collections, id: \.id) { collection in
                     Section {
-                        ForEach(set.games, id: \.id) { selection in
+                        ForEach(collection.games, id: \.id) { selection in
                             NavigationLink(selection.getTitle(), value: SideBarItem.game(selection))
                         }
                     } header: {
-                        Label(set.name, systemImage: "folder.fill")
+                        HStack {
+                            Button {
+                                selectedSideBarItem = .editCollection(collection)
+                            } label: {
+                                Label(collection.name, systemImage: "folder.fill")
+                            }
+                            .buttonStyle(.plain)
+                            Spacer()
+                            Button {
+                                selectedSideBarItem = .addGame
+                            } label: {
+                                Label("add", systemImage: "plus.circle")
+                                    .labelStyle(.iconOnly)
+                            }
+                            .buttonStyle(.plain)
+                        }
                     }
-                    
                 }
             }
             .onChange(of: selectedSideBarItem) {
-                focused = true
+                if case .game(_) = selectedSideBarItem {
+                    focusOnGame = true
+                } else {
+                    focusOnGame = false
+                }
             }
             .listStyle(.sidebar)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button {
+                        selectedSideBarItem = .openPgn
+                    } label: {
+                        Label("open PGN", systemImage: "doc.on.doc")
+                    }
+                    .buttonStyle(.plain)
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button {
+                        selectedSideBarItem = .createPgn
+                    } label: {
+                        Label("create PGN", systemImage: "folder.badge.plus")
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
         } detail:  {
             switch selectedSideBarItem {
-                case .openPgn:
+            case .openPgn:
                 OpenPgnView(model: model)
-                case .game(let game):
+                    .navigationTitle("Open PGN")
+            case .createPgn:
+                CreatePgnView(model: model)
+                    .navigationTitle("Add Collection")
+            case .editCollection(let collection):
+                EditCollectionView(model: model, collection: collection)
+                    .navigationTitle("Edit <" + collection.name + ">")
+            case .addGame:
+                AddGameView(model: model)
+                    .navigationTitle("Add Game")
+            case .editGame(let game):
+                EditGameView(model: model, game: game)
+                    .navigationTitle("Edit <" + game.getTitle() + ">")
+            case .game(let game):
                 GameView(game)
-                    .focused($focused)
+                    .focused($focusOnGame)
                     .navigationTitle(game.getTitle())
+                    .toolbar {
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button {
+                                selectedSideBarItem = .editGame(game)
+                            } label: {
+                                Label("edit game", systemImage: "pencil")
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
             }
-        }.navigationSplitViewStyle(.balanced)
+        }
+        .navigationSplitViewStyle(.balanced)
     }
 }

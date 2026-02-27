@@ -14,8 +14,9 @@ class BoardModel : ObservableObject {
     private var board:ChessBoard
 
     init() {
-        board = ChessBoard(PositionFactory.startingPosition())
-        result = ResultModel(board.getGameState())
+        let newBoard = ChessBoard(PositionFactory.startingPosition())
+        board = newBoard
+        result = ResultModel(newBoard.getGameState())
         figures = getFigures()
     }
     

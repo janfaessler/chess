@@ -25,6 +25,12 @@
 		615F49582C7B666C00D05EA1 /* NavigationManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615F49572C7B666C00D05EA1 /* NavigationManagerView.swift */; };
 		615F495A2C7B683B00D05EA1 /* OpenPgnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615F49592C7B683B00D05EA1 /* OpenPgnView.swift */; };
 		616BA6AF2C287E3B0015D3CD /* PgnMovesParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616BA6AE2C287E3B0015D3CD /* PgnMovesParser.swift */; };
+		616D02102CC52C0E0067BF33 /* CreatePgnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D020F2CC52C050067BF33 /* CreatePgnView.swift */; };
+		616D02122CC535C00067BF33 /* AddGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D02112CC535C00067BF33 /* AddGameView.swift */; };
+		616D02142CC53A120067BF33 /* EditCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D02132CC53A120067BF33 /* EditCollectionView.swift */; };
+		616D02162CC53DAD0067BF33 /* EditGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D02152CC53DAD0067BF33 /* EditGameView.swift */; };
+		616D02182CC53F290067BF33 /* GameCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D02172CC53F290067BF33 /* GameCollection.swift */; };
+		616D021E2CC5420E0067BF33 /* SideBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D021D2CC5420E0067BF33 /* SideBarItem.swift */; };
 		616D3E482BA464D8002D78EE /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D3E462BA464D8002D78EE /* GameState.swift */; };
 		6177238E274284FF00169D3D /* SwiftChessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61772362274284FE00169D3D /* SwiftChessApp.swift */; };
 		61772390274284FF00169D3D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61772363274284FE00169D3D /* ContentView.swift */; };
@@ -120,6 +126,12 @@
 		615F49572C7B666C00D05EA1 /* NavigationManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationManagerView.swift; sourceTree = "<group>"; };
 		615F49592C7B683B00D05EA1 /* OpenPgnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPgnView.swift; sourceTree = "<group>"; };
 		616BA6AE2C287E3B0015D3CD /* PgnMovesParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PgnMovesParser.swift; sourceTree = "<group>"; };
+		616D020F2CC52C050067BF33 /* CreatePgnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePgnView.swift; sourceTree = "<group>"; };
+		616D02112CC535C00067BF33 /* AddGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGameView.swift; sourceTree = "<group>"; };
+		616D02132CC53A120067BF33 /* EditCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCollectionView.swift; sourceTree = "<group>"; };
+		616D02152CC53DAD0067BF33 /* EditGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGameView.swift; sourceTree = "<group>"; };
+		616D02172CC53F290067BF33 /* GameCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCollection.swift; sourceTree = "<group>"; };
+		616D021D2CC5420E0067BF33 /* SideBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideBarItem.swift; sourceTree = "<group>"; };
 		616D3E402BA35241002D78EE /* PositionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionTests.swift; sourceTree = "<group>"; };
 		616D3E422BA352BF002D78EE /* NotationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotationTests.swift; sourceTree = "<group>"; };
 		616D3E462BA464D8002D78EE /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
@@ -380,6 +392,35 @@
 			path = Factories;
 			sourceTree = "<group>";
 		};
+		616D02192CC541860067BF33 /* DataManagment */ = {
+			isa = PBXGroup;
+			children = (
+				616D021C2CC541ED0067BF33 /* Structs */,
+				616D021A2CC541A60067BF33 /* Views */,
+			);
+			path = DataManagment;
+			sourceTree = "<group>";
+		};
+		616D021A2CC541A60067BF33 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				616D02132CC53A120067BF33 /* EditCollectionView.swift */,
+				616D02112CC535C00067BF33 /* AddGameView.swift */,
+				616D020F2CC52C050067BF33 /* CreatePgnView.swift */,
+				615F49592C7B683B00D05EA1 /* OpenPgnView.swift */,
+				616D02152CC53DAD0067BF33 /* EditGameView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		616D021C2CC541ED0067BF33 /* Structs */ = {
+			isa = PBXGroup;
+			children = (
+				616D02172CC53F290067BF33 /* GameCollection.swift */,
+			);
+			path = Structs;
+			sourceTree = "<group>";
+		};
 		6177235A274284FE00169D3D = {
 			isa = PBXGroup;
 			children = (
@@ -395,14 +436,15 @@
 		6177235F274284FE00169D3D /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				616D02192CC541860067BF33 /* DataManagment */,
 				616BA6A92C287C650015D3CD /* ChessUtil */,
 				615F49542C7B65F500D05EA1 /* Game */,
 				615F49572C7B666C00D05EA1 /* NavigationManagerView.swift */,
 				61B250B02C971CAF0090134B /* NavigationManagerModel.swift */,
+				616D021D2CC5420E0067BF33 /* SideBarItem.swift */,
 				61772363274284FE00169D3D /* ContentView.swift */,
 				61772362274284FE00169D3D /* SwiftChessApp.swift */,
 				61772365274284FF00169D3D /* Assets.xcassets */,
-				615F49592C7B683B00D05EA1 /* OpenPgnView.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -656,6 +698,7 @@
 				61F6090F2BC30F5F009BDC38 /* EngineView.swift in Sources */,
 				6177238E274284FF00169D3D /* SwiftChessApp.swift in Sources */,
 				614643FC2C31C1C70041E1BE /* PgnGame.swift in Sources */,
+				616D02102CC52C0E0067BF33 /* CreatePgnView.swift in Sources */,
 				6181ED842C5D288B00B6FAC3 /* CommentView.swift in Sources */,
 				618D83C12BC178FF00583944 /* ControlView.swift in Sources */,
 				614643FE2C31D1540041E1BE /* PgnGameParser.swift in Sources */,
@@ -663,6 +706,7 @@
 				616BA6AF2C287E3B0015D3CD /* PgnMovesParser.swift in Sources */,
 				614FFC6E277786560082F892 /* Move.swift in Sources */,
 				6100737B2C28918D009B2527 /* NotationFactory.swift in Sources */,
+				616D02142CC53A120067BF33 /* EditCollectionView.swift in Sources */,
 				61812E222767F0A900616866 /* FigureModel.swift in Sources */,
 				61EA625A2BA7452F009A0300 /* PositionFactory.swift in Sources */,
 				61B0B4452B94F8DB0085DB48 /* Queen.swift in Sources */,
@@ -679,13 +723,17 @@
 				6181ED802C5D1C3C00B6FAC3 /* LineView.swift in Sources */,
 				61F6090B2BC30775009BDC38 /* BoardNavigationView.swift in Sources */,
 				61812E252767F42000616866 /* BoardModel.swift in Sources */,
+				616D02182CC53F290067BF33 /* GameCollection.swift in Sources */,
+				616D02122CC535C00067BF33 /* AddGameView.swift in Sources */,
 				61812E2F276807E600616866 /* PieceColor.swift in Sources */,
 				61B0B4542B95E1A90085DB48 /* MoveType.swift in Sources */,
 				61F609182BC33C26009BDC38 /* LanParser.swift in Sources */,
 				617723A82742ABB800169D3D /* BoardFigureView.swift in Sources */,
 				617723A527429C9300169D3D /* BoardBackgroundView.swift in Sources */,
 				614C6BFC2C18A04100B4F930 /* MovePairModel.swift in Sources */,
+				616D02162CC53DAD0067BF33 /* EditGameView.swift in Sources */,
 				61F609052BC208B1009BDC38 /* ControlButtonView.swift in Sources */,
+				616D021E2CC5420E0067BF33 /* SideBarItem.swift in Sources */,
 				61F609082BC20C1B009BDC38 /* MoveListView.swift in Sources */,
 				615F49582C7B666C00D05EA1 /* NavigationManagerView.swift in Sources */,
 				61B0B44B2B94FAE60085DB48 /* Knight.swift in Sources */,

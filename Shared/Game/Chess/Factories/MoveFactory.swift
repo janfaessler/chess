@@ -110,13 +110,13 @@ public class MoveFactory {
         return figuresOfTypeAndColor.filter { $0.createMove(targetField) != nil && $0.isMovePossible($0.createMove(targetField)!, position: cache) }
     }
     
-    private static func getPieceField(_ input:any StringProtocol) -> (any StringProtocol)? {
+    private static func getPieceField(_ input:any StringProtocol) -> String? {
         let hasFileInfo = hasFileInfo(input)
         let hasRowInfo = hasRowInfo(input)
         let offset = hasFileInfo || hasRowInfo ? 2 : 1
         let fieldStartIndex =  input.index(input.startIndex, offsetBy: offset, limitedBy: input.endIndex)!
         let promotionParts = input[fieldStartIndex...].split(separator:NotationFactory.Promotion)
-        return promotionParts.first!
+        return String(promotionParts.first!)
     }
     private static func getField(_ input:any StringProtocol) -> (any StringProtocol)? {
         let input = String(input).replacing(NotationFactory.Check, with: "")
@@ -137,7 +137,7 @@ public class MoveFactory {
     
     private static func getPromotToFigure(_ input:any StringProtocol) -> PieceType {
         let promotionParts = input.split(separator: NotationFactory.Promotion)
-        return getPieceType(clean(promotionParts.last!)) ?? .queen
+        return getPieceType(clean(String(promotionParts.last!))) ?? .queen
     }
     
     private static func isCastlingMove(_ input:any StringProtocol) -> Bool {
