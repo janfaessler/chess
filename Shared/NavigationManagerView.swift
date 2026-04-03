@@ -2,7 +2,7 @@ import SwiftUI
 
 
 struct NavigationManagerView: View {
-    @StateObject var model = NavigationManagerModel()
+    @State var model = NavigationManagerModel()
     
     @State var sideBarVisibility: NavigationSplitViewVisibility = .doubleColumn
     @State var selectedSideBarItem: SideBarItem = .openPgn

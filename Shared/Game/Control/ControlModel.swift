@@ -1,24 +1,24 @@
 import SwiftUI
 import os
 
-public class ControlModel : ObservableObject {
+@Observable
+public class ControlModel {
+    
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "ControlModel")
+    private let minControlWidth: CGFloat = 200
 
-    private let minControlWidth:CGFloat = 200
+    var engineEval: String = ""
+    var lines: [EngineLine] = []
+    var games: [PgnGame] = []
+    var game: PgnGame?
+    var comment: String = ""
 
-    @Published var engineEval:String = ""
-    @Published var lines:[EngineLine] = []
-    @Published var games:[PgnGame] = []
+    var board = BoardModel()
+    var moveList = MoveListModel()
     
-    @Published var game:PgnGame? = nil
-    @Published var comment:String = ""
+    private var engine: ChessEngine = ChessEngine()
 
-    @ObservedObject var board = BoardModel()
-    @ObservedObject var moveList = MoveListModel()
-    
-    private var engine:ChessEngine = ChessEngine()
-
-    init(_ game:PgnGame) {
+    init(_ game: PgnGame) {
         self.game = game
         engine.addEvalListener(updateEval)
         board.addMoveListener(movePlayed)
@@ -26,8 +26,8 @@ public class ControlModel : ObservableObject {
         openGame()
     }
     
-    func getBoardSize(_ geo:GeometryProxy) -> CGFloat {
-        return min(geo.size.width - minControlWidth, geo.size.height)
+    func getBoardSize(_ geo: GeometryProxy) -> CGFloat {
+        min(geo.size.width - minControlWidth, geo.size.height)
     }
 
     func openGame() {
@@ -38,25 +38,28 @@ public class ControlModel : ObservableObject {
     }
     
     private func updatePosition() {
-        guard let newPosition = moveList.getPosition() else { return }
-        board.updatePosition(newPosition)
-        comment = moveList.currentMove?.note ?? ""
-        engine.newPosition(newPosition)
+        self.logger.info("updatePosition called")
+        guard let newPosition = self.moveList.getPosition() else { return }
+        self.board.updatePosition(newPosition)
+        self.comment = self.moveList.currentMove?.note ?? ""
+        self.engine.newPosition(newPosition)
     }
     
-    private func movePlayed(_ notation:String) {
-        moveList.movePlayed(notation)
-        comment = moveList.currentMove?.note ?? ""
-        engine.newPosition(board.getPosition())
+    private func movePlayed(_ notation: String) {
+        self.logger.info("movePlayed: \(notation)")
+        self.moveList.movePlayed(notation)
+        self.comment = self.moveList.currentMove?.note ?? ""
+        self.engine.newPosition(self.board.getPosition())
     }
     
-    private func positionChange(_ pos:Position) {
-        board.updatePosition(pos)
-        comment = moveList.currentMove?.note ?? ""
-        engine.newPosition(pos)
+    private func positionChange(_ pos: Position) {
+        self.logger.info("positionChange called - updating board")
+        self.board.updatePosition(pos)
+        self.comment = self.moveList.currentMove?.note ?? ""
+        self.engine.newPosition(pos)
     }
     
-    private func updateEval(_ eval:[EngineLine]) {
+    private func updateEval(_ eval: [EngineLine]) {
         self.lines.removeAll()
         self.lines.append(contentsOf: eval)
     }

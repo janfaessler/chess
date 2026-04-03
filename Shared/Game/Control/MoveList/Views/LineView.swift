@@ -2,8 +2,8 @@ import SwiftUI
 
 struct LineView: View {
     
-    @ObservedObject var model:MoveListModel
-    var line:LineModel
+    var model: MoveListModel
+    var line: LineModel
     
     var body: some View {
         Grid(verticalSpacing: 2.5) {

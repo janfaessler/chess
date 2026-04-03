@@ -1,17 +1,18 @@
 import Foundation
 import os
 
-public class MoveListModel : ObservableObject {
+@Observable
+public class MoveListModel {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "MoveListModel")
         
     public typealias PositionChangeNotification = (Position) -> ()
-    private var positionChangeNotification:[PositionChangeNotification]
+    private var positionChangeNotification: [PositionChangeNotification]
     
-    private var structure:MoveStructure
-    private var history:MoveHistory
+    private var structure: MoveStructure
+    private var history: MoveHistory
     
-    @Published public var currentMove:MoveModel?
+    public var currentMove: MoveModel?
 
     public init() {
         structure = MoveStructure()
@@ -19,11 +20,11 @@ public class MoveListModel : ObservableObject {
         positionChangeNotification = []
     }
     
-    public var moveCount:Int {
+    public var moveCount: Int {
         structure.count
     }
     
-    public var list:[MovePairModel] {
+    public var list: [MovePairModel] {
         structure.list
     }
     
@@ -129,14 +130,20 @@ public class MoveListModel : ObservableObject {
         return false
     }
     
-    public func addPositionChangeListener(_ listener:@escaping PositionChangeNotification) {
-        positionChangeNotification += [listener]
+    public func addPositionChangeListener(_ listener: @escaping PositionChangeNotification) {
+        self.positionChangeNotification.append(listener)
     }
     
-    private func updatePosition()  {
-        guard let position = getPosition() else { return }
-        for event in positionChangeNotification {
+    private func updatePosition() {
+        self.logger.info("MoveListModel.updatePosition called")
+        guard let position = self.getPosition() else {
+            self.logger.warning("MoveListModel.updatePosition - no position available")
+            return
+        }
+        self.logger.info("MoveListModel.updatePosition - calling \(self.positionChangeNotification.count) listeners")
+        for event in self.positionChangeNotification {
             event(position)
         }
+        self.logger.info("MoveListModel.updatePosition - listeners called")
     }
 }

@@ -3,7 +3,7 @@ import FilePicker
 
 struct ControlView: View {
     
-    @ObservedObject var model:ControlModel
+    var model: ControlModel
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -15,4 +15,3 @@ struct ControlView: View {
         }
     }
 }
-

@@ -1,29 +1,35 @@
 import SwiftUI
 import os
 
-class BoardModel : ObservableObject {
+@Observable
+class BoardModel {
     
     typealias MoveNotification = (String) -> ()
-    private var moveNotifcations:[MoveNotification] = []
     
-    @Published var figures:[FigureModel] = []
-    @Published var focus:FigureModel?
-    @Published var result:ResultModel
-    @Published var moveToPromote:Move?
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "BoardModel")
+    private var moveNotifcations: [MoveNotification] = []
     
-    private var board:ChessBoard
+    var figures: [FigureModel] = []
+    var focus: FigureModel?
+    var result: ResultModel
+    var moveToPromote: Move?
+    
+    private var board: ChessBoard
 
-    init() {
-        let newBoard = ChessBoard(PositionFactory.startingPosition())
-        board = newBoard
+
+    init(board: ChessBoard? = nil) {
+        let newBoard = board ?? ChessBoard(PositionFactory.startingPosition())
+        self.board = newBoard
         result = ResultModel(newBoard.getGameState())
         figures = getFigures()
     }
     
-    var lightColor:Color {
+    
+    var lightColor: Color {
         Color(red: 0.8, green: 0.8, blue: 0.5)
     }
-    var darkColor:Color {
+    
+    var darkColor: Color {
         .brown
     }
     
@@ -31,8 +37,8 @@ class BoardModel : ObservableObject {
         moveToPromote!.piece.getColor()
     }
     
-    var shouldShowPromotionView:Bool {
-        return moveToPromote != nil
+    var shouldShowPromotionView: Bool {
+        moveToPromote != nil
     }
     
     func getFieldColor(row: Int, file: Int) -> Color {
@@ -45,17 +51,17 @@ class BoardModel : ObservableObject {
         return odd ? darkColor : lightColor
     }
     
-    func getFileName(_ file:Int) -> String {
+    func getFileName(_ file: Int) -> String {
         let field = Field(row: 1, file: file)
         return field.getFileName()
     }
     
-    func getRowName(_ row:Int) -> String {
-        "\(9-row)"
+    func getRowName(_ row: Int) -> String {
+        "\(9 - row)"
     }
     
-    func move(figure: FigureModel, deltaRow:Int, deltaFile:Int) {
-        
+    
+    func move(figure: FigureModel, deltaRow: Int, deltaFile: Int) {
         guard figure.getColor() == board.getColorToMove() else {
             return
         }
@@ -71,16 +77,15 @@ class BoardModel : ObservableObject {
         }
     }
     
-    func doPromote(_ to:PieceType) throws {
+    func doPromote(_ to: PieceType) throws {
         moveToPromote?.promoteTo = to
         try doMove(moveToPromote!)
         moveToPromote = nil
     }
     
     func getLegalMoves() -> [Move] {
-        if focus != nil {
-            let moves = board.getPossibleMoves(forPeace: focus!.getFigure())
-            return moves
+        if let focus = focus {
+            return board.getPossibleMoves(forPeace: focus.getFigure())
         }
         return []
     }
@@ -90,58 +95,60 @@ class BoardModel : ObservableObject {
     }
     
     func clearFocus() {
-        if focus != nil {
-            focus = nil
-        }
+        focus = nil
     }
     
     func getPosition() -> Position {
-        return board.getPosition()
+        self.board.getPosition()
     }
     
-    func addMoveListener(_ listener:@escaping MoveNotification) {
-        moveNotifcations += [listener]
+    func addMoveListener(_ listener: @escaping MoveNotification) {
+        self.moveNotifcations.append(listener)
     }
     
-    func updatePosition(_ pos:Position)  {
-        board = ChessBoard(pos)
-        figures = getFigures()
+    func updatePosition(_ pos: Position) {
+        self.logger.info("BoardModel.updatePosition called - updating \(pos.getFigures().count) figures")
+        self.board = ChessBoard(pos)
+        let newFigures = self.getFigures()
+        self.figures = newFigures  // Explicit assignment to new array
+        self.result = ResultModel(self.board.getGameState())
+        self.logger.info("BoardModel.updatePosition complete - now have \(self.figures.count) figures")
     }
     
-    func moveFocusFigureTo(_ location: CGPoint, fieldSize:CGFloat) {
-        guard let figure = focus else { return }
+    func moveFocusFigureTo(_ location: CGPoint, fieldSize: CGFloat) {
+        guard let figure = self.focus else { return }
 
         let row = Int(9 - location.y / fieldSize)
         let file = Int(1 + location.x / fieldSize)
         let deltarow = row - figure.row
         let deltafile = file - figure.file
         
-        move(figure: figure, deltaRow: deltarow, deltaFile: deltafile)
-        clearFocus()
+        self.move(figure: figure, deltaRow: deltarow, deltaFile: deltafile)
+        self.clearFocus()
     }
     
     private func doMove(_ move: Move) throws {
-        let positionBeforeMove = FenBuilder.create(board.getPosition())
-        try board.move(move)
-        figures = getFigures()
-        result = ResultModel(board.getGameState())
-        notifyMoveDone(move, fen: positionBeforeMove)
+        let positionBeforeMove = FenBuilder.create(self.board.getPosition())
+        try self.board.move(move)
+        self.figures = self.getFigures()
+        self.result = ResultModel(self.board.getGameState())
+        self.notifyMoveDone(move, fen: positionBeforeMove)
     }
     
     private func moveAndUpdateModel(_ move: Move) throws {
-        try board.move(move)
-        figures = getFigures()
-        result = ResultModel(board.getGameState())
+        try self.board.move(move)
+        self.figures = self.getFigures()
+        self.result = ResultModel(self.board.getGameState())
     }
     
     private func getFigures() -> [FigureModel] {
-        let figures = board.getFigures()
-        return figures.map({ FigureModel($0, board: self) })
+        let figures = self.board.getFigures()
+        return figures.map { FigureModel($0, board: self) }
     }
     
-    private func notifyMoveDone(_ move:Move, fen:String) {
+    private func notifyMoveDone(_ move: Move, fen: String) {
         let notation = NotationFactory.generate(move, position: FenParser.parse(fen))
-        for event in moveNotifcations {
+        for event in self.moveNotifcations {
             event(notation)
         }
     }

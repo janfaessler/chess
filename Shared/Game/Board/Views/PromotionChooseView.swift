@@ -2,7 +2,7 @@ import SwiftUI
 
 struct PromotionChooseView: View {
     
-    @ObservedObject var board:BoardModel
+    var board:BoardModel
     let fieldSize:CGFloat
     
     var body: some View {

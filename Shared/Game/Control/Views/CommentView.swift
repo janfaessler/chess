@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct CommentView: View {
-    @ObservedObject var model:ControlModel
+    var model: ControlModel
     
     var body: some View {
-        GroupBox(label:Text("Note")) {
+        GroupBox(label: Text("Note")) {
             Text(model.comment)
         }
         .padding(10)

@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct VariationView: View {
-    @ObservedObject var model:MoveListModel
-    @ObservedObject var move:MoveModel
-    @State var variation:String?
-    var moveNumber:Int
+    var model: MoveListModel
+    var move: MoveModel
+    @State var variation: String?
+    var moveNumber: Int
     
     var body: some View {
         VStack {
@@ -17,7 +17,7 @@ struct VariationView: View {
             .padding(5)
             
             if variation != nil {
-                GroupBox(label:EmptyView()) {
+                GroupBox(label: EmptyView()) {
                     LineView(model: model, line: move.getVariation(variation!)!)
                         .padding(10)
                 }
@@ -25,7 +25,7 @@ struct VariationView: View {
         }
     }
     
-    func getName(_ variation:String) -> String {
+    func getName(_ variation: String) -> String {
         switch move.color {
         case .white:
             return "\(moveNumber). \(variation)"

@@ -3,7 +3,7 @@ import SwiftUI
 struct BoardFigureView: View {
 
     let fieldSize:CGFloat
-    @ObservedObject var figure:FigureModel
+    @Bindable var figure:FigureModel
     
     var body: some View {
         FigureView(size: fieldSize, type: figure.getType(), color: figure.getColor())

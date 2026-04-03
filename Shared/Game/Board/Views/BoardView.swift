@@ -2,7 +2,7 @@ import SwiftUI
 
 struct BoardView: View {
 
-    @ObservedObject var model:BoardModel
+    @Bindable var model: BoardModel
     
     var body: some View {
         GeometryReader { geo in
@@ -10,7 +10,7 @@ struct BoardView: View {
             ZStack (alignment: .topLeading) {
                 BoardBackgroundView(model: model)
        
-                ForEach(model.figures) { figure in
+                ForEach(model.figures, id: \.id ) { figure in
                     BoardFigureView(fieldSize: fieldSize, figure: figure)
                 }
                 
@@ -31,5 +31,5 @@ struct BoardView: View {
 }
 
 #Preview {
-    BoardView(model:BoardModel())
+    BoardView(model: BoardModel())
 }

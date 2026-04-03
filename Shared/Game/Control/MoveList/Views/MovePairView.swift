@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct MovePairView: View {
-    @ObservedObject var model:MoveListModel
-    @ObservedObject var pair:MovePairModel
+    var model: MoveListModel
+    var pair: MovePairModel
     
     var body: some View {
         Text("\(pair.moveNumber).")

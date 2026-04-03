@@ -2,7 +2,7 @@ import SwiftUI
 
 struct BoardBackgroundView: View {
     
-    @ObservedObject var model:BoardModel
+    var model:BoardModel
     
     var body: some View {
         VStack(spacing: 0.0) {
