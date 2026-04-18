@@ -3,26 +3,101 @@ import SwiftUI
 struct VariationView: View {
     var model: MoveListModel
     var move: MoveModel
-    @State var variation: String?
+    @State private var variation: String?
+    @State private var isExpanded: Bool = false
     var moveNumber: Int
+    var nestingLevel: Int = 0
+    
+    private var backgroundColor: Color {
+        switch nestingLevel {
+        case 1: return .blue.opacity(0.06)
+        case 2: return .green.opacity(0.06)
+        case 3: return .orange.opacity(0.06)
+        default: return .purple.opacity(0.06)
+        }
+    }
+    
+    private var accentColor: Color {
+        switch nestingLevel {
+        case 1: return .blue
+        case 2: return .green
+        case 3: return .orange
+        default: return .purple
+        }
+    }
     
     var body: some View {
-        VStack {
-            Picker(selection: $variation, label: EmptyView()) {
+        VStack(alignment: .leading, spacing: 2) {
+            Menu {
                 ForEach(move.getVariations(), id: \.self) { variation in
-                    Text(getName(variation)).tag(variation as String?)
+                    Button(action: {
+                        if self.variation == variation {
+                            self.variation = nil
+                            self.isExpanded = false
+                        } else {
+                            self.variation = variation
+                            self.isExpanded = true
+                        }
+                    }) {
+                        HStack {
+                            Text(getName(variation))
+                            if self.variation == variation {
+                                Image(systemName: "checkmark")
+                            }
+                        }
+                    }
                 }
+            } label: {
+                HStack(spacing: 3) {
+                    Image(systemName: "arrow.triangle.branch")
+                        .font(.system(size: 9))
+                        .foregroundStyle(accentColor)
+                    
+                    Text("Var (\(move.getVariations().count))")
+                        .font(.system(size: 10))
+                    
+                    if variation != nil {
+                        Text("• \(getName(variation!))")
+                            .font(.system(size: 10))
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
+                    
+                    Spacer()
+                    
+                    Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
+                        .font(.system(size: 8))
+                        .foregroundStyle(accentColor.opacity(0.7))
+                }
+                .padding(.horizontal, 6)
+                .padding(.vertical, 3)
+                .background(backgroundColor, in: RoundedRectangle(cornerRadius: 4))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 4)
+                        .strokeBorder(accentColor.opacity(0.25), lineWidth: 0.5)
+                )
             }
-            .pickerStyle(.segmented)
-            .padding(5)
+            .buttonStyle(.plain)
             
-            if variation != nil {
-                GroupBox(label: EmptyView()) {
-                    LineView(model: model, line: move.getVariation(variation!)!)
-                        .padding(10)
+            if let selectedVariation = variation, isExpanded {
+                if let variationLine = move.getVariation(selectedVariation) {
+                    LineView(model: model, line: variationLine, nestingLevel: nestingLevel)
+                        .padding(.leading, 6)
+                        .padding(.top, 2)
+                        .padding(.trailing, 2)
+                        .padding(.bottom, 2)
+                        .background(
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(backgroundColor.opacity(0.4))
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 4)
+                                .strokeBorder(accentColor.opacity(0.15), lineWidth: 0.5)
+                        )
                 }
             }
         }
+        .padding(.vertical, 1)
     }
     
     func getName(_ variation: String) -> String {

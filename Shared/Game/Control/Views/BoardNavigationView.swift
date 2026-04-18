@@ -1,24 +1,55 @@
 import SwiftUI
 
 struct BoardNavigationView: View {
-    
-    var model:ControlModel
+    var model: ControlModel
     
     var body: some View {
-        HStack(alignment: .center, spacing: 0) {
-            ControlButtonView("arrow.backward.to.line", shortcut: .downArrow) {
+        HStack(spacing: 12) {
+            Button {
                 model.moveList.start()
+            } label: {
+                Image(systemName: "backward.end.fill")
+                    .font(.title3)
+                    .frame(width: 44, height: 44)
             }
-            ControlButtonView("arrow.backward", shortcut: .leftArrow) {
+            .buttonStyle(.borderless)
+            .background(.quaternary, in: .circle)
+            .help("Jump to start")
+            
+            Button {
                 model.moveList.back()
+            } label: {
+                Image(systemName: "chevron.left")
+                    .font(.title3)
+                    .frame(width: 44, height: 44)
             }
-            ControlButtonView("arrow.forward", shortcut: .rightArrow) {
+            .buttonStyle(.borderless)
+            .background(.quaternary, in: .circle)
+            .help("Previous move")
+            
+            Spacer()
+            
+            Button {
                 model.moveList.forward()
+            } label: {
+                Image(systemName: "chevron.right")
+                    .font(.title3)
+                    .frame(width: 44, height: 44)
             }
-            ControlButtonView("arrow.forward.to.line", shortcut: .upArrow) {
+            .buttonStyle(.borderless)
+            .background(.quaternary, in: .circle)
+            .help("Next move")
+            
+            Button {
                 model.moveList.end()
+            } label: {
+                Image(systemName: "forward.end.fill")
+                    .font(.title3)
+                    .frame(width: 44, height: 44)
             }
+            .buttonStyle(.borderless)
+            .background(.quaternary, in: .circle)
+            .help("Jump to end")
         }
-        .frame(height: 30)
     }
 }

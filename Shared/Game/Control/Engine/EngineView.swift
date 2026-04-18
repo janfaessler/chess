@@ -1,16 +1,38 @@
 import SwiftUI
 
 struct EngineView: View {
-    
-    var lines:[EngineLine]
+    var lines: [EngineLine]
     
     var body: some View {
-        VStack(alignment: .leading) {
-            ForEach(lines) { x in
-                Text("\(x.score) \(x.line)")
-                    .lineLimit(1)
+        VStack(alignment: .leading, spacing: 8) {
+            ForEach(Array(lines.prefix(3)), id: \.id) { line in
+                HStack(spacing: 8) {
+                    Text(line.score)
+                        .font(.system(.caption, design: .monospaced, weight: .semibold))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(evaluationColor(for: line.score), in: .capsule)
+                        .foregroundStyle(.white)
+                    
+                    Text(line.line)
+                        .font(.system(.body, design: .monospaced))
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                    
+                    Spacer()
+                }
+                .padding(.vertical, 4)
             }
         }
-        .padding(5)
+    }
+    
+    private func evaluationColor(for eval: String) -> Color {
+        if eval.hasPrefix("+") {
+            return .green
+        } else if eval.hasPrefix("-") {
+            return .red
+        } else {
+            return .secondary
+        }
     }
 }

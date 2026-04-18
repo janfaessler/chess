@@ -1,6 +1,5 @@
 import SwiftUI
 
-
 struct NavigationManagerView: View {
     @State var model = NavigationManagerModel()
     
@@ -18,22 +17,23 @@ struct NavigationManagerView: View {
                         }
                     } header: {
                         HStack {
-                            Button {
-                                selectedSideBarItem = .editCollection(collection)
-                            } label: {
-                                Label(collection.name, systemImage: "folder.fill")
-                            }
-                            .buttonStyle(.plain)
-                            Spacer()
-                            Button {
-                                selectedSideBarItem = .addGame
-                            } label: {
-                                Label("add", systemImage: "plus.circle")
-                                    .labelStyle(.iconOnly)
-                            }
-                            .buttonStyle(.plain)
-                        }
+                              Button {
+                                  selectedSideBarItem = .editCollection(collection)
+                              } label: {
+                                  Label(collection.name, systemImage: "folder.fill")
+                              }
+                              .buttonStyle(.plain)
+                              Spacer()
+                              Button {
+                                  selectedSideBarItem = .addGame
+                              } label: {
+                                  Label("add", systemImage: "plus.circle")
+                                      .labelStyle(.iconOnly)
+                              }
+                              .buttonStyle(.plain)
+                          }
                     }
+                    .collapsible(true)
                 }
             }
             .onChange(of: selectedSideBarItem) {
@@ -44,24 +44,29 @@ struct NavigationManagerView: View {
                 }
             }
             .listStyle(.sidebar)
+            .scrollContentBackground(.hidden)
+            .background(Color(nsColor: .windowBackgroundColor))
             .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button {
-                        selectedSideBarItem = .openPgn
+                ToolbarItem(placement: .primaryAction) {
+                    Menu {
+                        Button {
+                            selectedSideBarItem = .openPgn
+                        } label: {
+                            Label("Open PGN", systemImage: "doc.on.doc")
+                        }
+
+                        Button {
+                            selectedSideBarItem = .createPgn
+                        } label: {
+                            Label("New Collection", systemImage: "folder.badge.plus")
+                        }
                     } label: {
-                        Label("open PGN", systemImage: "doc.on.doc")
+                        Label("Actions", systemImage: "plus.circle.fill")
                     }
-                    .buttonStyle(.plain)
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button {
-                        selectedSideBarItem = .createPgn
-                    } label: {
-                        Label("create PGN", systemImage: "folder.badge.plus")
-                    }
-                    .buttonStyle(.plain)
+                    .menuStyle(.button)
                 }
             }
+            .navigationTitle("Collections")
         } detail:  {
             switch selectedSideBarItem {
             case .openPgn:
@@ -69,26 +74,27 @@ struct NavigationManagerView: View {
                     .navigationTitle("Open PGN")
             case .createPgn:
                 CreatePgnView(model: model)
-                    .navigationTitle("Add Collection")
+                    .navigationTitle("New Collection")
             case .editCollection(let collection):
                 EditCollectionView(model: model, collection: collection)
-                    .navigationTitle("Edit <" + collection.name + ">")
+                    .navigationTitle("Edit \(collection.name)")
             case .addGame:
                 AddGameView(model: model)
                     .navigationTitle("Add Game")
             case .editGame(let game):
                 EditGameView(model: model, game: game)
-                    .navigationTitle("Edit <" + game.getTitle() + ">")
+                    .navigationTitle("Edit \(game.getTitle())")
             case .game(let game):
                 GameView(game)
+                    .id(game.id) // Force view recreation when game changes
                     .focused($focusOnGame)
                     .navigationTitle(game.getTitle())
                     .toolbar {
-                        ToolbarItem(placement: .confirmationAction) {
+                        ToolbarItem(placement: .primaryAction) {
                             Button {
                                 selectedSideBarItem = .editGame(game)
                             } label: {
-                                Label("edit game", systemImage: "pencil")
+                                Label("Edit Game", systemImage: "pencil")
                             }
                             .buttonStyle(.plain)
                         }
