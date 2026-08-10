@@ -72,8 +72,8 @@ public class FenParser {
     }
     
     private static func parsePiece(_ str: Character, rowNumber:Int, fileNumber:Int) -> Figure? {
-        let pieceType = parcePieceType(str);
-        let pieceColor = parseColor(str);
+        let pieceType = parsePieceType(str)
+        let pieceColor = parseColor(str)
         return createFigure(pieceType, pieceColor, rowNumber, fileNumber)
     }
     
@@ -96,7 +96,7 @@ public class FenParser {
         }
     }
     
-    private static func parcePieceType(_ str:Character) -> PieceType? {
+    private static func parsePieceType(_ str:Character) -> PieceType? {
         switch str.uppercased() {
         case Bishop.Ident: return .bishop
         case Knight.Ident: return .knight

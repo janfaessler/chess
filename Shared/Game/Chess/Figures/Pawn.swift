@@ -4,6 +4,8 @@ public class Pawn : Figure {
     
     public static let RowWherePromotionIsPossibleForWhite = 7
     public static let RowWherePromotionIsPossibleForBlack = 2
+    public static let startingRowForWhite = 2
+    public static let startingRowForBlack = 7
     
     init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
         super.init(type: .pawn, color: color, row: row, file: file, moved: moved)
@@ -19,7 +21,7 @@ public class Pawn : Figure {
                 createMove(row-1, file-1, moveType),
                 createMove(row-1, file, moveType),
                 createMove(row-1, file+1, moveType)]
-            if row == 7 {
+            if row == Pawn.startingRowForBlack {
                 moves.append(createMove(row-2, file, MoveType.Double))
             }
             return moves
@@ -29,7 +31,7 @@ public class Pawn : Figure {
                 createMove(row+1, file-1, moveType),
                 createMove(row+1, file, moveType),
                 createMove(row+1, file+1, moveType)]
-            if row == 2 {
+            if row == Pawn.startingRowForWhite {
                 moves.append(createMove(row+2, file, MoveType.Double))
             }
             return moves
@@ -94,6 +96,7 @@ public class Pawn : Figure {
     }
     
     private func getMoveType(_ move: any StringProtocol) -> MoveType {
-        return abs(Int(String(Array(move).last!))! - getRow()) == 2 ? MoveType.Double : MoveType.Normal
+        guard let lastChar = move.last, let targetRow = Int(String(lastChar)) else { return .Normal }
+        return abs(targetRow - getRow()) == 2 ? .Double : .Normal
     }
 }

@@ -57,7 +57,7 @@ public class Figure:Identifiable, ChessFigure {
     }
 
     public func getPossibleMoves() -> [Move] {
-        return Figure.create(type: type, color: color, row: row, file: file, moved: moved).getPossibleMoves()
+        fatalError("Subclasses must override getPossibleMoves()")
     }
     
     public func isMovePossible(_ move: Move, position:Position) -> Bool {
@@ -106,7 +106,7 @@ public class Figure:Identifiable, ChessFigure {
     }
 
     public func ident() -> String {
-        return ""
+        fatalError("Subclasses must override ident()")
     }
     
     func inBoard(_ m:Move) -> Bool {

@@ -237,7 +237,7 @@ class ChessTestBase: XCTestCase {
         
         let testee = try XCTUnwrap(testee)
         let blackKing = testee.getFigures().first(where: { $0.equals(forFigure)})!
-        let possibleMoves = testee.getPossibleMoves(forPeace: blackKing)
+        let possibleMoves = testee.getPossibleMoves(forPiece: blackKing)
             
         guard possibleMoves.elementsEqual(moves) == false else {
             return

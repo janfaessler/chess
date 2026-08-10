@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		6100737B2C28918D009B2527 /* NotationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6100737A2C28918D009B2527 /* NotationFactory.swift */; };
 		6106C2BA2C1F800A00D67A00 /* FilePicker in Frameworks */ = {isa = PBXBuildFile; productRef = 6106C2B92C1F800A00D67A00 /* FilePicker */; };
+		612ABAA3302A020E00350922 /* DrawConditionEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612ABAA2302A020E00350922 /* DrawConditionEvaluator.swift */; };
 		613B4AD92C4D416C007736D7 /* StructureFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613B4AD82C4D416C007736D7 /* StructureFactory.swift */; };
 		6141A20D2F93C299008FDB6B /* InfoRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6141A20C2F93C299008FDB6B /* InfoRowView.swift */; };
 		6141A2152F93D254008FDB6B /* MoveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6141A2142F93D254008FDB6B /* MoveData.swift */; };
@@ -114,6 +115,7 @@
 
 /* Begin PBXFileReference section */
 		6100737A2C28918D009B2527 /* NotationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotationFactory.swift; sourceTree = "<group>"; };
+		612ABAA2302A020E00350922 /* DrawConditionEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawConditionEvaluator.swift; sourceTree = "<group>"; };
 		613B4AD82C4D416C007736D7 /* StructureFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructureFactory.swift; sourceTree = "<group>"; };
 		6141A20C2F93C299008FDB6B /* InfoRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoRowView.swift; sourceTree = "<group>"; };
 		6141A2142F93D254008FDB6B /* MoveData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveData.swift; sourceTree = "<group>"; };
@@ -553,6 +555,7 @@
 				614FFC6C277786560082F892 /* Move.swift */,
 				61B0B44F2B95DEB00085DB48 /* ChessBoard.swift */,
 				61B32F582B9A53DB00790CF7 /* Field.swift */,
+				612ABAA2302A020E00350922 /* DrawConditionEvaluator.swift */,
 			);
 			path = Chess;
 			sourceTree = "<group>";
@@ -780,6 +783,7 @@
 				61812E282767FDA900616866 /* BoardView.swift in Sources */,
 				615F49562C7B660F00D05EA1 /* GameView.swift in Sources */,
 				61772390274284FF00169D3D /* ContentView.swift in Sources */,
+				612ABAA3302A020E00350922 /* DrawConditionEvaluator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

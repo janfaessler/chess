@@ -67,10 +67,9 @@ public class MoveListModel {
     }
     
     public func movePlayed(_ move: String, color: PieceColor) {
-        let nextMove = structure.get(after: currentMove)
-        if move == nextMove?.move {
+        if let nextMove = structure.get(after: currentMove), move == nextMove.move {
             currentMove = nextMove
-            history.add(nextMove!)
+            history.add(nextMove)
             return
         }
         let container = MoveModel(move: move, color: color)
@@ -114,28 +113,18 @@ public class MoveListModel {
         return false
     }
     
-    public func shouldShowVariationList(_ currentPair:MovePairModel, color:PieceColor) -> Bool {
-        if currentMove == nil {
-            return false
-        }
-        
+    public func shouldShowVariationList(_ currentPair: MovePairModel, color: PieceColor) -> Bool {
+        guard let current = currentMove else { return false }
+
         if color == .white {
-            
-            if currentMove == currentPair.white { return currentMove!.hasVariations() }
-            guard currentPair.white != nil else { return false }
-            if structure.move(currentMove, isChildOf: currentPair.white!) {
-                return true
-            }
+            if current == currentPair.white { return current.hasVariations() }
+            guard let white = currentPair.white else { return false }
+            return structure.move(currentMove, isChildOf: white)
         } else {
-            if currentMove == currentPair.black { return currentMove!.hasVariations() }
-            guard currentPair.black != nil else { return false }
-            if structure.move(currentMove, isChildOf: currentPair.black!) {
-                return true
-            }
+            if current == currentPair.black { return current.hasVariations() }
+            guard let black = currentPair.black else { return false }
+            return structure.move(currentMove, isChildOf: black)
         }
-        
-        
-        return false
     }
     
     public func activeVariation(of move: MoveModel) -> String? {

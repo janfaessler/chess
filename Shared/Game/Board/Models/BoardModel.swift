@@ -7,7 +7,7 @@ class BoardModel {
     typealias MoveNotification = (String) -> ()
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "BoardModel")
-    private var moveNotifcations: [MoveNotification] = []
+    private var moveNotifications: [MoveNotification] = []
     
     var figures: [FigureModel] = []
     var focus: FigureModel?
@@ -59,7 +59,7 @@ class BoardModel {
     
     func getLegalMoves() -> [Move] {
         if let focus = focus {
-            return board.getPossibleMoves(forPeace: focus.getFigure())
+            return board.getPossibleMoves(forPiece: focus.getFigure())
         }
         return []
     }
@@ -77,7 +77,7 @@ class BoardModel {
     }
     
     func addMoveListener(_ listener: @escaping MoveNotification) {
-        self.moveNotifcations.append(listener)
+        self.moveNotifications.append(listener)
     }
     
     func updatePosition(_ pos: Position) {
@@ -123,7 +123,7 @@ class BoardModel {
     
     private func notifyMoveDone(_ move: Move, fen: String) {
         let notation = NotationFactory.generate(move, position: FenParser.parse(fen))
-        for event in self.moveNotifcations {
+        for event in self.moveNotifications {
             event(notation)
         }
     }
