@@ -5,6 +5,6 @@ enum SideBarItem: Hashable {
     case createPgn
     case editCollection(GameCollection)
     case addGame
-    case editGame(PgnGame)
-    case game(PgnGame)
+    case editGame(GameData)
+    case game(GameData)
 }

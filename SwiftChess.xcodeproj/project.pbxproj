@@ -11,6 +11,11 @@
 		6106C2BA2C1F800A00D67A00 /* FilePicker in Frameworks */ = {isa = PBXBuildFile; productRef = 6106C2B92C1F800A00D67A00 /* FilePicker */; };
 		613B4AD92C4D416C007736D7 /* StructureFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613B4AD82C4D416C007736D7 /* StructureFactory.swift */; };
 		6141A20D2F93C299008FDB6B /* InfoRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6141A20C2F93C299008FDB6B /* InfoRowView.swift */; };
+		6141A2152F93D254008FDB6B /* MoveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6141A2142F93D254008FDB6B /* MoveData.swift */; };
+		6141A2172F93D26B008FDB6B /* GameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6141A2162F93D26B008FDB6B /* GameData.swift */; };
+		6141A21A2F93D280008FDB6B /* GameEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6141A2192F93D280008FDB6B /* GameEntity.swift */; };
+		6141A21C2F93D289008FDB6B /* CollectionEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6141A21B2F93D289008FDB6B /* CollectionEntity.swift */; };
+		6141A21E2F93D294008FDB6B /* PersistenceConversions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6141A21D2F93D294008FDB6B /* PersistenceConversions.swift */; };
 		614643FC2C31C1C70041E1BE /* PgnGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614643FB2C31C1C70041E1BE /* PgnGame.swift */; };
 		614643FE2C31D1540041E1BE /* PgnGameParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614643FD2C31D1540041E1BE /* PgnGameParser.swift */; };
 		614C6BF82C15EBC700B4F930 /* MoveListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614C6BF72C15EBC700B4F930 /* MoveListModel.swift */; };
@@ -111,6 +116,11 @@
 		6100737A2C28918D009B2527 /* NotationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotationFactory.swift; sourceTree = "<group>"; };
 		613B4AD82C4D416C007736D7 /* StructureFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructureFactory.swift; sourceTree = "<group>"; };
 		6141A20C2F93C299008FDB6B /* InfoRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoRowView.swift; sourceTree = "<group>"; };
+		6141A2142F93D254008FDB6B /* MoveData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveData.swift; sourceTree = "<group>"; };
+		6141A2162F93D26B008FDB6B /* GameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameData.swift; sourceTree = "<group>"; };
+		6141A2192F93D280008FDB6B /* GameEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEntity.swift; sourceTree = "<group>"; };
+		6141A21B2F93D289008FDB6B /* CollectionEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionEntity.swift; sourceTree = "<group>"; };
+		6141A21D2F93D294008FDB6B /* PersistenceConversions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceConversions.swift; sourceTree = "<group>"; };
 		614643FB2C31C1C70041E1BE /* PgnGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PgnGame.swift; sourceTree = "<group>"; };
 		614643FD2C31D1540041E1BE /* PgnGameParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PgnGameParser.swift; sourceTree = "<group>"; };
 		614C6BF72C15EBC700B4F930 /* MoveListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveListModel.swift; sourceTree = "<group>"; };
@@ -260,6 +270,16 @@
 			path = Navigation;
 			sourceTree = "<group>";
 		};
+		6141A2182F93D27D008FDB6B /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				6141A2192F93D280008FDB6B /* GameEntity.swift */,
+				6141A21B2F93D289008FDB6B /* CollectionEntity.swift */,
+				6141A21D2F93D294008FDB6B /* PersistenceConversions.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
 		614643FF2C31D2200041E1BE /* structs */ = {
 			isa = PBXGroup;
 			children = (
@@ -406,6 +426,7 @@
 			children = (
 				616D021C2CC541ED0067BF33 /* Structs */,
 				616D021A2CC541A60067BF33 /* Views */,
+				6141A2182F93D27D008FDB6B /* Persistence */,
 			);
 			path = DataManagment;
 			sourceTree = "<group>";
@@ -427,6 +448,8 @@
 			isa = PBXGroup;
 			children = (
 				616D02172CC53F290067BF33 /* GameCollection.swift */,
+				6141A2142F93D254008FDB6B /* MoveData.swift */,
+				6141A2162F93D26B008FDB6B /* GameData.swift */,
 			);
 			path = Structs;
 			sourceTree = "<group>";
@@ -681,8 +704,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				61F609242BC7F553009BDC38 /* ChessEngine.swift in Sources */,
+				6141A2152F93D254008FDB6B /* MoveData.swift in Sources */,
 				6141A20D2F93C299008FDB6B /* InfoRowView.swift in Sources */,
 				61F609232BC7F52C009BDC38 /* EngineLine.swift in Sources */,
+				6141A21A2F93D280008FDB6B /* GameEntity.swift in Sources */,
 				61B32F622B9CC5D700790CF7 /* Position.swift in Sources */,
 				61FA7FC22BA52A37002CA3D2 /* FenParser.swift in Sources */,
 				61B32F5F2B9A873500790CF7 /* ValidationError.swift in Sources */,
@@ -714,6 +739,7 @@
 				618D16A22C14FCA100D70B01 /* MoveModel.swift in Sources */,
 				616BA6AF2C287E3B0015D3CD /* PgnMovesParser.swift in Sources */,
 				614FFC6E277786560082F892 /* Move.swift in Sources */,
+				6141A2172F93D26B008FDB6B /* GameData.swift in Sources */,
 				6100737B2C28918D009B2527 /* NotationFactory.swift in Sources */,
 				616D02142CC53A120067BF33 /* EditCollectionView.swift in Sources */,
 				61812E222767F0A900616866 /* FigureModel.swift in Sources */,
@@ -724,6 +750,7 @@
 				61EA62692BAA0ED2009A0300 /* FigureView.swift in Sources */,
 				61B0B4512B95DEB00085DB48 /* ChessBoard.swift in Sources */,
 				614C6C022C1A527800B4F930 /* MovePairView.swift in Sources */,
+				6141A21E2F93D294008FDB6B /* PersistenceConversions.swift in Sources */,
 				6157321D2BA5F21E0048EDDF /* PgnParser.swift in Sources */,
 				615F495A2C7B683B00D05EA1 /* OpenPgnView.swift in Sources */,
 				61F163EE2B9D165200C48BAC /* ChessFigure.swift in Sources */,
@@ -735,6 +762,7 @@
 				616D02182CC53F290067BF33 /* GameCollection.swift in Sources */,
 				616D02122CC535C00067BF33 /* AddGameView.swift in Sources */,
 				61812E2F276807E600616866 /* PieceColor.swift in Sources */,
+				6141A21C2F93D289008FDB6B /* CollectionEntity.swift in Sources */,
 				61B0B4542B95E1A90085DB48 /* MoveType.swift in Sources */,
 				61F609182BC33C26009BDC38 /* LanParser.swift in Sources */,
 				617723A82742ABB800169D3D /* BoardFigureView.swift in Sources */,

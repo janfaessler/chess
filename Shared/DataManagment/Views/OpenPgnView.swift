@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 import FilePicker
 
 struct OpenPgnView: View {
@@ -94,5 +95,7 @@ struct OpenPgnView: View {
 
 
 #Preview {
-    OpenPgnView(model: NavigationManagerModel())
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: CollectionEntity.self, GameEntity.self, configurations: config)
+    OpenPgnView(model: NavigationManagerModel(modelContext: container.mainContext))
 }

@@ -2,9 +2,10 @@ import Foundation
 
 public class HistoryFactory {
     
-    public static func create(ofMove:MoveModel?, inStructure:MoveStructure) -> MoveHistory {
-       var history = getHistory(ofMove: ofMove, inStructure: inStructure)
-        history.append(ofMove!)
+    public static func create(ofMove: MoveModel?, inStructure: MoveStructure) -> MoveHistory {
+        guard let ofMove else { return MoveHistory() }
+        var history = getHistory(ofMove: ofMove, inStructure: inStructure)
+        history.append(ofMove)
         return MoveHistory(history: history)
     }
     

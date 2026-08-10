@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 @main
 struct SwiftChessApp: App {
@@ -7,5 +8,6 @@ struct SwiftChessApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: [CollectionEntity.self, GameEntity.self])
     }
 }

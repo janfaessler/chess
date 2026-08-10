@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct NavigationManagerView: View {
-    @State var model = NavigationManagerModel()
-    
+    var model: NavigationManagerModel
     @State var sideBarVisibility: NavigationSplitViewVisibility = .doubleColumn
     @State var selectedSideBarItem: SideBarItem = .openPgn
     @FocusState private var focusOnGame: Bool
@@ -12,26 +11,26 @@ struct NavigationManagerView: View {
             List(selection: $selectedSideBarItem) {
                 ForEach(model.collections, id: \.id) { collection in
                     Section {
-                        ForEach(collection.games, id: \.id) { selection in
-                            NavigationLink(selection.getTitle(), value: SideBarItem.game(selection))
+                        ForEach(collection.games, id: \.id) { gameData in
+                            NavigationLink(gameData.getTitle(), value: SideBarItem.game(gameData))
                         }
                     } header: {
                         HStack {
-                              Button {
-                                  selectedSideBarItem = .editCollection(collection)
-                              } label: {
-                                  Label(collection.name, systemImage: "folder.fill")
-                              }
-                              .buttonStyle(.plain)
-                              Spacer()
-                              Button {
-                                  selectedSideBarItem = .addGame
-                              } label: {
-                                  Label("add", systemImage: "plus.circle")
-                                      .labelStyle(.iconOnly)
-                              }
-                              .buttonStyle(.plain)
-                          }
+                            Button {
+                                selectedSideBarItem = .editCollection(collection)
+                            } label: {
+                                Label(collection.name, systemImage: "folder.fill")
+                            }
+                            .buttonStyle(.plain)
+                            Spacer()
+                            Button {
+                                selectedSideBarItem = .addGame
+                            } label: {
+                                Label("add", systemImage: "plus.circle")
+                                    .labelStyle(.iconOnly)
+                            }
+                            .buttonStyle(.plain)
+                        }
                     }
                     .collapsible(true)
                 }
@@ -67,7 +66,7 @@ struct NavigationManagerView: View {
                 }
             }
             .navigationTitle("Collections")
-        } detail:  {
+        } detail: {
             switch selectedSideBarItem {
             case .openPgn:
                 OpenPgnView(model: model)
@@ -81,18 +80,18 @@ struct NavigationManagerView: View {
             case .addGame:
                 AddGameView(model: model)
                     .navigationTitle("Add Game")
-            case .editGame(let game):
-                EditGameView(model: model, game: game)
-                    .navigationTitle("Edit \(game.getTitle())")
-            case .game(let game):
-                GameView(game)
-                    .id(game.id) // Force view recreation when game changes
+            case .editGame(let gameData):
+                EditGameView(model: model, game: gameData)
+                    .navigationTitle("Edit \(gameData.getTitle())")
+            case .game(let gameData):
+                GameView(gameData.toPgnGame())
+                    .id(gameData.id)
                     .focused($focusOnGame)
-                    .navigationTitle(game.getTitle())
+                    .navigationTitle(gameData.getTitle())
                     .toolbar {
                         ToolbarItem(placement: .primaryAction) {
                             Button {
-                                selectedSideBarItem = .editGame(game)
+                                selectedSideBarItem = .editGame(gameData)
                             } label: {
                                 Label("Edit Game", systemImage: "pencil")
                             }

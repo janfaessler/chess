@@ -25,14 +25,6 @@ class BoardModel {
     }
     
     
-    var lightColor: Color {
-        Color(red: 0.8, green: 0.8, blue: 0.5)
-    }
-    
-    var darkColor: Color {
-        .brown
-    }
-    
     var promotionColor: PieceColor {
         moveToPromote!.piece.getColor()
     }
@@ -41,32 +33,14 @@ class BoardModel {
         moveToPromote != nil
     }
     
-    func getFieldColor(row: Int, file: Int) -> Color {
-        let odd = (row + file) % 2 == 0
-        return odd ? lightColor : darkColor
-    }
-    
-    func getTextColor(row: Int, file: Int) -> Color {
-        let odd = (row + file) % 2 == 0
-        return odd ? darkColor : lightColor
-    }
-    
-    func getFileName(_ file: Int) -> String {
-        let field = Field(row: 1, file: file)
-        return field.getFileName()
-    }
-    
-    func getRowName(_ row: Int) -> String {
-        "\(9 - row)"
-    }
-    
-    
     func move(figure: FigureModel, deltaRow: Int, deltaFile: Int) {
         guard figure.getColor() == board.getColorToMove() else {
+            logger.error("MOVE REJECTED: color mismatch — figure=\(String(describing: figure.getColor())) board=\(String(describing: self.board.getColorToMove()))")
             return
         }
-        
+
         guard let move = figure.getMove(deltaRow: deltaRow, deltaFile: deltaFile) else {
+            logger.error("MOVE REJECTED: no legal move found for \(String(describing: figure.getType())) at row=\(figure.row) file=\(figure.file) delta=(\(deltaRow),\(deltaFile))")
             return
         }
         
@@ -132,6 +106,7 @@ class BoardModel {
         try self.board.move(move)
         self.figures = self.getFigures()
         self.result = ResultModel(self.board.getGameState())
+        self.logger.info("doMove succeeded, colorToMove now=\(String(describing: self.board.getColorToMove()))")
         self.notifyMoveDone(move, fen: positionBeforeMove)
     }
     

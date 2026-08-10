@@ -1,9 +1,10 @@
 import SwiftUI
 
 struct BoardBackgroundView: View {
-    
-    var model:BoardModel
-    
+
+    private let lightColor = Color(red: 0.8, green: 0.8, blue: 0.5)
+    private let darkColor = Color.brown
+
     var body: some View {
         VStack(spacing: 0.0) {
             ForEach(1...8, id: \.self) { row in
@@ -11,24 +12,24 @@ struct BoardBackgroundView: View {
                     ForEach(1...8, id: \.self) { file in
                         ZStack {
                             Rectangle()
-                                .fill(model.getFieldColor(row: row, file: file))
-                            
+                                .fill(fieldColor(row: row, file: file))
+
                             if row == 8 {
-                                Text(model.getFileName(file))
+                                Text(fileName(file))
                                     .fontWeight(.bold)
                                     .font(.largeTitle)
-                                    .foregroundStyle(model.getTextColor(row: row, file: file))
+                                    .foregroundStyle(textColor(row: row, file: file))
                                     .padding(3)
-                                    .frame(maxWidth: .infinity,  maxHeight: .infinity, alignment: .bottomTrailing)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
                             }
-                            
+
                             if file == 1 {
-                                Text(model.getRowName(row))
+                                Text(rowName(row))
                                     .fontWeight(.bold)
                                     .font(.largeTitle)
-                                    .foregroundStyle(model.getTextColor(row: row, file: file))
+                                    .foregroundStyle(textColor(row: row, file: file))
                                     .padding(3)
-                                    .frame(maxWidth: .infinity,  maxHeight: .infinity, alignment: .topLeading)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                             }
                         }
                     }
@@ -37,4 +38,19 @@ struct BoardBackgroundView: View {
         }
     }
 
+    private func fieldColor(row: Int, file: Int) -> Color {
+        (row + file) % 2 == 0 ? lightColor : darkColor
+    }
+
+    private func textColor(row: Int, file: Int) -> Color {
+        (row + file) % 2 == 0 ? darkColor : lightColor
+    }
+
+    private func fileName(_ file: Int) -> String {
+        Field(row: 1, file: file).getFileName()
+    }
+
+    private func rowName(_ row: Int) -> String {
+        "\(9 - row)"
+    }
 }

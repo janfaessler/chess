@@ -9,9 +9,11 @@ public class ControlModel {
 
     var engineEval: String = ""
     var lines: [EngineLine] = []
-    var games: [PgnGame] = []
     var game: PgnGame?
-    var comment: String = ""
+
+    var comment: String {
+        moveList.currentMove?.note ?? (game?.comment ?? "")
+    }
 
     var board = BoardModel()
     var moveList = MoveListModel()
@@ -34,28 +36,19 @@ public class ControlModel {
         guard let game = game else { return }
         let structure = StructureFactory.create(game)
         moveList.load(structure)
-        comment = game.comment ?? ""
     }
-    
-    private func updatePosition() {
-        self.logger.info("updatePosition called")
-        guard let newPosition = self.moveList.getPosition() else { return }
-        self.board.updatePosition(newPosition)
-        self.comment = self.moveList.currentMove?.note ?? ""
-        self.engine.newPosition(newPosition)
-    }
-    
+
     private func movePlayed(_ notation: String) {
         self.logger.info("movePlayed: \(notation)")
-        self.moveList.movePlayed(notation)
-        self.comment = self.moveList.currentMove?.note ?? ""
-        self.engine.newPosition(self.board.getPosition())
+        let position = self.board.getPosition()
+        let color: PieceColor = position.getColorToMove() == .white ? .black : .white
+        self.moveList.movePlayed(notation, color: color)
+        self.engine.newPosition(position)
     }
-    
+
     private func positionChange(_ pos: Position) {
         self.logger.info("positionChange called - updating board")
         self.board.updatePosition(pos)
-        self.comment = self.moveList.currentMove?.note ?? ""
         self.engine.newPosition(pos)
     }
     

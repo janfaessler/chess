@@ -24,6 +24,10 @@ public class MoveListModel {
         structure.count
     }
     
+    public var lineModel: LineModel {
+        structure.lineModel
+    }
+
     public var list: [MovePairModel] {
         structure.list
     }
@@ -62,18 +66,22 @@ public class MoveListModel {
         updatePosition()
     }
     
-    public func movePlayed(_ move:String) {
+    public func movePlayed(_ move: String, color: PieceColor) {
         let nextMove = structure.get(after: currentMove)
         if move == nextMove?.move {
             currentMove = nextMove
             history.add(nextMove!)
             return
         }
-        let color = currentMove?.color == .white ? PieceColor.black : PieceColor.white
         let container = MoveModel(move: move, color: color)
         structure.add(container, currentMove: currentMove)
         history.add(container)
         currentMove = container
+    }
+
+    public func movePlayed(_ move: String) {
+        let color: PieceColor = currentMove?.color == .white ? .black : .white
+        movePlayed(move, color: color)
     }
     
     public func getPosition() -> Position? {
@@ -130,6 +138,21 @@ public class MoveListModel {
         return false
     }
     
+    public func activeVariation(of move: MoveModel) -> String? {
+        for name in move.getVariations() {
+            guard let line = move.getVariation(name) else { continue }
+            for pair in line.all {
+                if let white = pair.white, white == currentMove || structure.move(currentMove, isChildOf: white) {
+                    return name
+                }
+                if let black = pair.black, black == currentMove || structure.move(currentMove, isChildOf: black) {
+                    return name
+                }
+            }
+        }
+        return nil
+    }
+
     public func addPositionChangeListener(_ listener: @escaping PositionChangeNotification) {
         self.positionChangeNotification.append(listener)
     }

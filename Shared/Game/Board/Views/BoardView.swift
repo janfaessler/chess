@@ -8,7 +8,7 @@ struct BoardView: View {
         GeometryReader { geo in
             let fieldSize = geo.size.width / 8
             ZStack (alignment: .topLeading) {
-                BoardBackgroundView(model: model)
+                BoardBackgroundView()
        
                 ForEach(model.figures, id: \.id ) { figure in
                     BoardFigureView(fieldSize: fieldSize, figure: figure)

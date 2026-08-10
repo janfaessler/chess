@@ -17,6 +17,10 @@ public class MoveStructure {
         return line.count
     }
     
+    public var lineModel: LineModel {
+        line
+    }
+
     public var list:[MovePairModel] {
         line.all
     }
