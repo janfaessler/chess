@@ -1,7 +1,7 @@
 import Foundation
 import os
 
-public class ChessBoard {
+class ChessBoard {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "ChessBoard")
 
@@ -10,20 +10,20 @@ public class ChessBoard {
     private var moveLog: [String] = []
     private var positionCount: [Int: Int] = [:]
     
-    public init(_ pos: Position) {
+    init(_ pos: Position) {
         position = pos
         positionCount = [:]
     }
     
-    public func move(_ moveNotation: String) throws {
+    func move(_ moveNotation: String) throws {
         guard let createdMove = MoveFactory.create(moveNotation, position: position) else {
             throw ValidationError.CanNotIdentifyMove
         }
         try move(createdMove)
     }
 
-    public func move(_ move: Move) throws {
-        guard position.IsMoveLegalMoveOnTheBoard(move) else {
+    func move(_ move: Move) throws {
+        guard position.isLegalMove(move) else {
             logger.error("move (\(move.info()) -> \(NotationFactory.generate(move, position: self.position))) is not allowed")
             throw ValidationError.MoveNotLegalMoveOnTheBoard
         }
@@ -31,7 +31,7 @@ public class ChessBoard {
         try doMove(move)
     }
 
-    public func getGameState() -> GameState {
+    func getGameState() -> GameState {
         if DrawConditionEvaluator.isInsufficientMaterial(figures: position.getFigures()) {
             return .DrawByInsufficientMaterial
         }
@@ -53,28 +53,28 @@ public class ChessBoard {
         return .DrawByStalemate
     }
     
-    public func getPossibleMoves(forPiece: any ChessFigure) -> [Move] {
+    func getPossibleMoves(forPiece: any ChessFigure) -> [Move] {
         let moves = forPiece.getPossibleMoves()
-        return moves.filter({ position.IsMoveLegalMoveOnTheBoard($0) })
+        return moves.filter({ position.isLegalMove($0) })
     }
     
-    public func getColorToMove() -> PieceColor {
+    func getColorToMove() -> PieceColor {
         return position.getColorToMove()
     }
     
-    public func getFigures() -> [any ChessFigure] {
+    func getFigures() -> [any ChessFigure] {
         return position.getFigures()
     }
     
-    public func getMoves() -> [Move] {
+    func getMoves() -> [Move] {
         return moves
     }
     
-    public func getMoveLog() -> [String] {
+    func getMoveLog() -> [String] {
         return moveLog
     }
     
-    public func getPosition() -> Position {
+    func getPosition() -> Position {
         return position
     }
     

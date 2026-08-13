@@ -1,5 +1,5 @@
 import Foundation
 
-public enum PieceColor {
+enum PieceColor {
     case white, black
 }

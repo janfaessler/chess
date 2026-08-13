@@ -1,13 +1,13 @@
 import Foundation
 
-public class MoveFactory {
+class MoveFactory {
 
     private static let whiteStartingRow = "1"
     private static let blackStartingRow = "8"
     private static let ShortCastleTargetFile = "g"
     private static let LongCastleTargetFile = "c"
     
-    public static func create(_ input:any StringProtocol, position:Position) -> Move? {
+    static func create(_ input:any StringProtocol, position:Position) -> Move? {
         let color = position.getColorToMove()
         if isCastlingMove(input) {
             return createCastlingMove(input, color: color, cache: position)

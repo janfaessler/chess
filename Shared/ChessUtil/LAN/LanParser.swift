@@ -1,10 +1,10 @@
 import Foundation
 
-public class LanParser {
-    
+class LanParser {
+
     private init() {}
-    
-    public static func parse(lan: String, position: Position) -> Move? {
+
+    static func parse(lan: String, position: Position) -> Move? {
         
         let startSquareIndex = lan.index(lan.startIndex, offsetBy: 2)
         let startSquareString = String(lan[..<startSquareIndex])

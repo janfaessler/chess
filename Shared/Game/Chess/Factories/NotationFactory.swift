@@ -1,15 +1,15 @@
 import Foundation
 
-public class NotationFactory {
+class NotationFactory {
     
-    public static let LongCastle = "O-O-O"
-    public static let ShortCastle = "O-O"
-    public static let Capture:Character = "x"
-    public static let Promotion:Character = "="
-    public static let Check:Character = "+"
-    public static let Checkmate:Character = "#"
+    static let LongCastle = "O-O-O"
+    static let ShortCastle = "O-O"
+    static let Capture:Character = "x"
+    static let Promotion:Character = "="
+    static let Check:Character = "+"
+    static let Checkmate:Character = "#"
     
-    public static func generate(_ move:Move, position:Position) -> String {
+    static func generate(_ move:Move, position:Position) -> String {
         guard !move.isCastling() else { 
             return getCastlingNotation(move, position:position)
         }
@@ -94,7 +94,7 @@ public class NotationFactory {
             && $0.getType() == move.getPiece().getType()
             && $0.getField() != move.piece.getField()
             && $0.createMove(move.getFieldInfo()) != nil
-            && position.IsMoveLegalMoveOnTheBoard($0.createMove(move.getFieldInfo())!)
+            && position.isLegalMove($0.createMove(move.getFieldInfo())!)
         }
     }
     

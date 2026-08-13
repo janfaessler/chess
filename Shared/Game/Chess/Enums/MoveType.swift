@@ -1,5 +1,5 @@
 import Foundation
 
-public enum MoveType {
+enum MoveType {
     case Normal,Castle,Double,Promotion,Revert
 }

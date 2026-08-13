@@ -2,7 +2,7 @@ import SwiftUI
 import os
 
 @Observable
-public class ControlModel {
+class ControlModel {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "ControlModel")
     private let minControlWidth: CGFloat = 200

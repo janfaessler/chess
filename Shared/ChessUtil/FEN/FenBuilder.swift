@@ -1,8 +1,8 @@
 import Foundation
 
-public class FenBuilder {
+class FenBuilder {
     
-    public static func create(_ pos:Position) -> String {
+    static func create(_ pos:Position) -> String {
         
         var output = createFigures(pos)
         output.append(" ")
@@ -10,7 +10,7 @@ public class FenBuilder {
         output.append(" ")
         output.append(createCastlingRights(pos))
         output.append(" ")
-        output.append(createEnPassantTarget(pos.getEnPassentTarget()))
+        output.append(createEnPassantTarget(pos.getEnPassantTarget()))
         output.append(" \(pos.getHalfmoveClock()) \(pos.getMoveClock()+1)")
 
         return output

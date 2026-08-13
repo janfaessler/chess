@@ -1,6 +1,6 @@
 import Foundation
 
-public class Figure:Identifiable, ChessFigure {
+class Figure:Identifiable, ChessFigure {
     private let type:PieceType
     private let color:PieceColor
     private var moved:Bool
@@ -15,12 +15,12 @@ public class Figure:Identifiable, ChessFigure {
         self.moved = moved
     }
     
-    public static func create(_ fieldname:String, type:PieceType, color: PieceColor, moved:Bool = false) -> (any ChessFigure)? {
+    static func create(_ fieldname:String, type:PieceType, color: PieceColor, moved:Bool = false) -> (any ChessFigure)? {
         guard let field = Field(fieldname) else { return nil }
         return Figure.create(type: type, color: color, row: field.row, file: field.file, moved: moved)
     }
     
-    public static func create(type:PieceType, color: PieceColor, row:Int, file:Int, moved:Bool = false) -> any ChessFigure {
+    static func create(type:PieceType, color: PieceColor, row:Int, file:Int, moved:Bool = false) -> any ChessFigure {
         switch type {
             case .pawn: return Pawn(color: color, row: row, file: file, moved: moved)
             case .knight: return Knight(color: color, row: row, file: file, moved: moved)
@@ -31,36 +31,36 @@ public class Figure:Identifiable, ChessFigure {
         }
     }
     
-    public func equals(_ other: any ChessFigure) -> Bool {
+    func equals(_ other: any ChessFigure) -> Bool {
         return row == other.getRow()
         && file == other.getFile()
         && type == other.getType()
         && color == other.getColor()
     }
     
-    public func hash(into hasher: inout Hasher) {
+    func hash(into hasher: inout Hasher) {
         hasher.combine(type)
         hasher.combine(color)
         hasher.combine(row)
         hasher.combine(file)
     }
     
-    public func move(row:Int, file:Int) {
+    func move(row:Int, file:Int) {
         self.row =  row
         self.file = file
         self.moved = true
     }
     
-    public func canDo(move:Move) -> Bool {
+    func canDo(move:Move) -> Bool {
         let moves = getPossibleMoves()
         return moves.contains(where:{$0.row == move.row && $0.file == move.file})
     }
 
-    public func getPossibleMoves() -> [Move] {
+    func getPossibleMoves() -> [Move] {
         fatalError("Subclasses must override getPossibleMoves()")
     }
     
-    public func isMovePossible(_ move: Move, position:Position) -> Bool {
+    func isMovePossible(_ move: Move, position:Position) -> Bool {
         
         guard canDo(move: move) else {
             return false
@@ -73,39 +73,39 @@ public class Figure:Identifiable, ChessFigure {
         return isCaptureablePiece(move, pieceToCapture: intersectingPiece)
     }
     
-    public func getRow() -> Int {
+    func getRow() -> Int {
         return row
     }
     
-    public func getFile() -> Int {
+    func getFile() -> Int {
         return file
     }
     
-    public func getColor() -> PieceColor {
+    func getColor() -> PieceColor {
         return color
     }
     
-    public func getType() -> PieceType {
+    func getType() -> PieceType {
         return type
     }
     
-    public func getFieldInfo() -> String {
+    func getFieldInfo() -> String {
         return getField().info()
     }
     
-    public func getField() -> Field {
+    func getField() -> Field {
         return Field(row:row, file:file)
     }
     
-    public func info() -> String {
+    func info() -> String {
         return "(\(color) \(type) \(getFieldInfo()))"
     }
     
-    public func hasMoved() -> Bool {
+    func hasMoved() -> Bool {
         return moved
     }
 
-    public func ident() -> String {
+    func ident() -> String {
         fatalError("Subclasses must override ident()")
     }
     
@@ -117,19 +117,19 @@ public class Figure:Identifiable, ChessFigure {
         return Move(row, file, piece: Figure.create(type: self.getType(), color: self.getColor(), row: self.getRow(), file: self.getFile()), type: .Normal)
     }
     
-    public func createMove(_ filename: any StringProtocol) -> Move? {
+    func createMove(_ filename: any StringProtocol) -> Move? {
         return createMove(filename, type: .Normal)
     }
     
-    public func createMove(_ row:Int, _ file:Int, _ type:MoveType = .Normal) -> Move {
+    func createMove(_ row:Int, _ file:Int, _ type:MoveType = .Normal) -> Move {
         return Move(row, file, piece: Figure.create(type: self.getType(), color: self.getColor(), row: self.getRow(), file: self.getFile()), type: type)
     }
 
-    public func createMove(_ move: any StringProtocol, type: MoveType) -> Move? {
+    func createMove(_ move: any StringProtocol, type: MoveType) -> Move? {
         return Move(move, piece: Figure.create(type: self.getType(), color: self.getColor(), row: self.getRow(), file: self.getFile()), type: type)
     }
     
-    public func createMove(_ move:any StringProtocol, type:MoveType = .Normal, promoteTo:PieceType = .queen) -> Move? {
+    func createMove(_ move:any StringProtocol, type:MoveType = .Normal, promoteTo:PieceType = .queen) -> Move? {
         return Move(move, piece: Figure.create(type: self.getType(), color: self.getColor(), row: self.getRow(), file: self.getFile()), type: type, promoteTo: promoteTo)
     }
     
@@ -137,7 +137,7 @@ public class Figure:Identifiable, ChessFigure {
         return move.piece.getColor() != pieceToCapture!.getColor() && pieceToCapture!.getRow() == move.row && pieceToCapture!.getFile() == move.file
     }
     
-    public static func == (lhs: Figure, rhs: Figure) -> Bool {
+    static func == (lhs: Figure, rhs: Figure) -> Bool {
         lhs.equals(rhs)
     }
 }

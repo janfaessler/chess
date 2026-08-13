@@ -1,7 +1,7 @@
 import Foundation
 import os
 
-public class Position {
+class Position {
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Position")
 
     private var cache:[Int:[Int:any ChessFigure]]
@@ -14,7 +14,7 @@ public class Position {
     private let halfmoveClock:Int
     private let moveClock:Int
     
-    public init(
+    init(
         _ figures: [any ChessFigure],
         colorToMove:PieceColor,
         enPassantTarget:Field?,
@@ -25,7 +25,7 @@ public class Position {
         moveClock:Int,
         halfmoveClock:Int
     ) {
-        self.cache = Position.createCachDictionary(figures)!
+        self.cache = Position.createCacheDict(figures)!
         self.colorToMove = colorToMove
         self.enPassantTarget = enPassantTarget
         self.whiteCanCastleKingside = whiteCanCastleKingside
@@ -36,66 +36,66 @@ public class Position {
         self.halfmoveClock = halfmoveClock
     }
     
-    public func get(atRow:Int, atFile:Int) -> (any ChessFigure)? {
+    func get(atRow:Int, atFile:Int) -> (any ChessFigure)? {
         return cache[atRow]?[atFile]
     }
     
-    public func clearField(atRow:Int, atFile:Int) {
+    func clearField(atRow:Int, atFile:Int) {
         cache[atRow]?[atFile] = nil
     }
     
-    public func set(_ figure:any ChessFigure) {
+    func set(_ figure:any ChessFigure) {
         if cache[figure.getRow()] == nil {
             cache[figure.getRow()] = [:]
         }
         cache[figure.getRow()]![figure.getFile()] = figure
     }
     
-    public func isEmpty(atRow:Int, atFile:Int) -> Bool {
+    func isEmpty(atRow:Int, atFile:Int) -> Bool {
         return get(atRow: atRow, atFile: atFile) == nil
     }
     
-    public func isNotEmpty(atRow:Int, atFile:Int) -> Bool {
+    func isNotEmpty(atRow:Int, atFile:Int) -> Bool {
         return isEmpty(atRow: atRow, atFile: atFile) == false
     }
     
-    public func getColorToMove() -> PieceColor {
+    func getColorToMove() -> PieceColor {
         return colorToMove
     }
     
-    public func getEnPassentTarget() -> Field? {
+    func getEnPassantTarget() -> Field? {
         return enPassantTarget
     }
     
-    public func canWhiteCastleKingside() -> Bool {
+    func canWhiteCastleKingside() -> Bool {
         return whiteCanCastleKingside
     }
     
-    public func canWhiteCastleQueenside() -> Bool {
+    func canWhiteCastleQueenside() -> Bool {
         return whiteCanCastleQueenside
     }
     
-    public func canBlackCastleKingside() -> Bool {
+    func canBlackCastleKingside() -> Bool {
         return blackCanCastleKingside
     }
     
-    public func canBlackCastleQueenside() -> Bool {
+    func canBlackCastleQueenside() -> Bool {
         return blackCanCastleQueenside
     }
     
-    public func getMoveClock() -> Int {
+    func getMoveClock() -> Int {
         return moveClock
     }
 
-    public func getHalfmoveClock() -> Int {
+    func getHalfmoveClock() -> Int {
         return halfmoveClock
     }
 
-    public func getFigures() -> [any ChessFigure] {
+    func getFigures() -> [any ChessFigure] {
         return cache.flatMap({ $1.values })
     }
     
-    public func getNextPiece(_ move: Move) -> (any ChessFigure)? {
+    func getNextPiece(_ move: Move) -> (any ChessFigure)? {
         let deltaFile = abs(move.piece.getFile() - move.file)
         let deltaRow = abs(move.piece.getRow() - move.row)
         
@@ -109,13 +109,13 @@ public class Position {
         return get(atRow: move.row, atFile: move.file)
     }
     
-    public func isCheck(_ move:Move) -> Bool {
+    func isCheck(_ move:Move) -> Bool {
         let opponentKing = getFigures().first(where: { $0.getType() == .king && $0.getColor() != move.piece.getColor()})
         let newPosition = createWithMove(move)
         return newPosition.isFieldInCheck(opponentKing!.getRow(), opponentKing!.getFile())
     }
     
-    public func isFieldInCheck(_ row: Int, _ file: Int) -> Bool {
+    func isFieldInCheck(_ row: Int, _ file: Int) -> Bool {
         let figures = getFigures()
         return figures.contains(where: {
             
@@ -125,50 +125,50 @@ public class Position {
         })
     }
     
-    public func isCheckMate(_ move:Move) -> Bool {
+    func isCheckMate(_ move:Move) -> Bool {
         let newPosition = createWithMove(move)
         let isCheckMate = !newPosition.playerHasLegalMove() && newPosition.isKingInCheck()
         return isCheckMate
     }
     
-    public func IsMoveLegalMoveOnTheBoard(_ target:Move) -> Bool {
+    func isLegalMove(_ target:Move) -> Bool {
         guard isMoveInBoard(target) else { return false }
         guard target.piece.isMovePossible(target, position: self) else { return false }
         guard !doesMovePutOwnKingInCheck(target) else { return false }
         return true
     }
     
-    public func playerHasLegalMove() -> Bool {
+    func playerHasLegalMove() -> Bool {
         let figuresOfCurrentPlayer = getFigures().filter({ $0.getColor() == colorToMove })
-        return figuresOfCurrentPlayer.contains(where: { fig in fig.getPossibleMoves().contains(where: { move in IsMoveLegalMoveOnTheBoard(move) }) })
+        return figuresOfCurrentPlayer.contains(where: { fig in fig.getPossibleMoves().contains(where: { move in isLegalMove(move) }) })
     }
     
-    public func isKingInCheck() -> Bool {
-        let king = getFigures().first(where: { $0.getType() == .king && $0.getColor() == getColorToMove()})!
+    func isKingInCheck() -> Bool {
+        guard let king = getFigures().first(where: { $0.getType() == .king && $0.getColor() == getColorToMove() }) else { return false }
         return isFieldInCheck(king.getRow(), king.getFile())
     }
     
-    public func isLongCastling(_ move: Move) -> Bool {
+    func isLongCastling(_ move: Move) -> Bool {
         let castlingPossible = move.piece.getColor() == .white ? whiteCanCastleQueenside : blackCanCastleQueenside
         return move.file == King.CastleQueensidePosition && move.isCastling() && castlingPossible
     }
     
-    public func isShortCastling(_ move: Move) -> Bool {
+    func isShortCastling(_ move: Move) -> Bool {
         let castlingPossible = move.piece.getColor() == .white ? whiteCanCastleKingside : blackCanCastleKingside
         return move.file == King.CastleKingsidePosition && move.isCastling() && castlingPossible
     }
     
-    public func isEnPassant(_ move:Move) -> Bool {
+    func isEnPassant(_ move:Move) -> Bool {
         canEnPassant(move) && isEmpty(atRow: move.row, atFile: move.file) && enPassantTarget == move.getField()
     }
     
-    public func canEnPassant(_ move:Move) -> Bool {
-        guard let target = getEnPassentTarget() else { return false }
+    func canEnPassant(_ move:Move) -> Bool {
+        guard let target = getEnPassantTarget() else { return false }
         
         return move.getField() == target
     }
     
-    public func moveRookForCastling(_ move: Move) {
+    func moveRookForCastling(_ move: Move) {
         if isLongCastling(move) {
             let rook = get(atRow: move.piece.getRow(), atFile: Rook.CastleQueensideStartingFile)!
             rook.move(row: move.row, file: Rook.CastleQueensideEndFile)
@@ -181,7 +181,7 @@ public class Position {
             set(rook)
         }
     }
-    public func checkPromotion(_ move: Move){
+    func checkPromotion(_ move: Move){
         guard move.piece.getType() == .pawn else {
             return
         }
@@ -200,11 +200,11 @@ public class Position {
     
     private func doesMovePutOwnKingInCheck(_ move:Move) -> Bool {
         
-        let isKingMKove = move.piece.getType() == .king
+        let isKingMove = move.piece.getType() == .king
         let figures = getFigures()
         let king = figures.first(where: { $0.getType() == .king && $0.getColor() == move.piece.getColor() })!
-        let rowToCheck = isKingMKove ? move.getRow() : king.getRow()
-        let fileToCheck = isKingMKove ? move.getFile() : king.getFile()
+        let rowToCheck = isKingMove ? move.getRow() : king.getRow()
+        let fileToCheck = isKingMove ? move.getFile() : king.getFile()
                 
         let newPos = createWithMove(move)
         
@@ -224,7 +224,7 @@ public class Position {
         return 1...8 ~= move.row && 1...8 ~= move.file
     }
 
-    public func getHash() -> Int {
+    func getHash() -> Int {
         var hasher = Hasher()
         for fig in getFigures().sorted(by: { $0.getRow() > $1.getRow() }).sorted(by: { $0.getFile() > $1.getFile() }) {
             hasher.combine(fig)
@@ -233,7 +233,7 @@ public class Position {
         return hasher.finalize()
     }
     
-    public func createWithMove(_ move:Move) -> Position {
+    func createWithMove(_ move:Move) -> Position {
         let capturedPiece = get(atRow: move.getRow(), atFile: move.getFile())
         
         var figures = getFigures()
@@ -293,7 +293,7 @@ public class Position {
         return (move.piece.getColor() == .white && move.row == 8) || (move.piece.getColor() == .black && move.row == 1)
     }
     
-    private static func createCachDictionary(_ figures: [any ChessFigure]) -> [Int : [Int : any ChessFigure]]? {
+    private static func createCacheDict(_ figures: [any ChessFigure]) -> [Int : [Int : any ChessFigure]]? {
         var dict:[Int:[Int:any ChessFigure]] = [:]
 
         for f in figures {

@@ -1,14 +1,14 @@
 import Foundation
 
-public class Queen : Figure {
+class Queen : Figure {
     
-    public static let Ident = "Q"
+    static let Ident = "Q"
     
-    public init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
+    init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
         super.init(type: .queen, color: color, row: row, file: file, moved: moved)
     }
     
-    public override func getPossibleMoves() -> [Move] {
+    override func getPossibleMoves() -> [Move] {
         var moves:[Move] = []
         for r in 1...8 {
             for f in 1...8 {
@@ -20,7 +20,7 @@ public class Queen : Figure {
         return moves
     }
     
-    public override func ident() -> String {
+    override func ident() -> String {
         return Queen.Ident
     }
 }

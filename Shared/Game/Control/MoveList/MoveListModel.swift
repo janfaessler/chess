@@ -2,50 +2,50 @@ import Foundation
 import os
 
 @Observable
-public class MoveListModel {
+class MoveListModel {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "MoveListModel")
         
-    public typealias PositionChangeNotification = (Position) -> ()
+    typealias PositionChangeNotification = (Position) -> ()
     private var positionChangeNotification: [PositionChangeNotification]
     
     private var structure: MoveStructure
     private var history: MoveHistory
     
-    public var currentMove: MoveModel?
+    var currentMove: MoveModel?
 
-    public init() {
+    init() {
         structure = MoveStructure()
         history = MoveHistory()
         positionChangeNotification = []
     }
     
-    public var moveCount: Int {
+    var moveCount: Int {
         structure.count
     }
     
-    public var lineModel: LineModel {
+    var lineModel: LineModel {
         structure.lineModel
     }
 
-    public var list: [MovePairModel] {
+    var list: [MovePairModel] {
         structure.list
     }
     
-    public func start() {
+    func start() {
         logger.info("start")
         history.clear()
         currentMove = nil
         updatePosition()
     }
     
-    public func back() {
+    func back() {
         logger.info("back")
         currentMove = history.pop()
         updatePosition()
     }
     
-    public func forward() {
+    func forward() {
         logger.info("forward")
         guard let nextMove = structure.get(after: currentMove) else { return }
         self.currentMove = nextMove
@@ -53,20 +53,20 @@ public class MoveListModel {
         updatePosition()
     }
     
-    public func end() {
+    func end() {
         logger.info("end")
         currentMove = structure.last
         history = HistoryFactory.create(ofMove: currentMove, inStructure: structure)
         updatePosition()
     }
     
-    public func goToMove(_ move:MoveModel) {
+    func goToMove(_ move:MoveModel) {
         currentMove = move
         history = HistoryFactory.create(ofMove: currentMove, inStructure: structure)
         updatePosition()
     }
     
-    public func movePlayed(_ move: String, color: PieceColor) {
+    func movePlayed(_ move: String, color: PieceColor) {
         if let nextMove = structure.get(after: currentMove), move == nextMove.move {
             currentMove = nextMove
             history.add(nextMove)
@@ -78,32 +78,32 @@ public class MoveListModel {
         currentMove = container
     }
 
-    public func movePlayed(_ move: String) {
+    func movePlayed(_ move: String) {
         let color: PieceColor = currentMove?.color == .white ? .black : .white
         movePlayed(move, color: color)
     }
     
-    public func getPosition() -> Position? {
+    func getPosition() -> Position? {
         guard currentMove != nil else { return PositionFactory.startingPosition() }
         let notations = getMoveNotations()
         return PositionFactory.loadPosition(notations)
     }
     
-    public func isCurrentMove(_ container:MoveModel?) -> Bool {
+    func isCurrentMove(_ container:MoveModel?) -> Bool {
         currentMove == container
     }
 
-    public func load(_ structure:MoveStructure) {
+    func load(_ structure:MoveStructure) {
         currentMove = nil
         history.clear()
         self.structure = structure
     }
     
-    public func getMoveNotations() -> [String] {
+    func getMoveNotations() -> [String] {
         history.list.map({ $0.move })
     }
     
-    public func shouldShowVariationList(_ currentPair:MovePairModel) -> Bool {
+    func shouldShowVariationList(_ currentPair:MovePairModel) -> Bool {
         if shouldShowVariationList(currentPair, color: .white) {
             return true
         }
@@ -113,7 +113,7 @@ public class MoveListModel {
         return false
     }
     
-    public func shouldShowVariationList(_ currentPair: MovePairModel, color: PieceColor) -> Bool {
+    func shouldShowVariationList(_ currentPair: MovePairModel, color: PieceColor) -> Bool {
         guard let current = currentMove else { return false }
 
         if color == .white {
@@ -127,7 +127,7 @@ public class MoveListModel {
         }
     }
     
-    public func activeVariation(of move: MoveModel) -> String? {
+    func activeVariation(of move: MoveModel) -> String? {
         for name in move.getVariations() {
             guard let line = move.getVariation(name) else { continue }
             for pair in line.all {
@@ -142,7 +142,7 @@ public class MoveListModel {
         return nil
     }
 
-    public func addPositionChangeListener(_ listener: @escaping PositionChangeNotification) {
+    func addPositionChangeListener(_ listener: @escaping PositionChangeNotification) {
         self.positionChangeNotification.append(listener)
     }
     

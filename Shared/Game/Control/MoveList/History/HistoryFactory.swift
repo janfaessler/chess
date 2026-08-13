@@ -1,8 +1,8 @@
 import Foundation
 
-public class HistoryFactory {
+class HistoryFactory {
     
-    public static func create(ofMove: MoveModel?, inStructure: MoveStructure) -> MoveHistory {
+    static func create(ofMove: MoveModel?, inStructure: MoveStructure) -> MoveHistory {
         guard let ofMove else { return MoveHistory() }
         var history = getHistory(ofMove: ofMove, inStructure: inStructure)
         history.append(ofMove)
@@ -12,11 +12,11 @@ public class HistoryFactory {
     private static func getHistory(ofMove:MoveModel?, inStructure:MoveStructure) -> [MoveModel] {
         var reverseHistory: [MoveModel] = []
         guard var move = ofMove else { return [] }
-        while  inStructure.parrent(of: move) != nil {
-            guard let parrentMove = inStructure.parrent(of: move) else { return [] }
+        while  inStructure.parent(of: move) != nil {
+            guard let parentMove = inStructure.parent(of: move) else { return [] }
             let reverseVariationHistory = getReversedVariationHistory(ofMove: move, inStructure: inStructure)
             reverseHistory.append(contentsOf: reverseVariationHistory)
-            move = parrentMove
+            move = parentMove
         }
        
         let range = inStructure.range(to: move)
@@ -26,8 +26,8 @@ public class HistoryFactory {
 
     
     private static func getReversedVariationHistory(ofMove:MoveModel, inStructure:MoveStructure) -> [MoveModel] {
-        guard let parrentMove = inStructure.parrent(of: ofMove) else { return [] }
-        guard let variation = parrentMove.getVariation(ofMove) else { return [] }
+        guard let parentMove = inStructure.parent(of: ofMove) else { return [] }
+        guard let variation = parentMove.getVariation(ofMove) else { return [] }
         return getReversedHistory(variation.range(to: ofMove).all, toMove: ofMove)
     }
     

@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol ChessFigure : Hashable, Equatable {
+protocol ChessFigure : Hashable, Equatable {
     func move(row:Int, file:Int)
     func canDo(move:Move) -> Bool
     func getPossibleMoves() -> [Move]

@@ -1,13 +1,13 @@
 import Foundation
-public class Knight : Figure {
+class Knight : Figure {
     
-    public static let Ident = "N"
+    static let Ident = "N"
     
-    public init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
+    init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
         super.init(type: .knight, color: color, row: row, file: file, moved: moved)
     }
     
-    public override func getPossibleMoves() -> [Move] {
+    override func getPossibleMoves() -> [Move] {
         let row = getRow()
         let file = getFile()
         let moves = [
@@ -23,7 +23,7 @@ public class Knight : Figure {
         return moves.filter({ move in inBoard(move) })
     }
     
-    public override func isMovePossible( _ move: Move, position:Position) -> Bool {
+    override func isMovePossible( _ move: Move, position:Position) -> Bool {
         guard canDo(move: move) else {
             return false
         }
@@ -35,7 +35,7 @@ public class Knight : Figure {
         return super.isCaptureablePiece(move, pieceToCapture: pieceAtTarget);
     }
     
-    public override func ident() -> String {
+    override func ident() -> String {
         return Knight.Ident
     }
 }

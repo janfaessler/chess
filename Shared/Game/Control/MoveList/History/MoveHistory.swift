@@ -1,27 +1,27 @@
 import Foundation
 
-public class MoveHistory {
+class MoveHistory {
     private var history: [MoveModel]
     
-    public init(history: [MoveModel] = []) {
+    init(history: [MoveModel] = []) {
         self.history = history
     }
 
-    public func clear() {
+    func clear() {
         history.removeAll()
     }
     
-    public func pop() -> MoveModel? {
+    func pop() -> MoveModel? {
         guard history.isEmpty == false else { return nil }
         history.removeLast()
         return history.last
     }
     
-    public func add(_ move:MoveModel) {
+    func add(_ move:MoveModel) {
         history.append(move)
     }
     
-    public var list:[MoveModel] {
+    var list:[MoveModel] {
         history
     }
 }

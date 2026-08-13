@@ -1,16 +1,16 @@
 import Foundation
 
-public class King : Figure {
+class King : Figure {
     
-    public static let Ident = "K"
-    public static let CastleQueensidePosition = 3
-    public static let CastleKingsidePosition = 7
+    static let Ident = "K"
+    static let CastleQueensidePosition = 3
+    static let CastleKingsidePosition = 7
     
-    public init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
+    init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
         super.init(type: .king, color: color, row: row, file: file, moved: moved)
     }
     
-    public override func getPossibleMoves() -> [Move] {
+    override func getPossibleMoves() -> [Move] {
         let row = getRow()
         let file = getFile()
         var moves = [
@@ -32,7 +32,7 @@ public class King : Figure {
         return moves.filter({ move in inBoard(move) })
     }
     
-    public override func isMovePossible( _ move: Move, position:Position) -> Bool {
+    override func isMovePossible( _ move: Move, position:Position) -> Bool {
         if isShortCastling(move) {
             return canCastle(move, rookStart: Rook.CastleKingsideStartingFile, cache: position)
         } else if isLongCastling(move) {
@@ -41,12 +41,12 @@ public class King : Figure {
         return super.isMovePossible(move, position: position)
     }
     
-    public override func createMove(_ filename: any StringProtocol) -> Move? {
+    override func createMove(_ filename: any StringProtocol) -> Move? {
         let possibleMoves = getPossibleMoves()
         return possibleMoves.first(where: {$0.getFieldInfo() == filename})
     }
     
-    public override func ident() -> String {
+    override func ident() -> String {
         return King.Ident
     }
     

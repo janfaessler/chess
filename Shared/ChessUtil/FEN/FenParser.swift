@@ -1,8 +1,8 @@
 import Foundation
 
-public class FenParser {
+class FenParser {
     
-    public static func parse(_ fen:String) -> Position {
+    static func parse(_ fen:String) -> Position {
         let parts = fen.split(separator: " ").map({String($0)})
         
         return Position(getFigures(parts[0]),

@@ -1,17 +1,17 @@
 import Foundation
 
-public class Pawn : Figure {
+class Pawn : Figure {
     
-    public static let RowWherePromotionIsPossibleForWhite = 7
-    public static let RowWherePromotionIsPossibleForBlack = 2
-    public static let startingRowForWhite = 2
-    public static let startingRowForBlack = 7
+    static let RowWherePromotionIsPossibleForWhite = 7
+    static let RowWherePromotionIsPossibleForBlack = 2
+    static let startingRowForWhite = 2
+    static let startingRowForBlack = 7
     
     init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
         super.init(type: .pawn, color: color, row: row, file: file, moved: moved)
     }
     
-    public override func getPossibleMoves() -> [Move] {
+    override func getPossibleMoves() -> [Move] {
         let row = getRow()
         let file = getFile()
         switch getColor() {
@@ -38,7 +38,7 @@ public class Pawn : Figure {
         }
     }
     
-    public override func isMovePossible( _ move: Move, position:Position) -> Bool {
+    override func isMovePossible( _ move: Move, position:Position) -> Bool {
         guard canDo(move: move) else { return false }
         let once = canMoveOnce(move, cache: position)
         let twice = canMoveTwice(move, cache: position)
@@ -46,11 +46,11 @@ public class Pawn : Figure {
         return once || twice || capture
     }
     
-    public override func createMove(_ move:any StringProtocol) -> Move? {
+    override func createMove(_ move:any StringProtocol) -> Move? {
         return Move(move, piece: Pawn(color: self.getColor(), row: self.getRow(), file: self.getFile()), type: getMoveType(move))
     }
     
-    public override func ident() -> String {
+    override func ident() -> String {
         return ""
     }
     

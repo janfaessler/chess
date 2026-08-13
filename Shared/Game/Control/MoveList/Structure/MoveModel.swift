@@ -2,11 +2,11 @@ import Foundation
 import Observation
 
 @Observable
-public class MoveModel : Identifiable, Equatable {
-    public let id: UUID = UUID()
-    public let move: String
-    public let color: PieceColor
-    public var note: String?
+class MoveModel : Identifiable, Equatable {
+    let id: UUID = UUID()
+    let move: String
+    let color: PieceColor
+    var note: String?
 
     private var variations: [String: LineModel]
 
@@ -17,7 +17,7 @@ public class MoveModel : Identifiable, Equatable {
         self.color = color
     }
 
-    public func getVariationName(_ ofMove: MoveModel) -> String? {
+    func getVariationName(_ ofMove: MoveModel) -> String? {
         for variation in variations {
             if variation.value.all.contains(where: { $0.white?.id == ofMove.id || $0.black?.id == ofMove.id }) {
                 return variation.key
@@ -26,37 +26,37 @@ public class MoveModel : Identifiable, Equatable {
         return nil
     }
 
-    public func getVariation(_ ofMove: MoveModel) -> LineModel? {
+    func getVariation(_ ofMove: MoveModel) -> LineModel? {
         guard let name = getVariationName(ofMove) else { return nil }
         return variations[name]
     }
 
-    public func getVariation(_ name: String) -> LineModel? {
+    func getVariation(_ name: String) -> LineModel? {
         guard let variation = variations[name] else { return LineModel() }
         return variation
     }
 
-    public func addVariation(_ name: String, variation: LineModel) {
+    func addVariation(_ name: String, variation: LineModel) {
         variations[name] = variation
     }
 
-    public func appendVariation(_ container: MoveModel, variation: String) {
-        variations[variation]!.last!.black = container
+    func appendVariation(_ container: MoveModel, variation: String) {
+        variations[variation]?.last?.black = container
     }
 
-    public func appendVariation(_ container: MovePairModel, variation: String) {
+    func appendVariation(_ container: MovePairModel, variation: String) {
         variations[variation]?.add(container)
     }
 
-    public func hasVariations() -> Bool {
+    func hasVariations() -> Bool {
         variations.count > 0
     }
 
-    public func getVariations() -> [String] {
+    func getVariations() -> [String] {
         variations.keys.map({ $0 })
     }
 
-    public static func == (lhs: MoveModel, rhs: MoveModel) -> Bool {
+    static func == (lhs: MoveModel, rhs: MoveModel) -> Bool {
         lhs.id == rhs.id
     }
 }

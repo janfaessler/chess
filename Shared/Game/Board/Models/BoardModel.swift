@@ -52,8 +52,9 @@ class BoardModel {
     }
     
     func doPromote(_ to: PieceType) throws {
-        moveToPromote?.promoteTo = to
-        try doMove(moveToPromote!)
+        guard var move = moveToPromote else { return }
+        move.promoteTo = to
+        try doMove(move)
         moveToPromote = nil
     }
     
@@ -84,7 +85,7 @@ class BoardModel {
         self.logger.info("BoardModel.updatePosition called - updating \(pos.getFigures().count) figures")
         self.board = ChessBoard(pos)
         let newFigures = self.getFigures()
-        self.figures = newFigures  // Explicit assignment to new array
+        self.figures = newFigures
         self.result = ResultModel(self.board.getGameState())
         self.logger.info("BoardModel.updatePosition complete - now have \(self.figures.count) figures")
     }
@@ -108,12 +109,6 @@ class BoardModel {
         self.result = ResultModel(self.board.getGameState())
         self.logger.info("doMove succeeded, colorToMove now=\(String(describing: self.board.getColorToMove()))")
         self.notifyMoveDone(move, fen: positionBeforeMove)
-    }
-    
-    private func moveAndUpdateModel(_ move: Move) throws {
-        try self.board.move(move)
-        self.figures = self.getFigures()
-        self.result = ResultModel(self.board.getGameState())
     }
     
     private func getFigures() -> [FigureModel] {

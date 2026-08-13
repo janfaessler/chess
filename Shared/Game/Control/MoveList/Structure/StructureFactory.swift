@@ -1,11 +1,11 @@
 import Foundation
 
-public class StructureFactory {
+class StructureFactory {
 
-    public static func create(_ game:PgnGame) -> MoveStructure{
+    static func create(_ game:PgnGame) -> MoveStructure{
         let rows = getRowContainers(game.moves, startingColor: .white, startingMoveNumber:1)
         let cache = createVariationCache(rows.all)
-        return MoveStructure(line: rows, parrentMoves: cache)
+        return MoveStructure(line: rows, parentMoves: cache)
     }
     
     private static func getRowContainers(_ moves:[PgnMove], startingColor:PieceColor, startingMoveNumber:Int) -> LineModel {

@@ -1,5 +1,5 @@
 import XCTest
-import SwiftChess
+@testable import SwiftChess
 
 class ChessTestBase: XCTestCase {
     

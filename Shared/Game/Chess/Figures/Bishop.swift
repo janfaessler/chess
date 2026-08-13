@@ -1,14 +1,14 @@
 import Foundation
 
-public class Bishop : Figure {
+class Bishop : Figure {
     
-    public static let Ident = "B"
+    static let Ident = "B"
     
-    public init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
+    init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
         super.init(type: .bishop, color: color, row: row, file: file, moved: moved)
     }
     
-    public override func getPossibleMoves() -> [Move] {
+    override func getPossibleMoves() -> [Move] {
         var moves:[Move] = []
         for r in 1...8 {
             for f in 1...8 {
@@ -20,7 +20,7 @@ public class Bishop : Figure {
         return moves
     }
     
-    public override func ident() -> String {
+    override func ident() -> String {
         return Bishop.Ident
     }
 }

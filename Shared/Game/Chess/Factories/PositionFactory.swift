@@ -1,18 +1,18 @@
 import Foundation
 
-public class PositionFactory {
+class PositionFactory {
     
-    public static let startingPositionFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    static let startingPositionFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     
-    public static func startingPosition() -> Position {
+    static func startingPosition() -> Position {
         return FenParser.parse(startingPositionFen)
     }
     
-    public static func loadPosition(_ fen:String) -> Position {
+    static func loadPosition(_ fen:String) -> Position {
         return FenParser.parse(fen)
     }
     
-    public static func loadPosition(_ moves:[any StringProtocol]) -> Position? {
+    static func loadPosition(_ moves:[any StringProtocol]) -> Position? {
         var position = startingPosition()
         for notation in moves {
             guard let move = MoveFactory.create(notation, position: position) else { return nil }
@@ -21,7 +21,7 @@ public class PositionFactory {
         return position
     }
     
-    public static func getPosition(_ move:Move, cache:Position, isCapture:Bool) -> Position{
+    static func getPosition(_ move:Move, cache:Position, isCapture:Bool) -> Position{
         var figures:[any ChessFigure] = cache.getFigures()
         let fig = figures.first(where: { $0.equals(move.getPiece())})!
         let capturedPiece = cache.get(atRow: move.getRow(), atFile: move.getFile())
@@ -41,7 +41,7 @@ public class PositionFactory {
         return PositionFactory.create(cache, afterMove: move, figures: figures, capturedPiece: capturedPiece)
     }
     
-    public static func create(
+    static func create(
         _ oldPosition:Position,
         afterMove:Move,
         figures: [any ChessFigure],

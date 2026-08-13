@@ -1,5 +1,5 @@
 import Foundation
 
-public enum GameState {
+enum GameState {
     case NotStarted, Running, WhiteWins, BlackWins, DrawByStalemate, DrawByInsufficientMaterial, DrawBy50MoveRule, DrawByRepetition
 }

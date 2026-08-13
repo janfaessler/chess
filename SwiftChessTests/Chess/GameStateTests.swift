@@ -1,5 +1,5 @@
 import Foundation
-import SwiftChess
+@testable import SwiftChess
 import XCTest
 
 final class GameStateTests : ChessTestBase {

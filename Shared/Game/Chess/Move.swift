@@ -1,8 +1,8 @@
 import Foundation
 
-public struct Move:Identifiable, Equatable {
+struct Move:Identifiable, Equatable {
     
-    public let id:String = UUID().uuidString
+    let id:String = UUID().uuidString
     
     var row:Int = 0
     var file:Int = 0
@@ -19,18 +19,18 @@ public struct Move:Identifiable, Equatable {
         self.promoteTo = .queen
     }
     
-    public init (_ r:Int, _ f:Int, piece: any ChessFigure, type: MoveType, promoteTo:PieceType = PieceType.queen){
+    init (_ r:Int, _ f:Int, piece: any ChessFigure, type: MoveType, promoteTo:PieceType = PieceType.queen){
         self.init(r,f, piece: piece)
         self.type = type
         self.promoteTo = promoteTo
     }
     
-    public init?(_ fieldname:any StringProtocol, piece: any ChessFigure, type: MoveType, promoteTo:PieceType = PieceType.queen) {
+    init?(_ fieldname:any StringProtocol, piece: any ChessFigure, type: MoveType, promoteTo:PieceType = PieceType.queen) {
         guard let field = Field(fieldname) else { return nil }
         self.init(field.row, field.file, piece: piece, type: type, promoteTo: promoteTo)
     }
 
-    public static func == (l:Move, r:Move) -> Bool {
+    static func == (l:Move, r:Move) -> Bool {
         return l.row == r.row && l.file == r.file && l.piece.equals(r.piece) && l.type == r.type
     }
     
@@ -38,39 +38,39 @@ public struct Move:Identifiable, Equatable {
         return !(l == r)
     }
     
-    public func getRow() -> Int {
+    func getRow() -> Int {
         return row
     }
     
-    public func getFile() -> Int {
+    func getFile() -> Int {
         return file
     }
     
-    public func getType() -> MoveType {
+    func getType() -> MoveType {
         return type
     }
     
-    public func getFieldInfo() -> String {
+    func getFieldInfo() -> String {
         return getField().info()
     }
     
-    public func getField() -> Field {
+    func getField() -> Field {
         return Field(row:row, file:file)
     }
     
-    public func getStartingField() -> Field {
+    func getStartingField() -> Field {
         return startingField
     }
     
-    public func getPiece() -> any ChessFigure {
+    func getPiece() -> any ChessFigure {
         return piece
     }
     
-    public func isCastling() -> Bool {
+    func isCastling() -> Bool {
         return piece.getType() == .king && type == .Castle
     }
     
-    public func info() -> String {
+    func info() -> String {
         "Move[\(Field(row: row, file: file).info()), \(piece.info()), \(type), \(promoteTo)]"
     }
 }
