@@ -79,7 +79,9 @@ class ChessBoard {
     }
     
     private func doMove(_ move: Move) throws {
-        let figure = position.get(atRow: move.getPiece().getRow(), atFile: move.getPiece().getFile())!
+        guard let figure = position.get(atRow: move.getPiece().getRow(), atFile: move.getPiece().getFile()) else {
+            throw ValidationError.FigureDoesNotExist(move.getPiece())
+        }
         let capturedPiece = doCapture(move)
 
         figure.move(row: move.row, file: move.file)

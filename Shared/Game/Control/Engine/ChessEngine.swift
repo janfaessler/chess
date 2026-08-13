@@ -77,11 +77,11 @@ final class ChessEngine {
         return moveNotations.joined(separator: ", ")
     }
     
-    private func getScore(_ info:EngineResponse.Info) -> String {
-        if info.score?.cp != nil {
-            return "\(String(format:"%2.2f", CGFloat(info.score!.cp! / 100)))"
-        } else if info.score?.mate != nil {
-            return  "M\(info.score!.mate ?? 0)"
+    private func getScore(_ info: EngineResponse.Info) -> String {
+        if let cp = info.score?.cp {
+            return String(format: "%2.2f", CGFloat(cp) / 100)
+        } else if let mate = info.score?.mate {
+            return "M\(mate)"
         }
         return ""
     }

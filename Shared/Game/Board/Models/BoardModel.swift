@@ -47,7 +47,11 @@ class BoardModel {
         if move.type == .Promotion {
             moveToPromote = move
         } else {
-            try? doMove(move)
+            do {
+                try doMove(move)
+            } catch {
+                logger.error("doMove failed: \(error)")
+            }
         }
     }
     

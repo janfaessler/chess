@@ -9,8 +9,9 @@ class MoveStructure {
         self.parentMoves = parentMoves
     }
     
-    var last:MoveModel? {
-        line.last!.hasBlackMoved() ? line.last!.black : line.last!.white
+    var last: MoveModel? {
+        guard let pair = line.last else { return nil }
+        return pair.hasBlackMoved() ? pair.black : pair.white
     }
     
     var count:Int {

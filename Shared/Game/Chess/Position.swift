@@ -25,7 +25,10 @@ class Position {
         moveClock:Int,
         halfmoveClock:Int
     ) {
-        self.cache = Position.createCacheDict(figures)!
+        guard let dict = Position.createCacheDict(figures) else {
+            preconditionFailure("Position initialized with conflicting figures — two pieces on the same square")
+        }
+        self.cache = dict
         self.colorToMove = colorToMove
         self.enPassantTarget = enPassantTarget
         self.whiteCanCastleKingside = whiteCanCastleKingside
@@ -109,10 +112,10 @@ class Position {
         return get(atRow: move.row, atFile: move.file)
     }
     
-    func isCheck(_ move:Move) -> Bool {
-        let opponentKing = getFigures().first(where: { $0.getType() == .king && $0.getColor() != move.piece.getColor()})
+    func isCheck(_ move: Move) -> Bool {
+        guard let opponentKing = getFigures().first(where: { $0.getType() == .king && $0.getColor() != move.piece.getColor() }) else { return false }
         let newPosition = applying(move)
-        return newPosition.isFieldInCheck(opponentKing!.getRow(), opponentKing!.getFile())
+        return newPosition.isFieldInCheck(opponentKing.getRow(), opponentKing.getFile())
     }
     
     func isFieldInCheck(_ row: Int, _ file: Int) -> Bool {
@@ -170,12 +173,12 @@ class Position {
     
     private func moveRookForCastling(_ move: Move) {
         if isLongCastling(move) {
-            let rook = get(atRow: move.piece.getRow(), atFile: Rook.CastleQueensideStartingFile)!
+            guard let rook = get(atRow: move.piece.getRow(), atFile: Rook.CastleQueensideStartingFile) else { return }
             rook.move(row: move.row, file: Rook.CastleQueensideEndFile)
             clearField(atRow: move.piece.getRow(), atFile: Rook.CastleQueensideStartingFile)
             set(rook)
         } else if isShortCastling(move) {
-            let rook = get(atRow: move.piece.getRow(), atFile: Rook.CastleKingsideStartingFile)!
+            guard let rook = get(atRow: move.piece.getRow(), atFile: Rook.CastleKingsideStartingFile) else { return }
             rook.move(row: move.row, file: Rook.CastleKingsideEndFile)
             clearField(atRow: move.piece.getRow(), atFile: Rook.CastleKingsideStartingFile)
             set(rook)
@@ -198,11 +201,10 @@ class Position {
         Position.logger.log("promote: replacing \(pawn.info()) with \(to.info())")
     }
     
-    private func doesMovePutOwnKingInCheck(_ move:Move) -> Bool {
-        
+    private func doesMovePutOwnKingInCheck(_ move: Move) -> Bool {
         let isKingMove = move.piece.getType() == .king
         let figures = getFigures()
-        let king = figures.first(where: { $0.getType() == .king && $0.getColor() == move.piece.getColor() })!
+        guard let king = figures.first(where: { $0.getType() == .king && $0.getColor() == move.piece.getColor() }) else { return true }
         let rowToCheck = isKingMove ? move.getRow() : king.getRow()
         let fileToCheck = isKingMove ? move.getFile() : king.getFile()
                 
