@@ -26,10 +26,24 @@ struct VariationView: View {
         }
     }
 
-    // The variation to display: auto-detected from current move takes priority
-    // over any manually selected one.
     private var displayedVariation: String? {
-        model.activeVariation(of: move) ?? (isExpanded ? variation : nil)
+        activeVariation ?? (isExpanded ? variation : nil)
+    }
+
+    private var activeVariation: String? {
+        guard let current = model.currentMove else { return nil }
+        for name in move.getVariations() {
+            guard let line = move.getVariation(name) else { continue }
+            for pair in line.all {
+                if let white = pair.white, white == current || model.isMove(current, childOf: white) {
+                    return name
+                }
+                if let black = pair.black, black == current || model.isMove(current, childOf: black) {
+                    return name
+                }
+            }
+        }
+        return nil
     }
 
     var body: some View {

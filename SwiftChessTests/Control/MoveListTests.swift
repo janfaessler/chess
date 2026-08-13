@@ -4,7 +4,7 @@ import XCTest
 final class MoveListTests: XCTestCase {
 
     private var testee:MoveListModel? = nil
-    
+
     override func setUpWithError() throws {
         testee = MoveListModel()
     }
@@ -21,10 +21,10 @@ final class MoveListTests: XCTestCase {
         XCTAssertEqual(root.move, "Nc3")
         XCTAssertEqual(rootPair.white?.move, root.move)
         XCTAssertEqual(root.hasVariations(), false)
-        XCTAssertFalse(testee.shouldShowVariationList(rootPair))
-        XCTAssertFalse(testee.shouldShowVariationList(rootPair, color: .white))
-        XCTAssertFalse(testee.shouldShowVariationList(rootPair, color: .black))
-        
+        XCTAssertFalse(showVariations(rootPair, in: testee))
+        XCTAssertFalse(showVariations(rootPair, color: .white, in: testee))
+        XCTAssertFalse(showVariations(rootPair, color: .black, in: testee))
+
         testee.back()
         testee.movePlayed("Nf3")
         let variationFirst = try XCTUnwrap(testee.currentMove)
@@ -33,26 +33,26 @@ final class MoveListTests: XCTestCase {
         XCTAssertEqual(variationFirst.move, "Nf3")
         XCTAssertEqual(variationPair.white?.move, "Nf3")
         XCTAssertEqual(root.hasVariations(), true)
-        XCTAssertTrue(testee.shouldShowVariationList(rootPair))
-        XCTAssertTrue(testee.shouldShowVariationList(rootPair, color: .white))
-        XCTAssertFalse(testee.shouldShowVariationList(rootPair, color: .black))
-        XCTAssertFalse(testee.shouldShowVariationList(variationPair))
-        XCTAssertFalse(testee.shouldShowVariationList(variationPair, color: .white))
-        XCTAssertFalse(testee.shouldShowVariationList(variationPair, color: .black))
-        
+        XCTAssertTrue(showVariations(rootPair, in: testee))
+        XCTAssertTrue(showVariations(rootPair, color: .white, in: testee))
+        XCTAssertFalse(showVariations(rootPair, color: .black, in: testee))
+        XCTAssertFalse(showVariations(variationPair, in: testee))
+        XCTAssertFalse(showVariations(variationPair, color: .white, in: testee))
+        XCTAssertFalse(showVariations(variationPair, color: .black, in: testee))
+
         testee.movePlayed("Nf6")
         let variationSecound = try XCTUnwrap(testee.currentMove)
         XCTAssertEqual(variationSecound.move, "Nf6")
         XCTAssertEqual(variationPair.white?.move, "Nf3")
         XCTAssertEqual(variationPair.black?.move, "Nf6")
         XCTAssertEqual(root.hasVariations(), true)
-        XCTAssertTrue(testee.shouldShowVariationList(rootPair))
-        XCTAssertTrue(testee.shouldShowVariationList(rootPair, color: .white))
-        XCTAssertFalse(testee.shouldShowVariationList(rootPair, color: .black))
-        XCTAssertFalse(testee.shouldShowVariationList(variationPair))
-        XCTAssertFalse(testee.shouldShowVariationList(variationPair, color: .white))
-        XCTAssertFalse(testee.shouldShowVariationList(variationPair, color: .black))
-        
+        XCTAssertTrue(showVariations(rootPair, in: testee))
+        XCTAssertTrue(showVariations(rootPair, color: .white, in: testee))
+        XCTAssertFalse(showVariations(rootPair, color: .black, in: testee))
+        XCTAssertFalse(showVariations(variationPair, in: testee))
+        XCTAssertFalse(showVariations(variationPair, color: .white, in: testee))
+        XCTAssertFalse(showVariations(variationPair, color: .black, in: testee))
+
         testee.back()
         testee.movePlayed("Nc6")
         let supVariationFirst = try XCTUnwrap(testee.currentMove)
@@ -63,16 +63,16 @@ final class MoveListTests: XCTestCase {
         XCTAssertEqual(supVariationPairFirst.black?.move, "Nc6")
         XCTAssertEqual(root.hasVariations(), true)
         XCTAssertEqual(variationSecound.hasVariations(), true)
-        XCTAssertTrue(testee.shouldShowVariationList(rootPair))
-        XCTAssertTrue(testee.shouldShowVariationList(rootPair, color: .white))
-        XCTAssertFalse(testee.shouldShowVariationList(rootPair, color: .black))
-        XCTAssertTrue(testee.shouldShowVariationList(variationPair))
-        XCTAssertFalse(testee.shouldShowVariationList(variationPair, color: .white))
-        XCTAssertTrue(testee.shouldShowVariationList(variationPair, color: .black))
-        XCTAssertFalse(testee.shouldShowVariationList(supVariationPairFirst))
-        XCTAssertFalse(testee.shouldShowVariationList(supVariationPairFirst, color: .white))
-        XCTAssertFalse(testee.shouldShowVariationList(supVariationPairFirst, color: .black))
-        
+        XCTAssertTrue(showVariations(rootPair, in: testee))
+        XCTAssertTrue(showVariations(rootPair, color: .white, in: testee))
+        XCTAssertFalse(showVariations(rootPair, color: .black, in: testee))
+        XCTAssertTrue(showVariations(variationPair, in: testee))
+        XCTAssertFalse(showVariations(variationPair, color: .white, in: testee))
+        XCTAssertTrue(showVariations(variationPair, color: .black, in: testee))
+        XCTAssertFalse(showVariations(supVariationPairFirst, in: testee))
+        XCTAssertFalse(showVariations(supVariationPairFirst, color: .white, in: testee))
+        XCTAssertFalse(showVariations(supVariationPairFirst, color: .black, in: testee))
+
         testee.movePlayed("Nc3")
         let supVariationSecound = try XCTUnwrap(testee.currentMove)
         let supVariationPairSecond = supVariation.all[1]
@@ -81,14 +81,29 @@ final class MoveListTests: XCTestCase {
         XCTAssertNil(supVariationPairSecond.black)
         XCTAssertEqual(root.hasVariations(), true)
         XCTAssertEqual(variationSecound.hasVariations(), true)
-        XCTAssertTrue(testee.shouldShowVariationList(rootPair))
-        XCTAssertTrue(testee.shouldShowVariationList(rootPair, color: .white))
-        XCTAssertFalse(testee.shouldShowVariationList(rootPair, color: .black))
-        XCTAssertTrue(testee.shouldShowVariationList(variationPair))
-        XCTAssertFalse(testee.shouldShowVariationList(variationPair, color: .white))
-        XCTAssertTrue(testee.shouldShowVariationList(variationPair, color: .black))
-        XCTAssertFalse(testee.shouldShowVariationList(supVariationPairFirst))
-        XCTAssertFalse(testee.shouldShowVariationList(supVariationPairFirst, color: .white))
-        XCTAssertFalse(testee.shouldShowVariationList(supVariationPairFirst, color: .black))
+        XCTAssertTrue(showVariations(rootPair, in: testee))
+        XCTAssertTrue(showVariations(rootPair, color: .white, in: testee))
+        XCTAssertFalse(showVariations(rootPair, color: .black, in: testee))
+        XCTAssertTrue(showVariations(variationPair, in: testee))
+        XCTAssertFalse(showVariations(variationPair, color: .white, in: testee))
+        XCTAssertTrue(showVariations(variationPair, color: .black, in: testee))
+        XCTAssertFalse(showVariations(supVariationPairFirst, in: testee))
+        XCTAssertFalse(showVariations(supVariationPairFirst, color: .white, in: testee))
+        XCTAssertFalse(showVariations(supVariationPairFirst, color: .black, in: testee))
+    }
+
+    private func showVariations(_ pair: MovePairModel, in model: MoveListModel) -> Bool {
+        showVariations(pair, color: .white, in: model) || showVariations(pair, color: .black, in: model)
+    }
+
+    private func showVariations(_ pair: MovePairModel, color: PieceColor, in model: MoveListModel) -> Bool {
+        guard let current = model.currentMove else { return false }
+        if color == .white {
+            guard let white = pair.white else { return false }
+            return current == white ? white.hasVariations() : model.isMove(current, childOf: white)
+        } else {
+            guard let black = pair.black else { return false }
+            return current == black ? black.hasVariations() : model.isMove(current, childOf: black)
+        }
     }
 }

@@ -70,7 +70,7 @@ final class ChessEngine {
                 return moveNotations.joined(separator: ", ")
             }
             let isCapture = tempPos.isNotEmpty(atRow: move.row, atFile: move.file)
-            tempPos = tempPos.createWithMove(move)
+            tempPos = tempPos.applying(move)
             let notation = getNotation(move:move, isCapture:isCapture)
             moveNotations += [notation]
         }

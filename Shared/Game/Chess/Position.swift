@@ -111,7 +111,7 @@ class Position {
     
     func isCheck(_ move:Move) -> Bool {
         let opponentKing = getFigures().first(where: { $0.getType() == .king && $0.getColor() != move.piece.getColor()})
-        let newPosition = createWithMove(move)
+        let newPosition = applying(move)
         return newPosition.isFieldInCheck(opponentKing!.getRow(), opponentKing!.getFile())
     }
     
@@ -126,7 +126,7 @@ class Position {
     }
     
     func isCheckMate(_ move:Move) -> Bool {
-        let newPosition = createWithMove(move)
+        let newPosition = applying(move)
         let isCheckMate = !newPosition.playerHasLegalMove() && newPosition.isKingInCheck()
         return isCheckMate
     }
@@ -168,7 +168,7 @@ class Position {
         return move.getField() == target
     }
     
-    func moveRookForCastling(_ move: Move) {
+    private func moveRookForCastling(_ move: Move) {
         if isLongCastling(move) {
             let rook = get(atRow: move.piece.getRow(), atFile: Rook.CastleQueensideStartingFile)!
             rook.move(row: move.row, file: Rook.CastleQueensideEndFile)
@@ -181,7 +181,7 @@ class Position {
             set(rook)
         }
     }
-    func checkPromotion(_ move: Move){
+    private func checkPromotion(_ move: Move) {
         guard move.piece.getType() == .pawn else {
             return
         }
@@ -206,7 +206,7 @@ class Position {
         let rowToCheck = isKingMove ? move.getRow() : king.getRow()
         let fileToCheck = isKingMove ? move.getFile() : king.getFile()
                 
-        let newPos = createWithMove(move)
+        let newPos = applying(move)
         
         return figures.contains(where: {
             if $0.getColor() != getColorToMove() {
@@ -233,7 +233,7 @@ class Position {
         return hasher.finalize()
     }
     
-    func createWithMove(_ move:Move) -> Position {
+    func applying(_ move: Move) -> Position {
         let capturedPiece = get(atRow: move.getRow(), atFile: move.getFile())
         
         var figures = getFigures()

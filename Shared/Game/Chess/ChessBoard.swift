@@ -83,10 +83,34 @@ class ChessBoard {
         let capturedPiece = doCapture(move)
 
         figure.move(row: move.row, file: move.file)
-        position.checkPromotion(move)
-        position.moveRookForCastling(move)
+        handlePromotion(move)
+        relocateCastlingRook(move)
         moves += [move]
         updateBoardStates(move, capturedPiece: capturedPiece)
+    }
+
+    private func handlePromotion(_ move: Move) {
+        guard move.piece.getType() == .pawn else { return }
+        let targetRow = move.getRow()
+        guard (move.piece.getColor() == .white && targetRow == 8) ||
+              (move.piece.getColor() == .black && targetRow == 1) else { return }
+        position.clearField(atRow: move.piece.getRow(), atFile: move.piece.getFile())
+        position.set(Figure.create(type: move.promoteTo, color: move.piece.getColor(), row: targetRow, file: move.getFile()))
+    }
+
+    private func relocateCastlingRook(_ move: Move) {
+        if position.isLongCastling(move) {
+            moveRook(fromFile: Rook.CastleQueensideStartingFile, toFile: Rook.CastleQueensideEndFile, row: move.row)
+        } else if position.isShortCastling(move) {
+            moveRook(fromFile: Rook.CastleKingsideStartingFile, toFile: Rook.CastleKingsideEndFile, row: move.row)
+        }
+    }
+
+    private func moveRook(fromFile: Int, toFile: Int, row: Int) {
+        guard let rook = position.get(atRow: row, atFile: fromFile) else { return }
+        rook.move(row: row, file: toFile)
+        position.clearField(atRow: row, atFile: fromFile)
+        position.set(rook)
     }
     
     private func doCapture(_ move: Move) -> (any ChessFigure)? {

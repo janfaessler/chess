@@ -17,7 +17,7 @@ struct LineView: View {
                             }
                         }
                         
-                        if model.shouldShowVariationList(movePair, color: .white) {
+                        if showVariations(for: movePair, color: .white) {
                             VariationView(
                                 model: model,
                                 move: movePair.white!,
@@ -26,8 +26,8 @@ struct LineView: View {
                             )
                             .padding(.leading, 8)
                         }
-                        
-                        if model.shouldShowVariationList(movePair, color: .black) {
+
+                        if showVariations(for: movePair, color: .black) {
                             VariationView(
                                 model: model,
                                 move: movePair.black!,
@@ -39,6 +39,17 @@ struct LineView: View {
                     }
                 }
             }
+        }
+    }
+
+    private func showVariations(for pair: MovePairModel, color: PieceColor) -> Bool {
+        guard let current = model.currentMove else { return false }
+        if color == .white {
+            guard let white = pair.white else { return false }
+            return current == white ? white.hasVariations() : model.isMove(current, childOf: white)
+        } else {
+            guard let black = pair.black else { return false }
+            return current == black ? black.hasVariations() : model.isMove(current, childOf: black)
         }
     }
 }

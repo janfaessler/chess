@@ -42,20 +42,9 @@ class FigureModel: Identifiable {
     }
     
     func getMove(deltaRow: Int, deltaFile: Int) -> Move? {
-        let moveToRow = row + deltaRow
-        let moveToFile = file + deltaFile
-        let moves = figure.getPossibleMoves()
-        
-        if figure.getType() == .king {
-            if figure.hasMoved() == false && moveToFile < King.CastleQueensidePosition {
-                return figure.createMove(moveToRow, King.CastleQueensidePosition, .Castle)
-            }
-            if figure.hasMoved() == false && moveToFile > King.CastleKingsidePosition {
-                return figure.createMove(moveToRow, King.CastleKingsidePosition, .Castle)
-            }
-        }
-        
-        return moves.first(where: { $0.row == moveToRow && $0.file == moveToFile })
+        let targetRow = row + deltaRow
+        let targetFile = file + deltaFile
+        return figure.getPossibleMoves().first(where: { $0.row == targetRow && $0.file == targetFile })
     }
     
     func setFocus() {

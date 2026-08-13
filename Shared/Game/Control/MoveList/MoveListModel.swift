@@ -103,43 +103,8 @@ class MoveListModel {
         history.list.map({ $0.move })
     }
     
-    func shouldShowVariationList(_ currentPair:MovePairModel) -> Bool {
-        if shouldShowVariationList(currentPair, color: .white) {
-            return true
-        }
-        if shouldShowVariationList(currentPair, color: .black) {
-            return true
-        }
-        return false
-    }
-    
-    func shouldShowVariationList(_ currentPair: MovePairModel, color: PieceColor) -> Bool {
-        guard let current = currentMove else { return false }
-
-        if color == .white {
-            if current == currentPair.white { return current.hasVariations() }
-            guard let white = currentPair.white else { return false }
-            return structure.move(currentMove, isChildOf: white)
-        } else {
-            if current == currentPair.black { return current.hasVariations() }
-            guard let black = currentPair.black else { return false }
-            return structure.move(currentMove, isChildOf: black)
-        }
-    }
-    
-    func activeVariation(of move: MoveModel) -> String? {
-        for name in move.getVariations() {
-            guard let line = move.getVariation(name) else { continue }
-            for pair in line.all {
-                if let white = pair.white, white == currentMove || structure.move(currentMove, isChildOf: white) {
-                    return name
-                }
-                if let black = pair.black, black == currentMove || structure.move(currentMove, isChildOf: black) {
-                    return name
-                }
-            }
-        }
-        return nil
+    func isMove(_ move: MoveModel?, childOf parent: MoveModel) -> Bool {
+        structure.move(move, isChildOf: parent)
     }
 
     func addPositionChangeListener(_ listener: @escaping PositionChangeNotification) {
