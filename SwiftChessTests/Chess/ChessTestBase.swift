@@ -16,10 +16,11 @@ class ChessTestBase: XCTestCase {
         var cache = PositionFactory.startingPosition()
         let game = PgnMovesParser.parse(pgn)
         for pgnmove in game {
-            let move = MoveFactory.create(pgnmove.move, position: cache)
-            if  move != nil {
-                result += [move!]
-                cache = PositionFactory.getPosition(move!, cache: cache, isCapture: pgnmove.move.contains(NotationFactory.Capture))
+            if let move = MoveFactory.create(pgnmove.move, position: cache) {
+                result += [move]
+                if let newPosition = PositionFactory.getPosition(move, cache: cache, isCapture: pgnmove.move.contains(NotationFactory.Capture)) {
+                    cache = newPosition
+                }
             }
         }
         

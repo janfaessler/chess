@@ -166,6 +166,45 @@ final class NotationTests: ChessTestBase {
 
     }
     
+    func testCastleKingsideBlockedByKnight() throws {
+        // Bishop moved off f1, but knight remains at g1 — path is not clear
+        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .Double)
+        try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .black, moveType: .Double)
+
+        try moveAndAssert(notation: "Bc4", toField: "c4", type: .bishop, color: .white)
+        try moveAndAssert(notation: "a6", toField: "a6", type: .pawn, color: .black)
+
+        try moveAndAssertError("O-O")
+
+        try assertMoves()
+    }
+
+    func testCastleKingsideBlockedByBishop() throws {
+        // Knight moved off g1, but bishop remains at f1 — path is not clear
+        try moveAndAssert(notation: "Nf3", toField: "f3", type: .knight, color: .white)
+        try moveAndAssert(notation: "a6", toField: "a6", type: .pawn, color: .black)
+
+        try moveAndAssertError("O-O")
+
+        try assertMoves()
+    }
+
+    func testCastleQueensideBlockedByQueen() throws {
+        // Knight and bishop cleared from queenside, but queen remains at d1 — path is not clear
+        try moveAndAssert(notation: "b3", toField: "b3", type: .pawn, color: .white)
+        try moveAndAssert(notation: "a6", toField: "a6", type: .pawn, color: .black)
+
+        try moveAndAssert(notation: "Bb2", toField: "b2", type: .bishop, color: .white)
+        try moveAndAssert(notation: "b6", toField: "b6", type: .pawn, color: .black)
+
+        try moveAndAssert(notation: "Nc3", toField: "c3", type: .knight, color: .white)
+        try moveAndAssert(notation: "c6", toField: "c6", type: .pawn, color: .black)
+
+        try moveAndAssertError("O-O-O")
+
+        try assertMoves()
+    }
+
     func testCastleWithoutRookKingside() throws {
         
         try moveAndAssert(notation: "Nf3", toField: "f3", type: .knight, color: .white)

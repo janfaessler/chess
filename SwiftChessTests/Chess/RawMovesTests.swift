@@ -159,6 +159,45 @@ final class RawMovesTests: ChessTestBase {
         try assertMoves(["e4", "e5", "f3", "Bc5", "Bc4", "d6", "Ne2", "f6"])
     }
     
+    func testCastleKingsideBlockedByKnight() throws {
+        // Bishop moved off f1, but knight remains at g1 — path is not clear
+        try moveAndAssert(from: "e2", to: "e4", type: .pawn, color: .white, moveType: .Double)
+        try moveAndAssert(from: "e7", to: "e5", type: .pawn, color: .black, moveType: .Double)
+
+        try moveAndAssert(from: "f1", to: "c4", type: .bishop, color: .white)
+        try moveAndAssert(from: "a7", to: "a6", type: .pawn, color: .black)
+
+        try moveAndAssertError("e1", to: "g1", type: .king, color: .white, moveType: .Castle)
+
+        try assertMoves(["e4", "e5", "Bc4", "a6"])
+    }
+
+    func testCastleKingsideBlockedByBishop() throws {
+        // Knight moved off g1, but bishop remains at f1 — path is not clear
+        try moveAndAssert(from: "g1", to: "f3", type: .knight, color: .white)
+        try moveAndAssert(from: "a7", to: "a6", type: .pawn, color: .black)
+
+        try moveAndAssertError("e1", to: "g1", type: .king, color: .white, moveType: .Castle)
+
+        try assertMoves(["Nf3", "a6"])
+    }
+
+    func testCastleQueensideBlockedByQueen() throws {
+        // Knight and bishop cleared from queenside, but queen remains at d1 — path is not clear
+        try moveAndAssert(from: "b2", to: "b3", type: .pawn, color: .white)
+        try moveAndAssert(from: "a7", to: "a6", type: .pawn, color: .black)
+
+        try moveAndAssert(from: "c1", to: "b2", type: .bishop, color: .white)
+        try moveAndAssert(from: "b7", to: "b6", type: .pawn, color: .black)
+
+        try moveAndAssert(from: "b1", to: "c3", type: .knight, color: .white)
+        try moveAndAssert(from: "c7", to: "c6", type: .pawn, color: .black)
+
+        try moveAndAssertError("e1", to: "c1", type: .king, color: .white, moveType: .Castle)
+
+        try assertMoves(["b3", "a6", "Bb2", "b6", "Nc3", "c6"])
+    }
+
     func testCastleWithoutRook() throws {
         
         try moveAndAssert(from: "g1", to: "f3", type: .knight, color: .white)

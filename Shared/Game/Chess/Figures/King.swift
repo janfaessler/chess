@@ -34,9 +34,9 @@ class King : Figure {
     
     override func isMovePossible( _ move: Move, position:Position) -> Bool {
         if isShortCastling(move) {
-            return canCastle(move, rookStart: Rook.CastleKingsideStartingFile, cache: position)
+            return canCastle(move, rookStart: Rook.CastleKingsideStartingFile, position: position)
         } else if isLongCastling(move) {
-            return canCastle(move, rookStart: Rook.CastleQueensideStartingFile, cache: position)
+            return canCastle(move, rookStart: Rook.CastleQueensideStartingFile, position: position)
         }
         return super.isMovePossible(move, position: position)
     }
@@ -50,16 +50,26 @@ class King : Figure {
         return King.Ident
     }
     
-    private func canCastle(_ to: Move, rookStart:Int, cache:Position) -> Bool {
-        if  isCastlingInCheck(to, cache:cache) {
+    private func canCastle(_ to: Move, rookStart:Int, position:Position) -> Bool {
+        if isCastlingInCheck(to, cache:position) {
             return false
         }
-        
-        if to.piece.getColor() == .white {
-            return rookStart == Rook.CastleKingsideStartingFile ? cache.canWhiteCastleKingside() : cache.canWhiteCastleQueenside()
-        } else {
-            return rookStart == Rook.CastleKingsideStartingFile ? cache.canBlackCastleKingside() : cache.canBlackCastleQueenside()
+        guard isPathClear(to, rookFile: rookStart, cache: position) else {
+            return false
         }
+        if to.piece.getColor() == .white {
+            return rookStart == Rook.CastleKingsideStartingFile ? position.canWhiteCastleKingside() : position.canWhiteCastleQueenside()
+        } else {
+            return rookStart == Rook.CastleKingsideStartingFile ? position.canBlackCastleKingside() : position.canBlackCastleQueenside()
+        }
+    }
+    
+    private func isPathClear(_ move: Move, rookFile: Int, cache: Position) -> Bool {
+        let kingFile = move.piece.getFile()
+        let row = move.piece.getRow()
+        let lo = min(kingFile, rookFile) + 1
+        let hi = max(kingFile, rookFile)
+        return (lo..<hi).allSatisfy { cache.isEmpty(atRow: row, atFile: $0) }
     }
     
     private func isLongCastling(_ move: Move) -> Bool {
