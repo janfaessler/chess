@@ -45,12 +45,6 @@ class Figure:Identifiable, ChessFigure {
         hasher.combine(file)
     }
     
-    func move(row:Int, file:Int) {
-        self.row =  row
-        self.file = file
-        self.moved = true
-    }
-    
     func canDo(move:Move) -> Bool {
         let moves = getPossibleMoves()
         return moves.contains(where:{$0.row == move.row && $0.file == move.file})

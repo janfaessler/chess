@@ -193,28 +193,7 @@ final class MoveFactoryTests: XCTestCase {
         XCTFail(message(move), file: file, line: line)
     }
     
-    private func updateBoardCache(_ move:Move, isCapture:Bool) throws {
-        let cache = try XCTUnwrap(boardCache)
-        var figures:[any ChessFigure] = cache.getFigures()
-        let fig = figures.first(where: { $0.equals(move.getPiece())})!
-        let capturedPiece = cache.get(atRow: move.getRow(), atFile: move.getFile())
-        figures.removeAll(where: { $0.equals(move.getPiece()) || capturedPiece?.equals($0) == true })
-        fig.move(row: move.getRow(), file: move.getFile())
-        figures.append(fig)
-        if move.getType() == .Castle {
-            if move.getFile() == King.CastleQueensidePosition{
-                let rook = figures.first(where: { $0.equals(Rook(color: fig.getColor(), row: fig.getRow(), file: Rook.CastleQueensideStartingFile))})!
-                cache.clearField(atRow: rook.getRow(), atFile: rook.getFile())
-                rook.move(row: move.getRow(), file: Rook.CastleQueensideEndFile)
-                cache.set(rook)
-            } else {
-                let rook = figures.first(where: { $0.equals(Rook(color: fig.getColor(), row: fig.getRow(), file: Rook.CastleKingsideStartingFile))})!
-                cache.clearField(atRow: rook.getRow(), atFile: rook.getFile())
-                rook.move(row: move.getRow(), file: Rook.CastleKingsideEndFile)
-                cache.set(rook)
-            }
-        }
-        boardCache = PositionFactory.create(cache, afterMove: move, figures: figures, capturedPiece: capturedPiece)
-    
+    private func updateBoardCache(_ move: Move, isCapture: Bool) throws {
+        boardCache = try XCTUnwrap(boardCache).applying(move)
     }
 }

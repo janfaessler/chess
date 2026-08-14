@@ -242,21 +242,6 @@ class Position {
         return 1...8 ~= move.row && 1...8 ~= move.file
     }
     
-    private func moveRookForCastling(_ move: Move) {
-        guard move.isCastling() else { return }
-        if move.file == King.CastleQueensidePosition {
-            guard let rook = get(atRow: move.piece.getRow(), atFile: Rook.CastleQueensideStartingFile) else { return }
-            rook.move(row: move.row, file: Rook.CastleQueensideEndFile)
-            clearField(atRow: move.piece.getRow(), atFile: Rook.CastleQueensideStartingFile)
-            set(rook)
-        } else if move.file == King.CastleKingsidePosition {
-            guard let rook = get(atRow: move.piece.getRow(), atFile: Rook.CastleKingsideStartingFile) else { return }
-            rook.move(row: move.row, file: Rook.CastleKingsideEndFile)
-            clearField(atRow: move.piece.getRow(), atFile: Rook.CastleKingsideStartingFile)
-            set(rook)
-        }
-    }
-    
     private func getNextPieceOnRow(from:Field, to:Field) -> (any ChessFigure)? {
         let direction = from.file < to.file ? 1 : -1
         for f in stride(from: from.file + direction, to: to.file, by: direction) {

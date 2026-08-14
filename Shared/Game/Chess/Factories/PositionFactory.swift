@@ -23,25 +23,8 @@ class PositionFactory {
     }
     
     static func getPosition(_ move: Move, cache: Position, isCapture: Bool) -> Position? {
-        var figures: [any ChessFigure] = cache.getFigures()
-        guard let fig = figures.first(where: { $0.equals(move.getPiece()) }) else { return nil }
-        let capturedPiece = cache.get(atRow: move.getRow(), atFile: move.getFile())
-        figures.removeAll(where: { $0.equals(move.getPiece()) || capturedPiece?.equals($0) == true })
-        fig.move(row: move.getRow(), file: move.getFile())
-        figures.append(fig)
-        if move.getType() == .Castle {
-            if move.getFile() == King.CastleQueensidePosition {
-                if let rook = figures.first(where: { $0.equals(Rook(color: fig.getColor(), row: fig.getRow(), file: Rook.CastleQueensideStartingFile)) }) {
-                    rook.move(row: move.getRow(), file: Rook.CastleQueensideEndFile)
-                }
-            } else {
-                if let rook = figures.first(where: { $0.equals(Rook(color: fig.getColor(), row: fig.getRow(), file: Rook.CastleKingsideStartingFile)) }) {
-                    rook.move(row: move.getRow(), file: Rook.CastleKingsideEndFile)
-                }
-            }
-        }
-
-        return PositionFactory.create(cache, afterMove: move, figures: figures, capturedPiece: capturedPiece)
+        guard cache.getFigures().contains(where: { $0.equals(move.getPiece()) }) else { return nil }
+        return cache.applying(move)
     }
     
     static func create(

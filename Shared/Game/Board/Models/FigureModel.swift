@@ -35,12 +35,6 @@ class FigureModel: Identifiable {
         zIndex = 1
     }
 
-    func move(row: Int, file: Int) {
-        figure.move(row: row, file: file)
-        self.row = row
-        self.file = file
-    }
-    
     func getMove(deltaRow: Int, deltaFile: Int) -> Move? {
         let targetRow = row + deltaRow
         let targetFile = file + deltaFile
