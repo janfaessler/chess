@@ -10,7 +10,7 @@ class NotationFactory {
     static let Checkmate:Character = "#"
     
     static func generate(_ move:Move, position:Position) -> String {
-        guard !move.isCastling() else { 
+        guard !CastlingRules.isCastlingMove(move) else {
             return getCastlingNotation(move, position:position)
         }
         let checkIdentifier = getCheckIdentifier(move, position: position)
@@ -24,9 +24,9 @@ class NotationFactory {
     }
     
     private static func getCastlingNotation(_ move:Move, position:Position) -> String {
-        if position.isLongCastling(move) {
+        if CastlingRules.isQueensideCastling(move) {
             return LongCastle
-        } else if position.isShortCastling(move) {
+        } else if CastlingRules.isKingsideCastling(move) {
             return ShortCastle
         }
         return ""

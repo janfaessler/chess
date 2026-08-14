@@ -66,10 +66,6 @@ struct Move:Identifiable, Equatable {
         return piece
     }
     
-    func isCastling() -> Bool {
-        return piece.getType() == .king && type == .Castle
-    }
-    
     func info() -> String {
         "Move[\(Field(row: row, file: file).info()), \(piece.info()), \(type), \(promoteTo)]"
     }
