@@ -23,7 +23,7 @@ class PositionFactory {
     }
     
     static func getPosition(_ move: Move, position: Position, isCapture: Bool) -> Position? {
-        guard position.getFigures().contains(where: { $0.equals(move.getPiece()) }) else { return nil }
+        guard position.getFigures().contains(where: { $0.equals(move.piece) }) else { return nil }
         return position.applying(move)
     }
     
@@ -41,28 +41,28 @@ class PositionFactory {
             whiteCanCastleQueenside: CastlingRules.retainsRights(afterMove: afterMove, color: .white, rookStartingFile: Rook.CastleQueensideStartingFile, capturedPiece: capturedPiece, oldPosition: oldPosition),
             blackCanCastleKingside: CastlingRules.retainsRights(afterMove: afterMove, color: .black, rookStartingFile: Rook.CastleKingsideStartingFile, capturedPiece: capturedPiece, oldPosition: oldPosition),
             blackCanCastleQueenside: CastlingRules.retainsRights(afterMove: afterMove, color: .black, rookStartingFile: Rook.CastleQueensideStartingFile, capturedPiece: capturedPiece, oldPosition: oldPosition),
-            moveClock: oldPosition.getMoveClock() + 1,
+            moveClock: oldPosition.moveClock + 1,
             halfmoveClock: getHalfmoveClock(afterMove, capturedPiece != nil, oldPosition: oldPosition))
     }
     
     private static func createColorToMove(_ move:Move) -> PieceColor {
-        return move.piece.getColor() == .white ? .black : .white
+        return move.piece.color == .white ? .black : .white
     }
     
     private static func createEnPassantTarget(_ move:Move) -> Field? {
         guard move.type == .Double else { return nil }
         
-        let targetRow = move.piece.getColor() == .white ? move.getRow() - 1 : move.getRow() + 1
-        let targetFile = move.getFile()
+        let targetRow = move.piece.color == .white ? move.row - 1 : move.row + 1
+        let targetFile = move.file
         
         return Field(row:targetRow, file: targetFile)
     }
     
     private static func getHalfmoveClock(_ move: Move, _ isCapture: Bool, oldPosition:Position) -> Int {
-        if move.getPiece().getType() == .pawn || isCapture  {
+        if move.piece.type == .pawn || isCapture  {
             return 1
         } else {
-            return oldPosition.getHalfmoveClock() + 1
+            return oldPosition.halfmoveClock + 1
         }
     }
 }

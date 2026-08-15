@@ -16,8 +16,8 @@ class FigureModel: Identifiable {
     
     init(_ figure: any ChessFigure, board: BoardModel) {
         self.figure = figure
-        self.row = figure.getRow()
-        self.file = figure.getFile()
+        self.row = figure.row
+        self.file = figure.file
         self.board = board
     }
     
@@ -49,14 +49,14 @@ class FigureModel: Identifiable {
         board.clearFocus()
     }
     
-    func getColor() -> PieceColor {
-        figure.getColor()
+    var color: PieceColor {
+        figure.color
     }
-    
-    func getType() -> PieceType {
-        figure.getType()
+
+    var type: PieceType {
+        figure.type
     }
-    
+
     func getFigure() -> any ChessFigure {
         figure
     }

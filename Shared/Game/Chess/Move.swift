@@ -15,7 +15,7 @@ struct Move:Identifiable, Equatable {
         self.row = r
         self.file = f
         self.piece = piece
-        self.startingField = piece.getField()
+        self.startingField = piece.field
         self.promoteTo = .queen
     }
     
@@ -38,35 +38,15 @@ struct Move:Identifiable, Equatable {
         return !(l == r)
     }
     
-    func getRow() -> Int {
-        return row
+    var field: Field {
+        Field(row: row, file: file)
     }
-    
-    func getFile() -> Int {
-        return file
+
+    var fieldInfo: String {
+        field.info()
     }
-    
-    func getType() -> MoveType {
-        return type
-    }
-    
-    func getFieldInfo() -> String {
-        return getField().info()
-    }
-    
-    func getField() -> Field {
-        return Field(row:row, file:file)
-    }
-    
-    func getStartingField() -> Field {
-        return startingField
-    }
-    
-    func getPiece() -> any ChessFigure {
-        return piece
-    }
-    
+
     func info() -> String {
-        "Move[\(Field(row: row, file: file).info()), \(piece.info()), \(type), \(promoteTo)]"
+        "Move[\(field.info()), \(piece.info()), \(type), \(promoteTo)]"
     }
 }

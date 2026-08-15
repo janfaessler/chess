@@ -8,7 +8,7 @@ class MoveFactory {
     private static let LongCastleTargetFile = "c"
     
     static func create(_ input:any StringProtocol, position:Position) -> Move? {
-        let color = position.getColorToMove()
+        let color = position.colorToMove
         if isCastlingMove(input) {
             return createCastlingMove(input, color: color, position: position)
         }
@@ -88,20 +88,20 @@ class MoveFactory {
     }
     
     private static func getFigure(_ field: any StringProtocol, withRow:String, type: PieceType, color: PieceColor, position: Position) -> (any ChessFigure)? {
-        let figures = getFigures(targetField: field, type: type, color: color, position: position).filter ({ $0.getRow() == Int(withRow) })
+        let figures = getFigures(targetField: field, type: type, color: color, position: position).filter ({ $0.row == Int(withRow) })
         guard figures.count == 1 else { return nil }
         return figures.first
     }
     
     private static func getFigure(_ field: any StringProtocol, withFile:String, type: PieceType, color: PieceColor, position: Position) -> (any ChessFigure)? {
-        let figures = getFigures(targetField: field, type: type, color: color, position: position).filter ({ $0.getField().getFileName() == withFile })
+        let figures = getFigures(targetField: field, type: type, color: color, position: position).filter ({ $0.field.getFileName() == withFile })
         guard figures.count == 1 else { return nil }
         return figures.first
     }
     
     private static func getFigures(targetField:any StringProtocol, type:PieceType, color:PieceColor, position:Position) -> [(any ChessFigure)] {
         let allFigures = position.getFigures()
-        let figuresOfTypeAndColor = allFigures.filter({ $0.getType() == type && $0.getColor() == color})
+        let figuresOfTypeAndColor = allFigures.filter({ $0.type == type && $0.color == color})
         return figuresOfTypeAndColor.filter {
             guard let move = $0.createMove(targetField) else { return false }
             return $0.isMovePossible(move, position: position)

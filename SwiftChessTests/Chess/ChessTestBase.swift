@@ -33,7 +33,7 @@ class ChessTestBase: XCTestCase {
         type:PieceType,
         color:PieceColor,
         moveType:MoveType = .Normal,
-        message: (String, String, any ChessFigure) -> String = { "\($2.getColor()) \($2.getType()) could not move from \($0) to \($1)" },
+        message: (String, String, any ChessFigure) -> String = { "\($2.color) \($2.type) could not move from \($0) to \($1)" },
         file: StaticString = #filePath,
         line: UInt = #line
     ) throws {
@@ -48,7 +48,7 @@ class ChessTestBase: XCTestCase {
         } catch { moveError = true }
         let startFigureExists = figureExist(startFigure, testee: testee)
         let endFigureExists = figureExist(endFigure, testee: testee)
-        let nextColorToMoveDidNotChange = testee.getColorToMove() == color
+        let nextColorToMoveDidNotChange = testee.colorToMove == color
         
         guard moveError == true || startFigureExists == true || endFigureExists == false || testee.getFigures().count != pieceCount && nextColorToMoveDidNotChange else {
             return
@@ -64,13 +64,13 @@ class ChessTestBase: XCTestCase {
         type:PieceType,
         color:PieceColor,
         moveType:MoveType = .Normal,
-        message: (String, String, any ChessFigure) -> String = { "\($0): \($2.getColor()) \($2.getType()) could not move to \($1)" },
+        message: (String, String, any ChessFigure) -> String = { "\($0): \($2.color) \($2.type) could not move to \($1)" },
         file: StaticString = #filePath,
         line: UInt = #line
     ) throws {
         let testee = try XCTUnwrap(testee)
         let pieceCount = testee.getFigures().count
-        let cache = testee.getPosition()
+        let cache = testee.position
         guard let move = MoveFactory.create(notation, position: cache) else {
             XCTFail("move \(notation) could not be created", file: file, line: line)
             return
@@ -83,7 +83,7 @@ class ChessTestBase: XCTestCase {
             moveLog += [notation]
         } catch { moveError = true }
         let endFigureExists = figureExist(endFigure, testee: testee)
-        let nextColorToMoveDidNotChange = testee.getColorToMove() == color
+        let nextColorToMoveDidNotChange = testee.colorToMove == color
         
         guard moveError == true,
               endFigureExists == false,
@@ -101,7 +101,7 @@ class ChessTestBase: XCTestCase {
         type:PieceType,
         color:PieceColor,
         moveType:MoveType = .Normal,
-        message: (String, String, any ChessFigure) -> String = { "move from \($0) to \($1) of \($2.getColor()) \($2.getType()) should not be possible" },
+        message: (String, String, any ChessFigure) -> String = { "move from \($0) to \($1) of \($2.color) \($2.type) should not be possible" },
         file: StaticString = #filePath,
         line: UInt = #line
     ) throws {
@@ -118,7 +118,7 @@ class ChessTestBase: XCTestCase {
     
     func moveAndAssertError(
          _ move:Move,
-         message: (Move, any ChessFigure) -> String = { "move from \($0.getPiece().getFieldInfo()) to \($0.getField()) of \($1.getColor()) \($1.getType()) should not be possible" },
+         message: (Move, any ChessFigure) -> String = { "move from \($0.piece.fieldInfo) to \($0.field) of \($1.color) \($1.type) should not be possible" },
          file: StaticString = #filePath,
          line: UInt = #line
      ) throws {
@@ -128,7 +128,7 @@ class ChessTestBase: XCTestCase {
              try testee.move(move)
          } catch { return }
          
-         XCTFail(message(move, move.getPiece()), file: file, line: line)
+         XCTFail(message(move, move.piece), file: file, line: line)
          
      }
     
@@ -153,7 +153,7 @@ class ChessTestBase: XCTestCase {
         to:String,
         type:PieceType,
         color:PieceColor,
-        message: (String, String, any ChessFigure) -> String = { "\($2.getColor()) \($2.getType()) on \($0) could not capture on \($1)" },
+        message: (String, String, any ChessFigure) -> String = { "\($2.color) \($2.type) on \($0) could not capture on \($1)" },
         file: StaticString = #filePath,
         line: UInt = #line
     ) throws {
@@ -162,7 +162,7 @@ class ChessTestBase: XCTestCase {
         let startFigure = Figure.create(from, type:type, color: color)!
         let endFigure = Figure.create(to, type:type, color:color)!
         let move = Move(to, piece:startFigure, type: .Normal)!
-        let nextColorToMoveDidNotChange = testee.getColorToMove() == color
+        let nextColorToMoveDidNotChange = testee.colorToMove == color
 
         var moveError:Bool = false
 
@@ -182,7 +182,7 @@ class ChessTestBase: XCTestCase {
         to:String,
         type:PieceType,
         color:PieceColor,
-        message: (String, String, any ChessFigure) -> String = { "\($2.getColor()) \($2.getType()) on \($0) could not capture on \($1)" },
+        message: (String, String, any ChessFigure) -> String = { "\($2.color) \($2.type) on \($0) could not capture on \($1)" },
         file: StaticString = #filePath,
         line: UInt = #line
     ) throws {
@@ -202,7 +202,7 @@ class ChessTestBase: XCTestCase {
         to:String,
         type:PieceType,
         color:PieceColor,
-        message: (String, String, any ChessFigure) -> String = { "\($2.getColor()) \($2.getType()) on \($0) could not capture on \($1)" },
+        message: (String, String, any ChessFigure) -> String = { "\($2.color) \($2.type) on \($0) could not capture on \($1)" },
         file: StaticString = #filePath,
         line: UInt = #line
     ) throws {
@@ -211,7 +211,7 @@ class ChessTestBase: XCTestCase {
         let startFigure = Figure.create(from, type:type, color: color)!
         let endFigure = Figure.create(to, type:.queen, color:color)!
         let move = Move(to, piece:startFigure, type: .Promotion)!
-        let nextColorToMoveDidNotChange = testee.getColorToMove() == color
+        let nextColorToMoveDidNotChange = testee.colorToMove == color
         var moveError:Bool = false
 
         do {

@@ -83,7 +83,7 @@ class MoveListModel {
         movePlayed(move, color: color)
     }
     
-    func getPosition() -> Position? {
+    var position: Position? {
         guard currentMove != nil else { return PositionFactory.startingPosition() }
         let notations = getMoveNotations()
         return PositionFactory.loadPosition(notations)
@@ -112,7 +112,7 @@ class MoveListModel {
     }
     
     private func updatePosition() {
-        guard let position = self.getPosition() else {
+        guard let position = self.position else {
             self.logger.warning("updatePosition: no position available")
             return
         }

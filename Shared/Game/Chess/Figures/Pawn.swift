@@ -12,9 +12,9 @@ class Pawn : Figure {
     }
     
     override func getPossibleMoves() -> [Move] {
-        let row = getRow()
-        let file = getFile()
-        switch getColor() {
+        let row = row
+        let file = file
+        switch color {
         case.black:
             let moveType = row == Pawn.RowWherePromotionIsPossibleForBlack ? MoveType.Promotion : MoveType.Normal
             var moves = [
@@ -47,7 +47,7 @@ class Pawn : Figure {
     }
     
     override func createMove(_ move:any StringProtocol) -> Move? {
-        return Move(move, piece: Pawn(color: self.getColor(), row: self.getRow(), file: self.getFile()), type: getMoveType(move))
+        return Move(move, piece: Pawn(color: self.color, row: self.row, file: self.file), type: getMoveType(move))
     }
     
     override func ident() -> String {
@@ -66,19 +66,19 @@ class Pawn : Figure {
         guard moveDoesNotChangeFile(move) else { return false }
         guard position.isEmpty(atRow: move.row, atFile: move.file) else { return false }
         
-        if move.piece.getColor() == PieceColor.white {
-            return position.isEmpty(atRow: move.piece.getRow()+1, atFile: move.file)
+        if move.piece.color == PieceColor.white {
+            return position.isEmpty(atRow: move.piece.row+1, atFile: move.file)
         } else {
-            return position.isEmpty(atRow: move.piece.getRow()-1, atFile: move.file)
+            return position.isEmpty(atRow: move.piece.row-1, atFile: move.file)
         }
     }
     
     private func canCapture(_ move:Move, position:Position) -> Bool {
         guard move.type == .Normal || move.type == .Promotion else { return false }
         
-        let row = move.piece.getRow() + (move.piece.getColor() == PieceColor.white ? +1 : -1)
-        let leftFile = move.piece.getFile() - 1
-        let rightFile = move.piece.getFile() + 1
+        let row = move.piece.row + (move.piece.color == PieceColor.white ? +1 : -1)
+        let leftFile = move.piece.file - 1
+        let rightFile = move.piece.file + 1
         
         let figureToCaptureOnLeft = position.isNotEmpty(atRow: row, atFile: leftFile)
         let figureToCaptureOnRight = position.isNotEmpty(atRow: row, atFile: rightFile)
@@ -92,11 +92,11 @@ class Pawn : Figure {
 
     
     private func moveDoesNotChangeFile(_ move:Move) -> Bool {
-        return move.file == move.piece.getFile()
+        return move.file == move.piece.file
     }
     
     private func getMoveType(_ move: any StringProtocol) -> MoveType {
         guard let lastChar = move.last, let targetRow = Int(String(lastChar)) else { return .Normal }
-        return abs(targetRow - getRow()) == 2 ? .Double : .Normal
+        return abs(targetRow - row) == 2 ? .Double : .Normal
     }
 }

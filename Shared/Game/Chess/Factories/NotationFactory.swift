@@ -18,7 +18,7 @@ class NotationFactory {
         let piece = getPieceIdentifier(move, position: position)
         let duplicateIdentifier = getDuplicateIdentifier(move, position: position)
         let captureIdentifier = getCaptureIdentifier(move, position: position)
-        let field = move.getFieldInfo()
+        let field = move.fieldInfo
         let promotionIdentifier = getPromotionIdentifier(move)
         return "\(piece)\(duplicateIdentifier)\(captureIdentifier)\(field)\(promotionIdentifier)\(checkIdentifier)"
     }
@@ -33,9 +33,9 @@ class NotationFactory {
     }
     
     private static func getPieceIdentifier(_ move:Move, position:Position) -> String {
-        if move.piece.getType() == .pawn {
+        if move.piece.type == .pawn {
             if isCapture(move, position: position) {
-                return move.piece.getField().getFileName()
+                return move.piece.field.getFileName()
             } else {
                 return ""
             }
@@ -73,33 +73,33 @@ class NotationFactory {
     private static func getDuplicateIdentifier(_ move: Move, position: Position) -> String {
         var duplicateIdentifier = ""
         let figureThatCanDoTheSameMove = getPieceForPossibleMoveDuplicate(move, position: position)
-        let pieceIsOnSameFile = move.getPiece().getFile() == figureThatCanDoTheSameMove?.getFile()
+        let pieceIsOnSameFile = move.piece.file == figureThatCanDoTheSameMove?.file
         if pieceIsOnSameFile {
-            if move.piece.getType() == .pawn {
-                duplicateIdentifier = move.piece.getField().getFileName()
+            if move.piece.type == .pawn {
+                duplicateIdentifier = move.piece.field.getFileName()
             } else {
-                duplicateIdentifier = String(move.getPiece().getRow())
+                duplicateIdentifier = String(move.piece.row)
             }
         }
-        let pieceIsOnSameRow = move.getPiece().getRow() == figureThatCanDoTheSameMove?.getRow()
+        let pieceIsOnSameRow = move.piece.row == figureThatCanDoTheSameMove?.row
         if pieceIsOnSameRow {
-            duplicateIdentifier = move.getPiece().getField().getFileName()
+            duplicateIdentifier = move.piece.field.getFileName()
         }
         return duplicateIdentifier
     }
     
     private static func getPieceForPossibleMoveDuplicate(_ move:Move, position:Position) -> (any ChessFigure)? {
         position.getFigures().first {
-            $0.getColor() == move.piece.getColor()
-            && $0.getType() == move.getPiece().getType()
-            && $0.getField() != move.piece.getField()
-            && $0.createMove(move.getFieldInfo()) != nil
-            && position.isLegalMove($0.createMove(move.getFieldInfo())!)
+            $0.color == move.piece.color
+            && $0.type == move.piece.type
+            && $0.field != move.piece.field
+            && $0.createMove(move.fieldInfo) != nil
+            && position.isLegalMove($0.createMove(move.fieldInfo)!)
         }
     }
     
     private static func isCapture(_ move:Move, position:Position) -> Bool {
-        let pieceAtPosition = position.get(atRow: move.getRow(), atFile: move.getFile())
+        let pieceAtPosition = position.get(atRow: move.row, atFile: move.file)
         return pieceAtPosition != nil || position.isEnPassant(move)
     }
     

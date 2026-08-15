@@ -28,7 +28,7 @@ final class FenTests: XCTestCase {
         for fen in fens {
             let pos = PositionFactory.loadPosition(fen)
             let board = ChessBoard(pos)
-            let exportedPosition = board.getPosition()
+            let exportedPosition = board.position
             let exportedFen = FenBuilder.create(exportedPosition)
             
             XCTAssertEqual(fen, exportedFen)

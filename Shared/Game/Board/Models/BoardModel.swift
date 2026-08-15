@@ -26,7 +26,7 @@ class BoardModel {
     
     
     var promotionColor: PieceColor {
-        moveToPromote!.piece.getColor()
+        moveToPromote!.piece.color
     }
     
     var shouldShowPromotionView: Bool {
@@ -34,13 +34,13 @@ class BoardModel {
     }
     
     func move(figure: FigureModel, deltaRow: Int, deltaFile: Int) {
-        guard figure.getColor() == board.getColorToMove() else {
-            logger.error("MOVE REJECTED: color mismatch — figure=\(String(describing: figure.getColor())) board=\(String(describing: self.board.getColorToMove()))")
+        guard figure.color == board.colorToMove else {
+            logger.error("MOVE REJECTED: color mismatch — figure=\(String(describing: figure.color)) board=\(String(describing: self.board.colorToMove))")
             return
         }
 
         guard let move = figure.getMove(deltaRow: deltaRow, deltaFile: deltaFile) else {
-            logger.error("MOVE REJECTED: no legal move found for \(String(describing: figure.getType())) at row=\(figure.row) file=\(figure.file) delta=(\(deltaRow),\(deltaFile))")
+            logger.error("MOVE REJECTED: no legal move found for \(String(describing: figure.type)) at row=\(figure.row) file=\(figure.file) delta=(\(deltaRow),\(deltaFile))")
             return
         }
         
@@ -77,10 +77,10 @@ class BoardModel {
         focus = nil
     }
     
-    func getPosition() -> Position {
-        self.board.getPosition()
+    var position: Position {
+        self.board.position
     }
-    
+
     func addMoveListener(_ listener: @escaping MoveNotification) {
         self.moveNotifications.append(listener)
     }
@@ -105,7 +105,7 @@ class BoardModel {
     }
     
     private func doMove(_ move: Move) throws {
-        let positionBeforeMove = FenBuilder.create(self.board.getPosition())
+        let positionBeforeMove = FenBuilder.create(self.board.position)
         try self.board.move(move)
         self.figures = self.getFigures()
         self.result = ResultModel(self.board.getGameState())

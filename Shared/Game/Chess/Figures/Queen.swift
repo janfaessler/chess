@@ -12,7 +12,7 @@ class Queen : Figure {
         var moves:[Move] = []
         for r in 1...8 {
             for f in 1...8 {
-                if !(getRow() == r && getFile() == f) && (r == getRow() || f == getFile() || getRow()-r == getFile()-f || getRow()+getFile() == r+f) {
+                if !(row == r && file == f) && (r == row || f == file || row-r == file-f || row+file == r+f) {
                     moves.append(createMove(r, f))
                 }
             }

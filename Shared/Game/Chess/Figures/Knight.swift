@@ -8,8 +8,8 @@ class Knight : Figure {
     }
     
     override func getPossibleMoves() -> [Move] {
-        let row = getRow()
-        let file = getFile()
+        let row = row
+        let file = file
         let moves = [
             createMove(row+1, file+2),
             createMove(row+1, file-2),

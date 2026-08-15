@@ -6,7 +6,7 @@ struct BoardFigureView: View {
     @Bindable var figure:FigureModel
     
     var body: some View {
-        FigureView(size: fieldSize, type: figure.getType(), color: figure.getColor())
+        FigureView(size: fieldSize, type: figure.type, color: figure.color)
             .zIndex(figure.zIndex)
             .offset(x: figure.getOffsetX(fieldSize: fieldSize), y: figure.getOffsetY(fieldSize: fieldSize))
             .gesture(

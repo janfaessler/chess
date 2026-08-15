@@ -1,16 +1,16 @@
 import Foundation
 
 protocol ChessFigure : Hashable, Equatable {
+    var row: Int { get }
+    var file: Int { get }
+    var color: PieceColor { get }
+    var type: PieceType { get }
+    var field: Field { get }
+    var fieldInfo: String { get }
     func canDo(move:Move) -> Bool
     func getPossibleMoves() -> [Move]
     func isMovePossible(_ move: Move, position:Position) -> Bool
-    func getRow() -> Int
-    func getFile() -> Int
-    func getColor() -> PieceColor
-    func getType() -> PieceType
     func equals(_ other:any ChessFigure) -> Bool
-    func getField() -> Field
-    func getFieldInfo() -> String
     func hasMoved() -> Bool
     func info() -> String
     func ident() -> String

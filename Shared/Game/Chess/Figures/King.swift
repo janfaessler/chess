@@ -11,8 +11,8 @@ class King : Figure {
     }
     
     override func getPossibleMoves() -> [Move] {
-        let row = getRow()
-        let file = getFile()
+        let row = row
+        let file = file
         var moves = [
             createMove(row+1, file+1),
             createMove(row, file+1),
@@ -42,7 +42,7 @@ class King : Figure {
     
     override func createMove(_ filename: any StringProtocol) -> Move? {
         let possibleMoves = getPossibleMoves()
-        return possibleMoves.first(where: {$0.getFieldInfo() == filename})
+        return possibleMoves.first(where: {$0.fieldInfo == filename})
     }
     
     override func ident() -> String {

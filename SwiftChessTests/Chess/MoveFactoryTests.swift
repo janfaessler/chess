@@ -189,14 +189,14 @@ final class MoveFactoryTests: XCTestCase {
         type:PieceType,
         color:PieceColor,
         moveType:MoveType = .Normal,
-        message: (Move?) -> String = { $0 == nil ? "Move not found ": "Move[\($0!.getFieldInfo()), \($0!.getPiece().getType()),\($0!.getPiece().getColor()), \($0!.getType())]  is the wrong move" },
+        message: (Move?) -> String = { $0 == nil ? "Move not found ": "Move[\($0!.fieldInfo), \($0!.piece.type),\($0!.piece.color), \($0!.type)]  is the wrong move" },
         file: StaticString = #filePath,
         line: UInt = #line
     ) throws {
         let cache = try XCTUnwrap(boardCache)
         let move:Move? = MoveFactory.create(moveName, position:cache);
         
-        guard move == nil || move?.getPiece().getType() != type || move?.getPiece().getColor() != color || move?.getFieldInfo() != field || move?.getType() != moveType else {
+        guard move == nil || move?.piece.type != type || move?.piece.color != color || move?.fieldInfo != field || move?.type != moveType else {
             try updateBoardCache(move!, isCapture: moveName.contains("x"))
             return
         }

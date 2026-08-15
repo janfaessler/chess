@@ -21,21 +21,21 @@ struct DrawConditionEvaluator {
     }
 
     private static func onlyKingsLeft(_ figures: [any ChessFigure]) -> Bool {
-        return figures.count == 2 && figures.allSatisfy({ $0.getType() == .king })
+        return figures.count == 2 && figures.allSatisfy({ $0.type == .king })
     }
 
     private static func onlyOneMinorPieceLeft(_ figures: [any ChessFigure], type: PieceType) -> Bool {
-        return figures.count == 3 && figures.filter({ $0.getType() == type }).count == 1
+        return figures.count == 3 && figures.filter({ $0.type == type }).count == 1
     }
 
     private static func onlySameColorBishopsLeft(_ figures: [any ChessFigure]) -> Bool {
         guard figures.count == 4 else { return false }
-        let bishops = figures.filter({ $0.getType() == .bishop })
+        let bishops = figures.filter({ $0.type == .bishop })
         guard
             bishops.count == 2,
-            Set(bishops.map({ $0.getColor() })).count == 2
+            Set(bishops.map({ $0.color })).count == 2
         else { return false }
-        let squareColors = bishops.map({ ($0.getRow() + $0.getFile()) % 2 })
+        let squareColors = bishops.map({ ($0.row + $0.file) % 2 })
         return Set(squareColors).count == 1
     }
 }

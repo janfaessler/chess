@@ -43,8 +43,8 @@ class ControlModel {
 
     private func movePlayed(_ notation: String) {
         self.logger.info("movePlayed: \(notation)")
-        let position = self.board.getPosition()
-        let color: PieceColor = position.getColorToMove() == .white ? .black : .white
+        let position = self.board.position
+        let color: PieceColor = position.colorToMove == .white ? .black : .white
         self.moveList.movePlayed(notation, color: color)
         self.engine.newPosition(position)
     }

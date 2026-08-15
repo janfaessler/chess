@@ -5,7 +5,7 @@ class ChessBoard {
 
     private let logger = Log.logger("ChessBoard")
 
-    private var position: Position
+    private(set) var position: Position
     private var moves: [Move] = []
     private var moveLog: [String] = []
     private var positionCount: [Int: Int] = [:]
@@ -35,20 +35,20 @@ class ChessBoard {
         if DrawConditionEvaluator.isInsufficientMaterial(figures: position.getFigures()) {
             return .DrawByInsufficientMaterial
         }
-        if position.getMoveClock() == 0 {
+        if position.moveClock == 0 {
             return .NotStarted
         }
         if DrawConditionEvaluator.isThreefoldRepetition(positionCount: positionCount, currentHash: position.getHash()) {
             return .DrawByRepetition
         }
-        if DrawConditionEvaluator.has50MoveRuleTriggered(halfmoveClock: position.getHalfmoveClock()) {
+        if DrawConditionEvaluator.has50MoveRuleTriggered(halfmoveClock: position.halfmoveClock) {
             return .DrawBy50MoveRule
         }
         if position.playerHasLegalMove() {
             return .Running
         }
         if position.isKingInCheck() {
-            return position.getColorToMove() == .white ? .BlackWins : .WhiteWins
+            return position.colorToMove == .white ? .BlackWins : .WhiteWins
         }
         return .DrawByStalemate
     }
@@ -57,8 +57,8 @@ class ChessBoard {
         return forPiece.getPossibleMoves().filter({ position.isLegalMove($0) })
     }
 
-    func getColorToMove() -> PieceColor {
-        return position.getColorToMove()
+    var colorToMove: PieceColor {
+        position.colorToMove
     }
 
     func getFigures() -> [any ChessFigure] {
@@ -73,13 +73,9 @@ class ChessBoard {
         return moveLog
     }
 
-    func getPosition() -> Position {
-        return position
-    }
-
     private func doMove(_ move: Move) throws {
-        guard position.get(atRow: move.getPiece().getRow(), atFile: move.getPiece().getFile()) != nil else {
-            throw ValidationError.FigureDoesNotExist(move.getPiece())
+        guard position.get(atRow: move.piece.row, atFile: move.piece.file) != nil else {
+            throw ValidationError.FigureDoesNotExist(move.piece)
         }
         position = position.applying(move)
         moves += [move]

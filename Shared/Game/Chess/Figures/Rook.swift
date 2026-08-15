@@ -16,7 +16,7 @@ class Rook : Figure {
         var moves:[Move] = []
         for r in 1...8 {
             for f in 1...8 {
-                if !(getRow() == r && getFile() == f) && (r == getRow() || f==getFile()) {
+                if !(row == r && file == f) && (r == row || f==file) {
                     moves.append(createMove(r, f))
                 }
             }
