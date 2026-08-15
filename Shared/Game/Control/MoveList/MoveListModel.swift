@@ -5,19 +5,20 @@ import os
 class MoveListModel {
     
     private let logger = Log.logger("MoveListModel")
-        
-    typealias PositionChangeNotification = (Position) -> ()
-    private var positionChangeNotification: [PositionChangeNotification]
-    
+
+    /// Emits the board position whenever navigation changes the current move.
+    let positionChanged: AsyncStream<Position>
+    private let positionContinuation: AsyncStream<Position>.Continuation
+
     private var structure: MoveStructure
     private var history: MoveHistory
-    
+
     var currentMove: MoveModel?
 
     init() {
         structure = MoveStructure()
         history = MoveHistory()
-        positionChangeNotification = []
+        (positionChanged, positionContinuation) = AsyncStream.makeStream(of: Position.self)
     }
     
     var moveCount: Int {
@@ -107,17 +108,11 @@ class MoveListModel {
         structure.move(move, isChildOf: parent)
     }
 
-    func addPositionChangeListener(_ listener: @escaping PositionChangeNotification) {
-        self.positionChangeNotification.append(listener)
-    }
-    
     private func updatePosition() {
         guard let position = self.position else {
             self.logger.warning("updatePosition: no position available")
             return
         }
-        for event in self.positionChangeNotification {
-            event(position)
-        }
+        positionContinuation.yield(position)
     }
 }

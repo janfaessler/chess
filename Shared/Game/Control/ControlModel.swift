@@ -23,12 +23,18 @@ class ControlModel {
 
     var engine = ChessEngine()
 
+    private var observationTasks: [Task<Void, Never>] = []
+
     init(_ game: PgnGame) {
         self.game = game
         engine.addEvalListener(updateEval)
-        board.addMoveListener(movePlayed)
-        moveList.addPositionChangeListener(positionChange)
         openGame()
+        observeBoardMoves()
+        observePositionChanges()
+    }
+
+    deinit {
+        observationTasks.forEach { $0.cancel() }
     }
 
     func getBoardSize(_ geo: GeometryProxy) -> CGFloat {
@@ -39,6 +45,24 @@ class ControlModel {
         guard let game = game else { return }
         let structure = StructureFactory.create(game)
         moveList.load(structure)
+    }
+
+    private func observeBoardMoves() {
+        let stream = board.movePlayed
+        observationTasks.append(Task { @MainActor [weak self] in
+            for await notation in stream {
+                self?.movePlayed(notation)
+            }
+        })
+    }
+
+    private func observePositionChanges() {
+        let stream = moveList.positionChanged
+        observationTasks.append(Task { @MainActor [weak self] in
+            for await position in stream {
+                self?.positionChange(position)
+            }
+        })
     }
 
     private func movePlayed(_ notation: String) {

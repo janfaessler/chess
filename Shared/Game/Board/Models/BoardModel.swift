@@ -4,22 +4,24 @@ import os
 @Observable
 class BoardModel {
     
-    typealias MoveNotification = (String) -> ()
-    
     private let logger = Log.logger("BoardModel")
-    private var moveNotifications: [MoveNotification] = []
-    
+
+    /// Emits the notation of each move played on the board.
+    let movePlayed: AsyncStream<String>
+    private let moveContinuation: AsyncStream<String>.Continuation
+
     var figures: [FigureModel] = []
     var focus: FigureModel?
     var result: ResultModel
     var moveToPromote: Move?
-    
+
     private var board: ChessBoard
 
 
     init(board: ChessBoard? = nil) {
         let newBoard = board ?? ChessBoard(PositionFactory.startingPosition())
         self.board = newBoard
+        (movePlayed, moveContinuation) = AsyncStream.makeStream(of: String.self)
         result = ResultModel(newBoard.getGameState())
         figures = getFigures()
     }
@@ -81,10 +83,6 @@ class BoardModel {
         self.board.position
     }
 
-    func addMoveListener(_ listener: @escaping MoveNotification) {
-        self.moveNotifications.append(listener)
-    }
-    
     func updatePosition(_ pos: Position) {
         self.board = ChessBoard(pos)
         let newFigures = self.getFigures()
@@ -119,8 +117,6 @@ class BoardModel {
     
     private func notifyMoveDone(_ move: Move, fen: String) {
         let notation = NotationFactory.generate(move, position: FenParser.parse(fen))
-        for event in self.moveNotifications {
-            event(notation)
-        }
+        moveContinuation.yield(notation)
     }
 }
