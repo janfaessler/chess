@@ -45,7 +45,8 @@ class NotationFactory {
     }
     
     private static func getCheckIdentifier(_ move:Move, position: Position) -> String {
-        return position.isCheckMate(move) ? String(Checkmate) : (position.isCheck(move) ? String(Check) : "")
+        let validator = MoveValidator(position)
+        return validator.isCheckMate(move) ? String(Checkmate) : (validator.isCheck(move) ? String(Check) : "")
     }
     
     private static func getPromotionIdentifier(_ move:Move) -> String {
@@ -94,7 +95,7 @@ class NotationFactory {
             && $0.type == move.piece.type
             && $0.field != move.piece.field
             && $0.createMove(move.fieldInfo) != nil
-            && position.isLegalMove($0.createMove(move.fieldInfo)!)
+            && MoveValidator(position).isLegalMove($0.createMove(move.fieldInfo)!)
         }
     }
     

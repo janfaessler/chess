@@ -22,8 +22,17 @@ class ChessBoard {
         try move(createdMove)
     }
 
+    private var validator: MoveValidator {
+        MoveValidator(position)
+    }
+
+    /// A move has been applied to the board (the position is no longer the untouched start).
+    private var hasStarted: Bool {
+        position.moveClock > 0
+    }
+
     func move(_ move: Move) throws {
-        guard position.isLegalMove(move) else {
+        guard validator.isLegalMove(move) else {
             logger.error("move (\(move.info()) -> \(NotationFactory.generate(move, position: self.position))) is not allowed")
             throw ValidationError.MoveNotLegalMoveOnTheBoard
         }
@@ -35,7 +44,7 @@ class ChessBoard {
         if DrawConditionEvaluator.isInsufficientMaterial(figures: position.getFigures()) {
             return .DrawByInsufficientMaterial
         }
-        if position.moveClock == 0 {
+        if !hasStarted {
             return .NotStarted
         }
         if DrawConditionEvaluator.isThreefoldRepetition(positionCount: positionCount, currentHash: position.getHash()) {
@@ -44,17 +53,17 @@ class ChessBoard {
         if DrawConditionEvaluator.has50MoveRuleTriggered(halfmoveClock: position.halfmoveClock) {
             return .DrawBy50MoveRule
         }
-        if position.playerHasLegalMove() {
+        if validator.playerHasLegalMove() {
             return .Running
         }
-        if position.isKingInCheck() {
+        if validator.isKingInCheck() {
             return position.colorToMove == .white ? .BlackWins : .WhiteWins
         }
         return .DrawByStalemate
     }
 
     func getPossibleMoves(forPiece: any ChessFigure) -> [Move] {
-        return forPiece.getPossibleMoves().filter({ position.isLegalMove($0) })
+        return forPiece.getPossibleMoves().filter({ validator.isLegalMove($0) })
     }
 
     var colorToMove: PieceColor {
