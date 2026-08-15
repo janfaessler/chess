@@ -16,15 +16,15 @@ class PositionFactory {
         var position = startingPosition()
         for notation in moves {
             guard let move = MoveFactory.create(notation, position: position) else { return nil }
-            guard let newPosition = getPosition(move, cache: position, isCapture: notation.contains(NotationFactory.Capture)) else { return nil }
+            guard let newPosition = getPosition(move, position: position, isCapture: notation.contains(NotationFactory.Capture)) else { return nil }
             position = newPosition
         }
         return position
     }
     
-    static func getPosition(_ move: Move, cache: Position, isCapture: Bool) -> Position? {
-        guard cache.getFigures().contains(where: { $0.equals(move.getPiece()) }) else { return nil }
-        return cache.applying(move)
+    static func getPosition(_ move: Move, position: Position, isCapture: Bool) -> Position? {
+        guard position.getFigures().contains(where: { $0.equals(move.getPiece()) }) else { return nil }
+        return position.applying(move)
     }
     
     static func create(

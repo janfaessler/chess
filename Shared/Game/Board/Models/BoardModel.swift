@@ -6,7 +6,7 @@ class BoardModel {
     
     typealias MoveNotification = (String) -> ()
     
-    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "BoardModel")
+    private let logger = Log.logger("BoardModel")
     private var moveNotifications: [MoveNotification] = []
     
     var figures: [FigureModel] = []
@@ -86,7 +86,6 @@ class BoardModel {
     }
     
     func updatePosition(_ pos: Position) {
-        self.logger.info("updatePosition: \(pos.getFigures().count) figures")
         self.board = ChessBoard(pos)
         let newFigures = self.getFigures()
         self.figures = newFigures

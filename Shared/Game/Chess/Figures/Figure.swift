@@ -106,7 +106,7 @@ class Figure:Identifiable, ChessFigure {
     func inBoard(_ m:Move) -> Bool {
         return 1...8 ~= m.row && 1...8 ~= m.file
     }
-    
+
     func createMove(_ row:Int, _ file:Int) -> Move {
         return Move(row, file, piece: Figure.create(type: self.getType(), color: self.getColor(), row: self.getRow(), file: self.getFile()), type: .Normal)
     }
@@ -127,8 +127,8 @@ class Figure:Identifiable, ChessFigure {
         return Move(move, piece: Figure.create(type: self.getType(), color: self.getColor(), row: self.getRow(), file: self.getFile()), type: type, promoteTo: promoteTo)
     }
     
-    func isCaptureablePiece(_ move: Move, pieceToCapture: (any ChessFigure)?) -> Bool {
-        return move.piece.getColor() != pieceToCapture!.getColor() && pieceToCapture!.getRow() == move.row && pieceToCapture!.getFile() == move.file
+    func isCaptureablePiece(_ move: Move, pieceToCapture: any ChessFigure) -> Bool {
+        return move.piece.getColor() != pieceToCapture.getColor() && pieceToCapture.getRow() == move.row && pieceToCapture.getFile() == move.file
     }
     
     static func == (lhs: Figure, rhs: Figure) -> Bool {

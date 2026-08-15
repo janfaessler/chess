@@ -5,7 +5,7 @@ import os
 @Observable
 public class NavigationManagerModel {
 
-    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "NavigationManagerModel")
+    private let logger = Log.logger("NavigationManagerModel")
 
     var collections: [GameCollection] = []
 

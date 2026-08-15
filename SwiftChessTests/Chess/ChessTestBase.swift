@@ -13,13 +13,13 @@ class ChessTestBase: XCTestCase {
     
     func loadMoves(_ pgn:String) -> [Move] {
         var result:[Move] = []
-        var cache = PositionFactory.startingPosition()
+        var position = PositionFactory.startingPosition()
         let game = PgnMovesParser.parse(pgn)
         for pgnmove in game {
-            if let move = MoveFactory.create(pgnmove.move, position: cache) {
+            if let move = MoveFactory.create(pgnmove.move, position: position) {
                 result += [move]
-                if let newPosition = PositionFactory.getPosition(move, cache: cache, isCapture: pgnmove.move.contains(NotationFactory.Capture)) {
-                    cache = newPosition
+                if let newPosition = PositionFactory.getPosition(move, position: position, isCapture: pgnmove.move.contains(NotationFactory.Capture)) {
+                    position = newPosition
                 }
             }
         }

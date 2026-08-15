@@ -3,7 +3,7 @@ import os
 
 class ChessBoard {
 
-    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "ChessBoard")
+    private let logger = Log.logger("ChessBoard")
 
     private var position: Position
     private var moves: [Move] = []

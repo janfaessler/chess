@@ -2,9 +2,9 @@ import Foundation
 import os
 
 class Position {
-    private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Position")
+    private static let logger = Log.logger("Position")
 
-    private var cache:[Int:[Int:any ChessFigure]]
+    private let cache:[Int:[Int:any ChessFigure]]
     private let colorToMove:PieceColor
     private let enPassantTarget:Field?
     private let whiteCanCastleKingside:Bool
@@ -38,17 +38,6 @@ class Position {
     
     func get(atRow:Int, atFile:Int) -> (any ChessFigure)? {
         return cache[atRow]?[atFile]
-    }
-    
-    func clearField(atRow:Int, atFile:Int) {
-        cache[atRow]?[atFile] = nil
-    }
-    
-    func set(_ figure:any ChessFigure) {
-        if cache[figure.getRow()] == nil {
-            cache[figure.getRow()] = [:]
-        }
-        cache[figure.getRow()]![figure.getFile()] = figure
     }
     
     func isEmpty(atRow:Int, atFile:Int) -> Bool {

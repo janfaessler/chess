@@ -4,7 +4,7 @@ import os
 @Observable
 class ControlModel {
 
-    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "ControlModel")
+    private let logger = Log.logger("ControlModel")
     private let minControlWidth: CGFloat = 200
 
     var engineEval: String = ""
@@ -25,7 +25,7 @@ class ControlModel {
 
     init(_ game: PgnGame) {
         self.game = game
-        engine.addEvalListener(updateEvel)
+        engine.addEvalListener(updateEval)
         board.addMoveListener(movePlayed)
         moveList.addPositionChangeListener(positionChange)
         openGame()
@@ -55,8 +55,8 @@ class ControlModel {
         self.engine.newPosition(position)
     }
 
-    private func updateEvel(_ lines: [EngineLine]) {
-        self.logger.info("updateEvel \(lines)")
+    private func updateEval(_ lines: [EngineLine]) {
+        self.logger.info("updateEval \(lines)")
         self.lines = lines
         engineEval = lines.debugDescription
     }

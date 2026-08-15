@@ -172,6 +172,17 @@ final class MoveFactoryTests: XCTestCase {
     }
     
 
+    func testMalformedInputReturnsNilInsteadOfCrashing() throws {
+        let start = try XCTUnwrap(boardCache)
+        // These previously hit internal force-unwraps and trapped; they must now return nil.
+        XCTAssertNil(MoveFactory.create("", position: start))
+        XCTAssertNil(MoveFactory.create("N", position: start))
+        XCTAssertNil(MoveFactory.create("R", position: start))
+        XCTAssertNil(MoveFactory.create("x", position: start))
+        XCTAssertNil(MoveFactory.create("=", position: start))
+        XCTAssertNil(MoveFactory.create("Z9", position: start))
+    }
+
     private func assertMove(
         _ moveName:String,
         field:String,

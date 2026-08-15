@@ -4,7 +4,7 @@ import os
 @Observable
 class MoveListModel {
     
-    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "MoveListModel")
+    private let logger = Log.logger("MoveListModel")
         
     typealias PositionChangeNotification = (Position) -> ()
     private var positionChangeNotification: [PositionChangeNotification]
@@ -112,15 +112,12 @@ class MoveListModel {
     }
     
     private func updatePosition() {
-        self.logger.info("MoveListModel.updatePosition called")
         guard let position = self.getPosition() else {
-            self.logger.warning("MoveListModel.updatePosition - no position available")
+            self.logger.warning("updatePosition: no position available")
             return
         }
-        self.logger.info("MoveListModel.updatePosition - calling \(self.positionChangeNotification.count) listeners")
         for event in self.positionChangeNotification {
             event(position)
         }
-        self.logger.info("MoveListModel.updatePosition - listeners called")
     }
 }

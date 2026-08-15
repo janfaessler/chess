@@ -40,9 +40,9 @@ class Pawn : Figure {
     
     override func isMovePossible( _ move: Move, position:Position) -> Bool {
         guard canDo(move: move) else { return false }
-        let once = canMoveOnce(move, cache: position)
-        let twice = canMoveTwice(move, cache: position)
-        let capture = canCapture(move, cache: position)
+        let once = canMoveOnce(move, position: position)
+        let twice = canMoveTwice(move, position: position)
+        let capture = canCapture(move, position: position)
         return once || twice || capture
     }
     
@@ -54,37 +54,37 @@ class Pawn : Figure {
         return ""
     }
     
-    private func canMoveOnce(_ move: Move, cache:Position) -> Bool {
+    private func canMoveOnce(_ move: Move, position:Position) -> Bool {
         guard move.type == .Normal else { return false }
         guard moveDoesNotChangeFile(move) else { return false }
-        return cache.isEmpty(atRow: move.row, atFile: move.file)
+        return position.isEmpty(atRow: move.row, atFile: move.file)
     }
     
-    private func canMoveTwice(_ move: Move, cache:Position) -> Bool {
+    private func canMoveTwice(_ move: Move, position:Position) -> Bool {
         guard move.type == .Double else { return false }
         guard !move.piece.hasMoved() else { return false }
         guard moveDoesNotChangeFile(move) else { return false }
-        guard cache.isEmpty(atRow: move.row, atFile: move.file) else { return false }
+        guard position.isEmpty(atRow: move.row, atFile: move.file) else { return false }
         
         if move.piece.getColor() == PieceColor.white {
-            return cache.isEmpty(atRow: move.piece.getRow()+1, atFile: move.file)
+            return position.isEmpty(atRow: move.piece.getRow()+1, atFile: move.file)
         } else {
-            return cache.isEmpty(atRow: move.piece.getRow()-1, atFile: move.file)
+            return position.isEmpty(atRow: move.piece.getRow()-1, atFile: move.file)
         }
     }
     
-    private func canCapture(_ move:Move, cache:Position) -> Bool {
+    private func canCapture(_ move:Move, position:Position) -> Bool {
         guard move.type == .Normal || move.type == .Promotion else { return false }
         
         let row = move.piece.getRow() + (move.piece.getColor() == PieceColor.white ? +1 : -1)
         let leftFile = move.piece.getFile() - 1
         let rightFile = move.piece.getFile() + 1
         
-        let figureToCaptureOnLeft = cache.isNotEmpty(atRow: row, atFile: leftFile)
-        let figureToCaptureOnRight = cache.isNotEmpty(atRow: row, atFile: rightFile)
+        let figureToCaptureOnLeft = position.isNotEmpty(atRow: row, atFile: leftFile)
+        let figureToCaptureOnRight = position.isNotEmpty(atRow: row, atFile: rightFile)
         
         
-        let canEnPassant = cache.canEnPassant(move)
+        let canEnPassant = position.canEnPassant(move)
         
         return (figureToCaptureOnLeft && leftFile == move.file) || (figureToCaptureOnRight && rightFile == move.file) || canEnPassant
     }

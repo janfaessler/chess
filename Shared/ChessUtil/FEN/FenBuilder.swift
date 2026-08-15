@@ -16,13 +16,13 @@ class FenBuilder {
         return output
     }
     
-    private static func createFigures(_ cache:Position) -> String {
+    private static func createFigures(_ position:Position) -> String {
         var output = ""
         
         for row in stride(from: 8, to: 0, by: -1) {
             var emptyCount = 0
             for file in 1...8 {
-                if cache.isEmpty(atRow: row, atFile: file) {
+                if position.isEmpty(atRow: row, atFile: file) {
                     emptyCount += 1
                     if file == 8 {
                         output.append("\(emptyCount)")
@@ -31,7 +31,7 @@ class FenBuilder {
                     if emptyCount > 0 {
                         output.append("\(emptyCount)")
                     }
-                    let fig = cache.get(atRow: row, atFile: file)!
+                    let fig = position.get(atRow: row, atFile: file)!
                     
                     output.append(getPieceIdent(fig))
                     emptyCount = 0
