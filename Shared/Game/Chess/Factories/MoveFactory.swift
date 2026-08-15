@@ -22,11 +22,7 @@ class MoveFactory {
         let kingRow = getRowOfKing(color)
         let kingFile = getFileOfKing(input)
         let fig = getFigure(targetField: "\(kingFile)\(kingRow)", type: .king, color: color, cache: cache)
-        if String(input) == NotationFactory.ShortCastle {
-            return fig?.createMove("\(kingFile)\(kingRow)", type: .Castle)
-        } else {
-            return fig?.createMove("\(kingFile)\(kingRow)", type: .Castle)
-        }
+        return fig?.createMove("\(kingFile)\(kingRow)", type: .Castle)
     }
     
     private static func createPieceMove(_ input: any StringProtocol, _ color: PieceColor, _ cache: Position) -> Move? {

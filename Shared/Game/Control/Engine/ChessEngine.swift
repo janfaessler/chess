@@ -1,6 +1,7 @@
 import Foundation
 import ChessKitEngine
 
+@Observable
 final class ChessEngine {
     
     typealias EvalNotification = ([EngineLine]) -> ()
@@ -8,7 +9,7 @@ final class ChessEngine {
     
     private let lineNumbers = 3
     private let engine:Engine
-    private var lines:[EngineLine] = []
+    var lines:[EngineLine] = []
     private var pos:Position = PositionFactory.startingPosition()
     
     private let queue = DispatchQueue.main
@@ -26,12 +27,11 @@ final class ChessEngine {
     public func newPosition(_ pos:Position) {
         guard engine.isRunning else { return }
         engine.send(command: .stop)
-        lines.removeAll()
         debounce {
             self.engine.send(command: .position(.fen(FenBuilder.create(pos))))
             self.engine.send(command: .go(depth: 5))
         }
-        self.pos = pos        
+        self.pos = pos
     }
     
     public func addEvalListener(_ listener:@escaping EvalNotification) {
@@ -47,9 +47,9 @@ final class ChessEngine {
                                   score: getScore(info),
                                   line: getLine(info.pv ??  []))
             
-            lines.removeAll(where: { $0.id == lineNumber })
-            lines += [line]
-            notifyEval(lines.sorted(by: { $0.id < $1.id }))
+            let newLines = lines.filter { $0.id != lineNumber } + [line]
+            lines = newLines.sorted(by: { $0.id < $1.id })
+            notifyEval(lines)
         default:
             break
         }

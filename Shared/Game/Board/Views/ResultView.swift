@@ -13,8 +13,8 @@ struct ResultView: View {
                     Text(model.getResultText())
                         .bold()
                         .font(.largeTitle)
-                    if model.shouldDisplayExplenation() {
-                        Text(model.getExplenation())
+                    if model.shouldDisplayExplanation() {
+                        Text(model.getExplanation())
                     }
                 }
             }.frame(width: 200, height: 75)

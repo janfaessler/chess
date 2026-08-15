@@ -5,13 +5,13 @@ struct ControlView: View {
     
     var body: some View {
         VStack(spacing: 16) {
-            if !model.lines.isEmpty {
+
+            if !model.eval.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
                     Label("Analysis", systemImage: "cpu")
                         .font(.headline)
                         .foregroundStyle(.secondary)
-                    
-                    EngineView(lines: model.lines)
+                    EngineView(model: model)
                 }
                 .padding()
                 .background(.regularMaterial, in: .rect(cornerRadius: 12))

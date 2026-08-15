@@ -34,12 +34,17 @@ class HistoryFactory {
     private static func getReversedHistory(_ rows:[MovePairModel], toMove:MoveModel) -> [MoveModel] {
         var reverseHistory: [MoveModel] = []
         for row in rows.reversed() {
-            if row.hasBlackMoved() && row.white != toMove && row.black != toMove {
-                reverseHistory.append(row.black!)
+            if let move = row.black {
+                if row.hasBlackMoved() && row.white != toMove && move != toMove {
+                    reverseHistory.append(move)
+                }
             }
-            if row.hasWhiteMoved() && row.white != toMove {
-                reverseHistory.append(row.white!)
+            if let move = row.white {
+                if row.hasWhiteMoved() && move != toMove {
+                    reverseHistory.append(move)
+                }
             }
+            
         }
         return reverseHistory
     }

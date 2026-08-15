@@ -50,7 +50,7 @@ class BoardModel {
             do {
                 try doMove(move)
             } catch {
-                logger.error("doMove failed: \(error)")
+                logger.error("MOVE FAILED: \(error)")
             }
         }
     }
@@ -86,12 +86,11 @@ class BoardModel {
     }
     
     func updatePosition(_ pos: Position) {
-        self.logger.info("BoardModel.updatePosition called - updating \(pos.getFigures().count) figures")
+        self.logger.info("updatePosition: \(pos.getFigures().count) figures")
         self.board = ChessBoard(pos)
         let newFigures = self.getFigures()
         self.figures = newFigures
         self.result = ResultModel(self.board.getGameState())
-        self.logger.info("BoardModel.updatePosition complete - now have \(self.figures.count) figures")
     }
     
     func moveFocusFigureTo(_ location: CGPoint, fieldSize: CGFloat) {
@@ -111,7 +110,6 @@ class BoardModel {
         try self.board.move(move)
         self.figures = self.getFigures()
         self.result = ResultModel(self.board.getGameState())
-        self.logger.info("doMove succeeded, colorToMove now=\(String(describing: self.board.getColorToMove()))")
         self.notifyMoveDone(move, fen: positionBeforeMove)
     }
     

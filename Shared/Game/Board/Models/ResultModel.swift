@@ -20,7 +20,7 @@ public class ResultModel {
         }
     }
     
-    func shouldDisplayExplenation() -> Bool {
+    func shouldDisplayExplanation() -> Bool {
         switch result {
         case .NotStarted: return false
         case .Running: return false
@@ -46,7 +46,7 @@ public class ResultModel {
         }
     }
     
-    func getExplenation() -> String {
+    func getExplanation() -> String {
         switch result {
         case .BlackWins: return ""
         case .WhiteWins: return ""

@@ -29,6 +29,7 @@ struct DrawConditionEvaluator {
     }
 
     private static func onlySameColorBishopsLeft(_ figures: [any ChessFigure]) -> Bool {
+        guard figures.count == 4 else { return false }
         let bishops = figures.filter({ $0.getType() == .bishop })
         guard
             bishops.count == 2,

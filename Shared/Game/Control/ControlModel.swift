@@ -3,7 +3,7 @@ import os
 
 @Observable
 class ControlModel {
-    
+
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "ControlModel")
     private let minControlWidth: CGFloat = 200
 
@@ -14,20 +14,23 @@ class ControlModel {
     var comment: String {
         moveList.currentMove?.note ?? (game?.comment ?? "")
     }
+    var eval:[EngineLine] {
+        engine.lines
+    }
 
     var board = BoardModel()
     var moveList = MoveListModel()
-    
-    private var engine: ChessEngine = ChessEngine()
+
+    var engine = ChessEngine()
 
     init(_ game: PgnGame) {
         self.game = game
-        engine.addEvalListener(updateEval)
+        engine.addEvalListener(updateEvel)
         board.addMoveListener(movePlayed)
         moveList.addPositionChangeListener(positionChange)
         openGame()
     }
-    
+
     func getBoardSize(_ geo: GeometryProxy) -> CGFloat {
         min(geo.size.width - minControlWidth, geo.size.height)
     }
@@ -46,14 +49,15 @@ class ControlModel {
         self.engine.newPosition(position)
     }
 
-    private func positionChange(_ pos: Position) {
-        self.logger.info("positionChange called - updating board")
-        self.board.updatePosition(pos)
-        self.engine.newPosition(pos)
+    private func positionChange(_ position: Position) {
+        self.logger.info("positionChange")
+        self.board.updatePosition(position)
+        self.engine.newPosition(position)
     }
-    
-    private func updateEval(_ eval: [EngineLine]) {
-        self.lines.removeAll()
-        self.lines.append(contentsOf: eval)
+
+    private func updateEvel(_ lines: [EngineLine]) {
+        self.logger.info("updateEvel \(lines)")
+        self.lines = lines
+        engineEval = lines.debugDescription
     }
 }
