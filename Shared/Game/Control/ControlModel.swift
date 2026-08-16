@@ -2,12 +2,12 @@ import SwiftUI
 import os
 
 @Observable
+@MainActor
 class ControlModel {
 
     private let logger = Log.logger("ControlModel")
     private let minControlWidth: CGFloat = 200
 
-    var engineEval: String = ""
     var lines: [EngineLine] = []
     var game: PgnGame?
 
@@ -15,25 +15,38 @@ class ControlModel {
         moveList.currentMove?.note ?? (game?.comment ?? "")
     }
     var eval:[EngineLine] {
-        engine.lines
+        lines
     }
 
-    var board = BoardModel()
+    var board: BoardModel
     var moveList = MoveListModel()
 
-    var engine = ChessEngine()
+    var engine: any EngineProtocol
 
     private var observationTasks: [Task<Void, Never>] = []
 
     init(_ game: PgnGame) {
         self.game = game
-        engine.addEvalListener(updateEval)
+
+        if let fen = TestSupport.boardFen {
+            board = BoardModel(game: ChessGame(FenParser.parse(fen)))
+        } else {
+            board = BoardModel()
+        }
+
+        engine = TestSupport.isUITesting ? StubEngine() : ChessEngine()
+
         openGame()
         observeBoardMoves()
         observePositionChanges()
+        observeEngineEval()
+
+        if TestSupport.isUITesting {
+            engine.newPosition(board.position)
+        }
     }
 
-    deinit {
+    isolated deinit {
         observationTasks.forEach { $0.cancel() }
     }
 
@@ -56,6 +69,14 @@ class ControlModel {
         })
     }
 
+    private func movePlayed(_ notation: String) {
+        self.logger.info("movePlayed: \(notation)")
+        let position = self.board.position
+        let color: PieceColor = position.colorToMove == .white ? .black : .white
+        self.moveList.movePlayed(notation, color: color)
+        self.engine.newPosition(position)
+    }
+    
     private func observePositionChanges() {
         let stream = moveList.positionChanged
         observationTasks.append(Task { @MainActor [weak self] in
@@ -65,23 +86,23 @@ class ControlModel {
         })
     }
 
-    private func movePlayed(_ notation: String) {
-        self.logger.info("movePlayed: \(notation)")
-        let position = self.board.position
-        let color: PieceColor = position.colorToMove == .white ? .black : .white
-        self.moveList.movePlayed(notation, color: color)
-        self.engine.newPosition(position)
-    }
-
     private func positionChange(_ position: Position) {
         self.logger.info("positionChange")
         self.board.updatePosition(position)
         self.engine.newPosition(position)
     }
+    
+    private func observeEngineEval() {
+        let stream = engine.evalStream
+        observationTasks.append(Task { @MainActor [weak self] in
+            for await lines in stream {
+                self?.updateEval(lines)
+            }
+        })
+    }
 
     private func updateEval(_ lines: [EngineLine]) {
         self.logger.info("updateEval \(lines)")
         self.lines = lines
-        engineEval = lines.debugDescription
     }
 }

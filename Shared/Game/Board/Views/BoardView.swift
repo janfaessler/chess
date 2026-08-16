@@ -16,6 +16,7 @@ struct BoardView: View {
                 
                 ForEach(model.getLegalMoves()) { move in
                     MoveIndicatorView(move: move, fieldSize: fieldSize)
+                        .onTapGesture { model.playFocusFigureMove(move) }
                 }
                 
                 PromotionChooseView(board: model, fieldSize: fieldSize)

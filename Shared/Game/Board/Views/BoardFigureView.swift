@@ -17,6 +17,9 @@ struct BoardFigureView: View {
             .onTapGesture {
                 figure.setFocus()
             }
+            .accessibilityElement()
+            .accessibilityIdentifier("figure-\(figure.square)")
+            .accessibilityAddTraits(.isButton)
     }
     
 

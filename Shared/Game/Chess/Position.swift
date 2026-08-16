@@ -7,12 +7,14 @@ class Position {
     private let cache:[Int:[Int:any ChessFigure]]
     let colorToMove:PieceColor
     let enPassantTarget:Field?
-    private let whiteCanCastleKingside:Bool
-    private let whiteCanCastleQueenside:Bool
-    private let blackCanCastleKingside:Bool
-    private let blackCanCastleQueenside:Bool
+    let canWhiteCastleKingside:Bool
+    let canWhiteCastleQueenside:Bool
+    let canBlackCastleKingside:Bool
+    let canBlackCastleQueenside:Bool
     let halfmoveClock:Int
     let moveClock:Int
+    
+    var figures:[any ChessFigure] { cache.flatMap({ $1.values }) }
     
     init(
         _ figures: [any ChessFigure],
@@ -28,10 +30,10 @@ class Position {
         self.cache = Position.createCacheDict(figures) ?? [:]
         self.colorToMove = colorToMove
         self.enPassantTarget = enPassantTarget
-        self.whiteCanCastleKingside = whiteCanCastleKingside
-        self.whiteCanCastleQueenside = whiteCanCastleQueenside
-        self.blackCanCastleKingside = blackCanCastleKingside
-        self.blackCanCastleQueenside = blackCanCastleQueenside
+        self.canWhiteCastleKingside = whiteCanCastleKingside
+        self.canWhiteCastleQueenside = whiteCanCastleQueenside
+        self.canBlackCastleKingside = blackCanCastleKingside
+        self.canBlackCastleQueenside = blackCanCastleQueenside
         self.moveClock = moveClock
         self.halfmoveClock = halfmoveClock
     }
@@ -46,15 +48,6 @@ class Position {
     
     func isNotEmpty(atRow:Int, atFile:Int) -> Bool {
         return isEmpty(atRow: atRow, atFile: atFile) == false
-    }
-    
-    var canWhiteCastleKingside: Bool { whiteCanCastleKingside }
-    var canWhiteCastleQueenside: Bool { whiteCanCastleQueenside }
-    var canBlackCastleKingside: Bool { blackCanCastleKingside }
-    var canBlackCastleQueenside: Bool { blackCanCastleQueenside }
-
-    func getFigures() -> [any ChessFigure] {
-        return cache.flatMap({ $1.values })
     }
     
     func getNextPiece(_ move: Move) -> (any ChessFigure)? {
@@ -82,7 +75,7 @@ class Position {
     
     func getHash() -> Int {
         var hasher = Hasher()
-        for fig in getFigures().sorted(by: { $0.row > $1.row }).sorted(by: { $0.file > $1.file }) {
+        for fig in figures.sorted(by: { $0.row > $1.row }).sorted(by: { $0.file > $1.file }) {
             hasher.combine(fig)
         }
         hasher.combine(enPassantTarget)
@@ -90,7 +83,7 @@ class Position {
     }
     
     func applying(_ move: Move) -> Position {
-        var figures = getFigures()
+        var figures = figures
         let capturedPiece = applyCapture(&figures, move: move)
         applyMovement(&figures, move: move, capturedPiece: capturedPiece)
         if CastlingRules.isCastlingMove(move) { applyCastlingRook(&figures, move: move) }
@@ -99,7 +92,6 @@ class Position {
     }
     
     private func applyCapture(_ figures: inout [any ChessFigure], move: Move) -> (any ChessFigure)? {
-    
         let capturedPiece = get(atRow: move.row, atFile: move.file)
         figures.removeAll(where: { $0.equals(move.piece) || capturedPiece?.equals($0) == true })
         return capturedPiece
@@ -163,15 +155,15 @@ class Position {
     
     private static func createCacheDict(_ figures: [any ChessFigure]) -> [Int : [Int : any ChessFigure]]? {
         var dict:[Int:[Int:any ChessFigure]] = [:]
-        for f in figures {
-            if dict[f.row] == nil {
-                dict[f.row] = [:]
+        for figure in figures {
+            if dict[figure.row] == nil {
+                dict[figure.row] = [:]
             }
-            guard dict[f.row]?[f.file] == nil else {
-                Position.logger.error("could not set \(f.info()) because field is occupied by \(dict[f.row]?[f.file]?.info() ?? "")")
+            guard dict[figure.row]?[figure.file] == nil else {
+                Position.logger.error("could not set \(figure.info()) because field is occupied by \(dict[figure.row]?[figure.file]?.info() ?? "")")
                 return nil
             }
-            dict[f.row]![f.file] = f
+            dict[figure.row]![figure.file] = figure
         }
         return dict
     }

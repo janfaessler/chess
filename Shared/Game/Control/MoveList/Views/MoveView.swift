@@ -34,5 +34,7 @@ struct MoveView: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("movelist-\(move.move)")
+        .accessibilityAddTraits(model.isCurrentMove(move) ? .isSelected : [])
     }
 }

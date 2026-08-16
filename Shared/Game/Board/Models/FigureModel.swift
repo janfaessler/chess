@@ -57,6 +57,10 @@ class FigureModel: Identifiable {
         figure.type
     }
 
+    var square: String {
+        Field(row: row, file: file).info
+    }
+
     func getFigure() -> any ChessFigure {
         figure
     }

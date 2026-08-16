@@ -74,7 +74,7 @@ class FenBuilder {
     }
     
     private static func createEnPassantTarget(_ field:Field?) -> String {
-        return field?.info() ?? "-"
+        return field?.info ?? "-"
     }
     
     private static func getPieceIdent(_ fig:any ChessFigure) -> String {

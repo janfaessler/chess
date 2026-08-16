@@ -11,6 +11,7 @@ struct ControlView: View {
                     Label("Analysis", systemImage: "cpu")
                         .font(.headline)
                         .foregroundStyle(.secondary)
+                        .accessibilityIdentifier("analysis-panel")
                     EngineView(model: model)
                 }
                 .padding()

@@ -23,7 +23,7 @@ class PositionFactory {
     }
     
     static func getPosition(_ move: Move, position: Position, isCapture: Bool) -> Position? {
-        guard position.getFigures().contains(where: { $0.equals(move.piece) }) else { return nil }
+        guard position.figures.contains(where: { $0.equals(move.piece) }) else { return nil }
         return position.applying(move)
     }
     

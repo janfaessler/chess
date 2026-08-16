@@ -6,7 +6,6 @@ class BoardModel {
     
     private let logger = Log.logger("BoardModel")
 
-    /// Emits the notation of each move played on the board.
     let movePlayed: AsyncStream<String>
     private let moveContinuation: AsyncStream<String>.Continuation
 
@@ -15,14 +14,14 @@ class BoardModel {
     var result: ResultModel
     var moveToPromote: Move?
 
-    private var board: ChessBoard
+    private var game: ChessGame
 
 
-    init(board: ChessBoard? = nil) {
-        let newBoard = board ?? ChessBoard(PositionFactory.startingPosition())
-        self.board = newBoard
+    init(game: ChessGame? = nil) {
+        let newGame = game ?? ChessGame(PositionFactory.startingPosition())
+        self.game = newGame
         (movePlayed, moveContinuation) = AsyncStream.makeStream(of: String.self)
-        result = ResultModel(newBoard.getGameState())
+        result = ResultModel(newGame.getGameState())
         figures = getFigures()
     }
     
@@ -36,8 +35,8 @@ class BoardModel {
     }
     
     func move(figure: FigureModel, deltaRow: Int, deltaFile: Int) {
-        guard figure.color == board.colorToMove else {
-            logger.error("MOVE REJECTED: color mismatch — figure=\(String(describing: figure.color)) board=\(String(describing: self.board.colorToMove))")
+        guard figure.color == game.colorToMove else {
+            logger.error("MOVE REJECTED: color mismatch — figure=\(String(describing: figure.color)) board=\(String(describing: self.game.colorToMove))")
             return
         }
 
@@ -66,7 +65,7 @@ class BoardModel {
     
     func getLegalMoves() -> [Move] {
         if let focus = focus {
-            return board.getPossibleMoves(forPiece: focus.getFigure())
+            return game.getPossibleMoves(forPiece: focus.getFigure())
         }
         return []
     }
@@ -80,14 +79,14 @@ class BoardModel {
     }
     
     var position: Position {
-        self.board.position
+        self.game.position
     }
 
     func updatePosition(_ pos: Position) {
-        self.board = ChessBoard(pos)
+        self.game = ChessGame(pos)
         let newFigures = self.getFigures()
         self.figures = newFigures
-        self.result = ResultModel(self.board.getGameState())
+        self.result = ResultModel(self.game.getGameState())
     }
     
     func moveFocusFigureTo(_ location: CGPoint, fieldSize: CGFloat) {
@@ -97,21 +96,27 @@ class BoardModel {
         let file = Int(1 + location.x / fieldSize)
         let deltarow = row - figure.row
         let deltafile = file - figure.file
-        
+
         self.move(figure: figure, deltaRow: deltarow, deltaFile: deltafile)
+        self.clearFocus()
+    }
+
+    func playFocusFigureMove(_ move: Move) {
+        guard let figure = self.focus else { return }
+        self.move(figure: figure, deltaRow: move.row - figure.row, deltaFile: move.file - figure.file)
         self.clearFocus()
     }
     
     private func doMove(_ move: Move) throws {
-        let positionBeforeMove = FenBuilder.create(self.board.position)
-        try self.board.move(move)
+        let positionBeforeMove = FenBuilder.create(self.game.position)
+        try self.game.move(move)
         self.figures = self.getFigures()
-        self.result = ResultModel(self.board.getGameState())
+        self.result = ResultModel(self.game.getGameState())
         self.notifyMoveDone(move, fen: positionBeforeMove)
     }
     
     private func getFigures() -> [FigureModel] {
-        let figures = self.board.getFigures()
+        let figures = self.game.figures
         return figures.map { FigureModel($0, board: self) }
     }
     

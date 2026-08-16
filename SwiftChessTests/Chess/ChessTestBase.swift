@@ -3,11 +3,11 @@ import XCTest
 
 class ChessTestBase: XCTestCase {
     
-    var testee:ChessBoard?
+    var testee:ChessGame?
     var moveLog:[String] = []
 
     override func setUpWithError() throws {
-        testee = ChessBoard(PositionFactory.startingPosition())
+        testee = ChessGame(PositionFactory.startingPosition())
         moveLog = []
     }
     
@@ -38,7 +38,7 @@ class ChessTestBase: XCTestCase {
         line: UInt = #line
     ) throws {
         let testee = try XCTUnwrap(testee)
-        let pieceCount = testee.getFigures().count
+        let pieceCount = testee.figures.count
         let startFigure = Figure.create(from, type:type, color: color)!
         let endFigure = Figure.create(to, type:type, color:color, moved: true)!
         let move = Move(to, piece:startFigure, type: moveType)!
@@ -50,7 +50,7 @@ class ChessTestBase: XCTestCase {
         let endFigureExists = figureExist(endFigure, testee: testee)
         let nextColorToMoveDidNotChange = testee.colorToMove == color
         
-        guard moveError == true || startFigureExists == true || endFigureExists == false || testee.getFigures().count != pieceCount && nextColorToMoveDidNotChange else {
+        guard moveError == true || startFigureExists == true || endFigureExists == false || testee.figures.count != pieceCount && nextColorToMoveDidNotChange else {
             return
         }
         
@@ -69,7 +69,7 @@ class ChessTestBase: XCTestCase {
         line: UInt = #line
     ) throws {
         let testee = try XCTUnwrap(testee)
-        let pieceCount = testee.getFigures().count
+        let pieceCount = testee.figures.count
         let cache = testee.position
         guard let move = MoveFactory.create(notation, position: cache) else {
             XCTFail("move \(notation) could not be created", file: file, line: line)
@@ -87,7 +87,7 @@ class ChessTestBase: XCTestCase {
         
         guard moveError == true,
               endFigureExists == false,
-              testee.getFigures().count != pieceCount && nextColorToMoveDidNotChange else {
+              testee.figures.count != pieceCount && nextColorToMoveDidNotChange else {
             return
         }
         
@@ -158,7 +158,7 @@ class ChessTestBase: XCTestCase {
         line: UInt = #line
     ) throws {
         let testee = try XCTUnwrap(testee)
-        let pieceCount = testee.getFigures().count - 1
+        let pieceCount = testee.figures.count - 1
         let startFigure = Figure.create(from, type:type, color: color)!
         let endFigure = Figure.create(to, type:type, color:color)!
         let move = Move(to, piece:startFigure, type: .Normal)!
@@ -170,7 +170,7 @@ class ChessTestBase: XCTestCase {
             try testee.move(move)
         } catch { moveError = true}
         
-        guard moveError == true || figureExist(startFigure, testee: testee) == true || figureExist(endFigure, testee: testee) == false || testee.getFigures().count != pieceCount && nextColorToMoveDidNotChange else {
+        guard moveError == true || figureExist(startFigure, testee: testee) == true || figureExist(endFigure, testee: testee) == false || testee.figures.count != pieceCount && nextColorToMoveDidNotChange else {
             return
         }
 
@@ -207,7 +207,7 @@ class ChessTestBase: XCTestCase {
         line: UInt = #line
     ) throws {
         let testee = try XCTUnwrap(testee)
-        let pieceCount = testee.getFigures().count - 1
+        let pieceCount = testee.figures.count - 1
         let startFigure = Figure.create(from, type:type, color: color)!
         let endFigure = Figure.create(to, type:.queen, color:color)!
         let move = Move(to, piece:startFigure, type: .Promotion)!
@@ -221,7 +221,7 @@ class ChessTestBase: XCTestCase {
         guard moveError == true,
               figureExist(startFigure, testee: testee) == true,
               figureExist(endFigure, testee: testee) == false,
-              testee.getFigures().count != pieceCount && nextColorToMoveDidNotChange else {
+              testee.figures.count != pieceCount && nextColorToMoveDidNotChange else {
             return
         }
 
@@ -237,7 +237,7 @@ class ChessTestBase: XCTestCase {
     ) throws {
         
         let testee = try XCTUnwrap(testee)
-        let blackKing = testee.getFigures().first(where: { $0.equals(forFigure)})!
+        let blackKing = testee.figures.first(where: { $0.equals(forFigure)})!
         let possibleMoves = testee.getPossibleMoves(forPiece: blackKing)
             
         guard possibleMoves.elementsEqual(moves) == false else {
@@ -274,7 +274,7 @@ class ChessTestBase: XCTestCase {
         line: UInt = #line
     ) throws {
         let testee = try XCTUnwrap(testee)
-        let moves = testee.getMoveLog()
+        let moves = testee.moveLog
         
         guard !moves.elementsEqual(expectedMoves) else { return }
 
@@ -287,7 +287,7 @@ class ChessTestBase: XCTestCase {
         line: UInt = #line
     ) throws {
         let testee = try XCTUnwrap(testee)
-        let moves = testee.getMoveLog()
+        let moves = testee.moveLog
         
         guard !moves.elementsEqual(moveLog) else { return }
 
@@ -309,11 +309,11 @@ class ChessTestBase: XCTestCase {
         XCTFail(message(gameState, expectedState, fen), file: file, line: line)
     }
     
-    func figureExist(_ figure:any ChessFigure, testee:ChessBoard) -> Bool {
-        testee.getFigures().contains(where: { $0.equals(figure) })
+    func figureExist(_ figure:any ChessFigure, testee:ChessGame) -> Bool {
+        testee.figures.contains(where: { $0.equals(figure) })
     }
     
     func loadFen(_ fen:String) {
-        testee = ChessBoard(PositionFactory.loadPosition(fen))
+        testee = ChessGame(PositionFactory.loadPosition(fen))
     }
 }

@@ -36,6 +36,8 @@ struct BoardBackgroundView: View {
                 }
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityIdentifier("chessboard")
     }
 
     private func fieldColor(row: Int, file: Int) -> Color {
@@ -47,7 +49,7 @@ struct BoardBackgroundView: View {
     }
 
     private func fileName(_ file: Int) -> String {
-        Field(row: 1, file: file).getFileName()
+        Field(row: 1, file: file).fileName
     }
 
     private func rowName(_ row: Int) -> String {

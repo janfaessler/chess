@@ -15,6 +15,7 @@ struct BoardNavigationView: View {
             .buttonStyle(.borderless)
             .background(.quaternary, in: .circle)
             .help("Jump to start")
+            .accessibilityIdentifier("nav-start")
             
             Button {
                 model.moveList.back()
@@ -26,6 +27,7 @@ struct BoardNavigationView: View {
             .buttonStyle(.borderless)
             .background(.quaternary, in: .circle)
             .help("Previous move")
+            .accessibilityIdentifier("nav-back")
             
             Spacer()
             
@@ -39,6 +41,7 @@ struct BoardNavigationView: View {
             .buttonStyle(.borderless)
             .background(.quaternary, in: .circle)
             .help("Next move")
+            .accessibilityIdentifier("nav-forward")
             
             Button {
                 model.moveList.end()
@@ -50,6 +53,7 @@ struct BoardNavigationView: View {
             .buttonStyle(.borderless)
             .background(.quaternary, in: .circle)
             .help("Jump to end")
+            .accessibilityIdentifier("nav-end")
         }
     }
 }

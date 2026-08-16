@@ -22,6 +22,8 @@ struct EngineView: View {
                     Spacer()
                 }
                 .padding(.vertical, 4)
+                .accessibilityElement(children: .combine)
+                .accessibilityIdentifier("engine-line-\(line.id)")
             }
         }
     }

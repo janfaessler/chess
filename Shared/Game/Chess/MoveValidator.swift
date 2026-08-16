@@ -1,9 +1,5 @@
 import Foundation
 
-/// Evaluates move legality and check/checkmate conditions for a given `Position`.
-///
-/// `Position` is pure, immutable board state; all rules logic lives here so the
-/// two responsibilities (state vs. rules) stay separated.
 struct MoveValidator {
 
     let position: Position
@@ -20,7 +16,7 @@ struct MoveValidator {
     }
 
     func isCheck(_ move: Move) -> Bool {
-        guard let opponentKing = position.getFigures().first(where: { $0.type == .king && $0.color != move.piece.color }) else { return false }
+        guard let opponentKing = position.figures.first(where: { $0.type == .king && $0.color != move.piece.color }) else { return false }
         let newPosition = position.applying(move)
         return MoveValidator(newPosition).isFieldInCheck(opponentKing.row, opponentKing.file)
     }
@@ -31,20 +27,24 @@ struct MoveValidator {
     }
 
     func isFieldInCheck(_ row: Int, _ file: Int) -> Bool {
-        return position.getFigures().contains(where: {
+        return position.figures.contains(where: {
             if $0.color == position.colorToMove { return false }
             return $0.isMovePossible(Move(row, file, piece: $0), position: position)
         })
     }
 
     func playerHasLegalMove() -> Bool {
-        let figuresOfCurrentPlayer = position.getFigures().filter({ $0.color == position.colorToMove })
+        let figuresOfCurrentPlayer = position.figures.filter({ $0.color == position.colorToMove })
         return figuresOfCurrentPlayer.contains(where: { fig in fig.getPossibleMoves().contains(where: { move in isLegalMove(move) }) })
     }
 
     func isKingInCheck() -> Bool {
-        guard let king = position.getFigures().first(where: { $0.type == .king && $0.color == position.colorToMove }) else { return false }
+        guard let king = position.figures.first(where: { $0.type == .king && $0.color == position.colorToMove }) else { return false }
         return isFieldInCheck(king.row, king.file)
+    }
+    
+    func figureExists(_ move: Move) -> Bool {
+        return self.position.get(atRow: move.piece.row, atFile: move.piece.file) != nil
     }
 
     private func doesMovePutOwnKingInCheck(_ move: Move) -> Bool {
@@ -52,7 +52,7 @@ struct MoveValidator {
             return CastlingRules.pathIsInCheck(move, position: position)
         }
 
-        let figures = position.getFigures()
+        let figures = position.figures
         guard let king = figures.first(where: { $0.type == .king && $0.color == move.piece.color }) else { return true }
         let isKingMove = move.piece.type == .king
         let rowToCheck = isKingMove ? move.row : king.row

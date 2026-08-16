@@ -43,10 +43,10 @@ struct Move:Identifiable, Equatable {
     }
 
     var fieldInfo: String {
-        field.info()
+        field.info
     }
 
-    func info() -> String {
-        "Move[\(field.info()), \(piece.info()), \(type), \(promoteTo)]"
+    var info: String {
+        "Move[\(field.info), \(piece.info()), \(type), \(promoteTo)]"
     }
 }

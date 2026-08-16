@@ -98,6 +98,7 @@ struct VariationView: View {
                 )
             }
             .buttonStyle(.plain)
+            .accessibilityIdentifier("variation-menu")
 
             if let selectedVariation = displayedVariation,
                let variationLine = move.getVariation(selectedVariation) {

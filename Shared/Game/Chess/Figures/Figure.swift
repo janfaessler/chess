@@ -72,7 +72,7 @@ class Figure:Identifiable, ChessFigure {
     }
 
     var fieldInfo: String {
-        field.info()
+        field.info
     }
 
     func info() -> String {

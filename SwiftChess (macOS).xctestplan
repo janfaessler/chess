@@ -23,6 +23,13 @@
         "identifier" : "619375D62BDE783D005A616D",
         "name" : "SwiftChessTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:SwiftChess.xcodeproj",
+        "identifier" : "615AED4D3031B3260045D0F0",
+        "name" : "SwiftChessUITests"
+      }
     }
   ],
   "version" : 1

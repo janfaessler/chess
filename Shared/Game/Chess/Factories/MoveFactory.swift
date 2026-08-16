@@ -94,13 +94,13 @@ class MoveFactory {
     }
     
     private static func getFigure(_ field: any StringProtocol, withFile:String, type: PieceType, color: PieceColor, position: Position) -> (any ChessFigure)? {
-        let figures = getFigures(targetField: field, type: type, color: color, position: position).filter ({ $0.field.getFileName() == withFile })
+        let figures = getFigures(targetField: field, type: type, color: color, position: position).filter ({ $0.field.fileName == withFile })
         guard figures.count == 1 else { return nil }
         return figures.first
     }
     
     private static func getFigures(targetField:any StringProtocol, type:PieceType, color:PieceColor, position:Position) -> [(any ChessFigure)] {
-        let allFigures = position.getFigures()
+        let allFigures = position.figures
         let figuresOfTypeAndColor = allFigures.filter({ $0.type == type && $0.color == color})
         return figuresOfTypeAndColor.filter {
             guard let move = $0.createMove(targetField) else { return false }

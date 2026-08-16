@@ -305,4 +305,21 @@ final class RawMovesTests: ChessTestBase {
         
         try assertMoves(["e4", "f5", "Bc4", "e6", "h3", "g5", "Qh5+", "Ke7", "e5", "a6","d3","b5", "Bxg5+", "Nf6", "Bxf6#"])
     }
+
+    func testStraightPawnPromotion() throws {
+        loadFen("4k3/P7/8/8/8/8/8/4K3 w - - 0 1")
+        let testee = try XCTUnwrap(testee)
+
+        // A pawn must be able to push straight to the last rank to promote,
+        // not only by capturing diagonally.
+        let pawn = try XCTUnwrap(testee.figures.first { $0.equals(Figure.create("a7", type: .pawn, color: .white)!) })
+        let canPushToPromote = testee.getPossibleMoves(forPiece: pawn).contains { $0.field == Field(row: 8, file: 1) }
+        XCTAssertTrue(canPushToPromote, "white pawn on a7 must be able to push to a8 to promote")
+
+        let move = try XCTUnwrap(Move("a8", piece: Figure.create("a7", type: .pawn, color: .white)!, type: .Promotion))
+        try testee.move(move)
+
+        assertFigureNotExists(Figure.create("a7", type: .pawn, color: .white)!)
+        assertFigureExists(Figure.create("a8", type: .queen, color: .white)!)
+    }
 }

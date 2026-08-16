@@ -13,6 +13,7 @@ struct NavigationManagerView: View {
                     Section {
                         ForEach(collection.games, id: \.id) { gameData in
                             NavigationLink(gameData.getTitle(), value: SideBarItem.game(gameData))
+                                .accessibilityIdentifier("sidebar-game-\(gameData.getTitle())")
                         }
                     } header: {
                         HStack {
@@ -22,6 +23,7 @@ struct NavigationManagerView: View {
                                 Label(collection.name, systemImage: "folder.fill")
                             }
                             .buttonStyle(.plain)
+                            .accessibilityIdentifier("sidebar-collection-\(collection.name)")
                             Spacer()
                             Button {
                                 selectedSideBarItem = .addGame
@@ -30,6 +32,7 @@ struct NavigationManagerView: View {
                                     .labelStyle(.iconOnly)
                             }
                             .buttonStyle(.plain)
+                            .accessibilityIdentifier("sidebar-addgame-\(collection.name)")
                         }
                     }
                     .collapsible(true)
@@ -53,16 +56,19 @@ struct NavigationManagerView: View {
                         } label: {
                             Label("Open PGN", systemImage: "doc.on.doc")
                         }
+                        .accessibilityIdentifier("actions-open-pgn")
 
                         Button {
                             selectedSideBarItem = .createPgn
                         } label: {
                             Label("New Collection", systemImage: "folder.badge.plus")
                         }
+                        .accessibilityIdentifier("actions-new-collection")
                     } label: {
                         Label("Actions", systemImage: "plus.circle.fill")
                     }
                     .menuStyle(.button)
+                    .accessibilityIdentifier("actions-menu")
                 }
             }
             .navigationTitle("Collections")
@@ -96,6 +102,7 @@ struct NavigationManagerView: View {
                                 Label("Edit Game", systemImage: "pencil")
                             }
                             .buttonStyle(.plain)
+                            .accessibilityIdentifier("edit-game")
                         }
                     }
             }

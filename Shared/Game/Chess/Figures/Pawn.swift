@@ -55,7 +55,7 @@ class Pawn : Figure {
     }
     
     private func canMoveOnce(_ move: Move, position:Position) -> Bool {
-        guard move.type == .Normal else { return false }
+        guard move.type == .Normal || move.type == .Promotion else { return false }
         guard moveDoesNotChangeFile(move) else { return false }
         return position.isEmpty(atRow: move.row, atFile: move.file)
     }

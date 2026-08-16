@@ -346,4 +346,16 @@ final class NotationTests: ChessTestBase {
         try moveAndAssert(notation: "Nxb6", toField: "b6", type: .knight, color: .white)
     }
 
+    func testStraightPromotionByPush() throws {
+        loadFen("4k3/P7/8/8/8/8/8/4K3 w - - 0 1")
+        let testee = try XCTUnwrap(testee)
+
+        // "a8=Q" is a straight (non-capturing) promotion push and must be legal.
+        let move = try XCTUnwrap(MoveFactory.create("a8=Q", position: testee.position))
+        try testee.move(move)
+
+        assertFigureNotExists(Figure.create("a7", type: .pawn, color: .white)!)
+        assertFigureExists(Figure.create("a8", type: .queen, color: .white)!)
+    }
+
 }

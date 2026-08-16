@@ -27,7 +27,7 @@ final class FenTests: XCTestCase {
         
         for fen in fens {
             let pos = PositionFactory.loadPosition(fen)
-            let board = ChessBoard(pos)
+            let board = ChessGame(pos)
             let exportedPosition = board.position
             let exportedFen = FenBuilder.create(exportedPosition)
             

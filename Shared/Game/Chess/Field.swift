@@ -23,12 +23,12 @@ struct Field : Equatable, Hashable {
         self.row = row
     }
     
-func info() -> String {
+    var info: String {
         guard let filename = fileNamesOut[file] else { return "??" }
         return "\(filename)\(row)"
     }
     
-    func getFileName() -> String {
+    var fileName:String {
         guard let filename = fileNamesOut[file] else { return "??" }
         return "\(filename)"
     }
@@ -36,6 +36,4 @@ func info() -> String {
     static func == (l:Field, r:Field) -> Bool {
         return l.row == r.row && l.file == r.file
     }
-
-
 }

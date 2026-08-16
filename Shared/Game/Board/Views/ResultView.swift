@@ -19,6 +19,8 @@ struct ResultView: View {
                 }
             }.frame(width: 200, height: 75)
                 .shadow(radius: 10)
+                .accessibilityElement(children: .combine)
+                .accessibilityIdentifier("game-result")
         }
     }
 }

@@ -35,7 +35,7 @@ class NotationFactory {
     private static func getPieceIdentifier(_ move:Move, position:Position) -> String {
         if move.piece.type == .pawn {
             if isCapture(move, position: position) {
-                return move.piece.field.getFileName()
+                return move.piece.field.fileName
             } else {
                 return ""
             }
@@ -77,20 +77,20 @@ class NotationFactory {
         let pieceIsOnSameFile = move.piece.file == figureThatCanDoTheSameMove?.file
         if pieceIsOnSameFile {
             if move.piece.type == .pawn {
-                duplicateIdentifier = move.piece.field.getFileName()
+                duplicateIdentifier = move.piece.field.fileName
             } else {
                 duplicateIdentifier = String(move.piece.row)
             }
         }
         let pieceIsOnSameRow = move.piece.row == figureThatCanDoTheSameMove?.row
         if pieceIsOnSameRow {
-            duplicateIdentifier = move.piece.field.getFileName()
+            duplicateIdentifier = move.piece.field.fileName
         }
         return duplicateIdentifier
     }
     
     private static func getPieceForPossibleMoveDuplicate(_ move:Move, position:Position) -> (any ChessFigure)? {
-        position.getFigures().first {
+        position.figures.first {
             $0.color == move.piece.color
             && $0.type == move.piece.type
             && $0.field != move.piece.field
