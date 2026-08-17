@@ -41,6 +41,12 @@ class ChessUITestCase: XCTestCase {
         el.click()
     }
 
+    func clickMenuItem(_ app: XCUIApplication, _ title: String, file: StaticString = #filePath, line: UInt = #line) {
+        let item = app.menuItems[title]
+        XCTAssertTrue(item.waitForExistence(timeout: 5), "Cannot click missing menu item '\(title)'", file: file, line: line)
+        item.click()
+    }
+
     func openGame(_ app: XCUIApplication, _ title: String) {
         click(app, "sidebar-game-\(title)")
         assertExists(app, "chessboard", "Board should appear after opening a game")

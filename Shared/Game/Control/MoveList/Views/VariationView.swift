@@ -73,7 +73,7 @@ struct VariationView: View {
                         .font(.system(size: 9))
                         .foregroundStyle(accentColor)
 
-                    Text("Var (\(move.getVariations().count))")
+                    Text(verbatim: "Var (\(move.getVariations().count))")
                         .font(.system(size: 10))
 
                     if let dv = displayedVariation {

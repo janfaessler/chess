@@ -16,7 +16,8 @@ struct ContentView: View {
         }
         .onAppear {
             if model == nil {
-                model = NavigationManagerModel(modelContext: modelContext)
+                let repository = SwiftDataGameCollectionRepository(modelContext: modelContext)
+                model = NavigationManagerModel(repository: repository)
             }
         }
     }

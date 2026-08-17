@@ -5,7 +5,7 @@ struct MovePairView: View {
     var pair: MovePairModel
     
     var body: some View {
-        Text("\(pair.moveNumber).")
+        Text(verbatim: "\(pair.moveNumber).")
             .font(.system(.caption, design: .monospaced))
             .foregroundStyle(.secondary)
             .frame(width: 32, alignment: .trailing)
