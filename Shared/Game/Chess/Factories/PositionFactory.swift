@@ -60,7 +60,7 @@ class PositionFactory {
     
     private static func getHalfmoveClock(_ move: Move, _ isCapture: Bool, oldPosition:Position) -> Int {
         if move.piece.type == .pawn || isCapture  {
-            return 1
+            return 0
         } else {
             return oldPosition.halfmoveClock + 1
         }

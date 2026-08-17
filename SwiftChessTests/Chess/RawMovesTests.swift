@@ -2,7 +2,24 @@ import XCTest
 @testable import SwiftChess
 
 final class RawMovesTests: ChessTestBase {
-    
+
+    func testEquality_underpromotionsAreDistinct() throws {
+        let pawn = Figure.create("e7", type: .pawn, color: .white)!
+        let toQueen = try XCTUnwrap(pawn.createMove("e8", type: .Promotion, promoteTo: .queen))
+        let toKnight = try XCTUnwrap(pawn.createMove("e8", type: .Promotion, promoteTo: .knight))
+        XCTAssertNotEqual(toQueen, toKnight, "e8=Q and e8=N must not compare equal")
+    }
+
+    func testIdentity_equalMovesShareId() throws {
+        let pawn = Figure.create("e7", type: .pawn, color: .white)!
+        let a = try XCTUnwrap(pawn.createMove("e8", type: .Promotion, promoteTo: .knight))
+        let b = try XCTUnwrap(pawn.createMove("e8", type: .Promotion, promoteTo: .knight))
+        let queen = try XCTUnwrap(pawn.createMove("e8", type: .Promotion, promoteTo: .queen))
+        XCTAssertEqual(a, b)
+        XCTAssertEqual(a.id, b.id, "structurally equal moves must share an id")
+        XCTAssertNotEqual(a.id, queen.id, "moves that differ must have different ids")
+    }
+
     func testSimplePawnCapture() throws {
         
         try moveAndAssert(from: "e2", to: "e4", type:.pawn, color: .white, moveType: .Double)

@@ -64,8 +64,7 @@ public class NavigationManagerModel {
         for (gameIndex, gameData) in collection.games.enumerated() {
             if let found = existingByID.removeValue(forKey: gameData.id) {
                 found.update(from: gameData, order: gameIndex)
-            } else {
-                let gameEntity = GameEntity(from: gameData, order: gameIndex)
+            } else if let gameEntity = GameEntity(from: gameData, order: gameIndex) {
                 gameEntity.collection = entity
                 entity.games.append(gameEntity)
             }

@@ -17,7 +17,7 @@ struct DrawConditionEvaluator {
     }
 
     static func has50MoveRuleTriggered(halfmoveClock: Int) -> Bool {
-        return halfmoveClock > halfmoveLimit
+        return halfmoveClock >= halfmoveLimit
     }
 
     private static func onlyKingsLeft(_ figures: [any ChessFigure]) -> Bool {

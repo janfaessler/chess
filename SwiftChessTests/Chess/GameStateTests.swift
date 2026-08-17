@@ -213,4 +213,51 @@ final class GameStateTests : ChessTestBase {
             try assertGameState(.Running, fen: fen)
         }
     }
+
+    func testKNNvK_notInsufficient() throws {
+        loadFen("8/5k2/8/3K4/8/8/1N3N2/8 w - - 0 10")
+        try assertGameState(.Running)
+    }
+
+    func testKBBoppositeColors_notInsufficient() throws {
+        loadFen("8/2k5/8/4BB2/8/5K2/8/8 w - - 0 10")
+        try assertGameState(.Running)
+    }
+
+    func test50MoveRule_triggersAtLimit() throws {
+        loadFen("4k3/8/8/8/8/8/R7/4K3 w - - 100 60")
+        try assertGameState(.DrawBy50MoveRule)
+    }
+
+    func test50MoveRule_notTriggeredOneBefore() throws {
+        loadFen("4k3/8/8/8/8/8/R7/4K3 w - - 99 60")
+        try assertGameState(.Running)
+    }
+
+    func testThreefold_samePlacementDifferentSideToMove_notEqual() throws {
+        let white = try XCTUnwrap(PositionFactory.loadPosition("4k3/8/8/8/8/8/8/4K3 w - - 0 1"))
+        let black = try XCTUnwrap(PositionFactory.loadPosition("4k3/8/8/8/8/8/8/4K3 b - - 0 1"))
+        XCTAssertNotEqual(white.getHash(), black.getHash())
+    }
+
+    func testThreefold_castlingRightsLostBreaksRepetition() throws {
+        let full = try XCTUnwrap(PositionFactory.loadPosition("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1"))
+        let none = try XCTUnwrap(PositionFactory.loadPosition("r3k2r/8/8/8/8/8/8/R3K2R w - - 0 1"))
+        XCTAssertNotEqual(full.getHash(), none.getHash())
+    }
+
+    func testThreefold_countsInitialPosition() throws {
+        for notation in ["Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8"] {
+            try testee?.move(notation)
+        }
+        try assertGameState(.DrawByRepetition)
+    }
+
+    func testThreefold_fromLoadedFen_triggers() throws {
+        loadFen("7k/8/8/8/3R4/8/8/K7 w - - 0 20")
+        for notation in ["Kb1", "Kg8", "Ka1", "Kh8", "Kb1", "Kg8", "Ka1", "Kh8"] {
+            try testee?.move(notation)
+        }
+        try assertGameState(.DrawByRepetition)
+    }
 }

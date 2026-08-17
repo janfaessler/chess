@@ -72,26 +72,25 @@ class NotationFactory {
     }
     
     private static func getDuplicateIdentifier(_ move: Move, position: Position) -> String {
-        var duplicateIdentifier = ""
-        let figureThatCanDoTheSameMove = getPieceForPossibleMoveDuplicate(move, position: position)
-        let pieceIsOnSameFile = move.piece.file == figureThatCanDoTheSameMove?.file
-        if pieceIsOnSameFile {
-            if move.piece.type == .pawn {
-                duplicateIdentifier = move.piece.field.fileName
-            } else {
-                duplicateIdentifier = String(move.piece.row)
-            }
+        guard move.piece.type != .pawn else { return "" }
+
+        let ambiguousPieces = getPiecesForPossibleMoveDuplicate(move, position: position)
+        guard !ambiguousPieces.isEmpty else { return "" }
+
+        let shareFile = ambiguousPieces.contains { $0.file == move.piece.file }
+        let shareRank = ambiguousPieces.contains { $0.row == move.piece.row }
+        if !shareFile {
+            return move.piece.field.fileName
+        } else if !shareRank {
+            return String(move.piece.row)
+        } else {
+            return "\(move.piece.field.fileName)\(move.piece.row)"
         }
-        let pieceIsOnSameRow = move.piece.row == figureThatCanDoTheSameMove?.row
-        if pieceIsOnSameRow {
-            duplicateIdentifier = move.piece.field.fileName
-        }
-        return duplicateIdentifier
     }
     
-    private static func getPieceForPossibleMoveDuplicate(_ move:Move, position:Position) -> (any ChessFigure)? {
+    private static func getPiecesForPossibleMoveDuplicate(_ move:Move, position:Position) -> [any ChessFigure] {
         let validator = MoveValidator(position)
-        return position.figures.first { figure in
+        return position.figures.filter { figure in
             guard figure.color == move.piece.color,
                   figure.type == move.piece.type,
                   figure.field != move.piece.field,

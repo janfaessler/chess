@@ -20,6 +20,7 @@ final class ChessEngine: EngineProtocol {
     private var lines:[EngineLine] = []
     private var pos:Position = PositionFactory.startingPosition()
 
+    private var configurationTask:Task<Void, Never>?
     private var responseTask:Task<Void, Never>?
     private var analysisTask:Task<Void, Never>?
     private let debounceDelay = Duration.seconds(1)
@@ -27,19 +28,31 @@ final class ChessEngine: EngineProtocol {
     init() {
         (evalStream, evalContinuation) = AsyncStream.makeStream(of: [EngineLine].self)
         engine = Engine(type: .stockfish)
+    }
 
-        guard let evalFilePath = materializeEvalFile("EvalFile", "nn-1111cefa1111.nnue") else { return }
-        guard let evalFileSmallPath = materializeEvalFile("EvalFileSmall", "nn-37f18f62d772.nnue") else { return }
+    private func startIfNeeded() {
+        guard configurationTask == nil else { return }
 
         let engine = engine
         let multipv = lineNumbers
-        responseTask = Task { [weak self] in
+
+        configurationTask = Task {
             await engine.set(loggingEnabled: true)
             await engine.start(coreCount: 2, multipv: multipv)
-            await engine.send(command: .setoption(id: "EvalFile", value: evalFilePath))
-            await engine.send(command: .setoption(id: "EvalFileSmall", value: evalFileSmallPath))
 
+            while await !engine.isRunning, !Task.isCancelled {
+                try? await Task.sleep(for: .milliseconds(50))
+            }
 
+            for (option, filename) in [("EvalFile", "nn-1111cefa1111.nnue"),
+                                       ("EvalFileSmall", "nn-37f18f62d772.nnue")] {
+                guard let path = Self.materializeEvalFile(option, filename) else { continue }
+                await engine.send(command: .setoption(id: option, value: path))
+            }
+        }
+
+        responseTask = Task { [weak self, engine] in
+            await self?.configurationTask?.value
             guard let stream = await engine.responseStream else { return }
             for await response in stream {
                 self?.handleEngineResponse(response)
@@ -48,26 +61,28 @@ final class ChessEngine: EngineProtocol {
     }
 
     isolated deinit {
+        configurationTask?.cancel()
         responseTask?.cancel()
         analysisTask?.cancel()
         evalContinuation.finish()
     }
 
     public func newPosition(_ pos:Position) {
+        startIfNeeded()
         self.pos = pos
         let fen = FenBuilder.create(pos)
 
         analysisTask?.cancel()
-        analysisTask = Task { [engine, debounceDelay] in
+        analysisTask = Task { [engine, configurationTask, debounceDelay] in
+            await configurationTask?.value
             guard await engine.isRunning else { return }
             await engine.send(command: .stop)
-            
+
             try? await Task.sleep(for: debounceDelay)
             guard !Task.isCancelled else { return }
 
             await engine.send(command: .position(.fen(fen)))
             await engine.send(command: .go(depth: 15))
-            await engine.start()
         }
     }
 
@@ -102,7 +117,7 @@ final class ChessEngine: EngineProtocol {
         return moveNotations.joined(separator: ", ")
     }
 
-    private func materializeEvalFile(_ asset:String, _ filename:String) -> String? {
+    private static func materializeEvalFile(_ asset:String, _ filename:String) -> String? {
         guard let asset = NSDataAsset(name: asset) else {
             return nil
         }

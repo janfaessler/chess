@@ -121,11 +121,12 @@ struct VariationView: View {
     }
 
     func getName(_ variation: String) -> String {
+        let displayed = MoveModel.displayName(forVariation: variation)
         switch move.color {
         case .white:
-            return "\(moveNumber). \(variation)"
+            return "\(moveNumber). \(displayed)"
         case .black:
-            return "\(moveNumber)... \(variation)"
+            return "\(moveNumber)... \(displayed)"
         }
     }
 }

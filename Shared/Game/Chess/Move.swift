@@ -2,7 +2,9 @@ import Foundation
 
 struct Move:Identifiable, Equatable {
     
-    let id:String = UUID().uuidString
+    var id:String {
+        "\(startingField.info)-\(field.info)-\(piece.color)-\(piece.type)-\(type)-\(promoteTo)"
+    }
     
     var row:Int = 0
     var file:Int = 0
@@ -31,7 +33,7 @@ struct Move:Identifiable, Equatable {
     }
 
     static func == (l:Move, r:Move) -> Bool {
-        return l.row == r.row && l.file == r.file && l.piece.equals(r.piece) && l.type == r.type
+        return l.row == r.row && l.file == r.file && l.piece.equals(r.piece) && l.type == r.type && l.promoteTo == r.promoteTo
     }
     
     static func != (l:Move, r:Move) -> Bool {

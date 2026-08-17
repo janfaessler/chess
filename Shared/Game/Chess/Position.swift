@@ -75,9 +75,14 @@ class Position {
     
     func getHash() -> Int {
         var hasher = Hasher()
-        for fig in figures.sorted(by: { $0.row > $1.row }).sorted(by: { $0.file > $1.file }) {
+        for fig in figures.sorted(by: { ($0.row, $0.file) > ($1.row, $1.file) }) {
             hasher.combine(fig)
         }
+        hasher.combine(colorToMove)
+        hasher.combine(canWhiteCastleKingside)
+        hasher.combine(canWhiteCastleQueenside)
+        hasher.combine(canBlackCastleKingside)
+        hasher.combine(canBlackCastleQueenside)
         hasher.combine(enPassantTarget)
         return hasher.finalize()
     }

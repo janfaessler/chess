@@ -22,6 +22,7 @@ struct GameView: View {
             }
             .focusable()
             .focusEffectDisabled()
+            .task { model.start() }
             .onKeyPress { press in
                 if press.key == .upArrow {
                     model.moveList.start()

@@ -24,6 +24,7 @@ class ControlModel {
     var engine: any EngineProtocol
 
     private var observationTasks: [Task<Void, Never>] = []
+    private var isStarted = false
 
     init(_ game: PgnGame) {
         self.game = game
@@ -35,6 +36,11 @@ class ControlModel {
         }
 
         engine = TestSupport.isUITesting ? StubEngine() : ChessEngine()
+    }
+
+    func start() {
+        guard !isStarted else { return }
+        isStarted = true
 
         openGame()
         observeBoardMoves()

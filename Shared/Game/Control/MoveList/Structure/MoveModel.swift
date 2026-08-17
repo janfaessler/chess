@@ -36,8 +36,21 @@ class MoveModel : Identifiable, Equatable {
         return variation
     }
 
+    private static let keyDisambiguator: Character = "\u{1}"
+
     func addVariation(_ name: String, variation: LineModel) {
-        variations[name] = variation
+        variations[uniqueVariationKey(for: name)] = variation
+    }
+
+    static func displayName(forVariation key: String) -> String {
+        String(key.prefix(while: { $0 != keyDisambiguator }))
+    }
+
+    private func uniqueVariationKey(for name: String) -> String {
+        guard variations[name] != nil else { return name }
+        var suffix = 2
+        while variations["\(name)\(MoveModel.keyDisambiguator)\(suffix)"] != nil { suffix += 1 }
+        return "\(name)\(MoveModel.keyDisambiguator)\(suffix)"
     }
 
     func appendVariation(_ container: MoveModel, variation: String) {

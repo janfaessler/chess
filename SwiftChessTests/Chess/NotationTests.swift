@@ -346,6 +346,38 @@ final class NotationTests: ChessTestBase {
         try moveAndAssert(notation: "Nxb6", toField: "b6", type: .knight, color: .white)
     }
 
+    func testUnderpromotionNotation() throws {
+        loadFen("4k3/P7/8/8/8/8/8/4K3 w - - 0 1")
+        let testee = try XCTUnwrap(testee)
+        let pawn = try XCTUnwrap(testee.position.get(atRow: 7, atFile: 1))
+        let move = try XCTUnwrap(pawn.createMove("a8", type: .Promotion, promoteTo: .knight))
+        XCTAssertEqual(NotationFactory.generate(move, position: testee.position), "a8=N")
+    }
+
+    func testDisambiguation_twoOnSameFile_usesRank() throws {
+        loadFen("4k3/8/8/5N2/8/5N2/8/4K3 w - - 0 1")
+        let testee = try XCTUnwrap(testee)
+        let knight = try XCTUnwrap(testee.position.get(atRow: 5, atFile: 6))
+        let move = try XCTUnwrap(knight.createMove("d4"))
+        XCTAssertEqual(NotationFactory.generate(move, position: testee.position), "N5d4")
+    }
+
+    func testDisambiguation_twoOnSameRank_usesFile() throws {
+        loadFen("4k3/8/8/1N3N2/8/8/8/4K3 w - - 0 1")
+        let testee = try XCTUnwrap(testee)
+        let knight = try XCTUnwrap(testee.position.get(atRow: 5, atFile: 6))
+        let move = try XCTUnwrap(knight.createMove("d4"))
+        XCTAssertEqual(NotationFactory.generate(move, position: testee.position), "Nfd4")
+    }
+
+    func testDisambiguation_threePieces_usesFileAndRank() throws {
+        loadFen("4k3/8/8/1N3N2/8/5N2/8/4K3 w - - 0 1")
+        let testee = try XCTUnwrap(testee)
+        let knight = try XCTUnwrap(testee.position.get(atRow: 5, atFile: 6))
+        let move = try XCTUnwrap(knight.createMove("d4"))
+        XCTAssertEqual(NotationFactory.generate(move, position: testee.position), "Nf5d4")
+    }
+
     func testStraightPromotionByPush() throws {
         loadFen("4k3/P7/8/8/8/8/8/4K3 w - - 0 1")
         let testee = try XCTUnwrap(testee)

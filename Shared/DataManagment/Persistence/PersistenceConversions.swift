@@ -1,10 +1,21 @@
 import Foundation
 
+private let logger = Log.logger("PersistenceConversions")
+
+private func encode<T: Encodable>(_ value: T, field: String) -> Data? {
+    do {
+        return try JSONEncoder().encode(value)
+    } catch {
+        logger.error("Failed to encode \(field): \(error)")
+        return nil
+    }
+}
+
 extension GameEntity {
-    convenience init(from gameData: GameData, order: Int) {
-        let encoder = JSONEncoder()
-        let headersData = (try? encoder.encode(gameData.headers)) ?? Data()
-        let movesData = (try? encoder.encode(gameData.moves)) ?? Data()
+    convenience init?(from gameData: GameData, order: Int) {
+        guard let headersData = encode(gameData.headers, field: "headers"),
+              let movesData = encode(gameData.moves, field: "moves")
+        else { return nil }
 
         self.init(
             id: gameData.id,
@@ -18,9 +29,11 @@ extension GameEntity {
     }
 
     func update(from gameData: GameData, order: Int) {
-        let encoder = JSONEncoder()
-        headersData = (try? encoder.encode(gameData.headers)) ?? Data()
-        movesData = (try? encoder.encode(gameData.moves)) ?? Data()
+        guard let headersData = encode(gameData.headers, field: "headers"),
+              let movesData = encode(gameData.moves, field: "moves")
+        else { return }
+        self.headersData = headersData
+        self.movesData = movesData
         title = gameData.getTitle()
         result = gameData.result
         comment = gameData.comment
@@ -29,17 +42,20 @@ extension GameEntity {
 
     func toGameData() -> GameData? {
         let decoder = JSONDecoder()
-        guard let headers = try? decoder.decode([String: String].self, from: headersData),
-              let moves = try? decoder.decode([MoveData].self, from: movesData)
-        else { return nil }
-
-        return GameData(
-            id: id,
-            headers: headers,
-            moves: moves,
-            result: result,
-            comment: comment
-        )
+        do {
+            let headers = try decoder.decode([String: String].self, from: headersData)
+            let moves = try decoder.decode([MoveData].self, from: movesData)
+            return GameData(
+                id: id,
+                headers: headers,
+                moves: moves,
+                result: result,
+                comment: comment
+            )
+        } catch {
+            logger.error("Failed to decode game \(self.id): \(error)")
+            return nil
+        }
     }
 }
 

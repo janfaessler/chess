@@ -16,7 +16,7 @@ class ChessGame {
 
     init(_ pos: Position) {
         position = pos
-        positionCount = [:]
+        positionCount = [pos.getHash(): 1]
     }
 
     func move(_ moveNotation: String) throws {
