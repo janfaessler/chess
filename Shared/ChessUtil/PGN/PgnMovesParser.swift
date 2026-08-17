@@ -30,9 +30,11 @@ public class PgnMovesParser {
     private static func parseMovePair(_ line: String, variations:[String]) -> [PgnMove] {
         let moveStrings = PgnRegex.parse(PgnRegex.move, input: line)
         let moveNumber = parseMoveNumber(line)
-        
-        let whiteString: String? = line.hasPrefix("\(moveNumber)...") == false ? moveStrings[0] : nil
-        let blackString: String? = line.hasPrefix("\(moveNumber)...") == true ? moveStrings[0] : (moveStrings.count > 1 ? moveStrings[1] : nil)
+
+        guard let firstMove = moveStrings.first else { return [] }
+        let isBlackOnly = line.hasPrefix("\(moveNumber)...")
+        let whiteString: String? = isBlackOnly ? nil : firstMove
+        let blackString: String? = isBlackOnly ? firstMove : (moveStrings.count > 1 ? moveStrings[1] : nil)
 
         var moves:[PgnMove] = []
         if let whiteString {
@@ -54,8 +56,7 @@ public class PgnMovesParser {
     }
     
     private static func parseMoveNumber(_ input:String) -> String {
-        let dot = input.split(separator: ".")
-        return "\(dot[0])"
+        return input.split(separator: ".").first.map(String.init) ?? ""
     }
     
     private static func parseNotation(_ input: String) -> String {

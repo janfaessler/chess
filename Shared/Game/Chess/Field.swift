@@ -17,8 +17,9 @@ struct Field : Equatable, Hashable {
     
     init?(_ field:any StringProtocol) {
         let chars = [Character](field)
-        guard let file = fileNames[chars[0]] else { return nil }
-        guard let row = Int(String(chars[1])) else { return nil }
+        guard chars.count >= 2,
+              let file = fileNames[chars[0]],
+              let row = Int(String(chars[1])) else { return nil }
         self.file = file
         self.row = row
     }

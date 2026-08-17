@@ -26,12 +26,28 @@ final class FenTests: XCTestCase {
         ]
         
         for fen in fens {
-            let pos = PositionFactory.loadPosition(fen)
+            let pos = try XCTUnwrap(PositionFactory.loadPosition(fen))
             let board = ChessGame(pos)
             let exportedPosition = board.position
             let exportedFen = FenBuilder.create(exportedPosition)
             
             XCTAssertEqual(fen, exportedFen)
         }
+    }
+
+    func testParse_tooFewFields_throws() {
+        XCTAssertThrowsError(try FenParser.parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -"))
+    }
+
+    func testParse_emptyString_throws() {
+        XCTAssertThrowsError(try FenParser.parse(""))
+    }
+
+    func testParse_garbageBoard_throws() {
+        XCTAssertThrowsError(try FenParser.parse("this-is-not-a-board w KQkq - 0 1"))
+    }
+
+    func testParse_validFen_doesNotThrow() throws {
+        XCTAssertNoThrow(try FenParser.parse(PositionFactory.startingPositionFen))
     }
 }

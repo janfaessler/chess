@@ -30,6 +30,7 @@
 
 /* Begin PBXFileReference section */
 		615AED4E3031B3260045D0F0 /* SwiftChessUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftChessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		615AEE4B3032DEBC0045D0F0 /* IMPROVEMENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = IMPROVEMENTS.md; sourceTree = "<group>"; };
 		61772370274284FF00169D3D /* SwiftChess.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftChess.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		619375D72BDE783D005A616D /* SwiftChessTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftChessTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		61AE78292B991BE8008F56F8 /* SwiftChess (macOS).xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "SwiftChess (macOS).xctestplan"; sourceTree = "<group>"; };
@@ -72,6 +73,7 @@
 		6177235A274284FE00169D3D = {
 			isa = PBXGroup;
 			children = (
+				615AEE4B3032DEBC0045D0F0 /* IMPROVEMENTS.md */,
 				61AE78292B991BE8008F56F8 /* SwiftChess (macOS).xctestplan */,
 				615AEDF33031C0540045D0F0 /* Shared */,
 				615AEE4A3031C10B0045D0F0 /* macOS */,

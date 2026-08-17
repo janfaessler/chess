@@ -314,6 +314,10 @@ class ChessTestBase: XCTestCase {
     }
     
     func loadFen(_ fen:String) {
-        testee = ChessGame(PositionFactory.loadPosition(fen))
+        guard let position = PositionFactory.loadPosition(fen) else {
+            XCTFail("Invalid FEN: \(fen)")
+            return
+        }
+        testee = ChessGame(position)
     }
 }

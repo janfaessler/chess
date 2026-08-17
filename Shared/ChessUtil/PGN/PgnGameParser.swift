@@ -48,17 +48,20 @@ public class PgnGameParser {
     }
     
     private static func parseComment(_ input:String) -> String {
-        let commentEndMarkIndex = input.firstIndex(of: "}")!
+        guard let commentEndMarkIndex = input.firstIndex(of: "}") else {
+            Log.logger("PgnGameParser").error("Unterminated PGN comment: \(input)")
+            return String(input.dropFirst()).trimmingCharacters(in: [" "])
+        }
         let startCommentIndex = input.index(after: input.startIndex)
         let endCommentIndex = input.index(before: commentEndMarkIndex)
+        guard startCommentIndex <= endCommentIndex else { return "" }
         return String(input[startCommentIndex...endCommentIndex]).trimmingCharacters(in: [" "])
     }
     
     private static func parseLineAfterComment(_ input:String) -> String {
-        let commentEndMarkIndex = input.firstIndex(of: "}")!
+        guard let commentEndMarkIndex = input.firstIndex(of: "}") else { return "" }
         let startGameIndex = input.index(after: commentEndMarkIndex)
-        let endLineIndex = input.index(before: input.endIndex)
-
-        return String(input[startGameIndex...endLineIndex])
+        guard startGameIndex < input.endIndex else { return "" }
+        return String(input[startGameIndex...])
     }
 }

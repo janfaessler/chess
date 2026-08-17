@@ -26,5 +26,16 @@ final class FieldTest: XCTestCase {
         }
     }
 
+    func testInit_singleChar_returnsNil() {
+        XCTAssertNil(Field("a"))
+        XCTAssertNil(Field("1"))
+    }
 
+    func testInit_empty_returnsNil() {
+        XCTAssertNil(Field(""))
+    }
+
+    func testInit_dash_returnsNil() {
+        XCTAssertNil(Field("-"))
+    }
 }

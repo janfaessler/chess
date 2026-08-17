@@ -10,7 +10,27 @@ struct SwiftChessApp: App {
         if TestSupport.isUITesting {
             container = TestSupport.makeSeededContainer()
         } else {
-            container = try! ModelContainer(for: CollectionEntity.self, GameEntity.self)
+            container = Self.makePersistentContainer()
+        }
+    }
+
+    private static func makePersistentContainer() -> ModelContainer {
+        do {
+            return try ModelContainer(for: CollectionEntity.self, GameEntity.self)
+        } catch {
+            Log.logger("SwiftChessApp").error("Persistent store unavailable, using in-memory fallback: \(error)")
+            return makeInMemoryFallback()
+        }
+    }
+
+    private static func makeInMemoryFallback() -> ModelContainer {
+        do {
+            return try ModelContainer(
+                for: CollectionEntity.self, GameEntity.self,
+                configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+            )
+        } catch {
+            fatalError("Unable to create an in-memory ModelContainer: \(error)")
         }
     }
 

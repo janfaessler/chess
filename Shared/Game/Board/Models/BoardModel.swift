@@ -27,7 +27,7 @@ class BoardModel {
     
     
     var promotionColor: PieceColor {
-        moveToPromote!.piece.color
+        moveToPromote?.piece.color ?? .white
     }
     
     var shouldShowPromotionView: Bool {
@@ -121,7 +121,7 @@ class BoardModel {
     }
     
     private func notifyMoveDone(_ move: Move, fen: String) {
-        let notation = NotationFactory.generate(move, position: FenParser.parse(fen))
+        let notation = NotationFactory.generate(move, position: FenParser.parse(trusted: fen))
         moveContinuation.yield(notation)
     }
 }

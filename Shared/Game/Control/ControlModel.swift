@@ -28,8 +28,8 @@ class ControlModel {
     init(_ game: PgnGame) {
         self.game = game
 
-        if let fen = TestSupport.boardFen {
-            board = BoardModel(game: ChessGame(FenParser.parse(fen)))
+        if let fen = TestSupport.boardFen, let position = try? FenParser.parse(fen) {
+            board = BoardModel(game: ChessGame(position))
         } else {
             board = BoardModel()
         }

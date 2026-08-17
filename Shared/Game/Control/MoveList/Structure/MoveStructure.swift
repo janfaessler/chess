@@ -72,9 +72,9 @@ class MoveStructure {
         guard currentMove != isChildOf else { return true }
         
         var parentMove = parent(of: currentMove)
-        while parentMove != nil {
-            if parentMove?.id == isChildOf.id { return true }
-            parentMove = parent(of:parentMove!)
+        while let current = parentMove {
+            if current.id == isChildOf.id { return true }
+            parentMove = parent(of: current)
         }
         return false
     }

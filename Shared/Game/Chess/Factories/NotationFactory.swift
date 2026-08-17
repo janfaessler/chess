@@ -90,12 +90,13 @@ class NotationFactory {
     }
     
     private static func getPieceForPossibleMoveDuplicate(_ move:Move, position:Position) -> (any ChessFigure)? {
-        position.figures.first {
-            $0.color == move.piece.color
-            && $0.type == move.piece.type
-            && $0.field != move.piece.field
-            && $0.createMove(move.fieldInfo) != nil
-            && MoveValidator(position).isLegalMove($0.createMove(move.fieldInfo)!)
+        let validator = MoveValidator(position)
+        return position.figures.first { figure in
+            guard figure.color == move.piece.color,
+                  figure.type == move.piece.type,
+                  figure.field != move.piece.field,
+                  let candidate = figure.createMove(move.fieldInfo) else { return false }
+            return validator.isLegalMove(candidate)
         }
     }
     

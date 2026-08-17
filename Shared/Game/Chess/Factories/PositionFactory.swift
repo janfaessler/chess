@@ -5,11 +5,11 @@ class PositionFactory {
     static let startingPositionFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     
     static func startingPosition() -> Position {
-        return FenParser.parse(startingPositionFen)
+        return FenParser.parse(trusted: startingPositionFen)
     }
     
-    static func loadPosition(_ fen:String) -> Position {
-        return FenParser.parse(fen)
+    static func loadPosition(_ fen:String) -> Position? {
+        return try? FenParser.parse(fen)
     }
     
     static func loadPosition(_ moves: [any StringProtocol]) -> Position? {

@@ -81,4 +81,50 @@ final class PgnParserTests: XCTestCase {
         XCTAssertEqual(game.moves[5].move, "dxe4")
         
     }
+
+    func testParse_unterminatedComment_doesNotCrash() {
+        let pgn = """
+        [Event "x"]
+
+        { this comment never closes
+        1. e4 e5
+        """
+        let games = PgnParser.parse(pgn)
+        XCTAssertFalse(games.isEmpty)
+    }
+
+    func testParse_multiLineComment_ok() {
+        let pgn = """
+        [Event "x"]
+
+        { opening
+        still going }
+        1. e4 e5
+        """
+        let games = PgnParser.parse(pgn)
+        XCTAssertFalse(games.isEmpty)
+    }
+
+    func testParse_commentOnlyLine_ok() {
+        let pgn = """
+        [Event "x"]
+
+        {c}
+        1. e4 e5
+        """
+        let games = PgnParser.parse(pgn)
+        let game = games.first!
+        XCTAssertEqual(game.comment, "c")
+        XCTAssertEqual(game.moves.first?.move, "e4")
+    }
+
+    func testParse_garbageMoveToken_skips() {
+        let pgn = """
+        [Event "x"]
+
+        1. e4 e5 2.
+        """
+        let games = PgnParser.parse(pgn)
+        XCTAssertFalse(games.isEmpty)
+    }
 }
