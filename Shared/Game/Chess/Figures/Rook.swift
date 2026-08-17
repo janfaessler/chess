@@ -13,15 +13,7 @@ class Rook : Figure {
     }
     
     override func getPossibleMoves() -> [Move] {
-        var moves:[Move] = []
-        for r in 1...8 {
-            for f in 1...8 {
-                if !(row == r && file == f) && (r == row || f==file) {
-                    moves.append(createMove(r, f))
-                }
-            }
-        }
-        return moves
+        return movesAlongRays([(1, 0), (-1, 0), (0, 1), (0, -1)])
     }
     
     override func ident() -> String {

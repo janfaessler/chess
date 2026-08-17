@@ -9,15 +9,8 @@ class Queen : Figure {
     }
     
     override func getPossibleMoves() -> [Move] {
-        var moves:[Move] = []
-        for r in 1...8 {
-            for f in 1...8 {
-                if !(row == r && file == f) && (r == row || f == file || row-r == file-f || row+file == r+f) {
-                    moves.append(createMove(r, f))
-                }
-            }
-        }
-        return moves
+        return movesAlongRays([(1, 0), (-1, 0), (0, 1), (0, -1),
+                               (1, 1), (1, -1), (-1, 1), (-1, -1)])
     }
     
     override func ident() -> String {

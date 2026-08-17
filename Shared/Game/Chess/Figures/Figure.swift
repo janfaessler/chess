@@ -91,6 +91,20 @@ class Figure:Identifiable, ChessFigure {
         return 1...8 ~= m.row && 1...8 ~= m.file
     }
 
+    func movesAlongRays(_ directions: [(row: Int, file: Int)]) -> [Move] {
+        var moves:[Move] = []
+        for direction in directions {
+            var r = row + direction.row
+            var f = file + direction.file
+            while 1...8 ~= r && 1...8 ~= f {
+                moves.append(createMove(r, f))
+                r += direction.row
+                f += direction.file
+            }
+        }
+        return moves
+    }
+
     func createMove(_ row:Int, _ file:Int) -> Move {
         return Move(row, file, piece: Figure.create(type: self.type, color: self.color, row: self.row, file: self.file), type: .Normal)
     }

@@ -14,8 +14,8 @@ class Position {
     let halfmoveClock:Int
     let moveClock:Int
     
-    var figures:[any ChessFigure] { cache.flatMap({ $1.values }) }
-    
+    let figures:[any ChessFigure]
+
     init(
         _ figures: [any ChessFigure],
         colorToMove:PieceColor,
@@ -27,7 +27,9 @@ class Position {
         moveClock:Int,
         halfmoveClock:Int
     ) {
-        self.cache = Position.createCacheDict(figures) ?? [:]
+        let cache = Position.createCacheDict(figures) ?? [:]
+        self.cache = cache
+        self.figures = cache.flatMap({ $1.values })
         self.colorToMove = colorToMove
         self.enPassantTarget = enPassantTarget
         self.canWhiteCastleKingside = whiteCanCastleKingside

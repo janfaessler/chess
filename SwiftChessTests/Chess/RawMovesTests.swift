@@ -20,8 +20,33 @@ final class RawMovesTests: ChessTestBase {
         XCTAssertNotEqual(a.id, queen.id, "moves that differ must have different ids")
     }
 
+    func testSlidingMoves_countMatches() throws {
+        let rook = Figure.create("d4", type: .rook, color: .white)!
+        let bishop = Figure.create("d4", type: .bishop, color: .white)!
+        let queen = Figure.create("d4", type: .queen, color: .white)!
+
+        let rookMoves = rook.getPossibleMoves()
+        let bishopMoves = bishop.getPossibleMoves()
+        let queenMoves = queen.getPossibleMoves()
+
+        XCTAssertEqual(rookMoves.count, 14, "rook on d4 has 7 rank + 7 file pseudo-moves")
+        XCTAssertEqual(bishopMoves.count, 13, "bishop on d4 has 13 diagonal pseudo-moves")
+        XCTAssertEqual(queenMoves.count, 27, "queen on d4 has rook + bishop pseudo-moves")
+
+        for moves in [rookMoves, bishopMoves, queenMoves] {
+            XCTAssertFalse(moves.contains { $0.row == 4 && $0.file == 4 }, "must not include the origin square")
+            XCTAssertTrue(moves.allSatisfy { 1...8 ~= $0.row && 1...8 ~= $0.file }, "all targets on the board")
+            XCTAssertEqual(Set(moves.map { $0.field }).count, moves.count, "no duplicate target squares")
+        }
+
+        XCTAssertTrue(bishopMoves.contains { $0.field == Field(row: 8, file: 8) }, "bishop reaches h8")
+        XCTAssertTrue(bishopMoves.contains { $0.field == Field(row: 1, file: 1) }, "bishop reaches a1")
+        XCTAssertTrue(rookMoves.contains { $0.field == Field(row: 4, file: 8) }, "rook reaches h4")
+        XCTAssertTrue(rookMoves.contains { $0.field == Field(row: 1, file: 4) }, "rook reaches d1")
+    }
+
     func testSimplePawnCapture() throws {
-        
+
         try moveAndAssert(from: "e2", to: "e4", type:.pawn, color: .white, moveType: .Double)
         try moveAndAssert(from: "d7", to: "d5", type:.pawn, color: .black, moveType: .Double)
         

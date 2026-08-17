@@ -108,20 +108,20 @@ class BoardModel {
     }
     
     private func doMove(_ move: Move) throws {
-        let positionBeforeMove = FenBuilder.create(self.game.position)
+        let positionBeforeMove = self.game.position
         try self.game.move(move)
         self.figures = self.getFigures()
         self.result = ResultModel(self.game.getGameState())
-        self.notifyMoveDone(move, fen: positionBeforeMove)
+        self.notifyMoveDone(move, positionBeforeMove: positionBeforeMove)
     }
-    
+
     private func getFigures() -> [FigureModel] {
         let figures = self.game.figures
         return figures.map { FigureModel($0, board: self) }
     }
-    
-    private func notifyMoveDone(_ move: Move, fen: String) {
-        let notation = NotationFactory.generate(move, position: FenParser.parse(trusted: fen))
+
+    private func notifyMoveDone(_ move: Move, positionBeforeMove: Position) {
+        let notation = NotationFactory.generate(move, position: positionBeforeMove)
         moveContinuation.yield(notation)
     }
 }
