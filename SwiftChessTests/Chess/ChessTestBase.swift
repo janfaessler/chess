@@ -18,7 +18,7 @@ class ChessTestBase: XCTestCase {
         for pgnmove in game {
             if let move = MoveFactory.create(pgnmove.move, position: position) {
                 result += [move]
-                if let newPosition = PositionFactory.getPosition(move, position: position, isCapture: pgnmove.move.contains(NotationFactory.Capture)) {
+                if let newPosition = PositionFactory.getPosition(move, position: position) {
                     position = newPosition
                 }
             }

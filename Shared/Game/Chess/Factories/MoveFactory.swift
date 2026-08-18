@@ -71,14 +71,9 @@ class MoveFactory {
     }
     
     private static func getPieceType(_ char:any StringProtocol) -> PieceType? {
-        switch String(char) {
-        case Bishop.Ident: return .bishop
-        case Knight.Ident: return .knight
-        case Queen.Ident: return .queen
-        case Rook.Ident: return .rook
-        case King.Ident: return .king
-        default: return nil
-        }
+        guard char.count == 1, let first = char.first,
+              let type = PieceType(fenChar: first), type != .pawn else { return nil }
+        return type
     }
     
     private static func getFigure(targetField:any StringProtocol, type:PieceType, color:PieceColor, position:Position) -> (any ChessFigure)? {

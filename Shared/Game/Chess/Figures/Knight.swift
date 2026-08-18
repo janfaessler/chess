@@ -1,8 +1,6 @@
 import Foundation
 class Knight : Figure {
-    
-    static let Ident = "N"
-    
+
     init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
         super.init(type: .knight, color: color, row: row, file: file, moved: moved)
     }
@@ -33,9 +31,5 @@ class Knight : Figure {
         }
         
         return super.isCaptureablePiece(move, pieceToCapture: pieceAtTarget);
-    }
-    
-    override func ident() -> String {
-        return Knight.Ident
     }
 }

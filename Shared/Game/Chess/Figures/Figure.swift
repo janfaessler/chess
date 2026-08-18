@@ -83,10 +83,6 @@ class Figure:Identifiable, ChessFigure {
         return moved
     }
 
-    func ident() -> String {
-        fatalError("Subclasses must override ident()")
-    }
-    
     func inBoard(_ m:Move) -> Bool {
         return 1...8 ~= m.row && 1...8 ~= m.file
     }
@@ -105,22 +101,14 @@ class Figure:Identifiable, ChessFigure {
         return moves
     }
 
-    func createMove(_ row:Int, _ file:Int) -> Move {
-        return Move(row, file, piece: Figure.create(type: self.type, color: self.color, row: self.row, file: self.file), type: .Normal)
-    }
-    
     func createMove(_ filename: any StringProtocol) -> Move? {
         return createMove(filename, type: .Normal)
     }
-    
+
     func createMove(_ row:Int, _ file:Int, _ type:MoveType = .Normal) -> Move {
         return Move(row, file, piece: Figure.create(type: self.type, color: self.color, row: self.row, file: self.file), type: type)
     }
 
-    func createMove(_ move: any StringProtocol, type: MoveType) -> Move? {
-        return Move(move, piece: Figure.create(type: self.type, color: self.color, row: self.row, file: self.file), type: type)
-    }
-    
     func createMove(_ move:any StringProtocol, type:MoveType = .Normal, promoteTo:PieceType = .queen) -> Move? {
         return Move(move, piece: Figure.create(type: self.type, color: self.color, row: self.row, file: self.file), type: type, promoteTo: promoteTo)
     }

@@ -1,9 +1,12 @@
 import SwiftUI
 
 struct GameView: View {
+    private let controlMinWidth: CGFloat = 300
+    private let controlMaxWidth: CGFloat = 400
+
     let game: PgnGame
     @State private var model: ControlModel
-    
+
     init(_ game: PgnGame) {
         self.game = game
         _model = State(wrappedValue: ControlModel(game))
@@ -13,11 +16,11 @@ struct GameView: View {
         GeometryReader { geo in
             HStack(alignment: .top, spacing: 0) {
                 BoardView(model: model.board)
-                    .frame(width: model.getBoardSize(geo),
-                           height: model.getBoardSize(geo))
-                
+                    .frame(width: boardSize(geo),
+                           height: boardSize(geo))
+
                 ControlView(model: model)
-                    .frame(minWidth: 300, maxWidth: 400)
+                    .frame(minWidth: controlMinWidth, maxWidth: controlMaxWidth)
                     .background(.clear)
             }
             .focusable()
@@ -39,5 +42,9 @@ struct GameView: View {
                 return .handled
             }
         }
+    }
+
+    private func boardSize(_ geo: GeometryProxy) -> CGFloat {
+        min(geo.size.width - controlMinWidth, geo.size.height)
     }
 }

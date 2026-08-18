@@ -2,7 +2,6 @@ import Foundation
 
 class King : Figure {
     
-    static let Ident = "K"
     static let CastleQueensidePosition = 3
     static let CastleKingsidePosition = 7
     
@@ -43,9 +42,5 @@ class King : Figure {
     override func createMove(_ filename: any StringProtocol) -> Move? {
         let possibleMoves = getPossibleMoves()
         return possibleMoves.first(where: {$0.fieldInfo == filename})
-    }
-    
-    override func ident() -> String {
-        return King.Ident
     }
 }

@@ -78,19 +78,6 @@ class FenBuilder {
     }
     
     private static func getPieceIdent(_ fig:any ChessFigure) -> String {
-        switch fig.type {
-        case .pawn:
-            return fig.color == .white ? "P" : "p"
-        case .bishop:
-            return fig.color == .white ? Bishop.Ident.uppercased() : Bishop.Ident.lowercased()
-        case .knight:
-            return fig.color == .white ? Knight.Ident.uppercased() : Knight.Ident.lowercased()
-        case .rook:
-            return fig.color == .white ? Rook.Ident.uppercased() : Rook.Ident.lowercased()
-        case .queen:
-            return fig.color == .white ? Queen.Ident.uppercased() : Queen.Ident.lowercased()
-        case .king:
-            return fig.color == .white ? King.Ident.uppercased() : King.Ident.lowercased()
-        }
+        return String(fig.type.fenChar(for: fig.color))
     }
 }

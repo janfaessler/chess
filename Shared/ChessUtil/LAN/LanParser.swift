@@ -19,20 +19,9 @@ class LanParser {
         guard var move = figure.createMove(endSquareString) else { return nil }
         guard figure.isMovePossible(move, position: position) else { return nil }
         
-        if lan.count == 5, let promotedPiece = Array(lan).last.flatMap(parcePieceType) {
+        if lan.count == 5, let promotedPiece = lan.last.flatMap(PieceType.init(fenChar:)) {
             move.promoteTo = promotedPiece
         }
         return move
-    }
-    
-    private static func parcePieceType(_ str:Character) -> PieceType? {
-        switch str.uppercased() {
-        case Bishop.Ident: return .bishop
-        case Knight.Ident: return .knight
-        case Rook.Ident: return .rook
-        case Queen.Ident: return .queen
-        case King.Ident: return .king
-        default: return .pawn
-        }
     }
 }

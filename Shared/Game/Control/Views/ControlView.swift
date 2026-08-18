@@ -6,7 +6,7 @@ struct ControlView: View {
     var body: some View {
         VStack(spacing: 16) {
 
-            if !model.eval.isEmpty {
+            if !model.lines.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
                     Label("Analysis", systemImage: "cpu")
                         .font(.headline)

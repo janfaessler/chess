@@ -50,19 +50,19 @@ class FenParser {
     }
     
     private static func canWhiteCastleShort(_ str:String) -> Bool {
-        return str.contains(where: { String($0) == King.Ident})
+        return str.contains(PieceType.king.fenChar(for: .white))
     }
-    
+
     private static func canWhiteCastleLong(_ str:String) -> Bool {
-        return str.contains(where: { String($0) == Queen.Ident})
+        return str.contains(PieceType.queen.fenChar(for: .white))
     }
-    
+
     private static func canBlackCastleShort(_ str:String) -> Bool {
-        return str.contains(where: { String($0) == King.Ident.lowercased()})
+        return str.contains(PieceType.king.fenChar(for: .black))
     }
-    
+
     private static func canBlackCastleLong(_ str:String) -> Bool {
-        return str.contains(where: { String($0) == Queen.Ident.lowercased()})
+        return str.contains(PieceType.queen.fenChar(for: .black))
     }
     
     private static func getEnPassantTarget(_ str:String) -> Field? {
@@ -89,7 +89,7 @@ class FenParser {
     }
     
     private static func parsePiece(_ str: Character, rowNumber:Int, fileNumber:Int) -> Figure? {
-        let pieceType = parsePieceType(str)
+        let pieceType = PieceType(fenChar: str)
         let pieceColor = parseColor(str)
         return createFigure(pieceType, pieceColor, rowNumber, fileNumber)
     }
@@ -110,17 +110,6 @@ class FenParser {
                 return King(color: pieceColor, row: rowNumber, file: fileNumber)
             case .none:
                 return nil
-        }
-    }
-    
-    private static func parsePieceType(_ str:Character) -> PieceType? {
-        switch str.uppercased() {
-        case Bishop.Ident: return .bishop
-        case Knight.Ident: return .knight
-        case Rook.Ident: return .rook
-        case Queen.Ident: return .queen
-        case King.Ident: return .king
-        default: return .pawn
         }
     }
     

@@ -6,16 +6,12 @@ import os
 class ControlModel {
 
     private let logger = Log.logger("ControlModel")
-    private let minControlWidth: CGFloat = 200
 
     var lines: [EngineLine] = []
     var game: PgnGame?
 
     var comment: String {
         moveList.currentMove?.note ?? (game?.comment ?? "")
-    }
-    var eval:[EngineLine] {
-        lines
     }
 
     var board: BoardModel
@@ -54,10 +50,6 @@ class ControlModel {
 
     isolated deinit {
         observationTasks.forEach { $0.cancel() }
-    }
-
-    func getBoardSize(_ geo: GeometryProxy) -> CGFloat {
-        min(geo.size.width - minControlWidth, geo.size.height)
     }
 
     func openGame() {

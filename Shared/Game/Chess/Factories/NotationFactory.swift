@@ -40,7 +40,7 @@ class NotationFactory {
                 return ""
             }
         } else {
-            return move.piece.ident()
+            return move.piece.type.sanIdent
         }
     }
     
@@ -51,18 +51,10 @@ class NotationFactory {
     
     private static func getPromotionIdentifier(_ move:Move) -> String {
         guard move.type == .Promotion else { return "" }
-        switch move.promoteTo  {
-        case PieceType.queen:
-            return "=\(Queen.Ident)"
-        case PieceType.rook:
-            return "=\(Rook.Ident)"
-        case PieceType.knight:
-            return "=\(Knight.Ident)"
-        case PieceType.bishop:
-            return "=\(Bishop.Ident)"
-        case .pawn:
-            return ""
-        case .king:
+        switch move.promoteTo {
+        case .queen, .rook, .knight, .bishop:
+            return "\(Promotion)\(move.promoteTo.sanIdent)"
+        case .pawn, .king:
             return ""
         }
     }

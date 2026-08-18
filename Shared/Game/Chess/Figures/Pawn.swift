@@ -49,11 +49,7 @@ class Pawn : Figure {
     override func createMove(_ move:any StringProtocol) -> Move? {
         return Move(move, piece: Pawn(color: self.color, row: self.row, file: self.file), type: getMoveType(move))
     }
-    
-    override func ident() -> String {
-        return ""
-    }
-    
+
     private func canMoveOnce(_ move: Move, position:Position) -> Bool {
         guard move.type == .Normal || move.type == .Promotion else { return false }
         guard moveDoesNotChangeFile(move) else { return false }
