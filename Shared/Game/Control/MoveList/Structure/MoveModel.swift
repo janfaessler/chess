@@ -6,15 +6,17 @@ class MoveModel : Identifiable, Equatable {
     let id: UUID = UUID()
     let move: String
     let color: PieceColor
+    let resultingPosition: Position?
     var note: String?
 
     private var variations: [String: LineModel]
 
-    init(move: String, color: PieceColor, variations: [String: LineModel] = [:], note: String? = nil) {
+    init(move: String, color: PieceColor, variations: [String: LineModel] = [:], note: String? = nil, resultingPosition: Position? = nil) {
         self.move = move
         self.variations = variations
         self.note = note
         self.color = color
+        self.resultingPosition = resultingPosition
     }
 
     func getVariationName(_ ofMove: MoveModel) -> String? {

@@ -3,22 +3,26 @@ import Foundation
 class StructureFactory {
 
     static func create(_ game:PgnGame) -> MoveStructure{
-        let rows = getRowContainers(game.moves, startingColor: .white, startingMoveNumber:1)
+        let rows = getRowContainers(game.moves, startingColor: .white, startingMoveNumber:1, startingPosition: PositionFactory.startingPosition())
         let cache = createVariationCache(rows.all)
         return MoveStructure(line: rows, parentMoves: cache)
     }
     
-    private static func getRowContainers(_ moves:[PgnMove], startingColor:PieceColor, startingMoveNumber:Int) -> LineModel {
+    private static func getRowContainers(_ moves:[PgnMove], startingColor:PieceColor, startingMoveNumber:Int, startingPosition: Position) -> LineModel {
         var containers:[MovePairModel] = []
         var color = startingColor
         var moveNumber = startingMoveNumber
+        var position = startingPosition
         for move in moves {
-            let moveContainer = MoveModel(move: move.move, color: color, note: move.comment)
+            let resultingPosition = PositionFactory.apply(move.move, to: position)
+            let moveContainer = MoveModel(move: move.move, color: color, note: move.comment, resultingPosition: resultingPosition)
             
             for variation in move.variations {
                 guard let variationName = variation.first?.move else { continue }
-                moveContainer.addVariation(variationName, variation: getRowContainers(variation, startingColor: color, startingMoveNumber: moveNumber))
+                moveContainer.addVariation(variationName, variation: getRowContainers(variation, startingColor: color, startingMoveNumber: moveNumber, startingPosition: position))
             }
+            
+            if let resultingPosition { position = resultingPosition }
             
             if color == .white {
                 containers += [MovePairModel.create(moveContainer, moveNumber: moveNumber)]

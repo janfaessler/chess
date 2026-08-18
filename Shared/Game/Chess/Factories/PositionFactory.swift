@@ -15,14 +15,18 @@ class PositionFactory {
     static func loadPosition(_ moves: [any StringProtocol]) -> Position? {
         var position = startingPosition()
         for notation in moves {
-            guard let move = MoveFactory.create(notation, position: position) else { return nil }
-            guard let newPosition = getPosition(move, position: position, isCapture: notation.contains(NotationFactory.Capture)) else { return nil }
+            guard let newPosition = apply(notation, to: position) else { return nil }
             position = newPosition
         }
         return position
     }
+
+    static func apply(_ notation: any StringProtocol, to position: Position) -> Position? {
+        guard let move = MoveFactory.create(notation, position: position) else { return nil }
+        return getPosition(move, position: position)
+    }
     
-    static func getPosition(_ move: Move, position: Position, isCapture: Bool) -> Position? {
+    static func getPosition(_ move: Move, position: Position) -> Position? {
         guard position.figures.contains(where: { $0.equals(move.piece) }) else { return nil }
         return position.applying(move)
     }
