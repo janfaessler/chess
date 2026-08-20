@@ -1,9 +1,9 @@
 import Foundation
 
-class Figure:Identifiable, ChessFigure {
+class Figure:Identifiable, ChessFigure, @unchecked Sendable {
     let type:PieceType
     let color:PieceColor
-    private var moved:Bool
+    private let moved:Bool
     let row:Int
     let file:Int
 

@@ -71,18 +71,23 @@ class Pawn : Figure {
     
     private func canCapture(_ move:Move, position:Position) -> Bool {
         guard move.type == .Normal || move.type == .Promotion else { return false }
-        
+
         let row = move.piece.row + (move.piece.color == PieceColor.white ? +1 : -1)
         let leftFile = move.piece.file - 1
         let rightFile = move.piece.file + 1
-        
-        let figureToCaptureOnLeft = position.isNotEmpty(atRow: row, atFile: leftFile)
-        let figureToCaptureOnRight = position.isNotEmpty(atRow: row, atFile: rightFile)
-        
-        
+
+        let enemyToCaptureOnLeft = hasEnemy(atRow: row, atFile: leftFile, position: position)
+        let enemyToCaptureOnRight = hasEnemy(atRow: row, atFile: rightFile, position: position)
+
+
         let canEnPassant = position.canEnPassant(move)
-        
-        return (figureToCaptureOnLeft && leftFile == move.file) || (figureToCaptureOnRight && rightFile == move.file) || canEnPassant
+
+        return (enemyToCaptureOnLeft && leftFile == move.file) || (enemyToCaptureOnRight && rightFile == move.file) || canEnPassant
+    }
+
+    private func hasEnemy(atRow row: Int, atFile file: Int, position: Position) -> Bool {
+        guard let target = position.get(atRow: row, atFile: file) else { return false }
+        return target.color != color
     }
     
 

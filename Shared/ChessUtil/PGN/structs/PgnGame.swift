@@ -1,6 +1,6 @@
 import Foundation
 
-public struct PgnGame : Identifiable, Hashable, Equatable {
+public struct PgnGame : Identifiable, Hashable, Equatable, Sendable {
     public let id = UUID()
     public let headers:[String:String]
     public let moves:[PgnMove]

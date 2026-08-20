@@ -1,6 +1,7 @@
 import XCTest
 @testable import SwiftChess
 
+@MainActor
 final class NavigationManagerModelTests: XCTestCase {
 
     private func makeGame(white: String, black: String) -> GameData {

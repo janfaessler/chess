@@ -8,7 +8,7 @@ public class PgnRegex {
             .map{ String(input[$0.range.lowerBound..<$0.range.upperBound]).trimmingCharacters(in: .whitespacesAndNewlines) }
     }
     
-    public static let line = Regex {
+    nonisolated(unsafe) public static let line = Regex {
         Repeat(1...) {
             One(.digit)
         }
@@ -23,7 +23,7 @@ public class PgnRegex {
         }
     }.anchorsMatchLineEndings()
     
-    public static let move =  Regex {
+    nonisolated(unsafe) public static let move =  Regex {
         Capture {
            notation
         }
@@ -61,14 +61,14 @@ public class PgnRegex {
 
     }
     
-    public static let notation = Regex {
+    nonisolated(unsafe) public static let notation = Regex {
         ChoiceOf {
             castle
             normalMove
         }
     }
     
-    public static let castle = Regex {
+    nonisolated(unsafe) public static let castle = Regex {
         One(.anyOf("Oo0"))
         "-"
         One(.anyOf("Oo0"))
@@ -81,7 +81,7 @@ public class PgnRegex {
             }
         }
     }
-    public static let normalMove = Regex {
+    nonisolated(unsafe) public static let normalMove = Regex {
         Optionally(.anyOf("KQRBN"))
         Optionally(("a"..."h"))
         Optionally(("1"..."8"))
@@ -101,19 +101,19 @@ public class PgnRegex {
         Optionally(.anyOf("+#"))
     }
     
-    public static let annotation = Regex  {
+    nonisolated(unsafe) public static let annotation = Regex  {
         Repeat(1...2) {
             One(.anyOf("?!"))
         }
     }
     
-    public static let numericAnnotation = Regex  {
+    nonisolated(unsafe) public static let numericAnnotation = Regex  {
         Optionally(.whitespace)
         "$"
         One(.digit)
     }
     
-    public static let comment = Regex {
+    nonisolated(unsafe) public static let comment = Regex {
         Optionally(.whitespace)
         "{"
         Optionally {
@@ -131,7 +131,7 @@ public class PgnRegex {
         "}"
     }
     
-    public static let result = Regex {
+    nonisolated(unsafe) public static let result = Regex {
         One(.whitespace)
         Capture {
             ChoiceOf {

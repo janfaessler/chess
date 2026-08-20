@@ -1,6 +1,7 @@
 import Foundation
 import SwiftData
 
+@MainActor
 final class SwiftDataGameCollectionRepository: GameCollectionRepository {
 
     private let logger = Log.logger("SwiftDataGameCollectionRepository")
@@ -76,19 +77,19 @@ final class SwiftDataGameCollectionRepository: GameCollectionRepository {
     }
 
     private func loadGames(_ url: URL) async -> [PgnGame] {
-        await Task.detached(priority: .utility) { [self] in
-            let pgn = getFileContent(url)
+        await Task.detached(priority: .utility) {
+            let pgn = Self.getFileContent(url)
             return PgnParser.parse(pgn)
         }.value
     }
 
-    private func getFileContent(_ url: URL) -> String {
+    nonisolated private static func getFileContent(_ url: URL) -> String {
         let path = url.path(percentEncoded: false)
         do {
             var encoding: String.Encoding = .utf8
             return try String(contentsOfFile: path, usedEncoding: &encoding)
         } catch {
-            logger.info("content of path <\(path)> could not be loaded: \(error)")
+            Log.logger("SwiftDataGameCollectionRepository").info("content of path <\(path)> could not be loaded: \(error)")
         }
         return ""
     }

@@ -1,6 +1,6 @@
 import Foundation
 
-protocol ChessFigure : Hashable, Equatable {
+protocol ChessFigure : Hashable, Equatable, Sendable {
     var row: Int { get }
     var file: Int { get }
     var color: PieceColor { get }

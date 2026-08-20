@@ -1,7 +1,7 @@
 import Foundation
 import os
 
-class Position {
+final class Position: @unchecked Sendable {
     private static let logger = Log.logger("Position")
 
     private let cache:[Int:[Int:any ChessFigure]]
@@ -13,8 +13,10 @@ class Position {
     let canBlackCastleQueenside:Bool
     let halfmoveClock:Int
     let moveClock:Int
-    
+
     let figures:[any ChessFigure]
+
+    private var cachedHash:Int?
 
     init(
         _ figures: [any ChessFigure],
@@ -76,6 +78,13 @@ class Position {
     }
     
     func getHash() -> Int {
+        if let cachedHash { return cachedHash }
+        let hash = computeHash()
+        cachedHash = hash
+        return hash
+    }
+
+    private func computeHash() -> Int {
         var hasher = Hasher()
         for fig in figures.sorted(by: { ($0.row, $0.file) > ($1.row, $1.file) }) {
             hasher.combine(fig)

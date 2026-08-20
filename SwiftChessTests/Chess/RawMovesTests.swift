@@ -348,6 +348,26 @@ final class RawMovesTests: ChessTestBase {
         try assertMoves(["e4", "f5", "Bc4", "e6", "h3", "g5", "Qh5+", "Ke7", "e5", "a6","d3","b5", "Bxg5+", "Nf6", "Bxf6#"])
     }
 
+    func testPawnCannotCaptureOwnPiece() throws {
+        loadFen("4k3/8/8/3B4/4P3/8/8/4K3 w - - 0 1")
+        let testee = try XCTUnwrap(testee)
+
+        let pawn = try XCTUnwrap(testee.figures.first { $0.equals(Figure.create("e4", type: .pawn, color: .white)!) })
+        let canCaptureOwnBishop = testee.getPossibleMoves(forPiece: pawn).contains { $0.field == Field(row: 5, file: 4) }
+        XCTAssertFalse(canCaptureOwnBishop, "white pawn on e4 must not be able to capture its own bishop on d5")
+
+        try moveAndAssertError(Move("d5", piece: Figure.create("e4", type: .pawn, color: .white)!, type: .Normal)!)
+    }
+
+    func testPawnCanStillCaptureEnemyPiece() throws {
+        loadFen("4k3/8/8/3b4/4P3/8/8/4K3 w - - 0 1")
+        let testee = try XCTUnwrap(testee)
+
+        let pawn = try XCTUnwrap(testee.figures.first { $0.equals(Figure.create("e4", type: .pawn, color: .white)!) })
+        let canCaptureEnemyBishop = testee.getPossibleMoves(forPiece: pawn).contains { $0.field == Field(row: 5, file: 4) }
+        XCTAssertTrue(canCaptureEnemyBishop, "white pawn on e4 must be able to capture the black bishop on d5")
+    }
+
     func testStraightPawnPromotion() throws {
         loadFen("4k3/P7/8/8/8/8/8/4K3 w - - 0 1")
         let testee = try XCTUnwrap(testee)

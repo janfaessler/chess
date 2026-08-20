@@ -378,6 +378,11 @@ final class NotationTests: ChessTestBase {
         XCTAssertEqual(NotationFactory.generate(move, position: testee.position), "Nf5d4")
     }
 
+    func testPawnCannotCaptureOwnPiece() throws {
+        loadFen("4k3/8/8/3B4/4P3/8/8/4K3 w - - 0 1")
+        try moveAndAssertError("exd5")
+    }
+
     func testStraightPromotionByPush() throws {
         loadFen("4k3/P7/8/8/8/8/8/4K3 w - - 0 1")
         let testee = try XCTUnwrap(testee)

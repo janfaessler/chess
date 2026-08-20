@@ -1,6 +1,7 @@
 import Foundation
 import os
 
+@MainActor
 @Observable
 public class NavigationManagerModel {
 
@@ -16,12 +17,10 @@ public class NavigationManagerModel {
     func openFiles(urls: [URL]) async {
         for url in urls {
             let gameDataArray = await repository.importGames(from: url)
-            await MainActor.run {
-                self.collections.append(
-                    GameCollection(name: url.lastPathComponent, expanded: true, games: gameDataArray)
-                )
-                self.save()
-            }
+            collections.append(
+                GameCollection(name: url.lastPathComponent, expanded: true, games: gameDataArray)
+            )
+            save()
         }
     }
 
