@@ -1,32 +1,27 @@
 import Foundation
 
-struct Move:Identifiable, Equatable {
-    
+struct Move:Identifiable, Equatable, Sendable {
+
     var id:String {
         "\(startingField.info)-\(field.info)-\(piece.color)-\(piece.type)-\(type)-\(promoteTo)"
     }
-    
-    var row:Int = 0
-    var file:Int = 0
-    var piece:any ChessFigure
-    var type:MoveType = MoveType.Normal
-    var startingField:Field
-    var promoteTo:PieceType
-    
-    init(_ r:Int, _ f:Int, piece: any ChessFigure) {
+
+    let row:Int
+    let file:Int
+    let piece:any ChessFigure
+    let type:MoveType
+    let startingField:Field
+    let promoteTo:PieceType
+
+    init(_ r:Int, _ f:Int, piece: any ChessFigure, type: MoveType = MoveType.Normal, promoteTo:PieceType = PieceType.queen) {
         self.row = r
         self.file = f
         self.piece = piece
         self.startingField = piece.field
-        self.promoteTo = .queen
-    }
-    
-    init (_ r:Int, _ f:Int, piece: any ChessFigure, type: MoveType, promoteTo:PieceType = PieceType.queen){
-        self.init(r,f, piece: piece)
         self.type = type
         self.promoteTo = promoteTo
     }
-    
+
     init?(_ fieldname:any StringProtocol, piece: any ChessFigure, type: MoveType, promoteTo:PieceType = PieceType.queen) {
         guard let field = Field(fieldname) else { return nil }
         self.init(field.row, field.file, piece: piece, type: type, promoteTo: promoteTo)
