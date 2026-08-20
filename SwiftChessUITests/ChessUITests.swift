@@ -19,7 +19,7 @@ final class NavigationUITests: ChessUITestCase {
         let app = launchApp()
         openGame(app, firstGameTitle)
         click(app, "actions-menu")
-        clickMenuItem(app, "Open PGN")
+        click(app, "actions-open-pgn")
         XCTAssertTrue(app.staticTexts["Import PGN Files"].waitForExistence(timeout: 5), "Open PGN screen should be shown")
     }
 }
