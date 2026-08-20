@@ -2,8 +2,6 @@ import Foundation
 
 class Pawn : Figure {
     
-    static let RowWherePromotionIsPossibleForWhite = 7
-    static let RowWherePromotionIsPossibleForBlack = 2
     static let startingRowForWhite = 2
     static let startingRowForBlack = 7
     
@@ -14,9 +12,9 @@ class Pawn : Figure {
     override func getPossibleMoves() -> [Move] {
         let row = row
         let file = file
+        let moveType = isOnPromotionRank ? MoveType.Promotion : MoveType.Normal
         switch color {
         case.black:
-            let moveType = row == Pawn.RowWherePromotionIsPossibleForBlack ? MoveType.Promotion : MoveType.Normal
             var moves = [
                 createMove(row-1, file-1, moveType),
                 createMove(row-1, file, moveType),
@@ -26,7 +24,6 @@ class Pawn : Figure {
             }
             return moves
         case .white:
-            let moveType = row == Pawn.RowWherePromotionIsPossibleForWhite ? MoveType.Promotion : MoveType.Normal
             var moves = [
                 createMove(row+1, file-1, moveType),
                 createMove(row+1, file, moveType),
@@ -99,5 +96,9 @@ class Pawn : Figure {
     private func getMoveType(_ move: any StringProtocol) -> MoveType {
         guard let lastChar = move.last, let targetRow = Int(String(lastChar)) else { return .Normal }
         return abs(targetRow - row) == 2 ? .Double : .Normal
+    }
+
+    private var isOnPromotionRank: Bool {
+        PromotionRules.isOnRankBeforePromotion(self)
     }
 }

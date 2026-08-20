@@ -94,7 +94,7 @@ final class Position: @unchecked Sendable {
         let capturedPiece = applyCapture(&figures, move: move)
         applyMovement(&figures, move: move, capturedPiece: capturedPiece)
         if CastlingRules.isCastlingMove(move) { applyCastlingRook(&figures, move: move) }
-        if isPawnPromotion(move) { applyPromotion(&figures, move: move) }
+        if PromotionRules.isPromotion(move) { applyPromotion(&figures, move: move) }
         return PositionFactory.create(self, afterMove: move, figures: figures, capturedPiece: capturedPiece)
     }
     
@@ -121,12 +121,8 @@ final class Position: @unchecked Sendable {
     }
     
     private func applyPromotion(_ figures: inout [any ChessFigure], move: Move) {
-        figures.removeAll(where: { $0.type == .pawn && $0.color == move.piece.color && $0.row == move.row && $0.file == move.file })
+        figures.removeAll(where: { PromotionRules.isPawnBeingPromoted($0, by: move) })
         figures.append(Figure.create(type: move.promoteTo, color: move.piece.color, row: move.row, file: move.file))
-    }
-    
-    private func isPawnPromotion(_ move: Move) -> Bool {
-        return move.piece.type == .pawn && pawnHasReachedEndOfTheBoard(move)
     }
     
     private func getNextPieceOnRow(from:Field, to:Field) -> (any ChessFigure)? {
@@ -155,10 +151,6 @@ final class Position: @unchecked Sendable {
             }
         }
         return get(atRow: to.row, atFile: to.file)
-    }
-    
-    private func pawnHasReachedEndOfTheBoard(_ move:Move) -> Bool {
-        return (move.piece.color == .white && move.row == 8) || (move.piece.color == .black && move.row == 1)
     }
     
     private static func createCacheDict(_ figures: [any ChessFigure]) -> [Int : [Int : any ChessFigure]]? {

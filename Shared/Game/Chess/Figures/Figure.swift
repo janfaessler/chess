@@ -109,7 +109,7 @@ class Figure:Identifiable, ChessFigure, @unchecked Sendable {
         return Move(row, file, piece: Figure.create(type: self.type, color: self.color, row: self.row, file: self.file), type: type)
     }
 
-    func createMove(_ move:any StringProtocol, type:MoveType = .Normal, promoteTo:PieceType = .queen) -> Move? {
+    func createMove(_ move:any StringProtocol, type:MoveType, promoteTo:PieceType) -> Move? {
         return Move(move, piece: Figure.create(type: self.type, color: self.color, row: self.row, file: self.file), type: type, promoteTo: promoteTo)
     }
     
