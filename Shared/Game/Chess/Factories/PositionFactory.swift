@@ -40,7 +40,7 @@ class PositionFactory {
         return Position(
             figures,
             colorToMove: createColorToMove(afterMove),
-            enPassantTarget: createEnPassantTarget(afterMove),
+            enPassantTarget: EnPassantRules.target(afterMove: afterMove),
             whiteCanCastleKingside: CastlingRules.retainsRights(afterMove: afterMove, color: .white, rookStartingFile: Rook.CastleKingsideStartingFile, capturedPiece: capturedPiece, oldPosition: oldPosition),
             whiteCanCastleQueenside: CastlingRules.retainsRights(afterMove: afterMove, color: .white, rookStartingFile: Rook.CastleQueensideStartingFile, capturedPiece: capturedPiece, oldPosition: oldPosition),
             blackCanCastleKingside: CastlingRules.retainsRights(afterMove: afterMove, color: .black, rookStartingFile: Rook.CastleKingsideStartingFile, capturedPiece: capturedPiece, oldPosition: oldPosition),
@@ -51,15 +51,6 @@ class PositionFactory {
     
     private static func createColorToMove(_ move:Move) -> PieceColor {
         return move.piece.color == .white ? .black : .white
-    }
-    
-    private static func createEnPassantTarget(_ move:Move) -> Field? {
-        guard move.type == .Double else { return nil }
-        
-        let targetRow = move.piece.color == .white ? move.row - 1 : move.row + 1
-        let targetFile = move.file
-        
-        return Field(row:targetRow, file: targetFile)
     }
     
     private static func getHalfmoveClock(_ move: Move, _ isCapture: Bool, oldPosition:Position) -> Int {

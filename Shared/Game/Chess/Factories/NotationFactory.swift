@@ -93,7 +93,7 @@ class NotationFactory {
     
     private static func isCapture(_ move:Move, position:Position) -> Bool {
         let pieceAtPosition = position.get(atRow: move.row, atFile: move.file)
-        return pieceAtPosition != nil || position.isEnPassant(move)
+        return pieceAtPosition != nil || EnPassantRules.isEnPassant(move, position: position)
     }
     
 }

@@ -68,15 +68,6 @@ final class Position: @unchecked Sendable {
         return get(atRow: move.row, atFile: move.file)
     }
     
-    func isEnPassant(_ move:Move) -> Bool {
-        canEnPassant(move) && isEmpty(atRow: move.row, atFile: move.file) && enPassantTarget == move.field
-    }
-    
-    func canEnPassant(_ move:Move) -> Bool {
-        guard let target = enPassantTarget else { return false }
-        return move.field == target
-    }
-    
     func getHash() -> Int {
         if let cachedHash { return cachedHash }
         let hash = computeHash()
@@ -114,8 +105,9 @@ final class Position: @unchecked Sendable {
     }
     
     private func applyMovement(_ figures: inout [any ChessFigure], move: Move, capturedPiece: (any ChessFigure)?) {
-        if isEnPassant(move) {
-            figures.removeAll(where: { $0.row == move.piece.row && $0.file == move.file })
+        if EnPassantRules.isEnPassant(move, position: self) {
+            let captured = EnPassantRules.capturedPawnField(for: move)
+            figures.removeAll(where: { $0.row == captured.row && $0.file == captured.file })
         }
         figures.append(Figure.create(type: move.piece.type, color: move.piece.color, row: move.row, file: move.file, moved: true))
     }

@@ -80,7 +80,7 @@ class Pawn : Figure {
         let enemyToCaptureOnRight = hasEnemy(atRow: row, atFile: rightFile, position: position)
 
 
-        let canEnPassant = position.canEnPassant(move)
+        let canEnPassant = EnPassantRules.canEnPassant(move, position: position)
 
         return (enemyToCaptureOnLeft && leftFile == move.file) || (enemyToCaptureOnRight && rightFile == move.file) || canEnPassant
     }
