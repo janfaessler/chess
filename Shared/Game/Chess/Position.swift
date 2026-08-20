@@ -1,10 +1,8 @@
 import Foundation
-import os
 
 final class Position: @unchecked Sendable {
-    private static let logger = Log.logger("Position")
 
-    private let cache:[Int:[Int:any ChessFigure]]
+    private let board:Board
     let colorToMove:PieceColor
     let enPassantTarget:Field?
     let canWhiteCastleKingside:Bool
@@ -14,7 +12,7 @@ final class Position: @unchecked Sendable {
     let halfmoveClock:Int
     let moveClock:Int
 
-    let figures:[any ChessFigure]
+    var figures:[any ChessFigure] { board.figures }
 
     private var cachedHash:Int?
 
@@ -29,9 +27,7 @@ final class Position: @unchecked Sendable {
         moveClock:Int,
         halfmoveClock:Int
     ) {
-        let cache = Position.createCacheDict(figures) ?? [:]
-        self.cache = cache
-        self.figures = cache.flatMap({ $1.values })
+        self.board = Board(figures)
         self.colorToMove = colorToMove
         self.enPassantTarget = enPassantTarget
         self.canWhiteCastleKingside = whiteCanCastleKingside
@@ -43,31 +39,21 @@ final class Position: @unchecked Sendable {
     }
     
     func get(atRow:Int, atFile:Int) -> (any ChessFigure)? {
-        return cache[atRow]?[atFile]
+        return board.get(atRow: atRow, atFile: atFile)
     }
-    
+
     func isEmpty(atRow:Int, atFile:Int) -> Bool {
-        return get(atRow: atRow, atFile: atFile) == nil
+        return board.isEmpty(atRow: atRow, atFile: atFile)
     }
-    
+
     func isNotEmpty(atRow:Int, atFile:Int) -> Bool {
-        return isEmpty(atRow: atRow, atFile: atFile) == false
+        return board.isNotEmpty(atRow: atRow, atFile: atFile)
     }
-    
-    func getNextPiece(_ move: Move) -> (any ChessFigure)? {
-        let deltaFile = abs(move.piece.file - move.file)
-        let deltaRow = abs(move.piece.row - move.row)
-        
-        if deltaRow == 0 {
-            return getNextPieceOnRow(from: move.piece.field, to: move.field)
-        } else if deltaFile == 0 {
-            return getNextPieceOnFile(from: move.piece.field, to: move.field)
-        } else if deltaRow == deltaFile {
-            return getNextPieceOnDiagonal(from: move.piece.field, to: move.field)
-        }
-        return get(atRow: move.row, atFile: move.file)
+
+    func checkNextIntersection(_ move: Move) -> (any ChessFigure)? {
+        return board.checkNextIntersection(move)
     }
-    
+
     func getHash() -> Int {
         if let cachedHash { return cachedHash }
         let hash = computeHash()
@@ -77,9 +63,7 @@ final class Position: @unchecked Sendable {
 
     private func computeHash() -> Int {
         var hasher = Hasher()
-        for fig in figures.sorted(by: { ($0.row, $0.file) > ($1.row, $1.file) }) {
-            hasher.combine(fig)
-        }
+        board.hash(into: &hasher)
         hasher.combine(colorToMove)
         hasher.combine(canWhiteCastleKingside)
         hasher.combine(canWhiteCastleQueenside)
@@ -123,48 +107,5 @@ final class Position: @unchecked Sendable {
     private func applyPromotion(_ figures: inout [any ChessFigure], move: Move) {
         figures.removeAll(where: { PromotionRules.isPawnBeingPromoted($0, by: move) })
         figures.append(Figure.create(type: move.promoteTo, color: move.piece.color, row: move.row, file: move.file))
-    }
-    
-    private func getNextPieceOnRow(from:Field, to:Field) -> (any ChessFigure)? {
-        let direction = from.file < to.file ? 1 : -1
-        for f in stride(from: from.file + direction, to: to.file, by: direction) {
-            if let piece = get(atRow: from.row, atFile: f) { return piece }
-        }
-        return get(atRow: to.row, atFile: to.file)
-    }
-    
-    private func getNextPieceOnFile(from:Field, to:Field) -> (any ChessFigure)? {
-        let direction = from.row < to.row ? 1 : -1
-        for r in stride(from: from.row + direction, to: to.row, by: direction) {
-            if let piece = get(atRow: r, atFile: from.file) { return piece }
-        }
-        return get(atRow: to.row, atFile: to.file)
-    }
-    
-    private func getNextPieceOnDiagonal(from:Field, to:Field) -> (any ChessFigure)? {
-        let rowDir = min(max(to.row - from.row, -1), 1)
-        let fileDir = min(max(to.file - from.file, -1), 1)
-        let delta = abs(from.file - to.file)
-        if delta > 1 {
-            for i in 1...delta {
-                if let piece = get(atRow: from.row + i * rowDir, atFile: from.file + i * fileDir) { return piece }
-            }
-        }
-        return get(atRow: to.row, atFile: to.file)
-    }
-    
-    private static func createCacheDict(_ figures: [any ChessFigure]) -> [Int : [Int : any ChessFigure]]? {
-        var dict:[Int:[Int:any ChessFigure]] = [:]
-        for figure in figures {
-            if dict[figure.row] == nil {
-                dict[figure.row] = [:]
-            }
-            guard dict[figure.row]?[figure.file] == nil else {
-                Position.logger.error("could not set \(figure.info()) because field is occupied by \(dict[figure.row]?[figure.file]?.info() ?? "")")
-                return nil
-            }
-            dict[figure.row]![figure.file] = figure
-        }
-        return dict
     }
 }

@@ -26,7 +26,7 @@ class Knight : Figure {
             return false
         }
         
-        guard let pieceAtTarget = position.getNextPiece(move) else {
+        guard let pieceAtTarget = position.checkNextIntersection(move) else {
             return true
         }
         

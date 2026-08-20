@@ -60,7 +60,7 @@ class Figure:Identifiable, ChessFigure, @unchecked Sendable {
             return false
         }
 
-        guard let intersectingPiece = position.getNextPiece(move) else {
+        guard let intersectingPiece = position.checkNextIntersection(move) else {
             return true
         }
         
