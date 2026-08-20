@@ -1,6 +1,6 @@
 import Foundation
 
-class Pawn : Figure {
+class Pawn : Figure, @unchecked Sendable {
     
     static let startingRowForWhite = 2
     static let startingRowForBlack = 7

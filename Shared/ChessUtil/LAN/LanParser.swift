@@ -20,7 +20,7 @@ class LanParser {
         guard figure.isMovePossible(move, position: position) else { return nil }
         
         if lan.count == 5, let promotedPiece = lan.last.flatMap(PieceType.init(fenChar:)) {
-            move.promoteTo = promotedPiece
+            return Move(move, promoteTo: promotedPiece)
         }
         return move
     }

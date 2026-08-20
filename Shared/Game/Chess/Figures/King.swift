@@ -1,6 +1,6 @@
 import Foundation
 
-class King : Figure {
+class King : Figure, @unchecked Sendable {
     
     static let CastleQueensidePosition = 3
     static let CastleKingsidePosition = 7

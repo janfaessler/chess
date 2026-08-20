@@ -21,6 +21,10 @@ struct Move:Identifiable, Equatable, Sendable {
         self.type = type
         self.promoteTo = promoteTo
     }
+    
+    init(_ move:Move, promoteTo:PieceType) {
+        self.init(move.row, move.file, piece: move.piece, type: MoveType.Promotion, promoteTo: promoteTo)
+    }
 
     init?(_ fieldname:any StringProtocol, piece: any ChessFigure, type: MoveType, promoteTo:PieceType = PieceType.queen) {
         guard let field = Field(fieldname) else { return nil }
