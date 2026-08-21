@@ -38,11 +38,23 @@
 		61AE78292B991BE8008F56F8 /* SwiftChess (macOS).xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "SwiftChess (macOS).xctestplan"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		619AF11F3038BC3800718D91 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"nn-37f18f62d772.nnue",
+				"nn-1111cefa1111.nnue",
+			);
+			target = 6177236F274284FF00169D3D /* SwiftChess (macOS) */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		615AED4F3031B3260045D0F0 /* SwiftChessUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SwiftChessUITests; sourceTree = "<group>"; };
 		615AED763031BFC50045D0F0 /* SwiftChessTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SwiftChessTests; sourceTree = "<group>"; };
 		615AEDF33031C0540045D0F0 /* Shared */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Shared; sourceTree = "<group>"; };
 		615AEE4A3031C10B0045D0F0 /* macOS */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = macOS; sourceTree = "<group>"; };
+		619AF11A3038BBC000718D91 /* EvalFiles */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (619AF11F3038BC3800718D91 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = EvalFiles; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +89,7 @@
 		6177235A274284FE00169D3D = {
 			isa = PBXGroup;
 			children = (
+				619AF11A3038BBC000718D91 /* EvalFiles */,
 				61AE78292B991BE8008F56F8 /* SwiftChess (macOS).xctestplan */,
 				619AF1163038861F00718D91 /* SwiftChessCore */,
 				615AEDF33031C0540045D0F0 /* Shared */,

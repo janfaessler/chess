@@ -1,5 +1,4 @@
 import SwiftUI
-import os
 import SwiftChessCore
 
 @Observable
@@ -18,11 +17,12 @@ class BoardModel {
     private var game: ChessGame
 
 
-    init(game: ChessGame? = nil) {
-        let newGame = game ?? ChessGame(PositionFactory.startingPosition())
-        self.game = newGame
+    init(_ position: Position? = nil) {
+        let position = position ?? PositionFactory.startingPosition()
+        let game = ChessGame(position)
+        self.game = game
+        result = ResultModel(game.getGameState())
         (movePlayed, moveContinuation) = AsyncStream.makeStream(of: String.self)
-        result = ResultModel(newGame.getGameState())
         figures = getFigures()
     }
     

@@ -38,18 +38,24 @@ final class ChessEngine: EngineProtocol {
         let multipv = lineNumbers
 
         configurationTask = Task {
-            await engine.set(loggingEnabled: false)
+            await engine.set(loggingEnabled: true)
             await engine.start(coreCount: 2, multipv: multipv)
 
             while await !engine.isRunning, !Task.isCancelled {
                 try? await Task.sleep(for: .milliseconds(50))
             }
-
-            for (option, filename) in [("EvalFile", "nn-1111cefa1111.nnue"),
-                                       ("EvalFileSmall", "nn-37f18f62d772.nnue")] {
-                guard let path = Self.materializeEvalFile(option, filename) else { continue }
-                await engine.send(command: .setoption(id: option, value: path))
+            
+            guard let evalFile = Bundle.main.url(forResource: "nn-1111cefa1111", withExtension: "nnue") else {
+                configurationTask?.cancel()
+                return
             }
+            await engine.send(command: .setoption(id: "EvalFile", value: evalFile.absoluteURL.path()))
+            guard let evalFile = Bundle.main.url(forResource: "nn-37f18f62d772", withExtension: "nnue") else {
+                configurationTask?.cancel()
+                return
+            }
+            await engine.send(command: .setoption(id: "EvalFileSmall", value: evalFile.absoluteURL.path()))
+            
         }
 
         responseTask = Task { [weak self, engine] in
@@ -116,27 +122,6 @@ final class ChessEngine: EngineProtocol {
             moveNotations += [notation]
         }
         return moveNotations.joined(separator: ", ")
-    }
-
-    private static func materializeEvalFile(_ asset:String, _ filename:String) -> String? {
-        guard let asset = NSDataAsset(name: asset) else {
-            return nil
-        }
-
-        let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
-        guard let destination = cachesDirectory?.appendingPathComponent(filename) else {
-            return nil
-        }
-
-        do {
-            if !FileManager.default.fileExists(atPath: destination.path) {
-                try asset.data.write(to: destination)
-            }
-        } catch {
-            return nil
-        }
-
-        return destination.path(percentEncoded: false)
     }
 
     private func getScore(_ info: EngineResponse.Info) -> String {

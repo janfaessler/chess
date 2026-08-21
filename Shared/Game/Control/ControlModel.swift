@@ -1,5 +1,4 @@
 import SwiftUI
-import os
 import SwiftChessCore
 
 @Observable
@@ -27,19 +26,21 @@ class ControlModel {
         self.game = game
 
         if let fen = TestSupport.boardFen, let position = try? FenParser.parse(fen) {
-            board = BoardModel(game: ChessGame(position))
+            board = BoardModel(position)
         } else {
             board = BoardModel()
         }
-
         engine = TestSupport.isUITesting ? StubEngine() : ChessEngine()
+
+        
+        let structure = StructureFactory.create(game)
+        self.moveList.load(structure)
     }
 
     func start() {
         guard !isStarted else { return }
         isStarted = true
 
-        openGame()
         observeBoardMoves()
         observePositionChanges()
         observeEngineEval()
@@ -51,12 +52,6 @@ class ControlModel {
 
     isolated deinit {
         observationTasks.forEach { $0.cancel() }
-    }
-
-    func openGame() {
-        guard let game = game else { return }
-        let structure = StructureFactory.create(game)
-        moveList.load(structure)
     }
 
     private func observeBoardMoves() {
