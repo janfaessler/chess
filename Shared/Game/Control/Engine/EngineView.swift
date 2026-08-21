@@ -5,7 +5,7 @@ struct EngineView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            ForEach(Array(model.lines.prefix(3)), id: \.id) { line in
+            ForEach(Array(model.lines.prefix(EngineSettings.shared.lineCount)), id: \.id) { line in
                 HStack(spacing: 8) {
                     Text(line.score)
                         .font(.system(.caption, design: .monospaced, weight: .semibold))

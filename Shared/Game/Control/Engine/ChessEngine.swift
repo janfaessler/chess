@@ -1,11 +1,6 @@
 import Foundation
 import ChessKitEngine
 import SwiftChessCore
-#if canImport(AppKit)
-import AppKit
-#elseif canImport(UIKit)
-import UIKit
-#endif
 
 @Observable
 @MainActor
@@ -16,14 +11,15 @@ final class ChessEngine: EngineProtocol {
     let evalStream: AsyncStream<[EngineLine]>
     private let evalContinuation: AsyncStream<[EngineLine]>.Continuation
 
-    private let lineNumbers = 3
-    private let engine:Engine
-    private var lines:[EngineLine] = []
-    private var pos:Position = PositionFactory.startingPosition()
+    private let engine: Engine
+    private let settings = EngineSettings.shared
+    private var lines: [EngineLine] = []
+    private var pos: Position = PositionFactory.startingPosition()
 
-    private var configurationTask:Task<Void, Never>?
-    private var responseTask:Task<Void, Never>?
-    private var analysisTask:Task<Void, Never>?
+    private var configurationTask: Task<Void, Never>?
+    private var responseTask: Task<Void, Never>?
+    private var analysisTask: Task<Void, Never>?
+    private var settingsTask: Task<Void, Never>?
     private let debounceDelay = Duration.seconds(1)
 
     init() {
@@ -35,16 +31,18 @@ final class ChessEngine: EngineProtocol {
         guard configurationTask == nil else { return }
 
         let engine = engine
-        let multipv = lineNumbers
+        let coreCount = settings.coreCount
+        let lineCount = settings.lineCount
+        let debug = settings.debug
 
         configurationTask = Task {
-            await engine.set(loggingEnabled: false)
-            await engine.start(coreCount: 2, multipv: multipv)
+            await engine.set(loggingEnabled: debug)
+            await engine.start(coreCount: coreCount, multipv: lineCount)
 
             while await !engine.isRunning, !Task.isCancelled {
                 try? await Task.sleep(for: .milliseconds(50))
             }
-            
+
             guard let evalFile = Bundle.main.url(forResource: "nn-1111cefa1111", withExtension: "nnue") else {
                 return
             }
@@ -53,7 +51,6 @@ final class ChessEngine: EngineProtocol {
                 return
             }
             await engine.send(command: .setoption(id: "EvalFileSmall", value: evalFile.absoluteURL.path()))
-            
         }
 
         responseTask = Task { [weak self, engine] in
@@ -63,19 +60,33 @@ final class ChessEngine: EngineProtocol {
                 self?.handleEngineResponse(response)
             }
         }
+
+        settingsTask = Task { [weak self] in
+            await self?.configurationTask?.value
+            guard let self else { return }
+            for await _ in settings.changes {
+                guard await engine.isRunning else { continue }
+                newPosition(pos)
+            }
+        }
     }
 
     isolated deinit {
         configurationTask?.cancel()
         responseTask?.cancel()
         analysisTask?.cancel()
+        settingsTask?.cancel()
         evalContinuation.finish()
     }
 
-    public func newPosition(_ pos:Position) {
+    public func newPosition(_ pos: Position) {
         startIfNeeded()
         self.pos = pos
         let fen = FenBuilder.create(pos)
+        let depth = settings.depth
+        let coreCount = settings.coreCount
+        let lineCount = settings.lineCount
+        let debug = settings.debug
 
         analysisTask?.cancel()
         analysisTask = Task { [engine, configurationTask, debounceDelay] in
@@ -83,22 +94,26 @@ final class ChessEngine: EngineProtocol {
             guard await engine.isRunning else { return }
             await engine.send(command: .stop)
 
+            await engine.set(loggingEnabled: debug)
+            await engine.send(command: .setoption(id: "Threads", value: "\(max(coreCount - 1, 1))"))
+            await engine.send(command: .setoption(id: "MultiPV", value: "\(lineCount)"))
+
             try? await Task.sleep(for: debounceDelay)
             guard !Task.isCancelled else { return }
 
             await engine.send(command: .position(.fen(fen)))
-            await engine.send(command: .go(depth: 15))
+            await engine.send(command: .go(depth: depth))
         }
     }
 
-    private func handleEngineResponse(_ response:EngineResponse) {
+    private func handleEngineResponse(_ response: EngineResponse) {
         switch response {
         case let .info(info):
-            guard let lineNumber = info.multipv  else {return}
+            guard let lineNumber = info.multipv else { return }
 
             let line = EngineLine(id: lineNumber,
                                   score: getScore(info),
-                                  line: getLine(info.pv ??  []))
+                                  line: getLine(info.pv ?? []))
 
             let newLines = lines.filter { $0.id != lineNumber } + [line]
             lines = newLines.sorted(by: { $0.id < $1.id })
@@ -108,8 +123,8 @@ final class ChessEngine: EngineProtocol {
         }
     }
 
-    private func getLine(_ engineline:[String]) -> String {
-        var moveNotations:[String]  = []
+    private func getLine(_ engineline: [String]) -> String {
+        var moveNotations: [String] = []
         var tempPos = pos
         for lan in engineline {
             guard let move = LanParser.parse(lan: lan, position: tempPos) else {

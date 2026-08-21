@@ -39,5 +39,10 @@ struct SwiftChessApp: App {
             ContentView()
         }
         .modelContainer(container)
+        #if os(macOS)
+        Settings {
+            SettingsView()
+        }
+        #endif
     }
 }
