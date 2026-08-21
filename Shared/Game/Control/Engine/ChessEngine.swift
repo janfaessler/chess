@@ -46,12 +46,10 @@ final class ChessEngine: EngineProtocol {
             }
             
             guard let evalFile = Bundle.main.url(forResource: "nn-1111cefa1111", withExtension: "nnue") else {
-                configurationTask?.cancel()
                 return
             }
             await engine.send(command: .setoption(id: "EvalFile", value: evalFile.absoluteURL.path()))
             guard let evalFile = Bundle.main.url(forResource: "nn-37f18f62d772", withExtension: "nnue") else {
-                configurationTask?.cancel()
                 return
             }
             await engine.send(command: .setoption(id: "EvalFileSmall", value: evalFile.absoluteURL.path()))
