@@ -1,15 +1,15 @@
-import XCTest
+import Testing
 @testable import SwiftChessCore
 
-final class MoveFactoryTests: XCTestCase {
+final class MoveFactoryTests {
 
-    private var boardCache:Position?
-    
-    override func setUpWithError() throws {
-        boardCache = PositionFactory.startingPosition();
+    var boardCache: Position
+
+    init() {
+        boardCache = PositionFactory.startingPosition()
     }
 
-    func testPawnMoves() throws {
+    @Test func testPawnMoves() throws {
         try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .Double)
         try assertMove("e5", field: "e5", type: .pawn, color: .black, moveType: .Double)
         try assertMove("d4", field: "d4", type: .pawn, color: .white, moveType: .Double)
@@ -23,8 +23,8 @@ final class MoveFactoryTests: XCTestCase {
         try assertMove("gxh8=Q", field: "h8", type: .pawn, color: .white, moveType: .Promotion)
         try assertMove("cxb1=Q", field: "b1", type: .pawn, color: .black, moveType: .Promotion)
     }
-    
-    func testPieceMoves() throws {
+
+    @Test func testPieceMoves() throws {
         try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .Double)
         try assertMove("e5", field: "e5", type: .pawn, color: .black, moveType: .Double)
         try assertMove("Nc3", field: "c3", type: .knight, color: .white)
@@ -43,168 +43,126 @@ final class MoveFactoryTests: XCTestCase {
         try assertMove("Bxg4+", field: "g4", type: .bishop, color: .black)
         try assertMove("Nxg4", field: "g4", type: .knight, color: .white)
     }
-    
-    func testShortCastle() throws {
-    
-        try assertMove("e4", field: "e4", type:.pawn, color: .white, moveType: .Double)
-        try assertMove("e5", field: "e5", type:.pawn, color: .black, moveType: .Double)
-        
-        try assertMove("Bc4", field: "c4", type:.bishop, color: .white)
-        try assertMove("Bc5", field: "c5", type:.bishop, color: .black)
-        
-        try assertMove("Nf3", field: "f3", type:.knight, color: .white)
-        try assertMove("Nf6", field: "f6", type:.knight, color: .black)
-        
-        try assertMove("O-O", field: "g1", type:.king, color: .white, moveType: .Castle)
-        try assertMove("O-O", field: "g8", type:.king, color: .black, moveType: .Castle)
-        
-    }
-    
-    func testLongCastle() throws {
-        
-        try assertMove("b3", field: "b3", type: .pawn, color: .white)
-        try assertMove("b6", field: "b6", type: .pawn, color: .black)
-        
-        try assertMove("Bb2", field: "b2", type: .bishop, color: .white)
-        try assertMove("Bb7", field: "b7", type: .bishop, color: .black)
-        
-        try assertMove("Nc3", field: "c3", type: .knight, color: .white)
-        try assertMove("Nc6", field: "c6", type: .knight, color: .black)
-        
-        try assertMove("e3", field: "e3", type: .pawn, color: .white)
-        try assertMove("e6", field: "e6", type: .pawn, color: .black)
-        
-        try assertMove("Qe2", field: "e2", type: .queen, color: .white)
-        try assertMove("Qe7", field: "e7", type: .queen, color: .black)
-        
-        try assertMove("O-O-O", field: "c1", type: .king, color: .white, moveType: .Castle)
-        try assertMove("O-O-O", field: "c8", type: .king, color: .black, moveType: .Castle)
-        
-    }
-    
-    func testUncertainKnightMoves() throws {
-        try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .Double)
-        try assertMove("c6", field: "c6", type: .pawn, color: .black)
-        
-        try assertMove("d3", field: "d3", type: .pawn, color: .white)
-        try assertMove("d5", field: "d5", type: .pawn, color: .black, moveType: .Double)
-        
-        try assertMove("Nd2", field: "d2", type: .knight, color: .white)
-        try assertMove("Nd7", field: "d7", type: .knight, color: .black)
-        
-        try assertMove("Ngf3", field: "f3", type: .knight, color: .white)
-        try assertMove("Ngf6", field: "f6", type: .knight, color: .black)
-        
-        try assertMove("Nb3", field: "b3", type: .knight, color: .white)
-        try assertMove("Nb6", field: "b6", type: .knight, color: .black)
-        
-        try assertMove("Nfd2", field: "d2", type: .knight, color: .white)
-        try assertMove("Ng4", field: "g4", type: .knight, color: .black)
 
-        try assertMove("Nc4", field: "c4", type: .knight, color: .white)
-        try assertMove("Nf6", field: "f6", type: .knight, color: .black)
-        
-        try assertMove("Nca5", field: "a5", type: .knight, color: .white)
-        try assertMove("Ng4", field: "g4", type: .knight, color: .black)
-
-        try assertMove("Nxb7", field: "b7", type: .knight, color: .white)
-        try assertMove("Nf6", field: "f6", type: .knight, color: .black)
-        
-        try assertMove("N7c5", field: "c5", type: .knight, color: .white)
-        try assertMove("Ng4", field: "g4", type: .knight, color: .black)
-        
-        try assertMove("Nd2", field: "d2", type: .knight, color: .white)
-    }
-    
-    func testUncertainRookMoves() throws {
+    @Test func testShortCastle() throws {
         try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .Double)
         try assertMove("e5", field: "e5", type: .pawn, color: .black, moveType: .Double)
-    
-        try assertMove("Nf3", field: "f3", type: .knight, color: .white)
-        try assertMove("Nf6" ,field: "f6", type: .knight, color: .black)
-    
         try assertMove("Bc4", field: "c4", type: .bishop, color: .white)
         try assertMove("Bc5", field: "c5", type: .bishop, color: .black)
-    
+        try assertMove("Nf3", field: "f3", type: .knight, color: .white)
+        try assertMove("Nf6", field: "f6", type: .knight, color: .black)
         try assertMove("O-O", field: "g1", type: .king, color: .white, moveType: .Castle)
         try assertMove("O-O", field: "g8", type: .king, color: .black, moveType: .Castle)
-        
+    }
+
+    @Test func testLongCastle() throws {
+        try assertMove("b3", field: "b3", type: .pawn, color: .white)
+        try assertMove("b6", field: "b6", type: .pawn, color: .black)
+        try assertMove("Bb2", field: "b2", type: .bishop, color: .white)
+        try assertMove("Bb7", field: "b7", type: .bishop, color: .black)
         try assertMove("Nc3", field: "c3", type: .knight, color: .white)
         try assertMove("Nc6", field: "c6", type: .knight, color: .black)
-        
-        try assertMove("d3", field: "d3", type: .pawn, color: .white)
-        try assertMove("d6", field: "d6", type: .pawn, color: .black)
-        
-        try assertMove("Be3", field: "e3", type: .bishop, color: .white)
-        try assertMove("Be6", field: "e6", type: .bishop, color: .black)
-        
-        try assertMove("Qd2", field: "d2", type: .queen, color: .white)
-        try assertMove("Qd7", field: "d7", type: .queen, color: .black)
-        
-        try assertMove("Rfd1", field: "d1", type: .rook, color: .white)
-        try assertMove("Rfe8", field: "e8", type: .rook, color: .black)
-        
-        try assertMove("Rac1", field: "c1", type: .rook, color: .white)
-        try assertMove("Rac8", field: "c8", type: .rook, color: .black)
-    
+        try assertMove("e3", field: "e3", type: .pawn, color: .white)
+        try assertMove("e6", field: "e6", type: .pawn, color: .black)
+        try assertMove("Qe2", field: "e2", type: .queen, color: .white)
+        try assertMove("Qe7", field: "e7", type: .queen, color: .black)
+        try assertMove("O-O-O", field: "c1", type: .king, color: .white, moveType: .Castle)
+        try assertMove("O-O-O", field: "c8", type: .king, color: .black, moveType: .Castle)
     }
-    
-    public func testUncertainPawnMove() throws {
 
+    @Test func testUncertainKnightMoves() throws {
         try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .Double)
         try assertMove("c6", field: "c6", type: .pawn, color: .black)
-        
+        try assertMove("d3", field: "d3", type: .pawn, color: .white)
+        try assertMove("d5", field: "d5", type: .pawn, color: .black, moveType: .Double)
+        try assertMove("Nd2", field: "d2", type: .knight, color: .white)
+        try assertMove("Nd7", field: "d7", type: .knight, color: .black)
+        try assertMove("Ngf3", field: "f3", type: .knight, color: .white)
+        try assertMove("Ngf6", field: "f6", type: .knight, color: .black)
+        try assertMove("Nb3", field: "b3", type: .knight, color: .white)
+        try assertMove("Nb6", field: "b6", type: .knight, color: .black)
+        try assertMove("Nfd2", field: "d2", type: .knight, color: .white)
+        try assertMove("Ng4", field: "g4", type: .knight, color: .black)
+        try assertMove("Nc4", field: "c4", type: .knight, color: .white)
+        try assertMove("Nf6", field: "f6", type: .knight, color: .black)
+        try assertMove("Nca5", field: "a5", type: .knight, color: .white)
+        try assertMove("Ng4", field: "g4", type: .knight, color: .black)
+        try assertMove("Nxb7", field: "b7", type: .knight, color: .white)
+        try assertMove("Nf6", field: "f6", type: .knight, color: .black)
+        try assertMove("N7c5", field: "c5", type: .knight, color: .white)
+        try assertMove("Ng4", field: "g4", type: .knight, color: .black)
+        try assertMove("Nd2", field: "d2", type: .knight, color: .white)
+    }
+
+    @Test func testUncertainRookMoves() throws {
+        try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .Double)
+        try assertMove("e5", field: "e5", type: .pawn, color: .black, moveType: .Double)
+        try assertMove("Nf3", field: "f3", type: .knight, color: .white)
+        try assertMove("Nf6", field: "f6", type: .knight, color: .black)
+        try assertMove("Bc4", field: "c4", type: .bishop, color: .white)
+        try assertMove("Bc5", field: "c5", type: .bishop, color: .black)
+        try assertMove("O-O", field: "g1", type: .king, color: .white, moveType: .Castle)
+        try assertMove("O-O", field: "g8", type: .king, color: .black, moveType: .Castle)
+        try assertMove("Nc3", field: "c3", type: .knight, color: .white)
+        try assertMove("Nc6", field: "c6", type: .knight, color: .black)
+        try assertMove("d3", field: "d3", type: .pawn, color: .white)
+        try assertMove("d6", field: "d6", type: .pawn, color: .black)
+        try assertMove("Be3", field: "e3", type: .bishop, color: .white)
+        try assertMove("Be6", field: "e6", type: .bishop, color: .black)
+        try assertMove("Qd2", field: "d2", type: .queen, color: .white)
+        try assertMove("Qd7", field: "d7", type: .queen, color: .black)
+        try assertMove("Rfd1", field: "d1", type: .rook, color: .white)
+        try assertMove("Rfe8", field: "e8", type: .rook, color: .black)
+        try assertMove("Rac1", field: "c1", type: .rook, color: .white)
+        try assertMove("Rac8", field: "c8", type: .rook, color: .black)
+    }
+
+    @Test func testUncertainPawnMove() throws {
+        try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .Double)
+        try assertMove("c6", field: "c6", type: .pawn, color: .black)
         try assertMove("d4", field: "d4", type: .pawn, color: .white, moveType: .Double)
         try assertMove("d5", field: "d5", type: .pawn, color: .black, moveType: .Double)
-        
         try assertMove("Nc3", field: "c3", type: .knight, color: .white)
         try assertMove("dxe4", field: "e4", type: .pawn, color: .black)
-        
         try assertMove("Nxe4", field: "e4", type: .knight, color: .white)
         try assertMove("Nf6", field: "f6", type: .knight, color: .black)
-        
         try assertMove("Nxf6+", field: "f6", type: .knight, color: .white)
         try assertMove("exf6", field: "f6", type: .pawn, color: .black)
-        
-        XCTAssertTrue(try XCTUnwrap(boardCache).isEmpty(atRow: 5, atFile: 6))
-        XCTAssertFalse(try XCTUnwrap(boardCache).isEmpty(atRow: 7, atFile: 6))
 
+        #expect(boardCache.isEmpty(atRow: 5, atFile: 6))
+        #expect(!boardCache.isEmpty(atRow: 7, atFile: 6))
     }
-    
 
-    func testMalformedInputReturnsNilInsteadOfCrashing() throws {
-        let start = try XCTUnwrap(boardCache)
-        // These previously hit internal force-unwraps and trapped; they must now return nil.
-        XCTAssertNil(MoveFactory.create("", position: start))
-        XCTAssertNil(MoveFactory.create("N", position: start))
-        XCTAssertNil(MoveFactory.create("R", position: start))
-        XCTAssertNil(MoveFactory.create("x", position: start))
-        XCTAssertNil(MoveFactory.create("=", position: start))
-        XCTAssertNil(MoveFactory.create("Z9", position: start))
+    @Test func testMalformedInputReturnsNilInsteadOfCrashing() throws {
+        let start = boardCache
+        #expect(MoveFactory.create("", position: start) == nil)
+        #expect(MoveFactory.create("N", position: start) == nil)
+        #expect(MoveFactory.create("R", position: start) == nil)
+        #expect(MoveFactory.create("x", position: start) == nil)
+        #expect(MoveFactory.create("=", position: start) == nil)
+        #expect(MoveFactory.create("Z9", position: start) == nil)
     }
 
     private func assertMove(
-        _ moveName:String,
-        field:String,
-        type:PieceType,
-        color:PieceColor,
-        moveType:MoveType = .Normal,
-        message: (Move?) -> String = { $0 == nil ? "Move not found ": "Move[\($0!.fieldInfo), \($0!.piece.type),\($0!.piece.color), \($0!.type)]  is the wrong move" },
-        file: StaticString = #filePath,
-        line: UInt = #line
+        _ moveName: String,
+        field: String,
+        type: PieceType,
+        color: PieceColor,
+        moveType: MoveType = .Normal,
+        message: (Move?) -> String = { $0 == nil ? "Move not found" : "Move[\($0!.fieldInfo), \($0!.piece.type),\($0!.piece.color), \($0!.type)] is the wrong move" },
+        sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
-        let cache = try XCTUnwrap(boardCache)
-        let move:Move? = MoveFactory.create(moveName, position:cache);
-        
+        let move: Move? = MoveFactory.create(moveName, position: boardCache)
+
         guard move == nil || move?.piece.type != type || move?.piece.color != color || move?.fieldInfo != field || move?.type != moveType else {
             try updateBoardCache(move!, isCapture: moveName.contains("x"))
             return
         }
-        
-        XCTFail(message(move), file: file, line: line)
+
+        Issue.record("\(message(move))", sourceLocation: sourceLocation)
     }
-    
+
     private func updateBoardCache(_ move: Move, isCapture: Bool) throws {
-        boardCache = try XCTUnwrap(boardCache).applying(move)
+        boardCache = boardCache.applying(move)
     }
 }

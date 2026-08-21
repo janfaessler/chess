@@ -1,53 +1,53 @@
-import XCTest
+import Testing
 @testable import SwiftChessCore
 
-final class PieceTypeMappingTests: XCTestCase {
+struct PieceTypeMappingTests {
 
-    func testFenChar_uppercaseForWhite() {
-        XCTAssertEqual(PieceType.pawn.fenChar(for: .white), "P")
-        XCTAssertEqual(PieceType.knight.fenChar(for: .white), "N")
-        XCTAssertEqual(PieceType.bishop.fenChar(for: .white), "B")
-        XCTAssertEqual(PieceType.rook.fenChar(for: .white), "R")
-        XCTAssertEqual(PieceType.queen.fenChar(for: .white), "Q")
-        XCTAssertEqual(PieceType.king.fenChar(for: .white), "K")
+    @Test func testFenChar_uppercaseForWhite() {
+        #expect(PieceType.pawn.fenChar(for: .white) == "P")
+        #expect(PieceType.knight.fenChar(for: .white) == "N")
+        #expect(PieceType.bishop.fenChar(for: .white) == "B")
+        #expect(PieceType.rook.fenChar(for: .white) == "R")
+        #expect(PieceType.queen.fenChar(for: .white) == "Q")
+        #expect(PieceType.king.fenChar(for: .white) == "K")
     }
 
-    func testFenChar_lowercaseForBlack() {
-        XCTAssertEqual(PieceType.pawn.fenChar(for: .black), "p")
-        XCTAssertEqual(PieceType.knight.fenChar(for: .black), "n")
-        XCTAssertEqual(PieceType.bishop.fenChar(for: .black), "b")
-        XCTAssertEqual(PieceType.rook.fenChar(for: .black), "r")
-        XCTAssertEqual(PieceType.queen.fenChar(for: .black), "q")
-        XCTAssertEqual(PieceType.king.fenChar(for: .black), "k")
+    @Test func testFenChar_lowercaseForBlack() {
+        #expect(PieceType.pawn.fenChar(for: .black) == "p")
+        #expect(PieceType.knight.fenChar(for: .black) == "n")
+        #expect(PieceType.bishop.fenChar(for: .black) == "b")
+        #expect(PieceType.rook.fenChar(for: .black) == "r")
+        #expect(PieceType.queen.fenChar(for: .black) == "q")
+        #expect(PieceType.king.fenChar(for: .black) == "k")
     }
 
-    func testInitFenChar_isCaseInsensitive() {
-        XCTAssertEqual(PieceType(fenChar: "N"), .knight)
-        XCTAssertEqual(PieceType(fenChar: "n"), .knight)
-        XCTAssertEqual(PieceType(fenChar: "P"), .pawn)
-        XCTAssertEqual(PieceType(fenChar: "q"), .queen)
-        XCTAssertEqual(PieceType(fenChar: "k"), .king)
+    @Test func testInitFenChar_isCaseInsensitive() {
+        #expect(PieceType(fenChar: "N") == .knight)
+        #expect(PieceType(fenChar: "n") == .knight)
+        #expect(PieceType(fenChar: "P") == .pawn)
+        #expect(PieceType(fenChar: "q") == .queen)
+        #expect(PieceType(fenChar: "k") == .king)
     }
 
-    func testInitFenChar_unknownReturnsNil() {
-        XCTAssertNil(PieceType(fenChar: "x"))
-        XCTAssertNil(PieceType(fenChar: "1"))
-        XCTAssertNil(PieceType(fenChar: "-"))
+    @Test func testInitFenChar_unknownReturnsNil() {
+        #expect(PieceType(fenChar: "x") == nil)
+        #expect(PieceType(fenChar: "1") == nil)
+        #expect(PieceType(fenChar: "-") == nil)
     }
 
-    func testFenCharRoundTrips() {
+    @Test func testFenCharRoundTrips() {
         for type in [PieceType.pawn, .knight, .bishop, .rook, .queen, .king] {
-            XCTAssertEqual(PieceType(fenChar: type.fenChar(for: .white)), type)
-            XCTAssertEqual(PieceType(fenChar: type.fenChar(for: .black)), type)
+            #expect(PieceType(fenChar: type.fenChar(for: .white)) == type)
+            #expect(PieceType(fenChar: type.fenChar(for: .black)) == type)
         }
     }
 
-    func testSanIdent() {
-        XCTAssertEqual(PieceType.pawn.sanIdent, "")
-        XCTAssertEqual(PieceType.knight.sanIdent, "N")
-        XCTAssertEqual(PieceType.bishop.sanIdent, "B")
-        XCTAssertEqual(PieceType.rook.sanIdent, "R")
-        XCTAssertEqual(PieceType.queen.sanIdent, "Q")
-        XCTAssertEqual(PieceType.king.sanIdent, "K")
+    @Test func testSanIdent() {
+        #expect(PieceType.pawn.sanIdent == "")
+        #expect(PieceType.knight.sanIdent == "N")
+        #expect(PieceType.bishop.sanIdent == "B")
+        #expect(PieceType.rook.sanIdent == "R")
+        #expect(PieceType.queen.sanIdent == "Q")
+        #expect(PieceType.king.sanIdent == "K")
     }
 }

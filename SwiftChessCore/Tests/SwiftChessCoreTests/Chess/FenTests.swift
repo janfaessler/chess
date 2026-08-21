@@ -1,17 +1,9 @@
-import XCTest
+import Testing
 @testable import SwiftChessCore
 
-final class FenTests: XCTestCase {
+struct FenTests {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
+    @Test func testExample() throws {
         let fens = [
             PositionFactory.startingPositionFen,
             "8/5k2/8/3K4/8/8/8/8 w - - 0 1",
@@ -24,30 +16,34 @@ final class FenTests: XCTestCase {
             "8/5k2/8/3K1b2/8/8/8/6r1 w - - 0 10",
             "8/5k2/8/3K1b2/8/8/1n6/8 w - - 0 10",
         ]
-        
+
         for fen in fens {
-            let pos = try XCTUnwrap(PositionFactory.loadPosition(fen))
+            let pos = try #require(PositionFactory.loadPosition(fen))
             let board = ChessGame(pos)
-            let exportedPosition = board.position
-            let exportedFen = FenBuilder.create(exportedPosition)
-            
-            XCTAssertEqual(fen, exportedFen)
+            let exportedFen = FenBuilder.create(board.position)
+            #expect(fen == exportedFen)
         }
     }
 
-    func testParse_tooFewFields_throws() {
-        XCTAssertThrowsError(try FenParser.parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -"))
+    @Test func testParse_tooFewFields_throws() {
+        #expect(throws: (any Error).self) {
+            try FenParser.parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -")
+        }
     }
 
-    func testParse_emptyString_throws() {
-        XCTAssertThrowsError(try FenParser.parse(""))
+    @Test func testParse_emptyString_throws() {
+        #expect(throws: (any Error).self) {
+            try FenParser.parse("")
+        }
     }
 
-    func testParse_garbageBoard_throws() {
-        XCTAssertThrowsError(try FenParser.parse("this-is-not-a-board w KQkq - 0 1"))
+    @Test func testParse_garbageBoard_throws() {
+        #expect(throws: (any Error).self) {
+            try FenParser.parse("this-is-not-a-board w KQkq - 0 1")
+        }
     }
 
-    func testParse_validFen_doesNotThrow() throws {
-        XCTAssertNoThrow(try FenParser.parse(PositionFactory.startingPositionFen))
+    @Test func testParse_validFen_doesNotThrow() throws {
+        _ = try FenParser.parse(PositionFactory.startingPositionFen)
     }
 }

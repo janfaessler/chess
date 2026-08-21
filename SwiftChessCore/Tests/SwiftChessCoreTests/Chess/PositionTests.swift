@@ -1,10 +1,10 @@
-import XCTest
+import Testing
 @testable import SwiftChessCore
 
 final class PositionTests: ChessTestBase {
 
-    func testStartingPosition() throws {
-        for color:PieceColor in [.white, .black] {
+    @Test func testStartingPosition() throws {
+        for color: PieceColor in [.white, .black] {
             let row = color == .white ? 1 : 8
             assertFigureExists(Figure.create("a\(row)", type: .rook, color: color)!)
             assertFigureExists(Figure.create("b\(row)", type: .knight, color: color)!)
@@ -17,14 +17,13 @@ final class PositionTests: ChessTestBase {
 
             let pawnRow = color == .white ? 2 : 7
             for file in 1...8 {
-                assertFigureExists(Figure.create(type: .pawn, color: color, row:pawnRow, file: file))
+                assertFigureExists(Figure.create(type: .pawn, color: color, row: pawnRow, file: file))
             }
         }
     }
-    
-    func testFenCreation() throws {
-        let startPosition = FenBuilder.create(PositionFactory.startingPosition())
-        XCTAssertEqual(startPosition, PositionFactory.startingPositionFen)
-    }
 
+    @Test func testFenCreation() throws {
+        let startPosition = FenBuilder.create(PositionFactory.startingPosition())
+        #expect(startPosition == PositionFactory.startingPositionFen)
+    }
 }

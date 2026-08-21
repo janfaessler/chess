@@ -1,18 +1,18 @@
-import XCTest
+import Testing
 @testable import SwiftChessCore
 
-class ChessTestBase: XCTestCase {
-    
-    var testee:ChessGame?
-    var moveLog:[String] = []
+class ChessTestBase {
 
-    override func setUpWithError() throws {
+    var testee: ChessGame?
+    var moveLog: [String] = []
+
+    init() {
         testee = ChessGame(PositionFactory.startingPosition())
         moveLog = []
     }
-    
-    func loadMoves(_ pgn:String) -> [Move] {
-        var result:[Move] = []
+
+    func loadMoves(_ pgn: String) -> [Move] {
+        var result: [Move] = []
         var position = PositionFactory.startingPosition()
         let game = PgnMovesParser.parse(pgn)
         for pgnmove in game {
@@ -23,299 +23,283 @@ class ChessTestBase: XCTestCase {
                 }
             }
         }
-        
         return result
     }
 
     func moveAndAssert(
-        from:String,
-        to:String,
-        type:PieceType,
-        color:PieceColor,
-        moveType:MoveType = .Normal,
+        from: String,
+        to: String,
+        type: PieceType,
+        color: PieceColor,
+        moveType: MoveType = .Normal,
         message: (String, String, any ChessFigure) -> String = { "\($2.color) \($2.type) could not move from \($0) to \($1)" },
-        file: StaticString = #filePath,
-        line: UInt = #line
+        sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
-        let testee = try XCTUnwrap(testee)
+        guard let testee else {
+            Issue.record("testee is nil", sourceLocation: sourceLocation)
+            return
+        }
         let pieceCount = testee.figures.count
-        let startFigure = Figure.create(from, type:type, color: color)!
-        let endFigure = Figure.create(to, type:type, color:color, moved: true)!
-        let move = Move(to, piece:startFigure, type: moveType)!
-        var moveError:Bool = false
-        do {
-            try testee.move(move)
-        } catch { moveError = true }
+        let startFigure = Figure.create(from, type: type, color: color)!
+        let endFigure = Figure.create(to, type: type, color: color, moved: true)!
+        let move = Move(to, piece: startFigure, type: moveType)!
+        var moveError = false
+        do { try testee.move(move) } catch { moveError = true }
         let startFigureExists = figureExist(startFigure, testee: testee)
         let endFigureExists = figureExist(endFigure, testee: testee)
         let nextColorToMoveDidNotChange = testee.colorToMove == color
-        
+
         guard moveError == true || startFigureExists == true || endFigureExists == false || testee.figures.count != pieceCount && nextColorToMoveDidNotChange else {
             return
         }
-        
-        XCTFail(message(from, to, startFigure), file: file, line: line)
-
+        Issue.record("\(message(from, to, startFigure))", sourceLocation: sourceLocation)
     }
-    
+
     func moveAndAssert(
-        notation:String,
-        toField:String,
-        type:PieceType,
-        color:PieceColor,
-        moveType:MoveType = .Normal,
+        notation: String,
+        toField: String,
+        type: PieceType,
+        color: PieceColor,
+        moveType: MoveType = .Normal,
         message: (String, String, any ChessFigure) -> String = { "\($0): \($2.color) \($2.type) could not move to \($1)" },
-        file: StaticString = #filePath,
-        line: UInt = #line
+        sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
-        let testee = try XCTUnwrap(testee)
+        guard let testee else {
+            Issue.record("testee is nil", sourceLocation: sourceLocation)
+            return
+        }
         let pieceCount = testee.figures.count
         let cache = testee.position
         guard let move = MoveFactory.create(notation, position: cache) else {
-            XCTFail("move \(notation) could not be created", file: file, line: line)
+            Issue.record("move \(notation) could not be created", sourceLocation: sourceLocation)
             return
         }
-        
-        let endFigure = Figure.create(toField, type:type, color:color, moved: true)!
-        var moveError:Bool = false
+        let endFigure = Figure.create(toField, type: type, color: color, moved: true)!
+        var moveError = false
         do {
             try testee.move(move)
             moveLog += [notation]
         } catch { moveError = true }
         let endFigureExists = figureExist(endFigure, testee: testee)
         let nextColorToMoveDidNotChange = testee.colorToMove == color
-        
+
         guard moveError == true,
               endFigureExists == false,
               testee.figures.count != pieceCount && nextColorToMoveDidNotChange else {
             return
         }
-        
-        XCTFail(message(notation, toField, endFigure), file: file, line: line)
-
+        Issue.record("\(message(notation, toField, endFigure))", sourceLocation: sourceLocation)
     }
-    
+
     func moveAndAssertError(
-        _ from:String,
-        to:String,
-        type:PieceType,
-        color:PieceColor,
-        moveType:MoveType = .Normal,
+        _ from: String,
+        to: String,
+        type: PieceType,
+        color: PieceColor,
+        moveType: MoveType = .Normal,
         message: (String, String, any ChessFigure) -> String = { "move from \($0) to \($1) of \($2.color) \($2.type) should not be possible" },
-        file: StaticString = #filePath,
-        line: UInt = #line
+        sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
-        let testee = try XCTUnwrap(testee)
-        let startFigure = Figure.create(from, type:type, color: color)!
-        let move = Move(to, piece:startFigure, type: moveType)!
-        
-        do {
-            try testee.move(move)
-        } catch { return }
-        
-        XCTFail(message(from, to, startFigure), file: file, line: line)
+        guard let testee else {
+            Issue.record("testee is nil", sourceLocation: sourceLocation)
+            return
+        }
+        let startFigure = Figure.create(from, type: type, color: color)!
+        let move = Move(to, piece: startFigure, type: moveType)!
+        do { try testee.move(move) } catch { return }
+        Issue.record("\(message(from, to, startFigure))", sourceLocation: sourceLocation)
     }
-    
+
     func moveAndAssertError(
-         _ move:Move,
-         message: (Move, any ChessFigure) -> String = { "move from \($0.piece.fieldInfo) to \($0.field) of \($1.color) \($1.type) should not be possible" },
-         file: StaticString = #filePath,
-         line: UInt = #line
-     ) throws {
-         let testee = try XCTUnwrap(testee)
-         
-         do {
-             try testee.move(move)
-         } catch { return }
-         
-         XCTFail(message(move, move.piece), file: file, line: line)
-         
-     }
-    
+        _ move: Move,
+        message: (Move, any ChessFigure) -> String = { "move from \($0.piece.fieldInfo) to \($0.field) of \($1.color) \($1.type) should not be possible" },
+        sourceLocation: SourceLocation = #_sourceLocation
+    ) throws {
+        guard let testee else {
+            Issue.record("testee is nil", sourceLocation: sourceLocation)
+            return
+        }
+        do { try testee.move(move) } catch { return }
+        Issue.record("\(message(move, move.piece))", sourceLocation: sourceLocation)
+    }
+
     func moveAndAssertError(
-        _ notation:String,
+        _ notation: String,
         message: (String) -> String = { "move \($0) should not be possible" },
-        file: StaticString = #filePath,
-        line: UInt = #line
+        sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
-        let testee = try XCTUnwrap(testee)
-        
-        do {
-            try testee.move(notation)
-        } catch { return }
-        
-        XCTFail(message(notation), file: file, line: line)
-        
+        guard let testee else {
+            Issue.record("testee is nil", sourceLocation: sourceLocation)
+            return
+        }
+        do { try testee.move(notation) } catch { return }
+        Issue.record("\(message(notation))", sourceLocation: sourceLocation)
     }
-    
+
     func captureAndAssert(
-        _ from:String,
-        to:String,
-        type:PieceType,
-        color:PieceColor,
+        _ from: String,
+        to: String,
+        type: PieceType,
+        color: PieceColor,
         message: (String, String, any ChessFigure) -> String = { "\($2.color) \($2.type) on \($0) could not capture on \($1)" },
-        file: StaticString = #filePath,
-        line: UInt = #line
+        sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
-        let testee = try XCTUnwrap(testee)
+        guard let testee else {
+            Issue.record("testee is nil", sourceLocation: sourceLocation)
+            return
+        }
         let pieceCount = testee.figures.count - 1
-        let startFigure = Figure.create(from, type:type, color: color)!
-        let endFigure = Figure.create(to, type:type, color:color)!
-        let move = Move(to, piece:startFigure, type: .Normal)!
+        let startFigure = Figure.create(from, type: type, color: color)!
+        let endFigure = Figure.create(to, type: type, color: color)!
+        let move = Move(to, piece: startFigure, type: .Normal)!
         let nextColorToMoveDidNotChange = testee.colorToMove == color
+        var moveError = false
+        do { try testee.move(move) } catch { moveError = true }
 
-        var moveError:Bool = false
-
-        do {
-            try testee.move(move)
-        } catch { moveError = true}
-        
         guard moveError == true || figureExist(startFigure, testee: testee) == true || figureExist(endFigure, testee: testee) == false || testee.figures.count != pieceCount && nextColorToMoveDidNotChange else {
             return
         }
-
-        XCTFail(message(from, to, startFigure), file: file, line: line)
+        Issue.record("\(message(from, to, startFigure))", sourceLocation: sourceLocation)
     }
-    
+
     func captureAndAssertError(
-        _ from:String,
-        to:String,
-        type:PieceType,
-        color:PieceColor,
+        _ from: String,
+        to: String,
+        type: PieceType,
+        color: PieceColor,
         message: (String, String, any ChessFigure) -> String = { "\($2.color) \($2.type) on \($0) could not capture on \($1)" },
-        file: StaticString = #filePath,
-        line: UInt = #line
+        sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
-        let testee = try XCTUnwrap(testee)
-        let startFigure = Figure.create(from, type:type, color: color)!
-        let move = Move(to, piece:startFigure, type: .Normal)!
-
-        do {
-            try testee.move(move)
-        } catch { return }
-
-        XCTFail(message(from, to, startFigure), file: file, line: line)
+        guard let testee else {
+            Issue.record("testee is nil", sourceLocation: sourceLocation)
+            return
+        }
+        let startFigure = Figure.create(from, type: type, color: color)!
+        let move = Move(to, piece: startFigure, type: .Normal)!
+        do { try testee.move(move) } catch { return }
+        Issue.record("\(message(from, to, startFigure))", sourceLocation: sourceLocation)
     }
-    
-    func captureAndAssertPromotion(
-        _ from:String,
-        to:String,
-        type:PieceType,
-        color:PieceColor,
-        message: (String, String, any ChessFigure) -> String = { "\($2.color) \($2.type) on \($0) could not capture on \($1)" },
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) throws {
-        let testee = try XCTUnwrap(testee)
-        let pieceCount = testee.figures.count - 1
-        let startFigure = Figure.create(from, type:type, color: color)!
-        let endFigure = Figure.create(to, type:.queen, color:color)!
-        let move = Move(to, piece:startFigure, type: .Promotion)!
-        let nextColorToMoveDidNotChange = testee.colorToMove == color
-        var moveError:Bool = false
 
-        do {
-            try testee.move(move)
-        } catch { moveError = true}
-        
+    func captureAndAssertPromotion(
+        _ from: String,
+        to: String,
+        type: PieceType,
+        color: PieceColor,
+        message: (String, String, any ChessFigure) -> String = { "\($2.color) \($2.type) on \($0) could not capture on \($1)" },
+        sourceLocation: SourceLocation = #_sourceLocation
+    ) throws {
+        guard let testee else {
+            Issue.record("testee is nil", sourceLocation: sourceLocation)
+            return
+        }
+        let pieceCount = testee.figures.count - 1
+        let startFigure = Figure.create(from, type: type, color: color)!
+        let endFigure = Figure.create(to, type: .queen, color: color)!
+        let move = Move(to, piece: startFigure, type: .Promotion)!
+        let nextColorToMoveDidNotChange = testee.colorToMove == color
+        var moveError = false
+        do { try testee.move(move) } catch { moveError = true }
+
         guard moveError == true,
               figureExist(startFigure, testee: testee) == true,
               figureExist(endFigure, testee: testee) == false,
               testee.figures.count != pieceCount && nextColorToMoveDidNotChange else {
             return
         }
-
-        XCTFail(message(from, to, startFigure), file: file, line: line)
+        Issue.record("\(message(from, to, startFigure))", sourceLocation: sourceLocation)
     }
-    
+
     func assertPossibleMoves(
-        forFigure:any ChessFigure,
-        moves:[Move],
+        forFigure: any ChessFigure,
+        moves: [Move],
         message: () -> String = { "moves are not equal" },
-        file: StaticString = #filePath,
-        line: UInt = #line
+        sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
-        
-        let testee = try XCTUnwrap(testee)
-        let blackKing = testee.figures.first(where: { $0.equals(forFigure)})!
-        let possibleMoves = testee.getPossibleMoves(forPiece: blackKing)
-            
-        guard possibleMoves.elementsEqual(moves) == false else {
+        guard let testee else {
+            Issue.record("testee is nil", sourceLocation: sourceLocation)
             return
         }
-            
-        XCTFail(file: file, line: line)
+        let piece = testee.figures.first(where: { $0.equals(forFigure) })!
+        let possibleMoves = testee.getPossibleMoves(forPiece: piece)
+        guard possibleMoves.elementsEqual(moves) == false else { return }
+        Issue.record(sourceLocation: sourceLocation)
     }
 
     func assertFigureExists(
         _ f: any ChessFigure,
         message: (any ChessFigure) -> String = { "\($0.info()) does not exist" },
-        file: StaticString = #filePath,
-        line: UInt = #line
+        sourceLocation: SourceLocation = #_sourceLocation
     ) {
-        guard figureExist(f, testee: try! XCTUnwrap(testee)) == false else { return }
-        XCTFail(message(f), file: file, line: line)
+        guard let testee else {
+            Issue.record("testee is nil", sourceLocation: sourceLocation)
+            return
+        }
+        guard figureExist(f, testee: testee) == false else { return }
+        Issue.record("\(message(f))", sourceLocation: sourceLocation)
     }
-    
+
     func assertFigureNotExists(
         _ f: any ChessFigure,
-        message: (any ChessFigure) -> String = { "\($0.info()) does not exist" },
-        file: StaticString = #filePath,
-        line: UInt = #line
+        message: (any ChessFigure) -> String = { "\($0.info()) still exists" },
+        sourceLocation: SourceLocation = #_sourceLocation
     ) {
-        guard figureExist(f, testee: try! XCTUnwrap(testee)) == true else { return }
-        XCTFail(message(f), file: file, line: line)
+        guard let testee else {
+            Issue.record("testee is nil", sourceLocation: sourceLocation)
+            return
+        }
+        guard figureExist(f, testee: testee) == true else { return }
+        Issue.record("\(message(f))", sourceLocation: sourceLocation)
     }
-    
+
     func assertMoves(
-        _ expectedMoves:[String],
+        _ expectedMoves: [String],
         message: ([String], [String]) -> String = { "[\($0.joined(separator: ","))] is not equal [\($1.joined(separator: ","))]" },
-        file: StaticString = #filePath,
-        line: UInt = #line
+        sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
-        let testee = try XCTUnwrap(testee)
+        guard let testee else {
+            Issue.record("testee is nil", sourceLocation: sourceLocation)
+            return
+        }
         let moves = testee.moveLog
-        
         guard !moves.elementsEqual(expectedMoves) else { return }
-
-        XCTFail(message(moves, expectedMoves), file: file, line: line)
+        Issue.record("\(message(moves, expectedMoves))", sourceLocation: sourceLocation)
     }
-    
+
     func assertMoves(
         message: ([String], [String]) -> String = { "[\($0.joined(separator: ","))] is not equal [\($1.joined(separator: ","))]" },
-        file: StaticString = #filePath,
-        line: UInt = #line
+        sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
-        let testee = try XCTUnwrap(testee)
+        guard let testee else {
+            Issue.record("testee is nil", sourceLocation: sourceLocation)
+            return
+        }
         let moves = testee.moveLog
-        
         guard !moves.elementsEqual(moveLog) else { return }
-
-        XCTFail(message(moves, moveLog), file: file, line: line)
+        Issue.record("\(message(moves, moveLog))", sourceLocation: sourceLocation)
     }
-    
+
     func assertGameState(
-        _ expectedState:GameState,
-        fen:String = "",
+        _ expectedState: GameState,
+        fen: String = "",
         message: (GameState, GameState, String) -> String = { "\($0) is not equal to \($1). Fen: \($2)" },
-        file: StaticString = #filePath,
-        line: UInt = #line
+        sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
-        let testee = try XCTUnwrap(testee)
-        
+        guard let testee else {
+            Issue.record("testee is nil", sourceLocation: sourceLocation)
+            return
+        }
         let gameState = testee.getGameState()
         guard gameState != expectedState else { return }
-        
-        XCTFail(message(gameState, expectedState, fen), file: file, line: line)
+        Issue.record("\(message(gameState, expectedState, fen))", sourceLocation: sourceLocation)
     }
-    
-    func figureExist(_ figure:any ChessFigure, testee:ChessGame) -> Bool {
+
+    func figureExist(_ figure: any ChessFigure, testee: ChessGame) -> Bool {
         testee.figures.contains(where: { $0.equals(figure) })
     }
-    
-    func loadFen(_ fen:String) {
+
+    func loadFen(_ fen: String, sourceLocation: SourceLocation = #_sourceLocation) {
         guard let position = PositionFactory.loadPosition(fen) else {
-            XCTFail("Invalid FEN: \(fen)")
+            Issue.record("Invalid FEN: \(fen)", sourceLocation: sourceLocation)
             return
         }
         testee = ChessGame(position)

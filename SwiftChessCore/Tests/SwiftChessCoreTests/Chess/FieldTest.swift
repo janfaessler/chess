@@ -1,10 +1,9 @@
-import XCTest
+import Testing
 @testable import SwiftChessCore
 
-final class FieldTest: XCTestCase {
-    
-    func testExample() throws {
-        
+struct FieldTest {
+
+    @Test func testExample() throws {
         let data = [
             "a3": (row: 3, file: 1),
             "a4": (row: 4, file: 1),
@@ -16,26 +15,24 @@ final class FieldTest: XCTestCase {
             "g5": (row: 5, file: 7),
             "h3": (row: 3, file: 8),
         ]
-        
+
         for (key, value) in data {
-            let field = Field(key)
-            
-            XCTAssertNotNil(field)
-            XCTAssertEqual(field?.file, value.file, "\(key) not found")
-            XCTAssertEqual(field?.row, value.row, "\(key) not found")
+            let field = try #require(Field(key), "\(key) not found")
+            #expect(field.file == value.file, "\(key) not found")
+            #expect(field.row == value.row, "\(key) not found")
         }
     }
 
-    func testInit_singleChar_returnsNil() {
-        XCTAssertNil(Field("a"))
-        XCTAssertNil(Field("1"))
+    @Test func testInit_singleChar_returnsNil() {
+        #expect(Field("a") == nil)
+        #expect(Field("1") == nil)
     }
 
-    func testInit_empty_returnsNil() {
-        XCTAssertNil(Field(""))
+    @Test func testInit_empty_returnsNil() {
+        #expect(Field("") == nil)
     }
 
-    func testInit_dash_returnsNil() {
-        XCTAssertNil(Field("-"))
+    @Test func testInit_dash_returnsNil() {
+        #expect(Field("-") == nil)
     }
 }

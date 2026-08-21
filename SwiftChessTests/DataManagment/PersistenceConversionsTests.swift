@@ -1,8 +1,9 @@
-import XCTest
+import Testing
+import SwiftUI
 import SwiftData
 @testable import SwiftChess
 
-final class PersistenceConversionsTests: XCTestCase {
+struct PersistenceConversionsTests {
 
     private func makeContext() throws -> ModelContext {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
@@ -10,7 +11,7 @@ final class PersistenceConversionsTests: XCTestCase {
         return ModelContext(container)
     }
 
-    func testToGameData_corruptMovesData_returnsNil() throws {
+    @Test func testToGameData_corruptMovesData_returnsNil() throws {
         let context = try makeContext()
         let entity = GameEntity(
             title: "corrupt",
@@ -22,15 +23,15 @@ final class PersistenceConversionsTests: XCTestCase {
         )
         context.insert(entity)
 
-        XCTAssertNil(entity.toGameData(), "a game with undecodable moves must decode to nil, not empty data")
+        #expect(entity.toGameData() == nil, "a game with undecodable moves must decode to nil, not empty data")
     }
 
-    func testToGameData_validData_roundTrips() throws {
+    @Test func testToGameData_validData_roundTrips() throws {
         let context = try makeContext()
-        let entity = try XCTUnwrap(GameEntity(from: GameData(headers: ["White": "A"], moves: [], result: "*", comment: nil), order: 0))
+        let entity = try #require(GameEntity(from: GameData(headers: ["White": "A"], moves: [], result: "*", comment: nil), order: 0))
         context.insert(entity)
 
-        let gameData = try XCTUnwrap(entity.toGameData())
-        XCTAssertEqual(gameData.headers["White"], "A")
+        let gameData = try #require(entity.toGameData())
+        #expect(gameData.headers["White"] == "A")
     }
 }

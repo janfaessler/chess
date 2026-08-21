@@ -1,315 +1,288 @@
-import XCTest
+import Testing
 @testable import SwiftChess
 
-final class MoveStructureTests: XCTestCase {
+struct MoveStructureTests {
 
-    var testee:MoveListModel?
-    
-    override func setUpWithError() throws {
-        testee = MoveListModel()
-    }
+    let testee = MoveListModel()
 
-    func testTopLevelMoveNavigation() throws {
-        let testee = try XCTUnwrap(testee)
-
+    @Test func testTopLevelMoveNavigation() throws {
         let testMoves = ["e4", "e5", "Nc3", "Nc6"]
         for move in testMoves {
             testee.movePlayed(move)
         }
-        
+
         testee.start()
-        XCTAssertTrue(testee.isCurrentMove(nil))
+        #expect(testee.isCurrentMove(nil))
         for move in testMoves {
             testee.forward()
-            XCTAssertEqual(testee.currentMove?.move, move)
+            #expect(testee.currentMove?.move == move)
         }
-        
+
         testee.start()
         testee.end()
-        
+
         for move in testMoves.reversed() {
-            XCTAssertEqual(testee.currentMove?.move, move)
+            #expect(testee.currentMove?.move == move)
             testee.back()
         }
-        XCTAssertNil(testee.currentMove)
+        #expect(testee.currentMove == nil)
     }
-    
-    func testMoveVariationOnBlack() throws {
-        let testee = try XCTUnwrap(testee)
 
+    @Test func testMoveVariationOnBlack() throws {
         let testMoves = ["e4", "e5", "Nc3", "Nc6"]
         for move in testMoves {
             testee.movePlayed(move)
         }
-        
+
         testee.back()
-        XCTAssertEqual(testee.currentMove?.move, "Nc3")
+        #expect(testee.currentMove?.move == "Nc3")
         testee.back()
-        XCTAssertEqual(testee.currentMove?.move, "e5")
-        
+        #expect(testee.currentMove?.move == "e5")
+
         testee.movePlayed("Bc4")
-        XCTAssertEqual(testee.currentMove?.move, "Bc4")
+        #expect(testee.currentMove?.move == "Bc4")
 
         testee.movePlayed("Bc5")
-        XCTAssertEqual(testee.currentMove?.move, "Bc5")
+        #expect(testee.currentMove?.move == "Bc5")
 
         testee.back()
-        XCTAssertEqual(testee.currentMove?.move, "Bc4")
+        #expect(testee.currentMove?.move == "Bc4")
         testee.forward()
-        XCTAssertEqual(testee.currentMove?.move, "Bc5")
-        
+        #expect(testee.currentMove?.move == "Bc5")
+
         testee.movePlayed("d3")
-        XCTAssertEqual(testee.currentMove?.move, "d3")
-        
+        #expect(testee.currentMove?.move == "d3")
+
         testee.movePlayed("d6")
-        XCTAssertEqual(testee.currentMove?.move, "d6")
-        
+        #expect(testee.currentMove?.move == "d6")
+
         let variation = testee.list[1].white?.getVariation("Bc4")?.all
-        XCTAssertEqual(variation?[0].moveNumber, 2)
-        XCTAssertEqual(variation?[0].white!.move, "Bc4")
-        XCTAssertEqual(variation?[0].white!.getVariations().count, 0)
-        XCTAssertEqual(variation?[0].black!.move, "Bc5")
-        XCTAssertEqual(variation?[0].black!.getVariations().count, 0)
-        XCTAssertEqual(variation?[1].moveNumber, 3)
-        XCTAssertEqual(variation?[1].white!.move, "d3")
-        XCTAssertEqual(variation?[1].white!.getVariations().count, 0)
-        XCTAssertEqual(variation?[1].black!.move, "d6")
-        XCTAssertEqual(variation?[1].black!.getVariations().count, 0)
-
+        #expect(variation?[0].moveNumber == 2)
+        #expect(variation?[0].white!.move == "Bc4")
+        #expect(variation?[0].white!.getVariations().count == 0)
+        #expect(variation?[0].black!.move == "Bc5")
+        #expect(variation?[0].black!.getVariations().count == 0)
+        #expect(variation?[1].moveNumber == 3)
+        #expect(variation?[1].white!.move == "d3")
+        #expect(variation?[1].white!.getVariations().count == 0)
+        #expect(variation?[1].black!.move == "d6")
+        #expect(variation?[1].black!.getVariations().count == 0)
     }
-    
-    func testMoveVariationOnWhite() throws {
-        let testee = try XCTUnwrap(testee)
 
+    @Test func testMoveVariationOnWhite() throws {
         let testMoves = ["e4", "e5", "Nc3", "Nc6"]
         for move in testMoves {
             testee.movePlayed(move)
         }
-        
+
         testee.back()
-        XCTAssertEqual(testee.currentMove?.move, "Nc3")
-        
+        #expect(testee.currentMove?.move == "Nc3")
+
         testee.movePlayed("Bc5")
-        XCTAssertEqual(testee.currentMove?.move, "Bc5")
+        #expect(testee.currentMove?.move == "Bc5")
 
         testee.movePlayed("Bc4")
-        XCTAssertEqual(testee.currentMove?.move, "Bc4")
+        #expect(testee.currentMove?.move == "Bc4")
 
         testee.back()
-        XCTAssertEqual(testee.currentMove?.move, "Bc5")
+        #expect(testee.currentMove?.move == "Bc5")
         testee.forward()
-        XCTAssertEqual(testee.currentMove?.move, "Bc4")
-        
+        #expect(testee.currentMove?.move == "Bc4")
+
         testee.movePlayed("d6")
-        XCTAssertEqual(testee.currentMove?.move, "d6")
-        
+        #expect(testee.currentMove?.move == "d6")
+
         testee.movePlayed("d3")
-        XCTAssertEqual(testee.currentMove?.move, "d3")
-        
+        #expect(testee.currentMove?.move == "d3")
+
         testee.back()
         testee.movePlayed("d3")
-        XCTAssertEqual(testee.currentMove?.move, "d3")
-        
-        let variation = testee.list[1].black?.getVariation("Bc5")?.all
-        XCTAssertEqual(variation?[0].moveNumber, 2)
-        XCTAssertNil(variation?[0].white)
-        XCTAssertEqual(variation?[0].black!.move, "Bc5")
-        XCTAssertEqual(variation?[0].black!.getVariations().count, 0)
-        XCTAssertEqual(variation?[1].moveNumber, 3)
-        XCTAssertEqual(variation?[1].white!.move, "Bc4")
-        XCTAssertEqual(variation?[1].white!.getVariations().count, 0)
-        XCTAssertEqual(variation?[1].black!.move, "d6")
-        XCTAssertEqual(variation?[1].black!.getVariations().count, 0)
-        XCTAssertEqual(variation?[2].moveNumber, 4)
-        XCTAssertEqual(variation?[2].white!.move, "d3")
-        XCTAssertEqual(variation?[2].white!.getVariations().count, 0)
-        XCTAssertNil(variation?[2].black)
-    }
-    
-    func testGoToMoveWithTwoVariations() throws {
-        let testee = try XCTUnwrap(testee)
+        #expect(testee.currentMove?.move == "d3")
 
+        let variation = testee.list[1].black?.getVariation("Bc5")?.all
+        #expect(variation?[0].moveNumber == 2)
+        #expect(variation?[0].white == nil)
+        #expect(variation?[0].black!.move == "Bc5")
+        #expect(variation?[0].black!.getVariations().count == 0)
+        #expect(variation?[1].moveNumber == 3)
+        #expect(variation?[1].white!.move == "Bc4")
+        #expect(variation?[1].white!.getVariations().count == 0)
+        #expect(variation?[1].black!.move == "d6")
+        #expect(variation?[1].black!.getVariations().count == 0)
+        #expect(variation?[2].moveNumber == 4)
+        #expect(variation?[2].white!.move == "d3")
+        #expect(variation?[2].white!.getVariations().count == 0)
+        #expect(variation?[2].black == nil)
+    }
+
+    @Test func testGoToMoveWithTwoVariations() throws {
         let testMoves = ["e4", "e5", "Nc3", "Nc6"]
-        
         for move in testMoves {
             testee.movePlayed(move)
         }
-        
-        let variationStart = try XCTUnwrap(testee.list[0].black)
+
+        let variationStart = try #require(testee.list[0].black)
         testee.goToMove(variationStart)
-        XCTAssertEqual(testee.currentMove?.move, variationStart.move)
-        
+        #expect(testee.currentMove?.move == variationStart.move)
+
         testee.movePlayed("Bc4")
-        XCTAssertEqual(testee.currentMove?.move, "Bc4")
+        #expect(testee.currentMove?.move == "Bc4")
 
         testee.movePlayed("Bc5")
-        XCTAssertEqual(testee.currentMove?.move, "Bc5")
-        
+        #expect(testee.currentMove?.move == "Bc5")
+
         testee.goToMove(variationStart)
-        XCTAssertEqual(testee.currentMove?.move, variationStart.move)
+        #expect(testee.currentMove?.move == variationStart.move)
 
         testee.movePlayed("d3")
-        XCTAssertEqual(testee.currentMove?.move, "d3")
-        
+        #expect(testee.currentMove?.move == "d3")
+
         testee.movePlayed("d6")
-        XCTAssertEqual(testee.currentMove?.move, "d6")
-        
-        testee.goToMove(try XCTUnwrap(testee.list[1].white?.getVariation("Bc4")?.all[0].white))
-        XCTAssertEqual(testee.currentMove?.move, "Bc4")
-        
-        XCTAssertEqual(testee.list[1].white?.getVariations().count, 2)
+        #expect(testee.currentMove?.move == "d6")
+
+        testee.goToMove(try #require(testee.list[1].white?.getVariation("Bc4")?.all[0].white))
+        #expect(testee.currentMove?.move == "Bc4")
+
+        #expect(testee.list[1].white?.getVariations().count == 2)
         let variationD3 = testee.list[1].white?.getVariation("d3")?.all
-        XCTAssertEqual(variationD3?[0].white!.move, "d3")
-        XCTAssertEqual(variationD3?[0].white!.getVariations().count, 0)
-        XCTAssertEqual(variationD3?[0].black!.move, "d6")
-        XCTAssertEqual(variationD3?[0].black!.getVariations().count, 0)
+        #expect(variationD3?[0].white!.move == "d3")
+        #expect(variationD3?[0].white!.getVariations().count == 0)
+        #expect(variationD3?[0].black!.move == "d6")
+        #expect(variationD3?[0].black!.getVariations().count == 0)
 
         let variationBc4 = testee.list[1].white?.getVariation("Bc4")?.all
-        XCTAssertEqual(variationBc4?[0].white!.move, "Bc4")
-        XCTAssertEqual(variationBc4?[0].white!.getVariations().count, 0)
-        XCTAssertEqual(variationBc4?[0].black!.move, "Bc5")
-        XCTAssertEqual(variationBc4?[0].black!.getVariations().count, 0)
-
+        #expect(variationBc4?[0].white!.move == "Bc4")
+        #expect(variationBc4?[0].white!.getVariations().count == 0)
+        #expect(variationBc4?[0].black!.move == "Bc5")
+        #expect(variationBc4?[0].black!.getVariations().count == 0)
     }
-    
-    func testSubVariationBlackOnWhite() throws {
-        let testee = try XCTUnwrap(testee)
 
+    @Test func testSubVariationBlackOnWhite() throws {
         let testMoves = ["e4", "e5", "Nc3", "Nc6"]
-        
         for move in testMoves {
             testee.movePlayed(move)
         }
-        
+
         testee.back()
-        XCTAssertEqual(testee.currentMove?.move, "Nc3")
-        
+        #expect(testee.currentMove?.move == "Nc3")
+
         testee.movePlayed("Bc5")
-        XCTAssertEqual(testee.currentMove?.move, "Bc5")
+        #expect(testee.currentMove?.move == "Bc5")
 
         testee.movePlayed("Bc4")
-        XCTAssertEqual(testee.currentMove?.move, "Bc4")
-        
-        testee.movePlayed("d6")
-        XCTAssertEqual(testee.currentMove?.move, "d6")
-        
-        testee.movePlayed("d3")
-        XCTAssertEqual(testee.currentMove?.move, "d3")
-        
-        testee.back()
-        XCTAssertEqual(testee.currentMove?.move, "d6")
-        
-        testee.back()
-        XCTAssertEqual(testee.currentMove?.move, "Bc4")
-        
-        testee.back()
-        XCTAssertEqual(testee.currentMove?.move, "Bc5")
-        
-        testee.movePlayed("d3")
-        XCTAssertEqual(testee.currentMove?.move, "d3")
-        
-        testee.movePlayed("d6")
-        XCTAssertEqual(testee.currentMove?.move, "d6")
-        
-        testee.movePlayed("Be2")
-        XCTAssertEqual(testee.currentMove?.move, "Be2")
-        
-        XCTAssertEqual(testee.list[1].black?.getVariations().count, 1)
-        let variation = testee.list[1].black?.getVariation("Bc5")?.all
-        XCTAssertEqual(variation?[0].moveNumber, 2)
-        XCTAssertEqual(variation?[0].black!.move, "Bc5")
-        XCTAssertEqual(variation?[0].black!.getVariations().count, 0)
-        XCTAssertEqual(variation?[1].moveNumber, 3)
-        XCTAssertEqual(variation?[1].white!.move, "Bc4")
-        XCTAssertEqual(variation?[1].white!.getVariations().count, 1)
-        XCTAssertEqual(variation?[1].black!.move, "d6")
-        XCTAssertEqual(variation?[1].black!.getVariations().count, 0)
+        #expect(testee.currentMove?.move == "Bc4")
 
-        XCTAssertEqual(variation?[2].moveNumber, 4)
-        XCTAssertEqual(variation?[2].white!.move, "d3")
-        XCTAssertEqual(variation?[2].white!.getVariations().count, 0)
+        testee.movePlayed("d6")
+        #expect(testee.currentMove?.move == "d6")
+
+        testee.movePlayed("d3")
+        #expect(testee.currentMove?.move == "d3")
+
+        testee.back()
+        #expect(testee.currentMove?.move == "d6")
+
+        testee.back()
+        #expect(testee.currentMove?.move == "Bc4")
+
+        testee.back()
+        #expect(testee.currentMove?.move == "Bc5")
+
+        testee.movePlayed("d3")
+        #expect(testee.currentMove?.move == "d3")
+
+        testee.movePlayed("d6")
+        #expect(testee.currentMove?.move == "d6")
+
+        testee.movePlayed("Be2")
+        #expect(testee.currentMove?.move == "Be2")
+
+        #expect(testee.list[1].black?.getVariations().count == 1)
+        let variation = testee.list[1].black?.getVariation("Bc5")?.all
+        #expect(variation?[0].moveNumber == 2)
+        #expect(variation?[0].black!.move == "Bc5")
+        #expect(variation?[0].black!.getVariations().count == 0)
+        #expect(variation?[1].moveNumber == 3)
+        #expect(variation?[1].white!.move == "Bc4")
+        #expect(variation?[1].white!.getVariations().count == 1)
+        #expect(variation?[1].black!.move == "d6")
+        #expect(variation?[1].black!.getVariations().count == 0)
+        #expect(variation?[2].moveNumber == 4)
+        #expect(variation?[2].white!.move == "d3")
+        #expect(variation?[2].white!.getVariations().count == 0)
 
         let subVariation = variation?[1].white?.getVariation("d3")?.all
-        XCTAssertEqual(subVariation?[0].moveNumber, 3)
-        XCTAssertEqual(subVariation?[0].white!.move, "d3")
-        XCTAssertEqual(subVariation?[0].white!.getVariations().count, 0)
-        XCTAssertEqual(subVariation?[0].black!.move, "d6")
-        XCTAssertEqual(subVariation?[0].black!.getVariations().count, 0)
-
-        XCTAssertEqual(subVariation?[1].moveNumber, 4)
-        XCTAssertEqual(subVariation?[1].white!.move, "Be2")
-        XCTAssertEqual(subVariation?[1].white!.getVariations().count, 0)
-        XCTAssertNil(subVariation?[1].black)
-
+        #expect(subVariation?[0].moveNumber == 3)
+        #expect(subVariation?[0].white!.move == "d3")
+        #expect(subVariation?[0].white!.getVariations().count == 0)
+        #expect(subVariation?[0].black!.move == "d6")
+        #expect(subVariation?[0].black!.getVariations().count == 0)
+        #expect(subVariation?[1].moveNumber == 4)
+        #expect(subVariation?[1].white!.move == "Be2")
+        #expect(subVariation?[1].white!.getVariations().count == 0)
+        #expect(subVariation?[1].black == nil)
     }
-    
-    func testSubVariationWhiteOnBlack() throws {
-        let testee = try XCTUnwrap(testee)
 
+    @Test func testSubVariationWhiteOnBlack() throws {
         let testMoves = ["e4", "e5", "Nc3", "Nc6"]
-        
         for move in testMoves {
             testee.movePlayed(move)
         }
-        
+
         testee.back()
-        XCTAssertEqual(testee.currentMove?.move, "Nc3")
-        
+        #expect(testee.currentMove?.move == "Nc3")
+
         testee.back()
-        XCTAssertEqual(testee.currentMove?.move, "e5")
-        
-        
+        #expect(testee.currentMove?.move == "e5")
+
         testee.movePlayed("Bc4")
-        XCTAssertEqual(testee.currentMove?.move, "Bc4")
-        
+        #expect(testee.currentMove?.move == "Bc4")
+
         testee.movePlayed("Bc5")
-        XCTAssertEqual(testee.currentMove?.move, "Bc5")
-        
+        #expect(testee.currentMove?.move == "Bc5")
+
         testee.movePlayed("d3")
-        XCTAssertEqual(testee.currentMove?.move, "d3")
-        
+        #expect(testee.currentMove?.move == "d3")
+
         testee.movePlayed("d6")
-        XCTAssertEqual(testee.currentMove?.move, "d6")
+        #expect(testee.currentMove?.move == "d6")
 
         testee.back()
-        XCTAssertEqual(testee.currentMove?.move, "d3")
-        
+        #expect(testee.currentMove?.move == "d3")
+
         testee.back()
-        XCTAssertEqual(testee.currentMove?.move, "Bc5")
-        
+        #expect(testee.currentMove?.move == "Bc5")
+
         testee.back()
-        XCTAssertEqual(testee.currentMove?.move, "Bc4")
-        
+        #expect(testee.currentMove?.move == "Bc4")
+
         testee.movePlayed("d6")
-        XCTAssertEqual(testee.currentMove?.move, "d6")
-                                                          
+        #expect(testee.currentMove?.move == "d6")
+
         testee.movePlayed("d3")
-        XCTAssertEqual(testee.currentMove?.move, "d3")
-        
-        
-        XCTAssertEqual(testee.list[1].white!.getVariations().count, 1)
+        #expect(testee.currentMove?.move == "d3")
+
+        #expect(testee.list[1].white!.getVariations().count == 1)
         let variation = testee.list[1].white?.getVariation("Bc4")?.all
-        XCTAssertEqual(variation?[0].moveNumber, 2)
-        XCTAssertEqual(variation?[0].white!.move, "Bc4")
-        XCTAssertEqual(variation?[0].white!.getVariations().count, 0)
-        XCTAssertEqual(variation?[0].black!.move, "Bc5")
-        XCTAssertEqual(variation?[0].black!.getVariations().count, 1)
+        #expect(variation?[0].moveNumber == 2)
+        #expect(variation?[0].white!.move == "Bc4")
+        #expect(variation?[0].white!.getVariations().count == 0)
+        #expect(variation?[0].black!.move == "Bc5")
+        #expect(variation?[0].black!.getVariations().count == 1)
+        #expect(variation?[1].moveNumber == 3)
+        #expect(variation?[1].white!.move == "d3")
+        #expect(variation?[1].white!.getVariations().count == 0)
+        #expect(variation?[1].black!.move == "d6")
+        #expect(variation?[1].black!.getVariations().count == 0)
+        #expect(variation?[0].black?.getVariations().count == 1)
 
-        XCTAssertEqual(variation?[1].moveNumber, 3)
-        XCTAssertEqual(variation?[1].white!.move, "d3")
-        XCTAssertEqual(variation?[1].white!.getVariations().count, 0)
-        XCTAssertEqual(variation?[1].black!.move, "d6")
-        XCTAssertEqual(variation?[1].black!.getVariations().count, 0)
-
-        XCTAssertEqual(variation?[0].black?.getVariations().count, 1)
         let subVariation = variation?[0].black?.getVariation("d6")?.all
-        XCTAssertEqual(subVariation?[0].moveNumber, 2)
-        XCTAssertNil(subVariation?[0].white)
-        XCTAssertEqual(subVariation?[0].black!.move, "d6")
-        XCTAssertEqual(subVariation?[0].black!.getVariations().count, 0)
-        XCTAssertEqual(subVariation?[1].moveNumber, 3)
-        XCTAssertEqual(subVariation?[1].white!.move, "d3")
-        XCTAssertEqual(subVariation?[1].white!.getVariations().count, 0)
-        XCTAssertNil(subVariation?[1].black)
+        #expect(subVariation?[0].moveNumber == 2)
+        #expect(subVariation?[0].white == nil)
+        #expect(subVariation?[0].black!.move == "d6")
+        #expect(subVariation?[0].black!.getVariations().count == 0)
+        #expect(subVariation?[1].moveNumber == 3)
+        #expect(subVariation?[1].white!.move == "d3")
+        #expect(subVariation?[1].white!.getVariations().count == 0)
+        #expect(subVariation?[1].black == nil)
     }
 }

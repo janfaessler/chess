@@ -1,8 +1,8 @@
-import XCTest
+import Testing
 @testable import SwiftChess
 
 @MainActor
-final class NavigationManagerModelTests: XCTestCase {
+struct NavigationManagerModelTests {
 
     private func makeGame(white: String, black: String) -> GameData {
         GameData(
@@ -13,7 +13,7 @@ final class NavigationManagerModelTests: XCTestCase {
         )
     }
 
-    func testOpenFiles_appendsCollection() async throws {
+    @Test func testOpenFiles_appendsCollection() async throws {
         let imported = [makeGame(white: "Alice", black: "Bob")]
         let repository = FakeGameCollectionRepository(importResult: imported)
         let testee = NavigationManagerModel(repository: repository)
@@ -21,15 +21,14 @@ final class NavigationManagerModelTests: XCTestCase {
         let url = URL(fileURLWithPath: "/tmp/opening.pgn")
         await testee.openFiles(urls: [url])
 
-        XCTAssertEqual(testee.collections.count, 1)
-        let collection = try XCTUnwrap(testee.collections.first)
-        XCTAssertEqual(collection.name, "opening.pgn")
-        XCTAssertEqual(collection.games, imported)
-        // The append is persisted through the repository.
-        XCTAssertEqual(repository.storedCollections, testee.collections)
+        #expect(testee.collections.count == 1)
+        let collection = try #require(testee.collections.first)
+        #expect(collection.name == "opening.pgn")
+        #expect(collection.games == imported)
+        #expect(repository.storedCollections == testee.collections)
     }
 
-    func testSave_roundTrips() throws {
+    @Test func testSave_roundTrips() throws {
         let repository = FakeGameCollectionRepository()
         let testee = NavigationManagerModel(repository: repository)
 
@@ -41,21 +40,21 @@ final class NavigationManagerModelTests: XCTestCase {
         testee.collections = [collection]
         testee.save()
 
-        XCTAssertEqual(repository.storedCollections, [collection])
+        #expect(repository.storedCollections == [collection])
     }
 
-    func testDelete_removesCollection() throws {
+    @Test func testDelete_removesCollection() throws {
         let keep = GameCollection(name: "Keep", expanded: true)
         let remove = GameCollection(name: "Remove", expanded: true)
         let repository = FakeGameCollectionRepository(collections: [keep, remove])
         let testee = NavigationManagerModel(repository: repository)
 
-        XCTAssertEqual(testee.collections.count, 2)
+        #expect(testee.collections.count == 2)
 
         testee.collections.removeAll { $0.id == remove.id }
         testee.save()
 
-        XCTAssertEqual(testee.collections, [keep])
-        XCTAssertEqual(repository.storedCollections, [keep])
+        #expect(testee.collections == [keep])
+        #expect(repository.storedCollections == [keep])
     }
 }
