@@ -52,7 +52,7 @@ struct MoveListTests {
         testee.back()
         testee.movePlayed("Nc6")
         let supVariationFirst = try #require(testee.currentMove)
-        let supVariation = try #require(variationSecound.getVariation(try #require(supVariationFirst)))
+        let supVariation = try #require(variationSecound.getVariation(supVariationFirst))
         let supVariationPairFirst = supVariation.all[0]
         #expect(supVariationFirst.move == "Nc6")
         #expect(supVariationPairFirst.white == nil)

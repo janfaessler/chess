@@ -16,7 +16,7 @@ public class LanParser {
         
         guard let figure = position.get(atRow: start.row, atFile:start.file) else { return nil}
         
-        guard var move = figure.createMove(endSquareString) else { return nil }
+        guard let move = figure.createMove(endSquareString) else { return nil }
         guard figure.isMovePossible(move, position: position) else { return nil }
         
         if lan.count == 5, let promotedPiece = lan.last.flatMap(PieceType.init(fenChar:)) {

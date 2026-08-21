@@ -4,8 +4,12 @@ import SwiftChessCore
 
 struct PositionThreadingTests {
 
-    private func fen(_ position: Position?) throws -> String {
-        FenBuilder.create(try #require(position))
+    private func fen(_ position: Position?) -> String {
+        do {
+            return FenBuilder.create(try #require(position))
+        } catch {
+            return "\(error)"
+        }
     }
 
     @Test func testNavigation_doesNotReparseSAN() throws {
@@ -29,24 +33,19 @@ struct PositionThreadingTests {
         testee.movePlayed("e5")
         testee.movePlayed("Nf3")
 
-        let expected = try fen(PositionFactory.loadPosition(["e4", "e5", "Nf3"]))
-        #expect(try fen(testee.currentMove?.resultingPosition) == expected)
+        #expect(fen(testee.currentMove?.resultingPosition) == fen(PositionFactory.loadPosition(["e4", "e5", "Nf3"])))
     }
 
     @Test func testStructureLoad_threadsPositionsThroughVariations() throws {
         let game = PgnGameParser.parse("1. e4 e5 2. Nc3 ( 2. Nf3 Nc6 ) 2... Nf6")
         let structure = StructureFactory.create(game)
 
-        #expect(try fen(structure.list[0].white?.resultingPosition) ==
-                try fen(PositionFactory.loadPosition(["e4"])))
-        #expect(try fen(structure.list[1].white?.resultingPosition) ==
-                try fen(PositionFactory.loadPosition(["e4", "e5", "Nc3"])))
+        #expect(fen(structure.list[0].white?.resultingPosition) == fen(PositionFactory.loadPosition(["e4"])))
+        #expect(fen(structure.list[1].white?.resultingPosition) == fen(PositionFactory.loadPosition(["e4", "e5", "Nc3"])))
 
         let variation = try #require(structure.list[1].white?.getVariation("Nf3"))
-        #expect(try fen(variation.all[0].white?.resultingPosition) ==
-                try fen(PositionFactory.loadPosition(["e4", "e5", "Nf3"])))
-        #expect(try fen(variation.all[0].black?.resultingPosition) ==
-                try fen(PositionFactory.loadPosition(["e4", "e5", "Nf3", "Nc6"])))
+        #expect(fen(variation.all[0].white?.resultingPosition) == fen(PositionFactory.loadPosition(["e4", "e5", "Nf3"])))
+        #expect(fen(variation.all[0].black?.resultingPosition) == fen(PositionFactory.loadPosition(["e4", "e5", "Nf3", "Nc6"])))
     }
 
     @Test func testNavigation_nilResultingPosition_fallsBackToReplay() throws {
@@ -58,7 +57,6 @@ struct PositionThreadingTests {
         testee.forward()
 
         #expect(testee.currentMove?.resultingPosition == nil)
-        let expected = try fen(PositionFactory.loadPosition(["e4"]))
-        #expect(try fen(testee.position) == expected)
+        #expect(fen(testee.position) == fen(PositionFactory.loadPosition(["e4"])))
     }
 }
