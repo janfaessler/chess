@@ -23,15 +23,6 @@ struct GameData: Identifiable, Hashable, Codable {
         return "\(white) - \(black)"
     }
 
-    func toPgnGame() -> PgnGame {
-        PgnGame(
-            headers: headers,
-            moves: moves.map { $0.toPgnMove() },
-            result: result,
-            comment: comment
-        )
-    }
-
     static func from(_ pgnGame: PgnGame) -> GameData {
         GameData(
             headers: pgnGame.headers,

@@ -6,14 +6,6 @@ struct MoveData: Codable, Hashable {
     let variations: [[MoveData]]
     let comment: String?
 
-    func toPgnMove() -> PgnMove {
-        PgnMove(
-            move: move,
-            variations: variations.map { $0.map { $0.toPgnMove() } },
-            comment: comment
-        )
-    }
-
     static func from(_ pgnMove: PgnMove) -> MoveData {
         MoveData(
             move: pgnMove.move,

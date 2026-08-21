@@ -8,7 +8,7 @@ class ControlModel {
     private let logger = Log.logger("ControlModel")
 
     var lines: [EngineLine] = []
-    var game: PgnGame?
+    var game: GameData?
 
     var comment: String {
         moveList.currentMove?.note ?? (game?.comment ?? "")
@@ -22,7 +22,7 @@ class ControlModel {
     private var observationTasks: [Task<Void, Never>] = []
     private var isStarted = false
 
-    init(_ game: PgnGame) {
+    init(_ game: GameData) {
         self.game = game
 
         if let fen = TestSupport.boardFen, let position = try? FenParser.parse(fen) {

@@ -1,15 +1,12 @@
 import SwiftUI
-import SwiftChessCore
 
 struct GameView: View {
     private let controlMinWidth: CGFloat = 300
     private let controlMaxWidth: CGFloat = 400
 
-    let game: PgnGame
     @State private var model: ControlModel
 
-    init(_ game: PgnGame) {
-        self.game = game
+    init(_ game: GameData) {
         _model = State(wrappedValue: ControlModel(game))
     }
 

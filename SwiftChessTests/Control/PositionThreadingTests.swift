@@ -37,7 +37,7 @@ struct PositionThreadingTests {
     }
 
     @Test func testStructureLoad_threadsPositionsThroughVariations() throws {
-        let game = PgnGameParser.parse("1. e4 e5 2. Nc3 ( 2. Nf3 Nc6 ) 2... Nf6")
+        let game = GameData.from(PgnGameParser.parse("1. e4 e5 2. Nc3 ( 2. Nf3 Nc6 ) 2... Nf6"))
         let structure = StructureFactory.create(game)
 
         #expect(fen(structure.list[0].white?.resultingPosition) == fen(PositionFactory.loadPosition(["e4"])))

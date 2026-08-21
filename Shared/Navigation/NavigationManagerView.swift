@@ -90,7 +90,7 @@ struct NavigationManagerView: View {
                 EditGameView(model: model, game: gameData)
                     .navigationTitle("Edit \(gameData.getTitle())")
             case .game(let gameData):
-                GameView(gameData.toPgnGame())
+                GameView(gameData)
                     .id(gameData.id)
                     .focused($focusOnGame)
                     .navigationTitle(gameData.getTitle())

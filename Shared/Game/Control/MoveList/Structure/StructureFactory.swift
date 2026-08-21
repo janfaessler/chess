@@ -3,13 +3,13 @@ import SwiftChessCore
 
 class StructureFactory {
 
-    static func create(_ game:PgnGame) -> MoveStructure{
+    static func create(_ game: GameData) -> MoveStructure {
         let rows = getRowContainers(game.moves, startingColor: .white, startingMoveNumber:1, startingPosition: PositionFactory.startingPosition())
         let cache = createVariationCache(rows.all)
         return MoveStructure(line: rows, parentMoves: cache)
     }
-    
-    private static func getRowContainers(_ moves:[PgnMove], startingColor:PieceColor, startingMoveNumber:Int, startingPosition: Position) -> LineModel {
+
+    private static func getRowContainers(_ moves: [MoveData], startingColor: PieceColor, startingMoveNumber: Int, startingPosition: Position) -> LineModel {
         var containers:[MovePairModel] = []
         var color = startingColor
         var moveNumber = startingMoveNumber
