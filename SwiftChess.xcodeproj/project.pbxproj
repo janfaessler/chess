@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		6106C2BA2C1F800A00D67A00 /* FilePicker in Frameworks */ = {isa = PBXBuildFile; productRef = 6106C2B92C1F800A00D67A00 /* FilePicker */; };
 		6117890F303766C100D15164 /* SwiftChessCore in Frameworks */ = {isa = PBXBuildFile; productRef = 6117890E303766C100D15164 /* SwiftChessCore */; };
-		6117891530376C4200D15164 /* SwiftChessCore in Frameworks */ = {isa = PBXBuildFile; productRef = 6117891430376C4200D15164 /* SwiftChessCore */; };
+		619AF1183038864900718D91 /* SwiftChessCore in Frameworks */ = {isa = PBXBuildFile; productRef = 619AF1173038864900718D91 /* SwiftChessCore */; };
 		61F609152BC333AF009BDC38 /* ChessKitEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 61F609142BC333AF009BDC38 /* ChessKitEngine */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +34,7 @@
 		615AED4E3031B3260045D0F0 /* SwiftChessUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftChessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		61772370274284FF00169D3D /* SwiftChess.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftChess.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		619375D72BDE783D005A616D /* SwiftChessTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftChessTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		619AF1163038861F00718D91 /* SwiftChessCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SwiftChessCore; sourceTree = "<group>"; };
 		61AE78292B991BE8008F56F8 /* SwiftChess (macOS).xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "SwiftChess (macOS).xctestplan"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -58,7 +59,7 @@
 			files = (
 				6106C2BA2C1F800A00D67A00 /* FilePicker in Frameworks */,
 				61F609152BC333AF009BDC38 /* ChessKitEngine in Frameworks */,
-				6117891530376C4200D15164 /* SwiftChessCore in Frameworks */,
+				619AF1183038864900718D91 /* SwiftChessCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				61AE78292B991BE8008F56F8 /* SwiftChess (macOS).xctestplan */,
+				619AF1163038861F00718D91 /* SwiftChessCore */,
 				615AEDF33031C0540045D0F0 /* Shared */,
 				615AEE4A3031C10B0045D0F0 /* macOS */,
 				615AED763031BFC50045D0F0 /* SwiftChessTests */,
@@ -140,7 +142,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				6117890D3037669700D15164 /* PBXTargetDependency */,
 				61F609112BC310B4009BDC38 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
@@ -150,7 +151,7 @@
 			packageProductDependencies = (
 				61F609142BC333AF009BDC38 /* ChessKitEngine */,
 				6106C2B92C1F800A00D67A00 /* FilePicker */,
-				6117891430376C4200D15164 /* SwiftChessCore */,
+				619AF1173038864900718D91 /* SwiftChessCore */,
 			);
 			productName = "SwiftChess (macOS)";
 			productReference = 61772370274284FF00169D3D /* SwiftChess.app */;
@@ -212,7 +213,6 @@
 			packageReferences = (
 				61F609122BC310DD009BDC38 /* XCRemoteSwiftPackageReference "chesskit-engine" */,
 				6106C2B82C1F7FE500D67A00 /* XCRemoteSwiftPackageReference "FilePicker" */,
-				6117890B3037663100D15164 /* XCLocalSwiftPackageReference "SwiftChessCore" */,
 			);
 			productRefGroup = 6177236B274284FF00169D3D /* Products */;
 			projectDirPath = "";
@@ -274,10 +274,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		6117890D3037669700D15164 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 6117890C3037669700D15164 /* SwiftChessCore */;
-		};
 		615AED553031B3260045D0F0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6177236F274284FF00169D3D /* SwiftChess (macOS) */;
@@ -657,19 +653,13 @@
 			package = 6106C2B82C1F7FE500D67A00 /* XCRemoteSwiftPackageReference "FilePicker" */;
 			productName = FilePicker;
 		};
-		6117890C3037669700D15164 /* SwiftChessCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6117890B3037663100D15164 /* XCLocalSwiftPackageReference "SwiftChessCore" */;
-			productName = SwiftChessCore;
-		};
 		6117890E303766C100D15164 /* SwiftChessCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6117890B3037663100D15164 /* XCLocalSwiftPackageReference "SwiftChessCore" */;
 			productName = SwiftChessCore;
 		};
-		6117891430376C4200D15164 /* SwiftChessCore */ = {
+		619AF1173038864900718D91 /* SwiftChessCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6117890B3037663100D15164 /* XCLocalSwiftPackageReference "SwiftChessCore" */;
 			productName = SwiftChessCore;
 		};
 		61F609102BC310B4009BDC38 /* ChessKitEngine */ = {

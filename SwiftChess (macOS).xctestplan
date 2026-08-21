@@ -30,6 +30,13 @@
         "identifier" : "615AED4D3031B3260045D0F0",
         "name" : "SwiftChessUITests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:SwiftChessCore",
+        "identifier" : "SwiftChessCoreTests",
+        "name" : "SwiftChessCoreTests"
+      }
     }
   ],
   "version" : 1
