@@ -1,4 +1,5 @@
 import Foundation
+import SwiftChessCore
 
 struct MoveData: Codable, Hashable {
     let move: String

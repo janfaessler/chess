@@ -1,4 +1,5 @@
 import Foundation
+import SwiftChessCore
 
 class StructureFactory {
 

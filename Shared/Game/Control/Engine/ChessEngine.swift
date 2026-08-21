@@ -1,5 +1,6 @@
 import Foundation
 import ChessKitEngine
+import SwiftChessCore
 #if canImport(AppKit)
 import AppKit
 #elseif canImport(UIKit)
@@ -37,7 +38,7 @@ final class ChessEngine: EngineProtocol {
         let multipv = lineNumbers
 
         configurationTask = Task {
-            await engine.set(loggingEnabled: true)
+            await engine.set(loggingEnabled: false)
             await engine.start(coreCount: 2, multipv: multipv)
 
             while await !engine.isRunning, !Task.isCancelled {

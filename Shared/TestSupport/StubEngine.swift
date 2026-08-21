@@ -1,4 +1,5 @@
 import Foundation
+import SwiftChessCore
 
 /// Deterministic engine used during UI tests. It emits fixed evaluation lines
 /// synchronously so the analysis UI can be asserted on without depending on the

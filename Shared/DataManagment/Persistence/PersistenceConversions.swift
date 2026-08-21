@@ -11,6 +11,15 @@ private func encode<T: Encodable>(_ value: T, field: String) -> Data? {
     }
 }
 
+private func decode<T: Decodable>(_ data: Data, as type: T.Type) -> T? {
+    do {
+        return try JSONDecoder().decode(type, from: data)
+    } catch {
+        logger.error("Failed to decode \(type): \(error)")
+        return nil
+    }
+}
+
 extension GameEntity {
     convenience init?(from gameData: GameData, order: Int) {
         guard let headersData = encode(gameData.headers, field: "headers"),
@@ -41,21 +50,16 @@ extension GameEntity {
     }
 
     func toGameData() -> GameData? {
-        let decoder = JSONDecoder()
-        do {
-            let headers = try decoder.decode([String: String].self, from: headersData)
-            let moves = try decoder.decode([MoveData].self, from: movesData)
-            return GameData(
-                id: id,
-                headers: headers,
-                moves: moves,
-                result: result,
-                comment: comment
-            )
-        } catch {
-            logger.error("Failed to decode game \(self.id): \(error)")
-            return nil
-        }
+        guard let headers = decode(headersData, as: [String: String].self),
+              let moves = decode(movesData, as: [MoveData].self)
+        else { return nil }
+        return GameData(
+            id: id,
+            headers: headers,
+            moves: moves,
+            result: result,
+            comment: comment
+        )
     }
 }
 

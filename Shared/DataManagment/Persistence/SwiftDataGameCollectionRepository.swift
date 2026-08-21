@@ -1,5 +1,6 @@
 import Foundation
 import SwiftData
+import SwiftChessCore
 
 @MainActor
 final class SwiftDataGameCollectionRepository: GameCollectionRepository {

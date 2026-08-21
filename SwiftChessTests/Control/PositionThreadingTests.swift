@@ -1,5 +1,6 @@
 import XCTest
 @testable import SwiftChess
+import SwiftChessCore
 
 
 final class PositionThreadingTests: XCTestCase {

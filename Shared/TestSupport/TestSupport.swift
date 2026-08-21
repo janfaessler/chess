@@ -1,5 +1,6 @@
 import Foundation
 import SwiftData
+import SwiftChessCore
 
 /// Central place for UI-test hooks.
 ///

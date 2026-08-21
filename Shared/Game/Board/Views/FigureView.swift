@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftChessCore
 
 struct FigureView: View {
     let fieldSize:CGFloat

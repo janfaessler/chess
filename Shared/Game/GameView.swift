@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftChessCore
 
 struct GameView: View {
     private let controlMinWidth: CGFloat = 300

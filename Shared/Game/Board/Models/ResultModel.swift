@@ -1,4 +1,5 @@
 import Foundation
+import SwiftChessCore
 
 public class ResultModel {
     

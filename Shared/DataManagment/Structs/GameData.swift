@@ -1,4 +1,5 @@
 import Foundation
+import SwiftChessCore
 
 struct GameData: Identifiable, Hashable, Codable {
     let id: UUID

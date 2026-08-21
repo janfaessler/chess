@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftChessCore
 
 @Observable
 class FigureModel: Identifiable {

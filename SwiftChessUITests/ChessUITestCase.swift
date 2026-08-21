@@ -1,5 +1,6 @@
 import XCTest
 
+@MainActor
 class ChessUITestCase: XCTestCase {
 
     let firstGameTitle = "Alice - Bob"
@@ -14,11 +15,19 @@ class ChessUITestCase: XCTestCase {
     @discardableResult
     func launchApp(boardFen: String? = nil) -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchArguments += ["-uiTesting"]
+        app.launchArguments += ["-uiTesting", "-AppleInterfaceStyle", "Dark"]
         if let boardFen {
             app.launchEnvironment["UITEST_BOARD_FEN"] = boardFen
         }
         app.launch()
+        app.activate()
+        
+        let window = app.windows.firstMatch
+        XCTAssertTrue(window.waitForExistence(timeout: 5), "The main window group failed to open.")
+        
+        // Force macOS to bring it to the front by clicking it safely
+        window.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
+
         return app
     }
 
