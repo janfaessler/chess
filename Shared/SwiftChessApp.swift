@@ -7,6 +7,7 @@ struct SwiftChessApp: App {
     private let container: ModelContainer
 
     init() {
+        NSWindow.allowsAutomaticWindowTabbing = false
         if TestSupport.isUITesting {
             container = TestSupport.makeSeededContainer()
         } else {

@@ -24,6 +24,18 @@ public class NavigationManagerModel {
         }
     }
 
+    func updateGame(_ game: GameData, headers: [String: String], result: String) -> GameData? {
+        for i in collections.indices {
+            if let j = collections[i].games.firstIndex(where: { $0.id == game.id }) {
+                let updated = GameData(id: game.id, headers: headers, moves: game.moves, result: result, comment: game.comment)
+                collections[i].games[j] = updated
+                save()
+                return updated
+            }
+        }
+        return nil
+    }
+
     func save() {
         repository.save(collections)
     }

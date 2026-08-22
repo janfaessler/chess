@@ -48,6 +48,7 @@ struct NavigationManagerView: View {
             .listStyle(.sidebar)
             .scrollContentBackground(.hidden)
             .background(Color(nsColor: .windowBackgroundColor))
+            .navigationTitle("")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Menu {
@@ -71,7 +72,6 @@ struct NavigationManagerView: View {
                     .accessibilityIdentifier("actions-menu")
                 }
             }
-            .navigationTitle("Collections")
         } detail: {
             switch selectedSideBarItem {
             case .openPgn:
@@ -85,10 +85,12 @@ struct NavigationManagerView: View {
                     .navigationTitle("Edit \(collection.name)")
             case .addGame:
                 AddGameView(model: model)
-                    .navigationTitle("Add Game")
+                    .navigationTitle("")
             case .editGame(let gameData):
-                EditGameView(model: model, game: gameData)
-                    .navigationTitle("Edit \(gameData.getTitle())")
+                EditGameView(navigationModel: model, game: gameData) { updated in
+                    selectedSideBarItem = .game(updated)
+                }
+                .navigationTitle("")
             case .game(let gameData):
                 GameView(gameData)
                     .id(gameData.id)
@@ -101,7 +103,6 @@ struct NavigationManagerView: View {
                             } label: {
                                 Label("Edit Game", systemImage: "pencil")
                             }
-                            .buttonStyle(.plain)
                             .accessibilityIdentifier("edit-game")
                         }
                     }
