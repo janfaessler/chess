@@ -1,11 +1,25 @@
 import SwiftUI
+import SwiftChessCore
+
+extension MoveAnnotation {
+    var displayColor: Color {
+        switch self {
+        case .brilliant: return .cyan
+        case .good: return .green
+        case .interesting: return .teal
+        case .dubious: return .orange
+        case .mistake: return .orange
+        case .blunder: return .red
+        }
+    }
+}
 
 struct MoveView: View {
-    
+
     let model: MoveListModel
     let move: MoveModel
     let action: () -> Void
-    
+
     var body: some View {
         Button {
             action()
@@ -14,7 +28,13 @@ struct MoveView: View {
                 Text(move.move)
                     .font(.system(.callout, design: .default))
                     .fontWeight(model.isCurrentMove(move) ? .semibold : .regular)
-                
+
+                if let annotation = move.annotation {
+                    Text(annotation.symbol)
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundStyle(annotation.displayColor)
+                }
+
                 if move.hasVariations() {
                     Image(systemName: "arrow.triangle.branch")
                         .font(.system(size: 7))

@@ -9,13 +9,28 @@ class MoveModel : Identifiable, Equatable {
     let color: PieceColor
     let resultingPosition: Position?
     var note: String?
+    var annotation: MoveAnnotation?
+    var highlights: [SquareHighlight]
+    var arrows: [BoardArrow]
 
     private var variations: [String: LineModel]
 
-    init(move: String, color: PieceColor, variations: [String: LineModel] = [:], note: String? = nil, resultingPosition: Position? = nil) {
+    init(
+        move: String,
+        color: PieceColor,
+        variations: [String: LineModel] = [:],
+        note: String? = nil,
+        annotation: MoveAnnotation? = nil,
+        highlights: [SquareHighlight] = [],
+        arrows: [BoardArrow] = [],
+        resultingPosition: Position? = nil
+    ) {
         self.move = move
         self.variations = variations
         self.note = note
+        self.annotation = annotation
+        self.highlights = highlights
+        self.arrows = arrows
         self.color = color
         self.resultingPosition = resultingPosition
     }

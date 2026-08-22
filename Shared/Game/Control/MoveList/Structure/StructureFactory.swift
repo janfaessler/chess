@@ -16,7 +16,15 @@ class StructureFactory {
         var position = startingPosition
         for move in moves {
             let resultingPosition = PositionFactory.apply(move.move, to: position)
-            let moveContainer = MoveModel(move: move.move, color: color, note: move.comment, resultingPosition: resultingPosition)
+            let moveContainer = MoveModel(
+                move: move.move,
+                color: color,
+                note: move.comment,
+                annotation: move.annotation,
+                highlights: move.highlights,
+                arrows: move.arrows,
+                resultingPosition: resultingPosition
+            )
             
             for variation in move.variations {
                 guard let variationName = variation.first?.move else { continue }

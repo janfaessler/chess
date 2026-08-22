@@ -46,7 +46,12 @@ struct PgnParserTests {
         #expect(game.moves[2].variations[0][5].move == "Bxf3")
         #expect(game.moves[2].variations[0][6].move == "Qxf3")
         #expect(game.moves[2].variations[0][7].move == "e6")
-        #expect(game.moves[2].variations[0][7].comment == "[%csl Gb7,Gc1,Gc6,Gd5,Ge6,Gf1,Gf7] fu:")
+        // [%csl ...] stripped from comment text
+        #expect(game.moves[2].variations[0][7].comment == "fu:")
+        // highlights parsed from [%csl Gb7,Gc1,Gc6,Gd5,Ge6,Gf1,Gf7]
+        #expect(game.moves[2].variations[0][7].highlights.count == 7)
+        #expect(game.moves[2].variations[0][7].highlights[0] == SquareHighlight(color: .green, square: "b7"))
+        #expect(game.moves[2].variations[0][7].highlights[6] == SquareHighlight(color: .green, square: "f7"))
 
         #expect(game.moves[2].variations[1][0].move == "Nf3")
         #expect(game.moves[2].variations[1][1].move == "d5")
@@ -61,8 +66,11 @@ struct PgnParserTests {
 
         #expect(game.moves[4].variations[0][0].move == "e5")
         #expect(game.moves[4].variations[0][0].comment == "fu bar 3..c5!")
+        #expect(game.moves[4].variations[0][0].annotation == .good)
         #expect(game.moves[4].variations[0][1].move == "c5")
+        #expect(game.moves[4].variations[0][1].annotation == .interesting)
         #expect(game.moves[4].variations[0][2].move == "dxc5")
+        #expect(game.moves[4].variations[0][2].annotation == .good)
 
         #expect(game.moves[4].variations[0][2].variations[0][0].move == "c3")
         #expect(game.moves[4].variations[0][2].variations[0][1].move == "Nc6")
@@ -72,8 +80,10 @@ struct PgnParserTests {
         #expect(game.moves[4].variations[0][2].variations[0][5].move == "e6")
 
         #expect(game.moves[4].variations[0][2].variations[1][0].move == "c4")
+        #expect(game.moves[4].variations[0][2].variations[1][0].annotation == .interesting)
 
         #expect(game.moves[4].variations[0][3].move == "Nc6")
+        #expect(game.moves[4].variations[0][3].annotation == .interesting)
         #expect(game.moves[4].variations[0][3].variations[0][0].move == "e6")
 
         #expect(game.moves[5].move == "dxe4")
@@ -123,5 +133,78 @@ struct PgnParserTests {
         """
         let games = PgnParser.parse(pgn)
         #expect(!games.isEmpty)
+    }
+
+    @Test func testParse_cslHighlights() throws {
+        let pgn = """
+        [Event "x"]
+
+        1. e4 { [%csl Rg4,Yh5,Gb2] some text } e5
+        """
+        let games = PgnParser.parse(pgn)
+        let game = try #require(games.first)
+        let move = try #require(game.moves.first)
+        #expect(move.comment == "some text")
+        #expect(move.highlights.count == 3)
+        #expect(move.highlights[0] == SquareHighlight(color: .red, square: "g4"))
+        #expect(move.highlights[1] == SquareHighlight(color: .yellow, square: "h5"))
+        #expect(move.highlights[2] == SquareHighlight(color: .green, square: "b2"))
+        #expect(move.arrows.isEmpty)
+    }
+
+    @Test func testParse_calArrows() throws {
+        let pgn = """
+        [Event "x"]
+
+        1. e4 { [%cal Rg4g8,Yb2b8] } e5
+        """
+        let games = PgnParser.parse(pgn)
+        let game = try #require(games.first)
+        let move = try #require(game.moves.first)
+        #expect(move.comment == nil)
+        #expect(move.arrows.count == 2)
+        #expect(move.arrows[0] == BoardArrow(color: .red, from: "g4", to: "g8"))
+        #expect(move.arrows[1] == BoardArrow(color: .yellow, from: "b2", to: "b8"))
+        #expect(move.highlights.isEmpty)
+    }
+
+    @Test func testParse_cslAndCalTogether() throws {
+        let pgn = """
+        [Event "x"]
+
+        1. e4 { [%csl Ge4][%cal Ge4e5] Great square } e5
+        """
+        let games = PgnParser.parse(pgn)
+        let game = try #require(games.first)
+        let move = try #require(game.moves.first)
+        #expect(move.comment == "Great square")
+        #expect(move.highlights.count == 1)
+        #expect(move.highlights[0] == SquareHighlight(color: .green, square: "e4"))
+        #expect(move.arrows.count == 1)
+        #expect(move.arrows[0] == BoardArrow(color: .green, from: "e4", to: "e5"))
+    }
+
+    @Test func testParse_nagAnnotation() throws {
+        let pgn = """
+        [Event "x"]
+
+        1. e4 $3 e5 $4
+        """
+        let games = PgnParser.parse(pgn)
+        let game = try #require(games.first)
+        #expect(game.moves[0].annotation == .brilliant)
+        #expect(game.moves[1].annotation == .blunder)
+    }
+
+    @Test func testParse_symbolicAnnotation() throws {
+        let pgn = """
+        [Event "x"]
+
+        1. e4!! e5?
+        """
+        let games = PgnParser.parse(pgn)
+        let game = try #require(games.first)
+        #expect(game.moves[0].annotation == .brilliant)
+        #expect(game.moves[1].annotation == .mistake)
     }
 }

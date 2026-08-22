@@ -39,7 +39,7 @@ enum TestSupport {
     [White "Alice"]
     [Black "Bob"]
 
-    1. e4 e5 2. Nf3 Nc6 (2... d6 3. d4) 3. Bb5 {Ruy Lopez} a6 *
+    1. e4 e5 2. Nf3 Nc6 (2... d6 3. d4) 3. Bb5 {[%csl Rb5,Rc6][%cal Rb5c6] Ruy Lopez} a6 *
     """
 
     /// A second, plain game so the sidebar shows more than one entry.

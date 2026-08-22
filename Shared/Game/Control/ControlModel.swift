@@ -68,6 +68,7 @@ class ControlModel {
         let position = self.board.position
         let color: PieceColor = position.colorToMove == .white ? .black : .white
         self.moveList.movePlayed(notation, color: color)
+        self.board.clearUserAnnotations()
         self.engine.newPosition(position)
     }
     
@@ -83,6 +84,11 @@ class ControlModel {
     private func positionChange(_ position: Position) {
         self.logger.info("positionChange")
         self.board.updatePosition(position)
+        self.board.clearUserAnnotations()
+        self.board.updateAnnotations(
+            highlights: moveList.currentMove?.highlights ?? [],
+            arrows: moveList.currentMove?.arrows ?? []
+        )
         self.engine.newPosition(position)
     }
     
