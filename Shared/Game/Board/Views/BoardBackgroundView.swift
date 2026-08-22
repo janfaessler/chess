@@ -3,19 +3,23 @@ import SwiftChessCore
 
 struct BoardBackgroundView: View {
 
+    let orientation: BoardOrientation
+
     private let lightColor = Color(red: 0.8, green: 0.8, blue: 0.5)
     private let darkColor = Color.brown
 
     var body: some View {
         VStack(spacing: 0.0) {
-            ForEach(1...8, id: \.self) { row in
+            ForEach(1...8, id: \.self) { rowIndex in
                 HStack(spacing: 0.0) {
-                    ForEach(1...8, id: \.self) { file in
+                    ForEach(1...8, id: \.self) { colIndex in
+                        let row = orientation.visualRow(rowIndex)
+                        let file = orientation.visualFile(colIndex)
                         ZStack {
                             Rectangle()
                                 .fill(fieldColor(row: row, file: file))
 
-                            if row == 8 {
+                            if rowIndex == 8 {
                                 Text(fileName(file))
                                     .fontWeight(.bold)
                                     .font(.largeTitle)
@@ -24,7 +28,7 @@ struct BoardBackgroundView: View {
                                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
                             }
 
-                            if file == 1 {
+                            if colIndex == 1 {
                                 Text(rowName(row))
                                     .fontWeight(.bold)
                                     .font(.largeTitle)
@@ -54,6 +58,6 @@ struct BoardBackgroundView: View {
     }
 
     private func rowName(_ row: Int) -> String {
-        "\(9 - row)"
+        "\(row)"
     }
 }

@@ -13,6 +13,7 @@ class BoardModel {
     var focus: FigureModel?
     var result: ResultModel
     var moveToPromote: Move?
+    var orientation: BoardOrientation = BoardOrientation(isFlipped: false)
 
     private var game: ChessGame
 
@@ -78,6 +79,10 @@ class BoardModel {
         focus = nil
     }
     
+    func toggleOrientation() {
+        orientation = BoardOrientation(isFlipped: !orientation.isFlipped)
+    }
+
     var position: Position {
         self.game.position
     }
@@ -92,8 +97,8 @@ class BoardModel {
     func moveFocusFigureTo(_ location: CGPoint, fieldSize: CGFloat) {
         guard let figure = self.focus else { return }
 
-        let row = Int(9 - location.y / fieldSize)
-        let file = Int(1 + location.x / fieldSize)
+        let row = orientation.logicalRow(y: location.y, fieldSize: fieldSize)
+        let file = orientation.logicalFile(x: location.x, fieldSize: fieldSize)
         let deltarow = row - figure.row
         let deltafile = file - figure.file
 

@@ -67,11 +67,11 @@ class FigureModel: Identifiable {
     }
     
     func calculateDeltaRow(_ height: CGFloat, fieldSize: CGFloat) -> Int {
-        Int(round(height / fieldSize)) * -1
+        Int(round(height / fieldSize)) * board.orientation.deltaRowMultiplier
     }
-    
+
     func calculateDeltaFile(_ width: CGFloat, fieldSize: CGFloat) -> Int {
-        Int(round(width / fieldSize))
+        Int(round(width / fieldSize)) * board.orientation.deltaFileMultiplier
     }
 
     func resetOffset() {
@@ -79,11 +79,11 @@ class FigureModel: Identifiable {
     }
     
     func getOffsetX(fieldSize: CGFloat) -> CGFloat {
-        (x ?? 0) + calcOffset(forLine: file, fieldSize: fieldSize)
+        (x ?? 0) + calcOffset(forLine: board.orientation.visualFile(file), fieldSize: fieldSize)
     }
-    
+
     func getOffsetY(fieldSize: CGFloat) -> CGFloat {
-        (y ?? 0) + calcOffset(forLine: 9 - row, fieldSize: fieldSize)
+        (y ?? 0) + calcOffset(forLine: board.orientation.visualRow(row), fieldSize: fieldSize)
     }
     
     func setOffset(x: CGFloat?, y: CGFloat?) {

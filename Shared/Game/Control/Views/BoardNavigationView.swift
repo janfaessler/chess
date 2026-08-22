@@ -6,6 +6,18 @@ struct BoardNavigationView: View {
     var body: some View {
         HStack(spacing: 12) {
             Button {
+                model.board.toggleOrientation()
+            } label: {
+                Image(systemName: "arrow.up.arrow.down")
+                    .font(.title3)
+                    .frame(width: 44, height: 44)
+            }
+            .buttonStyle(.borderless)
+            .background(.quaternary, in: .circle)
+            .help("Flip board")
+            .accessibilityIdentifier("nav-flip")
+
+            Button {
                 model.moveList.start()
             } label: {
                 Image(systemName: "backward.end.fill")

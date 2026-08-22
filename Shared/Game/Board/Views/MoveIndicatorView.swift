@@ -2,15 +2,16 @@ import SwiftUI
 import SwiftChessCore
 
 struct MoveIndicatorView: View {
-    let size:CGFloat
-    let fieldSize:CGFloat
-    let move:Move
+    let size: CGFloat
+    let fieldSize: CGFloat
+    let move: Move
+    let orientation: BoardOrientation
 
-    init (move:Move, fieldSize:CGFloat) {
+    init(move: Move, fieldSize: CGFloat, orientation: BoardOrientation) {
         self.move = move
         self.size = fieldSize * 0.25
         self.fieldSize = fieldSize
-
+        self.orientation = orientation
     }
     var body: some View {
         
@@ -32,11 +33,11 @@ struct MoveIndicatorView: View {
     
     
     func getOffsetX() -> CGFloat {
-        return calcOffset(forLine: move.file)
+        calcOffset(forLine: orientation.visualFile(move.file))
     }
-    
+
     func getOffsetY() -> CGFloat {
-        return calcOffset(forLine: 9 - move.row)
+        calcOffset(forLine: orientation.visualRow(move.row))
     }
     
     func calcOffset(forLine:Int) -> CGFloat {

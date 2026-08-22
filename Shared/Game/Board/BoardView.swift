@@ -8,14 +8,14 @@ struct BoardView: View {
         GeometryReader { geo in
             let fieldSize = geo.size.width / 8
             ZStack (alignment: .topLeading) {
-                BoardBackgroundView()
-       
+                BoardBackgroundView(orientation: model.orientation)
+
                 ForEach(model.figures, id: \.id ) { figure in
                     BoardFigureView(fieldSize: fieldSize, figure: figure)
                 }
-                
+
                 ForEach(model.getLegalMoves()) { move in
-                    MoveIndicatorView(move: move, fieldSize: fieldSize)
+                    MoveIndicatorView(move: move, fieldSize: fieldSize, orientation: model.orientation)
                         .onTapGesture { model.playFocusFigureMove(move) }
                 }
                 
