@@ -62,7 +62,6 @@ struct OpenPgnView: View {
             .buttonStyle(.plain)
             .disabled(isLoading)
             
-            // Info section
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 10) {
                     Image(systemName: "info.circle.fill")
