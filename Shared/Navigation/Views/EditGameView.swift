@@ -4,8 +4,8 @@ struct EditGameView: View {
     @State private var model: EditGameModel
     var onSave: (GameData) -> Void
 
-    init(navigationModel: NavigationManagerModel, game: GameData, onSave: @escaping (GameData) -> Void) {
-        _model = State(wrappedValue: EditGameModel(game: game, navigationModel: navigationModel))
+    init(navigationModel: NavigationManagerModel, game: GameData, targetCollection: GameCollection? = nil, onSave: @escaping (GameData) -> Void) {
+        _model = State(wrappedValue: EditGameModel(game: game, navigationModel: navigationModel, targetCollection: targetCollection))
         self.onSave = onSave
     }
 
@@ -48,7 +48,7 @@ struct EditGameView: View {
             }
         }
         .formStyle(.grouped)
-        .navigationTitle("Edit Game")
+        .navigationTitle(model.title)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button("Save") {

@@ -20,6 +20,10 @@ class EditGameModel {
 
     private let game: GameData
     private let navigationModel: NavigationManagerModel
+    private let targetCollection: GameCollection?
+
+    var isNew: Bool { targetCollection != nil }
+    var title: String { isNew ? "Add Game" : "Edit Game" }
 
     static let standardKeys = ["White", "Black", "Event", "Site", "Date", "Round", "Result"]
 
@@ -29,9 +33,10 @@ class EditGameModel {
         return f
     }()
 
-    init(game: GameData, navigationModel: NavigationManagerModel) {
+    init(game: GameData, navigationModel: NavigationManagerModel, targetCollection: GameCollection? = nil) {
         self.game = game
         self.navigationModel = navigationModel
+        self.targetCollection = targetCollection
         white = game.headers["White"] ?? ""
         black = game.headers["Black"] ?? ""
         event = game.headers["Event"] ?? ""
@@ -66,6 +71,10 @@ class EditGameModel {
         let keptKeys = Set(extraHeaders.map(\.key))
         for key in game.headers.keys where !Self.standardKeys.contains(key) && !keptKeys.contains(key) {
             updated.removeValue(forKey: key)
+        }
+        if let collection = targetCollection {
+            let newGame = GameData(headers: updated, moves: game.moves, result: game.result, comment: game.comment)
+            return navigationModel.addGame(newGame, to: collection)
         }
         return navigationModel.updateGame(game, headers: updated, result: game.result)
     }

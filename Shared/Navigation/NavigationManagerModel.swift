@@ -36,6 +36,31 @@ public class NavigationManagerModel {
         return nil
     }
 
+    func addGame(_ game: GameData, to collection: GameCollection) -> GameData? {
+        guard let i = collections.firstIndex(where: { $0.id == collection.id }) else { return nil }
+        collections[i].games.append(game)
+        save()
+        return game
+    }
+
+    func removeGame(_ game: GameData) {
+        for i in collections.indices {
+            collections[i].games.removeAll { $0.id == game.id }
+        }
+        save()
+    }
+
+    func updateCollection(_ collection: GameCollection) {
+        guard let i = collections.firstIndex(where: { $0.id == collection.id }) else { return }
+        collections[i] = collection
+        save()
+    }
+
+    func removeCollection(_ collection: GameCollection) {
+        collections.removeAll { $0.id == collection.id }
+        save()
+    }
+
     func save() {
         repository.save(collections)
     }

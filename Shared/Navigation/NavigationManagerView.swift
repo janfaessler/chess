@@ -7,13 +7,25 @@ struct NavigationManagerView: View {
     @FocusState private var focusOnGame: Bool
 
     var body: some View {
+        @Bindable var bModel = model
         NavigationSplitView(columnVisibility: $sideBarVisibility) {
             List(selection: $selectedSideBarItem) {
-                ForEach(model.collections, id: \.id) { collection in
-                    Section {
+                ForEach($bModel.collections) { $collection in
+                    Section(isExpanded: $collection.expanded) {
                         ForEach(collection.games, id: \.id) { gameData in
                             NavigationLink(gameData.getTitle(), value: SideBarItem.game(gameData))
                                 .accessibilityIdentifier("sidebar-game-\(gameData.getTitle())")
+                                .contextMenu {
+                                    Button(role: .destructive) {
+                                        if case .game(let selected) = selectedSideBarItem, selected.id == gameData.id {
+                                            selectedSideBarItem = .openPgn
+                                        }
+                                        model.removeGame(gameData)
+                                    } label: {
+                                        Label("Delete Game", systemImage: "trash")
+                                    }
+                                    .accessibilityIdentifier("sidebar-deletegame-\(gameData.getTitle())")
+                                }
                         }
                     } header: {
                         HStack {
@@ -26,7 +38,7 @@ struct NavigationManagerView: View {
                             .accessibilityIdentifier("sidebar-collection-\(collection.name)")
                             Spacer()
                             Button {
-                                selectedSideBarItem = .addGame
+                                selectedSideBarItem = .addGame(collection)
                             } label: {
                                 Label("add", systemImage: "plus.circle")
                                     .labelStyle(.iconOnly)
@@ -35,7 +47,7 @@ struct NavigationManagerView: View {
                             .accessibilityIdentifier("sidebar-addgame-\(collection.name)")
                         }
                     }
-                    .collapsible(true)
+                    .onChange(of: collection.expanded) { model.save() }
                 }
             }
             .onChange(of: selectedSideBarItem) {
@@ -81,11 +93,12 @@ struct NavigationManagerView: View {
                 CreatePgnView(model: model)
                     .navigationTitle("New Collection")
             case .editCollection(let collection):
-                EditCollectionView(model: model, collection: collection)
-                    .navigationTitle("Edit \(collection.name)")
-            case .addGame:
-                AddGameView(model: model)
-                    .navigationTitle("")
+                EditCollectionView(model: model, collection: collection, selectedSideBarItem: $selectedSideBarItem)
+            case .addGame(let collection):
+                EditGameView(navigationModel: model, game: GameData(headers: [:], moves: [], result: "*", comment: nil), targetCollection: collection) { added in
+                    selectedSideBarItem = .game(added)
+                }
+                .navigationTitle("")
             case .editGame(let gameData):
                 EditGameView(navigationModel: model, game: gameData) { updated in
                     selectedSideBarItem = .game(updated)

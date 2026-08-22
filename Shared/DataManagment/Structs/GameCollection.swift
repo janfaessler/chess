@@ -1,8 +1,8 @@
 import Foundation
 
-struct GameCollection: Hashable {
+struct GameCollection: Identifiable, Hashable {
     let id: UUID
-    let name: String
+    var name: String
     var expanded: Bool
     var games: [GameData] = []
 
