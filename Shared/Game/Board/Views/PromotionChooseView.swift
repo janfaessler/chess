@@ -47,12 +47,14 @@ struct PromotionChooseView: View {
     }
 
     func getOffsetX() -> CGFloat {
-        return calcOffset(board.moveToPromote!.file)
+        guard let move = board.moveToPromote else { return 0 }
+        return calcOffset(move.file)
     }
-    
+
     func getOffsetY() -> CGFloat {
-        let correction = board.moveToPromote!.piece.color == .white ? -7 : 4
-        return calcOffset(board.moveToPromote!.row + correction)
+        guard let move = board.moveToPromote else { return 0 }
+        let correction = move.piece.color == .white ? -7 : 4
+        return calcOffset(move.row + correction)
     }
     
     func calcOffset(_ offset:Int) -> CGFloat {

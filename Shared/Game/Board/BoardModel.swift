@@ -6,8 +6,8 @@ class BoardModel {
 
     private let logger = Log.logger("BoardModel")
 
-    let movePlayed: AsyncStream<String>
-    private let moveContinuation: AsyncStream<String>.Continuation
+    let gameEvents: AsyncStream<GameEvent>
+    private let gameEventContinuation: AsyncStream<GameEvent>.Continuation
 
     var figures: [FigureModel] = []
     var focus: FigureModel?
@@ -32,7 +32,7 @@ class BoardModel {
         let game = ChessGame(position)
         self.game = game
         result = ResultModel(game.getGameState())
-        (movePlayed, moveContinuation) = AsyncStream.makeStream(of: String.self)
+        (gameEvents, gameEventContinuation) = AsyncStream.makeStream(of: GameEvent.self)
         figures = getFigures()
     }
 
@@ -55,7 +55,7 @@ class BoardModel {
             return
         }
 
-        if move.type == .Promotion {
+        if move.type == .promotion {
             moveToPromote = move
         } else {
             do {
@@ -89,6 +89,7 @@ class BoardModel {
 
     func toggleOrientation() {
         orientation = BoardOrientation(isFlipped: !orientation.isFlipped)
+        figures.forEach { $0.orientation = orientation }
     }
 
     var position: Position {
@@ -164,12 +165,20 @@ class BoardModel {
     }
 
     private func getFigures() -> [FigureModel] {
-        let figures = self.game.figures
-        return figures.map { FigureModel($0, board: self) }
+        let orientation = self.orientation
+        return self.game.figures.map { [weak self] figure in
+            FigureModel(figure, orientation: orientation) { [weak self] event in
+                switch event {
+                case .moved(let fig, let dRow, let dFile): self?.move(figure: fig, deltaRow: dRow, deltaFile: dFile)
+                case .focusSet(let fig): self?.setFocus(fig)
+                case .focusCleared: self?.clearFocus()
+                }
+            }
+        }
     }
 
     private func notifyMoveDone(_ move: Move, positionBeforeMove: Position) {
         let notation = NotationFactory.generate(move, position: positionBeforeMove)
-        moveContinuation.yield(notation)
+        gameEventContinuation.yield(.moveMade(notation: notation, color: move.piece.color))
     }
 }

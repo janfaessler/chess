@@ -69,4 +69,37 @@ final class BoardInteractionUITests: ChessUITestCase {
 
         assertExists(app, "game-result", "Result overlay should appear on checkmate")
     }
+
+    func testIllegalMoveIsRejected() {
+        let app = launchApp(boardFen: "4k3/8/8/8/8/8/4P3/4K3 w - - 1 1")
+        openGame(app, firstGameTitle)
+
+        click(app, "figure-e2")
+        assertAbsent(app, "target-e1", "Pawn cannot move backward — target must not appear")
+
+        click(app, "figure-e1")
+        assertExists(app, "figure-e2", "Pawn must remain on e2 after illegal move attempt")
+    }
+
+    func testQueensideCastling() {
+        let app = launchApp(boardFen: "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1")
+        openGame(app, firstGameTitle)
+
+        play(app, from: "e1", to: "c1")
+
+        assertExists(app, "figure-c1", "King should have castled to c1")
+        assertExists(app, "figure-d1", "Rook should have moved to d1")
+        assertAbsent(app, "figure-e1", "King should have left e1")
+        assertAbsent(app, "figure-a1", "Rook should have left a1")
+    }
+
+    func testStalemateShowsResultOverlay() {
+        // k=a8, K=c6, Q=b2 — Qb6 travels the clear b-file; black king a8 has no legal moves and is not in check
+        let app = launchApp(boardFen: "k7/8/2K5/8/8/8/1Q6/8 w - - 1 10")
+        openGame(app, firstGameTitle)
+
+        play(app, from: "b2", to: "b6")
+
+        assertExists(app, "game-result", "Result overlay should appear on stalemate")
+    }
 }

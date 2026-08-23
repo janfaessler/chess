@@ -65,13 +65,6 @@ struct BoardArrowsView: View {
         return path
     }
 
-    private func squareFile(_ square: String) -> Int {
-        guard let c = square.first else { return 1 }
-        return Int(c.asciiValue! - Character("a").asciiValue!) + 1
-    }
-
-    private func squareRow(_ square: String) -> Int {
-        guard square.count >= 2, let r = Int(String(square.dropFirst())) else { return 1 }
-        return r
-    }
+    private func squareFile(_ square: String) -> Int { square.chessFileIndex }
+    private func squareRow(_ square: String) -> Int { square.chessRowIndex }
 }

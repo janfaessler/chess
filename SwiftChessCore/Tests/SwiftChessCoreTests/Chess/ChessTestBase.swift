@@ -31,7 +31,7 @@ class ChessTestBase {
         to: String,
         type: PieceType,
         color: PieceColor,
-        moveType: MoveType = .Normal,
+        moveType: MoveType = .normal,
         message: (String, String, any ChessFigure) -> String = { "\($2.color) \($2.type) could not move from \($0) to \($1)" },
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
@@ -60,7 +60,7 @@ class ChessTestBase {
         toField: String,
         type: PieceType,
         color: PieceColor,
-        moveType: MoveType = .Normal,
+        moveType: MoveType = .normal,
         message: (String, String, any ChessFigure) -> String = { "\($0): \($2.color) \($2.type) could not move to \($1)" },
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
@@ -96,7 +96,7 @@ class ChessTestBase {
         to: String,
         type: PieceType,
         color: PieceColor,
-        moveType: MoveType = .Normal,
+        moveType: MoveType = .normal,
         message: (String, String, any ChessFigure) -> String = { "move from \($0) to \($1) of \($2.color) \($2.type) should not be possible" },
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
@@ -151,7 +151,7 @@ class ChessTestBase {
         let pieceCount = testee.figures.count - 1
         let startFigure = Figure.create(from, type: type, color: color)!
         let endFigure = Figure.create(to, type: type, color: color)!
-        let move = Move(to, piece: startFigure, type: .Normal)!
+        let move = Move(to, piece: startFigure, type: .normal)!
         let nextColorToMoveDidNotChange = testee.colorToMove == color
         var moveError = false
         do { try testee.move(move) } catch { moveError = true }
@@ -175,7 +175,7 @@ class ChessTestBase {
             return
         }
         let startFigure = Figure.create(from, type: type, color: color)!
-        let move = Move(to, piece: startFigure, type: .Normal)!
+        let move = Move(to, piece: startFigure, type: .normal)!
         do { try testee.move(move) } catch { return }
         Issue.record("\(message(from, to, startFigure))", sourceLocation: sourceLocation)
     }
@@ -195,7 +195,7 @@ class ChessTestBase {
         let pieceCount = testee.figures.count - 1
         let startFigure = Figure.create(from, type: type, color: color)!
         let endFigure = Figure.create(to, type: .queen, color: color)!
-        let move = Move(to, piece: startFigure, type: .Promotion)!
+        let move = Move(to, piece: startFigure, type: .promotion)!
         let nextColorToMoveDidNotChange = testee.colorToMove == color
         var moveError = false
         do { try testee.move(move) } catch { moveError = true }

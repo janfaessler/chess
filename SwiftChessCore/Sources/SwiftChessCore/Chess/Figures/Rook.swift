@@ -12,6 +12,6 @@ class Rook : Figure, @unchecked Sendable {
     }
     
     override func getPossibleMoves() -> [Move] {
-        return movesAlongRays([(1, 0), (-1, 0), (0, 1), (0, -1)])
+        SlidingMoves.along(rays: [(1, 0), (-1, 0), (0, 1), (0, -1)], piece: self)
     }
 }

@@ -61,7 +61,7 @@ struct MoveValidator {
 
         return figures.contains(where: {
             guard $0.color != position.colorToMove else { return false }
-            return $0.isMovePossible($0.createMove(rowToCheck, fileToCheck, MoveType.Normal), position: newPos)
+            return $0.isMovePossible($0.createMove(rowToCheck, fileToCheck, MoveType.normal), position: newPos)
         })
     }
 

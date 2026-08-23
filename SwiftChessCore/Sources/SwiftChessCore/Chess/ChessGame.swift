@@ -6,7 +6,6 @@ public class ChessGame {
     private let logger = Log.logger("ChessBoard")
 
     private var positionCount: [Int: Int] = [:]
-    private var validator: MoveValidator { MoveValidator(position) }
     private var hasStarted: Bool { position.moveClock > 0 }
 
     public private(set) var position: Position
@@ -22,46 +21,49 @@ public class ChessGame {
     public func move(_ moveNotation: String) throws {
         guard let createdMove = MoveFactory.create(moveNotation, position: position) else {
             logger.error("can not identify move: \(moveNotation)")
-            throw ValidationError.CanNotIdentifyMove
+            throw ValidationError.canNotIdentifyMove
         }
         try move(createdMove)
     }
 
     public func move(_ move: Move) throws {
+        let validator = MoveValidator(position)
         guard validator.isLegalMove(move) else {
             logger.error("move (\(move.info) -> \(NotationFactory.generate(move, position: self.position))) is not allowed")
-            throw ValidationError.MoveNotLegalMoveOnTheBoard
+            throw ValidationError.moveNotLegalMoveOnTheBoard
         }
         guard validator.figureExists(move) else {
             logger.error("figure \(move.piece.info()) does not exists")
-            throw ValidationError.FigureDoesNotExist(move.piece)
+            throw ValidationError.figureDoesNotExist(move.piece)
         }
         try doMove(move)
     }
 
     public func getGameState() -> GameState {
         if DrawConditionEvaluator.isInsufficientMaterial(figures: position.figures) {
-            return .DrawByInsufficientMaterial
+            return .drawByInsufficientMaterial
         }
         if !hasStarted {
-            return .NotStarted
+            return .notStarted
         }
         if DrawConditionEvaluator.isThreefoldRepetition(positionCount: positionCount, currentHash: position.getHash()) {
-            return .DrawByRepetition
+            return .drawByRepetition
         }
         if DrawConditionEvaluator.has50MoveRuleTriggered(halfmoveClock: position.halfmoveClock) {
-            return .DrawBy50MoveRule
+            return .drawBy50MoveRule
         }
+        let validator = MoveValidator(position)
         if validator.playerHasLegalMove() {
-            return .Running
+            return .running
         }
         if validator.isKingInCheck() {
-            return position.colorToMove == .white ? .BlackWins : .WhiteWins
+            return position.colorToMove == .white ? .blackWins : .whiteWins
         }
-        return .DrawByStalemate
+        return .drawByStalemate
     }
 
     public func getPossibleMoves(forPiece: any ChessFigure) -> [Move] {
+        let validator = MoveValidator(position)
         return forPiece.getPossibleMoves().filter({ validator.isLegalMove($0) })
     }
 
@@ -76,7 +78,7 @@ public class ChessGame {
         logger.log("play \(logInfo) \(move.info)")
         moveLog += [logInfo]
     }
-    
+
     private func increasePositionCount() {
         let hash = position.getHash()
         positionCount[hash, default: 0] += 1

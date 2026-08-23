@@ -11,7 +11,7 @@ struct EngineView: View {
                         .font(.system(.caption, design: .monospaced, weight: .semibold))
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
-                        .background(evaluationColor(for: line.score), in: .capsule)
+                        .background(line.badgeColor, in: .capsule)
                         .foregroundStyle(.white)
                     
                     Text(line.line)
@@ -28,13 +28,5 @@ struct EngineView: View {
         }
     }
     
-    private func evaluationColor(for eval: String) -> Color {
-        if eval.hasPrefix("+") {
-            return .green
-        } else if eval.hasPrefix("-") {
-            return .red
-        } else {
-            return .secondary
-        }
-    }
+
 }

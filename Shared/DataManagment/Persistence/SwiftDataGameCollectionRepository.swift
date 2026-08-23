@@ -64,6 +64,8 @@ final class SwiftDataGameCollectionRepository: GameCollectionRepository {
             } else if let gameEntity = GameEntity(from: gameData, order: gameIndex) {
                 gameEntity.collection = entity
                 entity.games.append(gameEntity)
+            } else {
+                logger.error("Failed to encode game \(gameData.id) '\(gameData.getTitle())' — game was not saved")
             }
         }
 

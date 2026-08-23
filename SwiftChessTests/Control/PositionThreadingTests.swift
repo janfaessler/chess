@@ -18,13 +18,13 @@ struct PositionThreadingTests {
         testee.movePlayed("e5")
         testee.movePlayed("Nf3")
 
-        #expect(testee.position === testee.currentMove?.resultingPosition)
+        #expect(fen(testee.position) == fen(testee.currentMove?.resultingPosition))
 
         testee.back()
-        #expect(testee.position === testee.currentMove?.resultingPosition)
+        #expect(fen(testee.position) == fen(testee.currentMove?.resultingPosition))
 
         testee.end()
-        #expect(testee.position === testee.currentMove?.resultingPosition)
+        #expect(fen(testee.position) == fen(testee.currentMove?.resultingPosition))
     }
 
     @Test func testPlayedMoves_populateResultingPosition() throws {

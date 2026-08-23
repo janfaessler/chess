@@ -4,52 +4,52 @@ import Testing
 final class NotationTests: ChessTestBase {
 
     @Test func testSimplePawnCapture() throws {
-        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .Double)
-        try moveAndAssert(notation: "d5", toField: "d5", type: .pawn, color: .black, moveType: .Double)
+        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .double)
+        try moveAndAssert(notation: "d5", toField: "d5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssert(notation: "exd5", toField: "d5", type: .pawn, color: .white)
         try assertMoves()
     }
 
     @Test func testEnPassantLeft() throws {
-        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .Double)
+        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .double)
         try moveAndAssert(notation: "a6", toField: "a6", type: .pawn, color: .black)
         try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .white)
-        try moveAndAssert(notation: "d5", toField: "d5", type: .pawn, color: .black, moveType: .Double)
+        try moveAndAssert(notation: "d5", toField: "d5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssert(notation: "exd6", toField: "d6", type: .pawn, color: .white)
         try assertMoves()
     }
 
     @Test func testEnPassanRight() throws {
-        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .Double)
+        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .double)
         try moveAndAssert(notation: "a6", toField: "a6", type: .pawn, color: .black)
         try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .white)
-        try moveAndAssert(notation: "f5", toField: "f5", type: .pawn, color: .black, moveType: .Double)
+        try moveAndAssert(notation: "f5", toField: "f5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssert(notation: "exf6", toField: "f6", type: .pawn, color: .white)
         try assertMoves()
     }
 
     @Test func testEnPassantToPromotion() throws {
-        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .Double)
+        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .double)
         try moveAndAssert(notation: "a6", toField: "a6", type: .pawn, color: .black)
         try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .white)
-        try moveAndAssert(notation: "d5", toField: "d5", type: .pawn, color: .black, moveType: .Double)
+        try moveAndAssert(notation: "d5", toField: "d5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssert(notation: "exd6", toField: "d6", type: .pawn, color: .white)
-        try moveAndAssert(notation: "b5", toField: "b5", type: .pawn, color: .black, moveType: .Double)
+        try moveAndAssert(notation: "b5", toField: "b5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssert(notation: "dxe7", toField: "e7", type: .pawn, color: .white)
-        try moveAndAssert(notation: "c5", toField: "c5", type: .pawn, color: .black, moveType: .Double)
-        try moveAndAssert(notation: "exd8=Q+", toField: "d8", type: .queen, color: .white, moveType: .Promotion)
+        try moveAndAssert(notation: "c5", toField: "c5", type: .pawn, color: .black, moveType: .double)
+        try moveAndAssert(notation: "exd8=Q+", toField: "d8", type: .queen, color: .white, moveType: .promotion)
         try assertMoves()
     }
 
     @Test func testShortCastle() throws {
-        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .Double)
-        try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .black, moveType: .Double)
+        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .double)
+        try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssert(notation: "Bc4", toField: "c4", type: .bishop, color: .white)
         try moveAndAssert(notation: "Bc5", toField: "c5", type: .bishop, color: .black)
         try moveAndAssert(notation: "Nf3", toField: "f3", type: .knight, color: .white)
         try moveAndAssert(notation: "Nf6", toField: "f6", type: .knight, color: .black)
-        try moveAndAssert(notation: "O-O", toField: "g1", type: .king, color: .white, moveType: .Castle)
-        try moveAndAssert(notation: "O-O", toField: "g8", type: .king, color: .black, moveType: .Castle)
+        try moveAndAssert(notation: "O-O", toField: "g1", type: .king, color: .white, moveType: .castle)
+        try moveAndAssert(notation: "O-O", toField: "g8", type: .king, color: .black, moveType: .castle)
         try assertMoves()
     }
 
@@ -64,16 +64,16 @@ final class NotationTests: ChessTestBase {
         try moveAndAssert(notation: "e6", toField: "e6", type: .pawn, color: .black)
         try moveAndAssert(notation: "Qe2", toField: "e2", type: .queen, color: .white)
         try moveAndAssert(notation: "Qe7", toField: "e7", type: .queen, color: .black)
-        try moveAndAssert(notation: "O-O-O", toField: "c1", type: .king, color: .white, moveType: .Castle)
-        try moveAndAssert(notation: "O-O-O", toField: "c8", type: .king, color: .black, moveType: .Castle)
+        try moveAndAssert(notation: "O-O-O", toField: "c1", type: .king, color: .white, moveType: .castle)
+        try moveAndAssert(notation: "O-O-O", toField: "c8", type: .king, color: .black, moveType: .castle)
         try assertMoves()
     }
 
     @Test func testCastleAttemptStartInCheck() throws {
-        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .Double)
-        try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .black, moveType: .Double)
+        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .double)
+        try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssert(notation: "f3", toField: "f3", type: .pawn, color: .white)
-        try moveAndAssert(notation: "f5", toField: "f5", type: .pawn, color: .black, moveType: .Double)
+        try moveAndAssert(notation: "f5", toField: "f5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssert(notation: "Bc4", toField: "c4", type: .bishop, color: .white)
         try moveAndAssert(notation: "d6", toField: "d6", type: .pawn, color: .black)
         try moveAndAssert(notation: "Nh3", toField: "h3", type: .knight, color: .white)
@@ -83,8 +83,8 @@ final class NotationTests: ChessTestBase {
     }
 
     @Test func testCastleAttemptMiddleInCheck() throws {
-        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .Double)
-        try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .black, moveType: .Double)
+        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .double)
+        try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssert(notation: "Nf3", toField: "f3", type: .knight, color: .white)
         try moveAndAssert(notation: "d6", toField: "d6", type: .pawn, color: .black)
         try moveAndAssert(notation: "h3", toField: "h3", type: .pawn, color: .white)
@@ -98,8 +98,8 @@ final class NotationTests: ChessTestBase {
     }
 
     @Test func testCastleAttemptTargetInCheck() throws {
-        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .Double)
-        try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .black, moveType: .Double)
+        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .double)
+        try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssert(notation: "f3", toField: "f3", type: .pawn, color: .white)
         try moveAndAssert(notation: "Bc5", toField: "c5", type: .bishop, color: .black)
         try moveAndAssert(notation: "Bc4", toField: "c4", type: .bishop, color: .white)
@@ -111,8 +111,8 @@ final class NotationTests: ChessTestBase {
     }
 
     @Test func testCastleKingsideBlockedByKnight() throws {
-        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .Double)
-        try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .black, moveType: .Double)
+        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .double)
+        try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssert(notation: "Bc4", toField: "c4", type: .bishop, color: .white)
         try moveAndAssert(notation: "a6", toField: "a6", type: .pawn, color: .black)
         try moveAndAssertError("O-O")
@@ -143,7 +143,7 @@ final class NotationTests: ChessTestBase {
         try moveAndAssert(notation: "g3", toField: "g3", type: .pawn, color: .white)
         try moveAndAssert(notation: "Bb7", toField: "b7", type: .bishop, color: .black)
         try moveAndAssert(notation: "Bg2", toField: "g2", type: .bishop, color: .white)
-        try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .black, moveType: .Double)
+        try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssert(notation: "Nxe5", toField: "e5", type: .knight, color: .white)
         try moveAndAssert(notation: "Bxg2", toField: "g2", type: .bishop, color: .black)
         try moveAndAssert(notation: "Nxf7", toField: "f7", type: .knight, color: .white)
@@ -170,8 +170,8 @@ final class NotationTests: ChessTestBase {
     }
 
     @Test func testSimpleCastleWithTryingWrongMoves() throws {
-        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .Double)
-        try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .black, moveType: .Double)
+        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .double)
+        try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssertError("Bc5")
         try moveAndAssert(notation: "Bc4", toField: "c4", type: .bishop, color: .white)
         try moveAndAssert(notation: "Bb4", toField: "b4", type: .bishop, color: .black)
@@ -180,18 +180,18 @@ final class NotationTests: ChessTestBase {
         try moveAndAssert(notation: "c3", toField: "c3", type: .pawn, color: .white)
         try moveAndAssert(notation: "Nf6", toField: "f6", type: .knight, color: .black)
         try moveAndAssert(notation: "Nf3", toField: "f3", type: .knight, color: .white)
-        try moveAndAssert(notation: "O-O", toField: "g8", type: .king, color: .black, moveType: .Castle)
+        try moveAndAssert(notation: "O-O", toField: "g8", type: .king, color: .black, moveType: .castle)
         try moveAndAssert(notation: "cxb4", toField: "b4", type: .pawn, color: .white)
         try moveAndAssert(notation: "Re8", toField: "e8", type: .rook, color: .black)
-        try moveAndAssert(notation: "O-O", toField: "g1", type: .king, color: .white, moveType: .Castle)
+        try moveAndAssert(notation: "O-O", toField: "g1", type: .king, color: .white, moveType: .castle)
         try moveAndAssert(notation: "Kh8", toField: "h8", type: .king, color: .black)
         try moveAndAssert(notation: "Kh1", toField: "h1", type: .king, color: .white)
         try assertMoves()
     }
 
     @Test func testRowIntersection() throws {
-        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .Double)
-        try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .black, moveType: .Double)
+        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .double)
+        try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssert(notation: "Bc4", toField: "c4", type: .bishop, color: .white)
         try moveAndAssert(notation: "Qh4", toField: "h4", type: .queen, color: .black)
         try moveAndAssert(notation: "a3", toField: "a3", type: .pawn, color: .white)
@@ -201,12 +201,12 @@ final class NotationTests: ChessTestBase {
     }
 
     @Test func testCheckMate() throws {
-        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .Double)
-        try moveAndAssert(notation: "f5", toField: "f5", type: .pawn, color: .black, moveType: .Double)
+        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .double)
+        try moveAndAssert(notation: "f5", toField: "f5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssert(notation: "Bc4", toField: "c4", type: .bishop, color: .white)
         try moveAndAssert(notation: "e6", toField: "e6", type: .pawn, color: .black)
         try moveAndAssert(notation: "h3", toField: "h3", type: .pawn, color: .white)
-        try moveAndAssert(notation: "g5", toField: "g5", type: .pawn, color: .black, moveType: .Double)
+        try moveAndAssert(notation: "g5", toField: "g5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssert(notation: "Qh5+", toField: "h5", type: .queen, color: .white)
 
         let king = Figure.create("e8", type: .king, color: .black)!
@@ -219,7 +219,7 @@ final class NotationTests: ChessTestBase {
 
         try moveAndAssert(notation: "a6", toField: "a6", type: .pawn, color: .black)
         try moveAndAssert(notation: "d3", toField: "d3", type: .pawn, color: .white)
-        try moveAndAssert(notation: "b5", toField: "b5", type: .pawn, color: .black, moveType: .Double)
+        try moveAndAssert(notation: "b5", toField: "b5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssert(notation: "Bxg5+", toField: "g5", type: .bishop, color: .white)
         try moveAndAssert(notation: "Nf6", toField: "f6", type: .knight, color: .black)
         try moveAndAssert(notation: "Bxf6#", toField: "f6", type: .bishop, color: .white)
@@ -231,7 +231,7 @@ final class NotationTests: ChessTestBase {
         for move in moves {
             try testee?.move(move)
         }
-        try moveAndAssert(notation: "bxa8=N+", toField: "a8", type: .knight, color: .white, moveType: .Promotion)
+        try moveAndAssert(notation: "bxa8=N+", toField: "a8", type: .knight, color: .white, moveType: .promotion)
         try moveAndAssert(notation: "Kb7", toField: "b7", type: .king, color: .black)
         try moveAndAssert(notation: "Nxb6", toField: "b6", type: .knight, color: .white)
     }
@@ -240,7 +240,7 @@ final class NotationTests: ChessTestBase {
         loadFen("4k3/P7/8/8/8/8/8/4K3 w - - 0 1")
         let testee = try #require(testee)
         let pawn = try #require(testee.position.get(atRow: 7, atFile: 1))
-        let move = try #require(pawn.createMove("a8", type: .Promotion, promoteTo: .knight))
+        let move = try #require(pawn.createMove("a8", type: .promotion, promoteTo: .knight))
         #expect(NotationFactory.generate(move, position: testee.position) == "a8=N")
     }
 

@@ -3,7 +3,7 @@ import Foundation
 struct EnPassantRules {
 
     static func target(afterMove move: Move) -> Field? {
-        guard move.type == .Double else { return nil }
+        guard move.type == .double else { return nil }
         let targetRow = move.piece.color == .white ? move.row - 1 : move.row + 1
         return Field(row: targetRow, file: move.file)
     }

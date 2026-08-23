@@ -1,5 +1,5 @@
 import Foundation
 
 enum ValidationError: Error {
-    case MoveNotLegalMoveOnTheBoard, FigureDoesNotExist(_ figure:any ChessFigure), CanNotIdentifyMove
+    case moveNotLegalMoveOnTheBoard, figureDoesNotExist(_ figure: any ChessFigure), canNotIdentifyMove
 }

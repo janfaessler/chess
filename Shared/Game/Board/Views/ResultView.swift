@@ -26,5 +26,5 @@ struct ResultView: View {
 }
 
 #Preview {
-    ResultView(model: ResultModel(.DrawBy50MoveRule))
+    ResultView(model: ResultModel(.drawBy50MoveRule))
 }

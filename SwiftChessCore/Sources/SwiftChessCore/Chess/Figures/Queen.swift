@@ -7,7 +7,7 @@ class Queen : Figure, @unchecked Sendable {
     }
 
     override func getPossibleMoves() -> [Move] {
-        return movesAlongRays([(1, 0), (-1, 0), (0, 1), (0, -1),
-                               (1, 1), (1, -1), (-1, 1), (-1, -1)])
+        SlidingMoves.along(rays: [(1, 0), (-1, 0), (0, 1), (0, -1),
+                                  (1, 1), (1, -1), (-1, 1), (-1, -1)], piece: self)
     }
 }

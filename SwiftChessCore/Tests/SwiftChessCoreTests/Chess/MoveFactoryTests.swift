@@ -10,23 +10,23 @@ final class MoveFactoryTests {
     }
 
     @Test func testPawnMoves() throws {
-        try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .Double)
-        try assertMove("e5", field: "e5", type: .pawn, color: .black, moveType: .Double)
-        try assertMove("d4", field: "d4", type: .pawn, color: .white, moveType: .Double)
+        try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .double)
+        try assertMove("e5", field: "e5", type: .pawn, color: .black, moveType: .double)
+        try assertMove("d4", field: "d4", type: .pawn, color: .white, moveType: .double)
         try assertMove("exd4", field: "d4", type: .pawn, color: .black)
         try assertMove("e5", field: "e5", type: .pawn, color: .white)
-        try assertMove("f5", field: "f5", type: .pawn, color: .black, moveType: .Double)
+        try assertMove("f5", field: "f5", type: .pawn, color: .black, moveType: .double)
         try assertMove("exf6", field: "f6", type: .pawn, color: .white)
         try assertMove("d3", field: "d3", type: .pawn, color: .black)
         try assertMove("fxg7", field: "g7", type: .pawn, color: .white)
         try assertMove("dxc2", field: "c2", type: .pawn, color: .black)
-        try assertMove("gxh8=Q", field: "h8", type: .pawn, color: .white, moveType: .Promotion)
-        try assertMove("cxb1=Q", field: "b1", type: .pawn, color: .black, moveType: .Promotion)
+        try assertMove("gxh8=Q", field: "h8", type: .pawn, color: .white, moveType: .promotion)
+        try assertMove("cxb1=Q", field: "b1", type: .pawn, color: .black, moveType: .promotion)
     }
 
     @Test func testPieceMoves() throws {
-        try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .Double)
-        try assertMove("e5", field: "e5", type: .pawn, color: .black, moveType: .Double)
+        try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .double)
+        try assertMove("e5", field: "e5", type: .pawn, color: .black, moveType: .double)
         try assertMove("Nc3", field: "c3", type: .knight, color: .white)
         try assertMove("Nc6", field: "c6", type: .knight, color: .black)
         try assertMove("Bc4", field: "c4", type: .bishop, color: .white)
@@ -45,14 +45,14 @@ final class MoveFactoryTests {
     }
 
     @Test func testShortCastle() throws {
-        try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .Double)
-        try assertMove("e5", field: "e5", type: .pawn, color: .black, moveType: .Double)
+        try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .double)
+        try assertMove("e5", field: "e5", type: .pawn, color: .black, moveType: .double)
         try assertMove("Bc4", field: "c4", type: .bishop, color: .white)
         try assertMove("Bc5", field: "c5", type: .bishop, color: .black)
         try assertMove("Nf3", field: "f3", type: .knight, color: .white)
         try assertMove("Nf6", field: "f6", type: .knight, color: .black)
-        try assertMove("O-O", field: "g1", type: .king, color: .white, moveType: .Castle)
-        try assertMove("O-O", field: "g8", type: .king, color: .black, moveType: .Castle)
+        try assertMove("O-O", field: "g1", type: .king, color: .white, moveType: .castle)
+        try assertMove("O-O", field: "g8", type: .king, color: .black, moveType: .castle)
     }
 
     @Test func testLongCastle() throws {
@@ -66,15 +66,15 @@ final class MoveFactoryTests {
         try assertMove("e6", field: "e6", type: .pawn, color: .black)
         try assertMove("Qe2", field: "e2", type: .queen, color: .white)
         try assertMove("Qe7", field: "e7", type: .queen, color: .black)
-        try assertMove("O-O-O", field: "c1", type: .king, color: .white, moveType: .Castle)
-        try assertMove("O-O-O", field: "c8", type: .king, color: .black, moveType: .Castle)
+        try assertMove("O-O-O", field: "c1", type: .king, color: .white, moveType: .castle)
+        try assertMove("O-O-O", field: "c8", type: .king, color: .black, moveType: .castle)
     }
 
     @Test func testUncertainKnightMoves() throws {
-        try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .Double)
+        try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .double)
         try assertMove("c6", field: "c6", type: .pawn, color: .black)
         try assertMove("d3", field: "d3", type: .pawn, color: .white)
-        try assertMove("d5", field: "d5", type: .pawn, color: .black, moveType: .Double)
+        try assertMove("d5", field: "d5", type: .pawn, color: .black, moveType: .double)
         try assertMove("Nd2", field: "d2", type: .knight, color: .white)
         try assertMove("Nd7", field: "d7", type: .knight, color: .black)
         try assertMove("Ngf3", field: "f3", type: .knight, color: .white)
@@ -95,14 +95,14 @@ final class MoveFactoryTests {
     }
 
     @Test func testUncertainRookMoves() throws {
-        try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .Double)
-        try assertMove("e5", field: "e5", type: .pawn, color: .black, moveType: .Double)
+        try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .double)
+        try assertMove("e5", field: "e5", type: .pawn, color: .black, moveType: .double)
         try assertMove("Nf3", field: "f3", type: .knight, color: .white)
         try assertMove("Nf6", field: "f6", type: .knight, color: .black)
         try assertMove("Bc4", field: "c4", type: .bishop, color: .white)
         try assertMove("Bc5", field: "c5", type: .bishop, color: .black)
-        try assertMove("O-O", field: "g1", type: .king, color: .white, moveType: .Castle)
-        try assertMove("O-O", field: "g8", type: .king, color: .black, moveType: .Castle)
+        try assertMove("O-O", field: "g1", type: .king, color: .white, moveType: .castle)
+        try assertMove("O-O", field: "g8", type: .king, color: .black, moveType: .castle)
         try assertMove("Nc3", field: "c3", type: .knight, color: .white)
         try assertMove("Nc6", field: "c6", type: .knight, color: .black)
         try assertMove("d3", field: "d3", type: .pawn, color: .white)
@@ -118,10 +118,10 @@ final class MoveFactoryTests {
     }
 
     @Test func testUncertainPawnMove() throws {
-        try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .Double)
+        try assertMove("e4", field: "e4", type: .pawn, color: .white, moveType: .double)
         try assertMove("c6", field: "c6", type: .pawn, color: .black)
-        try assertMove("d4", field: "d4", type: .pawn, color: .white, moveType: .Double)
-        try assertMove("d5", field: "d5", type: .pawn, color: .black, moveType: .Double)
+        try assertMove("d4", field: "d4", type: .pawn, color: .white, moveType: .double)
+        try assertMove("d5", field: "d5", type: .pawn, color: .black, moveType: .double)
         try assertMove("Nc3", field: "c3", type: .knight, color: .white)
         try assertMove("dxe4", field: "e4", type: .pawn, color: .black)
         try assertMove("Nxe4", field: "e4", type: .knight, color: .white)
@@ -148,7 +148,7 @@ final class MoveFactoryTests {
         field: String,
         type: PieceType,
         color: PieceColor,
-        moveType: MoveType = .Normal,
+        moveType: MoveType = .normal,
         message: (Move?) -> String = { $0 == nil ? "Move not found" : "Move[\($0!.fieldInfo), \($0!.piece.type),\($0!.piece.color), \($0!.type)] is the wrong move" },
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {

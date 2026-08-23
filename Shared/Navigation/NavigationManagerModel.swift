@@ -25,10 +25,9 @@ public class NavigationManagerModel {
     }
 
     func updateGame(_ game: GameData, headers: [String: String], result: String) -> GameData? {
+        let updated = GameData(id: game.id, headers: headers, moves: game.moves, result: result, comment: game.comment)
         for i in collections.indices {
-            if let j = collections[i].games.firstIndex(where: { $0.id == game.id }) {
-                let updated = GameData(id: game.id, headers: headers, moves: game.moves, result: result, comment: game.comment)
-                collections[i].games[j] = updated
+            if collections[i].updateGame(updated) {
                 save()
                 return updated
             }
@@ -38,14 +37,14 @@ public class NavigationManagerModel {
 
     func addGame(_ game: GameData, to collection: GameCollection) -> GameData? {
         guard let i = collections.firstIndex(where: { $0.id == collection.id }) else { return nil }
-        collections[i].games.append(game)
+        collections[i].addGame(game)
         save()
         return game
     }
 
     func removeGame(_ game: GameData) {
         for i in collections.indices {
-            collections[i].games.removeAll { $0.id == game.id }
+            collections[i].removeGame(withId: game.id)
         }
         save()
     }

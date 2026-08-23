@@ -55,18 +55,19 @@ class ControlModel {
     }
 
     private func observeBoardMoves() {
-        let stream = board.movePlayed
+        let stream = board.gameEvents
         observationTasks.append(Task { @MainActor [weak self] in
-            for await notation in stream {
-                self?.movePlayed(notation)
+            for await event in stream {
+                if case .moveMade(let notation, let color) = event {
+                    self?.movePlayed(notation, color: color)
+                }
             }
         })
     }
 
-    private func movePlayed(_ notation: String) {
+    private func movePlayed(_ notation: String, color: PieceColor) {
         self.logger.info("movePlayed: \(notation)")
         let position = self.board.position
-        let color: PieceColor = position.colorToMove == .white ? .black : .white
         self.moveList.movePlayed(notation, color: color)
         self.board.clearUserAnnotations()
         self.engine.newPosition(position)

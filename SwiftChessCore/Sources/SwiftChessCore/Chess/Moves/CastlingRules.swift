@@ -3,7 +3,7 @@ import Foundation
 struct CastlingRules {
 
     static func isCastlingMove(_ move: Move) -> Bool {
-        move.piece.type == .king && move.type == .Castle
+        move.piece.type == .king && move.type == .castle
     }
 
     static func isKingsideCastling(_ move: Move) -> Bool {

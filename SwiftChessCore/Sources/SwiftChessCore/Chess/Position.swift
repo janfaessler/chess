@@ -1,6 +1,6 @@
 import Foundation
 
-public final class Position: @unchecked Sendable {
+public struct Position: Sendable {
 
     private let board:Board
     public let colorToMove:PieceColor
@@ -13,8 +13,6 @@ public final class Position: @unchecked Sendable {
     public let moveClock:Int
 
     public var figures:[any ChessFigure] { board.figures }
-
-    private var cachedHash:Int?
 
     public init(
         _ figures: [any ChessFigure],
@@ -55,13 +53,6 @@ public final class Position: @unchecked Sendable {
     }
 
     public func getHash() -> Int {
-        if let cachedHash { return cachedHash }
-        let hash = computeHash()
-        cachedHash = hash
-        return hash
-    }
-
-    private func computeHash() -> Int {
         var hasher = Hasher()
         board.hash(into: &hasher)
         hasher.combine(colorToMove)

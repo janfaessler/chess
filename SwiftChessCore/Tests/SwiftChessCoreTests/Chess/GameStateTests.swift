@@ -5,134 +5,134 @@ import Testing
 final class GameStateTests: ChessTestBase {
 
     @Test func testCheckMate() throws {
-        try assertGameState(.NotStarted)
+        try assertGameState(.notStarted)
 
-        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .Double)
-        try assertGameState(.Running)
-        try moveAndAssert(notation: "f5", toField: "f5", type: .pawn, color: .black, moveType: .Double)
-        try assertGameState(.Running)
+        try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white, moveType: .double)
+        try assertGameState(.running)
+        try moveAndAssert(notation: "f5", toField: "f5", type: .pawn, color: .black, moveType: .double)
+        try assertGameState(.running)
 
         try moveAndAssert(notation: "Bc4", toField: "c4", type: .bishop, color: .white)
-        try assertGameState(.Running)
+        try assertGameState(.running)
         try moveAndAssert(notation: "e6", toField: "e6", type: .pawn, color: .black)
-        try assertGameState(.Running)
+        try assertGameState(.running)
 
         try moveAndAssert(notation: "h3", toField: "h3", type: .pawn, color: .white)
-        try assertGameState(.Running)
-        try moveAndAssert(notation: "g5", toField: "g5", type: .pawn, color: .black, moveType: .Double)
-        try assertGameState(.Running)
+        try assertGameState(.running)
+        try moveAndAssert(notation: "g5", toField: "g5", type: .pawn, color: .black, moveType: .double)
+        try assertGameState(.running)
 
         try moveAndAssert(notation: "Qh5+", toField: "h5", type: .queen, color: .white)
-        try assertGameState(.Running)
+        try assertGameState(.running)
         try moveAndAssert(notation: "Ke7", toField: "e7", type: .king, color: .black)
-        try assertGameState(.Running)
+        try assertGameState(.running)
 
         try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .white)
-        try assertGameState(.Running)
+        try assertGameState(.running)
         try moveAndAssert(notation: "a6", toField: "a6", type: .pawn, color: .black)
-        try assertGameState(.Running)
+        try assertGameState(.running)
 
         try moveAndAssert(notation: "d3", toField: "d3", type: .pawn, color: .white)
-        try assertGameState(.Running)
-        try moveAndAssert(notation: "b5", toField: "b5", type: .pawn, color: .black, moveType: .Double)
-        try assertGameState(.Running)
+        try assertGameState(.running)
+        try moveAndAssert(notation: "b5", toField: "b5", type: .pawn, color: .black, moveType: .double)
+        try assertGameState(.running)
 
         try moveAndAssert(notation: "Bxg5+", toField: "g5", type: .bishop, color: .white)
-        try assertGameState(.Running)
+        try assertGameState(.running)
         try moveAndAssert(notation: "Nf6", toField: "f6", type: .knight, color: .black)
-        try assertGameState(.Running)
+        try assertGameState(.running)
 
         try moveAndAssert(notation: "Bxf6#", toField: "f6", type: .bishop, color: .white)
-        try assertGameState(.WhiteWins)
+        try assertGameState(.whiteWins)
     }
 
     @Test func testFoolsMate() throws {
-        try assertGameState(.NotStarted)
+        try assertGameState(.notStarted)
 
         try moveAndAssert(notation: "f3", toField: "f3", type: .pawn, color: .white)
-        try assertGameState(.Running)
+        try assertGameState(.running)
         try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .black)
-        try assertGameState(.Running)
+        try assertGameState(.running)
 
         try moveAndAssert(notation: "g4", toField: "g4", type: .pawn, color: .white)
-        try assertGameState(.Running)
+        try assertGameState(.running)
         try moveAndAssert(notation: "Qh4#", toField: "h4", type: .queen, color: .black)
-        try assertGameState(.BlackWins)
+        try assertGameState(.blackWins)
     }
 
     @Test func testGropsAttack() throws {
-        try assertGameState(.NotStarted)
+        try assertGameState(.notStarted)
 
         try moveAndAssert(notation: "g4", toField: "g4", type: .pawn, color: .white)
-        try assertGameState(.Running)
+        try assertGameState(.running)
         try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .black)
-        try assertGameState(.Running)
+        try assertGameState(.running)
 
         try moveAndAssert(notation: "f4", toField: "f4", type: .pawn, color: .white)
-        try assertGameState(.Running)
+        try assertGameState(.running)
         try moveAndAssert(notation: "Qh4#", toField: "h4", type: .queen, color: .black)
-        try assertGameState(.BlackWins)
+        try assertGameState(.blackWins)
     }
 
     @Test func testScholarsMate() throws {
-        try assertGameState(.NotStarted)
+        try assertGameState(.notStarted)
 
         try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white)
-        try assertGameState(.Running)
+        try assertGameState(.running)
         try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .black)
-        try assertGameState(.Running)
+        try assertGameState(.running)
 
         try moveAndAssert(notation: "Bc4", toField: "c4", type: .bishop, color: .white)
-        try assertGameState(.Running)
+        try assertGameState(.running)
         try moveAndAssert(notation: "Nc6", toField: "c6", type: .knight, color: .black)
-        try assertGameState(.Running)
+        try assertGameState(.running)
 
         try moveAndAssert(notation: "Qh5", toField: "h5", type: .queen, color: .white)
-        try assertGameState(.Running)
+        try assertGameState(.running)
         try moveAndAssert(notation: "Nf6", toField: "f6", type: .knight, color: .black)
-        try assertGameState(.Running)
+        try assertGameState(.running)
 
         try moveAndAssert(notation: "Qf7#", toField: "f7", type: .queen, color: .white)
-        try assertGameState(.WhiteWins)
+        try assertGameState(.whiteWins)
     }
 
     @Test func testCaroKannSmotheredMate() throws {
-        try assertGameState(.NotStarted)
+        try assertGameState(.notStarted)
 
         try moveAndAssert(notation: "e4", toField: "e4", type: .pawn, color: .white)
-        try assertGameState(.Running)
+        try assertGameState(.running)
         try moveAndAssert(notation: "c6", toField: "c6", type: .pawn, color: .black)
-        try assertGameState(.Running)
+        try assertGameState(.running)
 
         try moveAndAssert(notation: "d4", toField: "d4", type: .pawn, color: .white)
-        try assertGameState(.Running)
+        try assertGameState(.running)
         try moveAndAssert(notation: "d5", toField: "d5", type: .pawn, color: .black)
-        try assertGameState(.Running)
+        try assertGameState(.running)
 
         try moveAndAssert(notation: "Nc3", toField: "c3", type: .knight, color: .white)
-        try assertGameState(.Running)
+        try assertGameState(.running)
         try moveAndAssert(notation: "dxe4", toField: "e4", type: .pawn, color: .black)
-        try assertGameState(.Running)
+        try assertGameState(.running)
 
         try moveAndAssert(notation: "Nxe4", toField: "e4", type: .knight, color: .white)
-        try assertGameState(.Running)
+        try assertGameState(.running)
         try moveAndAssert(notation: "Nd7", toField: "d7", type: .knight, color: .black)
-        try assertGameState(.Running)
+        try assertGameState(.running)
 
         try moveAndAssert(notation: "Qe2", toField: "e2", type: .queen, color: .white)
-        try assertGameState(.Running)
+        try assertGameState(.running)
         try moveAndAssert(notation: "Ngf6", toField: "f6", type: .knight, color: .black)
-        try assertGameState(.Running)
+        try assertGameState(.running)
 
         try moveAndAssert(notation: "Nd6#", toField: "d6", type: .knight, color: .white)
-        try assertGameState(.WhiteWins)
+        try assertGameState(.whiteWins)
     }
 
     @Test func testStalemate() throws {
         loadFen("7k/4NK2/5r2/5BN1/8/8/8/8 w - - 50 115")
-        try assertGameState(.Running)
+        try assertGameState(.running)
         try moveAndAssert(notation: "Kxf6", toField: "f6", type: .king, color: .white)
-        try assertGameState(.DrawByStalemate)
+        try assertGameState(.drawByStalemate)
     }
 
     @Test func testThreefoldRepetition() throws {
@@ -150,7 +150,7 @@ final class GameStateTests: ChessTestBase {
 
         try moveAndAssert(notation: "Nf3", toField: "f3", type: .knight, color: .white)
 
-        try assertGameState(.DrawByRepetition)
+        try assertGameState(.drawByRepetition)
     }
 
     @Test func testDrawByInsufficientMaterial() throws {
@@ -164,7 +164,7 @@ final class GameStateTests: ChessTestBase {
         ]
         for fen in drawFens {
             loadFen(fen)
-            try assertGameState(.DrawByInsufficientMaterial, fen: fen)
+            try assertGameState(.drawByInsufficientMaterial, fen: fen)
         }
     }
 
@@ -173,13 +173,13 @@ final class GameStateTests: ChessTestBase {
 
         for move in moves {
             if move != moves.first {
-                try assertGameState(.Running)
+                try assertGameState(.running)
             } else {
-                try assertGameState(.NotStarted)
+                try assertGameState(.notStarted)
             }
             try testee?.move(move)
         }
-        try assertGameState(.DrawBy50MoveRule)
+        try assertGameState(.drawBy50MoveRule)
     }
 
     @Test func testNoDraw() throws {
@@ -191,28 +191,28 @@ final class GameStateTests: ChessTestBase {
         ]
         for fen in notADrawFen {
             loadFen(fen)
-            try assertGameState(.Running, fen: fen)
+            try assertGameState(.running, fen: fen)
         }
     }
 
     @Test func testKNNvK_notInsufficient() throws {
         loadFen("8/5k2/8/3K4/8/8/1N3N2/8 w - - 0 10")
-        try assertGameState(.Running)
+        try assertGameState(.running)
     }
 
     @Test func testKBBoppositeColors_notInsufficient() throws {
         loadFen("8/2k5/8/4BB2/8/5K2/8/8 w - - 0 10")
-        try assertGameState(.Running)
+        try assertGameState(.running)
     }
 
     @Test func test50MoveRule_triggersAtLimit() throws {
         loadFen("4k3/8/8/8/8/8/R7/4K3 w - - 100 60")
-        try assertGameState(.DrawBy50MoveRule)
+        try assertGameState(.drawBy50MoveRule)
     }
 
     @Test func test50MoveRule_notTriggeredOneBefore() throws {
         loadFen("4k3/8/8/8/8/8/R7/4K3 w - - 99 60")
-        try assertGameState(.Running)
+        try assertGameState(.running)
     }
 
     @Test func testThreefold_samePlacementDifferentSideToMove_notEqual() throws {
@@ -231,7 +231,7 @@ final class GameStateTests: ChessTestBase {
         for notation in ["Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8"] {
             try testee?.move(notation)
         }
-        try assertGameState(.DrawByRepetition)
+        try assertGameState(.drawByRepetition)
     }
 
     @Test func testThreefold_fromLoadedFen_triggers() throws {
@@ -239,6 +239,42 @@ final class GameStateTests: ChessTestBase {
         for notation in ["Kb1", "Kg8", "Ka1", "Kh8", "Kb1", "Kg8", "Ka1", "Kh8"] {
             try testee?.move(notation)
         }
-        try assertGameState(.DrawByRepetition)
+        try assertGameState(.drawByRepetition)
+    }
+
+    @Test func test50MoveRule_resetByPawnMove() throws {
+        // Halfmove clock at 49 — a pawn move resets to 0, preventing the draw
+        loadFen("4k3/p7/8/8/8/8/P7/4K3 w - - 49 30")
+        try assertGameState(.running)
+        try moveAndAssert(notation: "a4", toField: "a4", type: .pawn, color: .white, moveType: .double)
+        try assertGameState(.running)
+    }
+
+    @Test func test50MoveRule_resetByCapture() throws {
+        // Halfmove clock at 49 — a capture resets to 0, preventing the draw
+        loadFen("4k3/8/8/3p4/4P3/8/8/4K3 w - - 49 30")
+        try assertGameState(.running)
+        try moveAndAssert(notation: "exd5", toField: "d5", type: .pawn, color: .white)
+        try assertGameState(.running)
+    }
+
+    @Test func testStalemate_queenMoveStalesBlackKingInCorner() throws {
+        // White queen h2 moves to f2 — black king h1 then has no legal moves and is not in check
+        loadFen("8/8/8/8/8/6K1/7Q/7k w - - 1 10")
+        try assertGameState(.running)
+        try moveAndAssert(notation: "Qf2", toField: "f2", type: .queen, color: .white)
+        try assertGameState(.drawByStalemate)
+    }
+
+    @Test func testStalemate_twoAdditionalPatterns() throws {
+        // Use non-zero halfmove so hasStarted is true; both are known stalemate positions
+        let stalematePositions = [
+            "k7/2Q5/1K6/8/8/8/8/8 b - - 1 10",  // queen + king vs king, black king cornered
+            "8/8/8/8/8/2K5/1R6/k7 b - - 1 10"   // rook + king vs king, black king cornered
+        ]
+        for fen in stalematePositions {
+            loadFen(fen)
+            try assertGameState(.drawByStalemate, fen: fen)
+        }
     }
 }

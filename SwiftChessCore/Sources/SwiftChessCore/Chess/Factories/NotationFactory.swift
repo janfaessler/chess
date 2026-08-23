@@ -50,7 +50,7 @@ public class NotationFactory {
     }
     
     private static func getPromotionIdentifier(_ move:Move) -> String {
-        guard move.type == .Promotion else { return "" }
+        guard move.type == .promotion else { return "" }
         switch move.promoteTo {
         case .queen, .rook, .knight, .bishop:
             return "\(Promotion)\(move.promoteTo.sanIdent)"

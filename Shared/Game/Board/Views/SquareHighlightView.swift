@@ -33,15 +33,6 @@ struct SquareHighlightView: View {
         .accessibilityIdentifier("highlight-\(highlight.square)")
     }
 
-    private var squareFile: Int {
-        guard let c = highlight.square.first else { return 1 }
-        return Int(c.asciiValue! - Character("a").asciiValue!) + 1
-    }
-
-    private var squareRow: Int {
-        guard highlight.square.count >= 2,
-              let r = Int(String(highlight.square.dropFirst()))
-        else { return 1 }
-        return r
-    }
+    private var squareFile: Int { highlight.square.chessFileIndex }
+    private var squareRow: Int { highlight.square.chessRowIndex }
 }
