@@ -6,7 +6,7 @@ enum SlidingMoves {
         for direction in rays {
             var r = piece.row + direction.row
             var f = piece.file + direction.file
-            while 1...8 ~= r && 1...8 ~= f {
+            while 1...BoardConstants.size ~= r && 1...BoardConstants.size ~= f {
                 if let move = piece.createMove(r, f, .normal) { moves.append(move) }
                 r += direction.row
                 f += direction.file

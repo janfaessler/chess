@@ -19,12 +19,12 @@ public class FenBuilder {
     private static func createFigures(_ position:Position) -> String {
         var output = ""
         
-        for row in stride(from: 8, to: 0, by: -1) {
+        for row in stride(from: BoardConstants.size, to: 0, by: -1) {
             var emptyCount = 0
-            for file in 1...8 {
+            for file in 1...BoardConstants.size {
                 if position.isEmpty(atRow: row, atFile: file) {
                     emptyCount += 1
-                    if file == 8 {
+                    if file == BoardConstants.size {
                         output.append("\(emptyCount)")
                     }
                 } else {

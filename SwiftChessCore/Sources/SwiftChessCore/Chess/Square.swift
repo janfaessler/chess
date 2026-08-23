@@ -3,20 +3,20 @@ import Foundation
 public struct Square: Equatable, Hashable, Sendable {
 
     private static let PossibleFileNames: String = "abcdefgh"
-    private static let fileNames: [Character: Int] = zip(PossibleFileNames, 1...8).reduce(into: [:]) { $0[$1.0] = $1.1 }
-    private static let fileNamesOut: [Int: Character] = zip(1...8, PossibleFileNames).reduce(into: [:]) { $0[$1.0] = $1.1 }
+    private static let fileNames: [Character: Int] = zip(PossibleFileNames, 1...BoardConstants.size).reduce(into: [:]) { $0[$1.0] = $1.1 }
+    private static let fileNamesOut: [Int: Character] = zip(1...BoardConstants.size, PossibleFileNames).reduce(into: [:]) { $0[$1.0] = $1.1 }
 
     public let row: Int
     public let file: Int
 
     public init?(row: Int, file: Int) {
-        guard 1...8 ~= row && 1...8 ~= file else { return nil }
+        guard 1...BoardConstants.size ~= row && 1...BoardConstants.size ~= file else { return nil }
         self.row = row
         self.file = file
     }
 
     public static func isValid(row: Int, file: Int) -> Bool {
-        1...8 ~= row && 1...8 ~= file
+        1...BoardConstants.size ~= row && 1...BoardConstants.size ~= file
     }
 
     public init?(_ square: any StringProtocol) {

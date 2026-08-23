@@ -2,9 +2,6 @@ import Foundation
 
 struct DrawConditionEvaluator {
 
-    private static let halfmoveLimit = 100
-    private static let threefoldRepetitionThreshold = 3
-
     static func isInsufficientMaterial(figures: [any ChessPiece]) -> Bool {
         return onlyKingsLeft(figures)
             || onlyOneMinorPieceLeft(figures, type: .knight)
@@ -13,11 +10,11 @@ struct DrawConditionEvaluator {
     }
 
     static func isThreefoldRepetition(positionCount: [Int: Int], currentHash: Int) -> Bool {
-        return (positionCount[currentHash] ?? 0) >= threefoldRepetitionThreshold
+        return (positionCount[currentHash] ?? 0) >= BoardConstants.threefoldRepetitionCount
     }
 
     static func has50MoveRuleTriggered(halfmoveClock: Int) -> Bool {
-        return halfmoveClock >= halfmoveLimit
+        return halfmoveClock >= BoardConstants.halfmoveClockLimit
     }
 
     private static func onlyKingsLeft(_ figures: [any ChessPiece]) -> Bool {
