@@ -11,7 +11,7 @@ public class ChessGame {
     public private(set) var position: Position
     public private(set) var moveLog: [String] = []
     public var colorToMove: PieceColor { position.colorToMove }
-    public var figures:[any ChessFigure] { position.figures }
+    public var figures:[any ChessPiece] { position.figures }
 
     public init(_ pos: Position) {
         position = pos
@@ -34,7 +34,7 @@ public class ChessGame {
         }
         guard validator.figureExists(move) else {
             logger.error("figure \(move.piece.info()) does not exists")
-            throw ValidationError.figureDoesNotExist(move.piece)
+            throw ValidationError.pieceDoesNotExist(move.piece)
         }
         try doMove(move)
     }
@@ -62,7 +62,7 @@ public class ChessGame {
         return .drawByStalemate
     }
 
-    public func getPossibleMoves(forPiece: any ChessFigure) -> [Move] {
+    public func getPossibleMoves(forPiece: any ChessPiece) -> [Move] {
         let validator = MoveValidator(position)
         return forPiece.getPossibleMoves().filter({ validator.isLegalMove($0) })
     }

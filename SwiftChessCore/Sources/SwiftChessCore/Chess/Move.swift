@@ -1,24 +1,24 @@
 import Foundation
 
-public struct Move:Identifiable, Equatable, Sendable {
+public struct Move: Identifiable, Equatable, Sendable {
 
-    public var id:String {
-        "\(startingField.info)-\(destination.info)-\(piece.color)-\(piece.type)-\(type)-\(promoteTo)"
+    public var id: String {
+        "\(startingSquare.info)-\(destination.info)-\(piece.color)-\(piece.type)-\(type)-\(promoteTo)"
     }
 
-    public let destination: Field
-    public let piece: any ChessFigure
+    public let destination: Square
+    public let piece: any ChessPiece
     public let type: MoveType
-    public let startingField: Field
+    public let startingSquare: Square
     public let promoteTo: PieceType
 
     public var row: Int { destination.row }
     public var file: Int { destination.file }
 
-    public init(_ r: Int, _ f: Int, piece: any ChessFigure, type: MoveType = MoveType.normal, promoteTo: PieceType = PieceType.queen) {
-        self.destination = Field(row: r, file: f)
+    public init(_ r: Int, _ f: Int, piece: any ChessPiece, type: MoveType = MoveType.normal, promoteTo: PieceType = PieceType.queen) {
+        self.destination = Square(row: r, file: f)
         self.piece = piece
-        self.startingField = piece.field
+        self.startingSquare = piece.square
         self.type = type
         self.promoteTo = promoteTo
     }
@@ -27,11 +27,11 @@ public struct Move:Identifiable, Equatable, Sendable {
         self.init(move.destination.row, move.destination.file, piece: move.piece, type: MoveType.promotion, promoteTo: promoteTo)
     }
 
-    public init?(_ fieldname: any StringProtocol, piece: any ChessFigure, type: MoveType, promoteTo: PieceType = PieceType.queen) {
-        guard let field = Field(fieldname) else { return nil }
-        self.destination = field
+    public init?(_ squareName: any StringProtocol, piece: any ChessPiece, type: MoveType, promoteTo: PieceType = PieceType.queen) {
+        guard let square = Square(squareName) else { return nil }
+        self.destination = square
         self.piece = piece
-        self.startingField = piece.field
+        self.startingSquare = piece.square
         self.type = type
         self.promoteTo = promoteTo
     }
@@ -40,9 +40,9 @@ public struct Move:Identifiable, Equatable, Sendable {
         return l.destination == r.destination && l.piece.equals(r.piece) && l.type == r.type && l.promoteTo == r.promoteTo
     }
 
-    public var field: Field { destination }
+    public var square: Square { destination }
 
-    public var fieldInfo: String { destination.info }
+    public var squareInfo: String { destination.info }
 
     public var info: String {
         "Move[\(destination.info), \(piece.info()), \(type), \(promoteTo)]"

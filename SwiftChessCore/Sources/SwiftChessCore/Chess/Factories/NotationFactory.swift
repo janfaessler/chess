@@ -18,9 +18,9 @@ public class NotationFactory {
         let piece = getPieceIdentifier(move, position: position)
         let duplicateIdentifier = getDuplicateIdentifier(move, position: position)
         let captureIdentifier = getCaptureIdentifier(move, position: position)
-        let field = move.fieldInfo
+        let square = move.squareInfo
         let promotionIdentifier = getPromotionIdentifier(move)
-        return "\(piece)\(duplicateIdentifier)\(captureIdentifier)\(field)\(promotionIdentifier)\(checkIdentifier)"
+        return "\(piece)\(duplicateIdentifier)\(captureIdentifier)\(square)\(promotionIdentifier)\(checkIdentifier)"
     }
     
     private static func getCastlingNotation(_ move:Move, position:Position) -> String {
@@ -35,7 +35,7 @@ public class NotationFactory {
     private static func getPieceIdentifier(_ move:Move, position:Position) -> String {
         if move.piece.type == .pawn {
             if isCapture(move, position: position) {
-                return move.piece.field.fileName
+                return move.piece.square.fileName
             } else {
                 return ""
             }
@@ -72,21 +72,21 @@ public class NotationFactory {
         let shareFile = ambiguousPieces.contains { $0.file == move.piece.file }
         let shareRank = ambiguousPieces.contains { $0.row == move.piece.row }
         if !shareFile {
-            return move.piece.field.fileName
+            return move.piece.square.fileName
         } else if !shareRank {
             return String(move.piece.row)
         } else {
-            return "\(move.piece.field.fileName)\(move.piece.row)"
+            return "\(move.piece.square.fileName)\(move.piece.row)"
         }
     }
     
-    private static func getPiecesForPossibleMoveDuplicate(_ move:Move, position:Position) -> [any ChessFigure] {
+    private static func getPiecesForPossibleMoveDuplicate(_ move:Move, position:Position) -> [any ChessPiece] {
         let validator = MoveValidator(position)
         return position.figures.filter { figure in
             guard figure.color == move.piece.color,
                   figure.type == move.piece.type,
-                  figure.field != move.piece.field,
-                  let candidate = figure.createMove(move.fieldInfo) else { return false }
+                  figure.square != move.piece.square,
+                  let candidate = figure.createMove(move.squareInfo) else { return false }
             return validator.isLegalMove(candidate)
         }
     }

@@ -34,8 +34,8 @@ public class PositionFactory {
     static func create(
         _ oldPosition:Position,
         afterMove:Move,
-        figures: [any ChessFigure],
-        capturedPiece:(any ChessFigure)? = nil
+        figures: [any ChessPiece],
+        capturedPiece:(any ChessPiece)? = nil
     ) -> Position {
         return Position(
             figures,

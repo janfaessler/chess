@@ -54,7 +54,7 @@ struct BoardBackgroundView: View {
     }
 
     private func fileName(_ file: Int) -> String {
-        Field(row: 1, file: file).fileName
+        Square(row: 1, file: file).fileName
     }
 
     private func rowName(_ row: Int) -> String {

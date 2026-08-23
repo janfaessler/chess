@@ -37,7 +37,7 @@ struct CastlingRules {
         return true
     }
 
-    static func retainsRights(afterMove move: Move, color: PieceColor, rookStartingFile: Int, capturedPiece: (any ChessFigure)?, oldPosition: Position) -> Bool {
+    static func retainsRights(afterMove move: Move, color: PieceColor, rookStartingFile: Int, capturedPiece: (any ChessPiece)?, oldPosition: Position) -> Bool {
         guard rightsState(oldPosition, color: color, rookStartingFile: rookStartingFile) else { return false }
         if move.piece.color == color && move.piece.type == .king { return false }
         if move.piece.color == color && move.piece.type == .rook && move.piece.file == rookStartingFile { return false }

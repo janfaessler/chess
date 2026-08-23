@@ -1,6 +1,6 @@
 import Foundation
 
-class Rook : Figure, @unchecked Sendable {
+class Rook : Piece, @unchecked Sendable {
     
     static let CastleQueensideStartingFile = 1
     static let CastleQueensideEndFile = 4

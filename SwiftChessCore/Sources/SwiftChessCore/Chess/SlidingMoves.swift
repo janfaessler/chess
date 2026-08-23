@@ -1,7 +1,7 @@
 import Foundation
 
 enum SlidingMoves {
-    static func along(rays: [(row: Int, file: Int)], piece: any ChessFigure) -> [Move] {
+    static func along(rays: [(row: Int, file: Int)], piece: any ChessPiece) -> [Move] {
         var moves: [Move] = []
         for direction in rays {
             var r = piece.row + direction.row

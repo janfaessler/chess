@@ -1,6 +1,6 @@
 import Foundation
 
-class King: Figure, @unchecked Sendable {
+class King: Piece, @unchecked Sendable {
 
     static let CastleQueensidePosition = 3
     static let CastleKingsidePosition = 7
@@ -40,6 +40,6 @@ class King: Figure, @unchecked Sendable {
 
     override func createMove(_ filename: any StringProtocol) -> Move? {
         let possibleMoves = getPossibleMoves()
-        return possibleMoves.first(where: { $0.fieldInfo == filename })
+        return possibleMoves.first(where: { $0.squareInfo == filename })
     }
 }

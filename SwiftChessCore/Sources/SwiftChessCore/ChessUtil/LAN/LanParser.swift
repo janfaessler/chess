@@ -9,7 +9,7 @@ public class LanParser {
 
         let startSquareIndex = lan.index(lan.startIndex, offsetBy: 2)
         let startSquareString = String(lan[..<startSquareIndex])
-        guard let start = Field(startSquareString) else { return nil }
+        guard let start = Square(startSquareString) else { return nil }
         
         let endSquareIndex = lan.index(startSquareIndex, offsetBy: 2)
         let endSquareString = String(lan[startSquareIndex..<endSquareIndex])

@@ -23,7 +23,7 @@ struct BoardView: View {
                 }
 
                 ForEach(model.figures, id: \.id ) { figure in
-                    BoardFigureView(fieldSize: fieldSize, figure: figure)
+                    BoardPieceView(fieldSize: fieldSize, piece: figure)
                 }
 
                 ForEach(model.getLegalMoves()) { move in

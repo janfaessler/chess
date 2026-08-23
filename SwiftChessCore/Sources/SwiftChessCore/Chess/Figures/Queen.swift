@@ -1,6 +1,6 @@
 import Foundation
 
-class Queen : Figure, @unchecked Sendable {
+class Queen : Piece, @unchecked Sendable {
 
     init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
         super.init(type: .queen, color: color, row: row, file: file, moved: moved)

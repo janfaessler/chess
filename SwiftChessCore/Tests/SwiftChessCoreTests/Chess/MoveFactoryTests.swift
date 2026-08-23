@@ -149,12 +149,12 @@ final class MoveFactoryTests {
         type: PieceType,
         color: PieceColor,
         moveType: MoveType = .normal,
-        message: (Move?) -> String = { $0 == nil ? "Move not found" : "Move[\($0!.fieldInfo), \($0!.piece.type),\($0!.piece.color), \($0!.type)] is the wrong move" },
+        message: (Move?) -> String = { $0 == nil ? "Move not found" : "Move[\($0!.squareInfo), \($0!.piece.type),\($0!.piece.color), \($0!.type)] is the wrong move" },
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
         let move: Move? = MoveFactory.create(moveName, position: boardCache)
 
-        guard move == nil || move?.piece.type != type || move?.piece.color != color || move?.fieldInfo != field || move?.type != moveType else {
+        guard move == nil || move?.piece.type != type || move?.piece.color != color || move?.squareInfo != field || move?.type != moveType else {
             try updateBoardCache(move!, isCapture: moveName.contains("x"))
             return
         }

@@ -1,6 +1,6 @@
 import Foundation
 
-class Figure: Identifiable, ChessFigure, @unchecked Sendable {
+class Piece: Identifiable, ChessPiece, @unchecked Sendable {
     let type: PieceType
     let color: PieceColor
     private let moved: Bool
@@ -15,12 +15,12 @@ class Figure: Identifiable, ChessFigure, @unchecked Sendable {
         self.moved = moved
     }
 
-    static func create(_ fieldname: String, type: PieceType, color: PieceColor, moved: Bool = false) -> (any ChessFigure)? {
-        guard let field = Field(fieldname) else { return nil }
-        return Figure.create(type: type, color: color, row: field.row, file: field.file, moved: moved)
+    static func create(_ squareName: String, type: PieceType, color: PieceColor, moved: Bool = false) -> (any ChessPiece)? {
+        guard let square = Square(squareName) else { return nil }
+        return Piece.create(type: type, color: color, row: square.row, file: square.file, moved: moved)
     }
 
-    static func create(type: PieceType, color: PieceColor, row: Int, file: Int, moved: Bool = false) -> any ChessFigure {
+    static func create(type: PieceType, color: PieceColor, row: Int, file: Int, moved: Bool = false) -> any ChessPiece {
         switch type {
         case .pawn:   return Pawn(color: color, row: row, file: file, moved: moved)
         case .knight: return Knight(color: color, row: row, file: file, moved: moved)
@@ -31,7 +31,7 @@ class Figure: Identifiable, ChessFigure, @unchecked Sendable {
         }
     }
 
-    func equals(_ other: any ChessFigure) -> Bool {
+    func equals(_ other: any ChessPiece) -> Bool {
         return row == other.row && file == other.file && type == other.type && color == other.color
     }
 
@@ -57,10 +57,10 @@ class Figure: Identifiable, ChessFigure, @unchecked Sendable {
         return isCaptureablePiece(move, pieceToCapture: intersectingPiece)
     }
 
-    var field: Field { Field(row: row, file: file) }
-    var fieldInfo: String { field.info }
+    var square: Square { Square(row: row, file: file) }
+    var squareInfo: String { square.info }
 
-    func info() -> String { "(\(color) \(type) \(fieldInfo))" }
+    func info() -> String { "(\(color) \(type) \(squareInfo))" }
     func hasMoved() -> Bool { moved }
 
     func inBoard(_ m: Move) -> Bool {
@@ -72,18 +72,18 @@ class Figure: Identifiable, ChessFigure, @unchecked Sendable {
     }
 
     func createMove(_ row: Int, _ file: Int, _ type: MoveType = .normal) -> Move {
-        return Move(row, file, piece: Figure.create(type: self.type, color: self.color, row: self.row, file: self.file), type: type)
+        return Move(row, file, piece: Piece.create(type: self.type, color: self.color, row: self.row, file: self.file), type: type)
     }
 
     func createMove(_ move: any StringProtocol, type: MoveType, promoteTo: PieceType) -> Move? {
-        return Move(move, piece: Figure.create(type: self.type, color: self.color, row: self.row, file: self.file), type: type, promoteTo: promoteTo)
+        return Move(move, piece: Piece.create(type: self.type, color: self.color, row: self.row, file: self.file), type: type, promoteTo: promoteTo)
     }
 
-    func isCaptureablePiece(_ move: Move, pieceToCapture: any ChessFigure) -> Bool {
+    func isCaptureablePiece(_ move: Move, pieceToCapture: any ChessPiece) -> Bool {
         return move.piece.color != pieceToCapture.color && pieceToCapture.row == move.row && pieceToCapture.file == move.file
     }
 
-    static func == (lhs: Figure, rhs: Figure) -> Bool {
+    static func == (lhs: Piece, rhs: Piece) -> Bool {
         lhs.equals(rhs)
     }
 }

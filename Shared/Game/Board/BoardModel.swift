@@ -9,8 +9,8 @@ class BoardModel {
     let gameEvents: AsyncStream<GameEvent>
     private let gameEventContinuation: AsyncStream<GameEvent>.Continuation
 
-    var figures: [FigureModel] = []
-    var focus: FigureModel?
+    var figures: [PieceModel] = []
+    var focus: PieceModel?
     var result: ResultModel
     var moveToPromote: Move?
     var orientation: BoardOrientation = BoardOrientation(isFlipped: false)
@@ -44,7 +44,7 @@ class BoardModel {
         moveToPromote != nil
     }
 
-    func move(figure: FigureModel, deltaRow: Int, deltaFile: Int) {
+    func move(figure: PieceModel, deltaRow: Int, deltaFile: Int) {
         guard figure.color == game.colorToMove else {
             logger.error("MOVE REJECTED: color mismatch — figure=\(String(describing: figure.color)) board=\(String(describing: self.game.colorToMove))")
             return
@@ -74,12 +74,12 @@ class BoardModel {
 
     func getLegalMoves() -> [Move] {
         if let focus = focus {
-            return game.getPossibleMoves(forPiece: focus.getFigure())
+            return game.getPossibleMoves(forPiece: focus.getPiece())
         }
         return []
     }
 
-    func setFocus(_ fig: FigureModel) {
+    func setFocus(_ fig: PieceModel) {
         focus = fig
     }
 
@@ -164,10 +164,10 @@ class BoardModel {
         self.notifyMoveDone(move, positionBeforeMove: positionBeforeMove)
     }
 
-    private func getFigures() -> [FigureModel] {
+    private func getFigures() -> [PieceModel] {
         let orientation = self.orientation
         return self.game.figures.map { [weak self] figure in
-            FigureModel(figure, orientation: orientation) { [weak self] event in
+            PieceModel(figure, orientation: orientation) { [weak self] event in
                 switch event {
                 case .moved(let fig, let dRow, let dFile): self?.move(figure: fig, deltaRow: dRow, deltaFile: dFile)
                 case .focusSet(let fig): self?.setFocus(fig)

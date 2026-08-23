@@ -1,7 +1,7 @@
 import Testing
 @testable import SwiftChessCore
 
-struct FieldTest {
+struct SquareTests {
 
     @Test func testExample() throws {
         let data = [
@@ -17,22 +17,22 @@ struct FieldTest {
         ]
 
         for (key, value) in data {
-            let field = try #require(Field(key), "\(key) not found")
-            #expect(field.file == value.file, "\(key) not found")
-            #expect(field.row == value.row, "\(key) not found")
+            let square = try #require(Square(key), "\(key) not found")
+            #expect(square.file == value.file, "\(key) not found")
+            #expect(square.row == value.row, "\(key) not found")
         }
     }
 
     @Test func testInit_singleChar_returnsNil() {
-        #expect(Field("a") == nil)
-        #expect(Field("1") == nil)
+        #expect(Square("a") == nil)
+        #expect(Square("1") == nil)
     }
 
     @Test func testInit_empty_returnsNil() {
-        #expect(Field("") == nil)
+        #expect(Square("") == nil)
     }
 
     @Test func testInit_dash_returnsNil() {
-        #expect(Field("-") == nil)
+        #expect(Square("-") == nil)
     }
 }

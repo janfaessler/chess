@@ -12,7 +12,7 @@ public class FenParser {
         guard parts[1].lowercased() == "w" || parts[1].lowercased() == "b" else { throw FenError.malformed(fen) }
         guard Int(parts[4]) != nil, Int(parts[5]) != nil else { throw FenError.malformed(fen) }
 
-        return Position(getFigures(parts[0]),
+        return Position(getPieces(parts[0]),
                         colorToMove: getNextMove(parts[1]),
                         enPassantTarget: getEnPassantTarget(parts[3]),
                         whiteCanCastleKingside: canWhiteCastleShort(parts[2]),
@@ -34,8 +34,8 @@ public class FenParser {
         return board.allSatisfy { $0 == "/" || allowed.contains($0) }
     }
     
-    private static func getFigures(_ position: String) -> [Figure] {
-        var figures:[Figure] = []
+    private static func getPieces(_ position: String) -> [Piece] {
+        var figures:[Piece] = []
         var row = 8
         for rowPart in position.split(separator: "/") {
             let figuresLine = parseLine(rowPart, rowNumber: row)
@@ -65,12 +65,12 @@ public class FenParser {
         return str.contains(PieceType.queen.fenChar(for: .black))
     }
     
-    private static func getEnPassantTarget(_ str:String) -> Field? {
-        return Field(str)
+    private static func getEnPassantTarget(_ str:String) -> Square? {
+        return Square(str)
     }
     
-    private static func parseLine(_ rowPart: String.SubSequence,  rowNumber: Int) -> [Figure]{
-        var figures:[Figure] = []
+    private static func parseLine(_ rowPart: String.SubSequence,  rowNumber: Int) -> [Piece]{
+        var figures:[Piece] = []
         var file = 1
         for part in Array(rowPart) {
             let digit = Int("\(part)")
@@ -88,13 +88,13 @@ public class FenParser {
         return figures
     }
     
-    private static func parsePiece(_ str: Character, rowNumber:Int, fileNumber:Int) -> Figure? {
+    private static func parsePiece(_ str: Character, rowNumber:Int, fileNumber:Int) -> Piece? {
         let pieceType = PieceType(fenChar: str)
         let pieceColor = parseColor(str)
-        return createFigure(pieceType, pieceColor, rowNumber, fileNumber)
+        return createPiece(pieceType, pieceColor, rowNumber, fileNumber)
     }
     
-    private static func createFigure(_ pieceType: PieceType?, _ pieceColor: PieceColor, _ rowNumber: Int, _ fileNumber: Int) -> Figure? {
+    private static func createPiece(_ pieceType: PieceType?, _ pieceColor: PieceColor, _ rowNumber: Int, _ fileNumber: Int) -> Piece? {
         switch (pieceType) {
             case .pawn:
                 return Pawn(color: pieceColor, row: rowNumber, file: fileNumber)

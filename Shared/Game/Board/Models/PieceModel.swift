@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftChessCore
 
 @Observable
-class FigureModel: Identifiable {
+class PieceModel: Identifiable {
 
     let id: String = UUID().uuidString
 
@@ -13,17 +13,17 @@ class FigureModel: Identifiable {
     var file: Int = 0
     var orientation: BoardOrientation
 
-    private let figure: any ChessFigure
-    private let onEvent: (FigureEvent) -> Void
+    private let piece: any ChessPiece
+    private let onEvent: (PieceEvent) -> Void
 
     init(
-        _ figure: any ChessFigure,
+        _ piece: any ChessPiece,
         orientation: BoardOrientation,
-        onEvent: @escaping (FigureEvent) -> Void
+        onEvent: @escaping (PieceEvent) -> Void
     ) {
-        self.figure = figure
-        self.row = figure.row
-        self.file = figure.file
+        self.piece = piece
+        self.row = piece.row
+        self.file = piece.file
         self.orientation = orientation
         self.onEvent = onEvent
     }
@@ -31,7 +31,7 @@ class FigureModel: Identifiable {
     func onDragEnd(_ gesture: DragGesture.Value, fieldSize: CGFloat) {
         let dRow = calculateDeltaRow(gesture.translation.height, fieldSize: fieldSize)
         let dFile = calculateDeltaFile(gesture.translation.width, fieldSize: fieldSize)
-        onEvent(.moved(figure: self, deltaRow: dRow, deltaFile: dFile))
+        onEvent(.moved(piece: self, deltaRow: dRow, deltaFile: dFile))
         resetOffset()
         zIndex = 0
     }
@@ -45,11 +45,11 @@ class FigureModel: Identifiable {
     func getMove(deltaRow: Int, deltaFile: Int) -> Move? {
         let targetRow = row + deltaRow
         let targetFile = file + deltaFile
-        return figure.getPossibleMoves().first(where: { $0.row == targetRow && $0.file == targetFile })
+        return piece.getPossibleMoves().first(where: { $0.row == targetRow && $0.file == targetFile })
     }
 
     func setFocus() {
-        onEvent(.focusSet(figure: self))
+        onEvent(.focusSet(piece: self))
     }
 
     func clearFocus() {
@@ -57,19 +57,19 @@ class FigureModel: Identifiable {
     }
 
     var color: PieceColor {
-        figure.color
+        piece.color
     }
 
     var type: PieceType {
-        figure.type
+        piece.type
     }
 
-    var square: String {
-        Field(row: row, file: file).info
+    var squareInfo: String {
+        Square(row: row, file: file).info
     }
 
-    func getFigure() -> any ChessFigure {
-        figure
+    func getPiece() -> any ChessPiece {
+        piece
     }
 
     func calculateDeltaRow(_ height: CGFloat, fieldSize: CGFloat) -> Int {

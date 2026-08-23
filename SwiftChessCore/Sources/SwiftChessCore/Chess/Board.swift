@@ -4,16 +4,16 @@ import os
 struct Board: Sendable {
     private static let logger = Log.logger("Board")
 
-    private let grid:[Int:[Int:any ChessFigure]]
-    let figures:[any ChessFigure]
+    private let grid:[Int:[Int:any ChessPiece]]
+    let figures:[any ChessPiece]
 
-    init(_ figures: [any ChessFigure]) {
+    init(_ figures: [any ChessPiece]) {
         let grid = Board.createCacheDict(figures) ?? [:]
         self.grid = grid
         self.figures = grid.flatMap({ $1.values })
     }
 
-    func get(atRow:Int, atFile:Int) -> (any ChessFigure)? {
+    func get(atRow:Int, atFile:Int) -> (any ChessPiece)? {
         return grid[atRow]?[atFile]
     }
 
@@ -25,8 +25,8 @@ struct Board: Sendable {
         return isEmpty(atRow: atRow, atFile: atFile) == false
     }
 
-    func checkNextIntersection(_ move: Move) -> (any ChessFigure)? {
-        PathChecker(self).firstPieceOnPath(from: move.piece.field, to: move.field)
+    func checkNextIntersection(_ move: Move) -> (any ChessPiece)? {
+        PathChecker(self).firstPieceOnPath(from: move.piece.square, to: move.square)
     }
 
     func hash(into hasher: inout Hasher) {
@@ -35,8 +35,8 @@ struct Board: Sendable {
         }
     }
 
-    private static func createCacheDict(_ figures: [any ChessFigure]) -> [Int : [Int : any ChessFigure]]? {
-        var dict:[Int:[Int:any ChessFigure]] = [:]
+    private static func createCacheDict(_ figures: [any ChessPiece]) -> [Int : [Int : any ChessPiece]]? {
+        var dict:[Int:[Int:any ChessPiece]] = [:]
         for figure in figures {
             if dict[figure.row] == nil {
                 dict[figure.row] = [:]

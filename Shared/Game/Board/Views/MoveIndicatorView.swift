@@ -26,7 +26,7 @@ struct MoveIndicatorView: View {
         .frame(width: size, height: size, alignment: .center)
         .offset(x: getOffsetX() , y: getOffsetY())
         .accessibilityElement()
-        .accessibilityIdentifier("target-\(move.fieldInfo)")
+        .accessibilityIdentifier("target-\(move.squareInfo)")
         .accessibilityAddTraits(.isButton)
 
     }

@@ -42,7 +42,7 @@ class MoveFactory {
     
     private static func createPawnMove(_ input: any StringProtocol, color:PieceColor, position: Position) -> Move? {
         guard let field = getField(input) else { return nil }
-        var fig:(any ChessFigure)?
+        var fig:(any ChessPiece)?
         if hasFileInfo(clean(input)) {
             let fileInfo = String(Array(input)[0])
             fig = getFigure(field, withFile: fileInfo, type: .pawn, color: color, position: position)
@@ -57,7 +57,7 @@ class MoveFactory {
         return fig?.createMove(field)
     }
     
-    private static func getPieceFigure(_ cleanedInput: any StringProtocol, pieceType: PieceType, color: PieceColor, position: Position) -> (any ChessFigure)? {
+    private static func getPieceFigure(_ cleanedInput: any StringProtocol, pieceType: PieceType, color: PieceColor, position: Position) -> (any ChessPiece)? {
         guard let field = getPieceField(cleanedInput) else { return nil }
         if hasRowInfo(cleanedInput){
             let rowInfo = getPiecePositionInfo(cleanedInput)
@@ -76,25 +76,25 @@ class MoveFactory {
         return type
     }
     
-    private static func getFigure(targetField:any StringProtocol, type:PieceType, color:PieceColor, position:Position) -> (any ChessFigure)? {
+    private static func getFigure(targetField:any StringProtocol, type:PieceType, color:PieceColor, position:Position) -> (any ChessPiece)? {
         let figures = getFigures(targetField: targetField, type: type, color: color, position: position)
         guard figures.count == 1 else { return nil }
         return figures.first
     }
     
-    private static func getFigure(_ field: any StringProtocol, withRow:String, type: PieceType, color: PieceColor, position: Position) -> (any ChessFigure)? {
+    private static func getFigure(_ field: any StringProtocol, withRow:String, type: PieceType, color: PieceColor, position: Position) -> (any ChessPiece)? {
         let figures = getFigures(targetField: field, type: type, color: color, position: position).filter ({ $0.row == Int(withRow) })
         guard figures.count == 1 else { return nil }
         return figures.first
     }
     
-    private static func getFigure(_ field: any StringProtocol, withFile:String, type: PieceType, color: PieceColor, position: Position) -> (any ChessFigure)? {
-        let figures = getFigures(targetField: field, type: type, color: color, position: position).filter ({ $0.field.fileName == withFile })
+    private static func getFigure(_ field: any StringProtocol, withFile:String, type: PieceType, color: PieceColor, position: Position) -> (any ChessPiece)? {
+        let figures = getFigures(targetField: field, type: type, color: color, position: position).filter ({ $0.square.fileName == withFile })
         guard figures.count == 1 else { return nil }
         return figures.first
     }
     
-    private static func getFigures(targetField:any StringProtocol, type:PieceType, color:PieceColor, position:Position) -> [(any ChessFigure)] {
+    private static func getFigures(targetField:any StringProtocol, type:PieceType, color:PieceColor, position:Position) -> [(any ChessPiece)] {
         let allFigures = position.figures
         let figuresOfTypeAndColor = allFigures.filter({ $0.type == type && $0.color == color})
         return figuresOfTypeAndColor.filter {

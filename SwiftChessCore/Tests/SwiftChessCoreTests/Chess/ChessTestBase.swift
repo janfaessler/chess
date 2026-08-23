@@ -32,7 +32,7 @@ class ChessTestBase {
         type: PieceType,
         color: PieceColor,
         moveType: MoveType = .normal,
-        message: (String, String, any ChessFigure) -> String = { "\($2.color) \($2.type) could not move from \($0) to \($1)" },
+        message: (String, String, any ChessPiece) -> String = { "\($2.color) \($2.type) could not move from \($0) to \($1)" },
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
         guard let testee else {
@@ -40,8 +40,8 @@ class ChessTestBase {
             return
         }
         let pieceCount = testee.figures.count
-        let startFigure = Figure.create(from, type: type, color: color)!
-        let endFigure = Figure.create(to, type: type, color: color, moved: true)!
+        let startFigure = Piece.create(from, type: type, color: color)!
+        let endFigure = Piece.create(to, type: type, color: color, moved: true)!
         let move = Move(to, piece: startFigure, type: moveType)!
         var moveError = false
         do { try testee.move(move) } catch { moveError = true }
@@ -61,7 +61,7 @@ class ChessTestBase {
         type: PieceType,
         color: PieceColor,
         moveType: MoveType = .normal,
-        message: (String, String, any ChessFigure) -> String = { "\($0): \($2.color) \($2.type) could not move to \($1)" },
+        message: (String, String, any ChessPiece) -> String = { "\($0): \($2.color) \($2.type) could not move to \($1)" },
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
         guard let testee else {
@@ -74,7 +74,7 @@ class ChessTestBase {
             Issue.record("move \(notation) could not be created", sourceLocation: sourceLocation)
             return
         }
-        let endFigure = Figure.create(toField, type: type, color: color, moved: true)!
+        let endFigure = Piece.create(toField, type: type, color: color, moved: true)!
         var moveError = false
         do {
             try testee.move(move)
@@ -97,14 +97,14 @@ class ChessTestBase {
         type: PieceType,
         color: PieceColor,
         moveType: MoveType = .normal,
-        message: (String, String, any ChessFigure) -> String = { "move from \($0) to \($1) of \($2.color) \($2.type) should not be possible" },
+        message: (String, String, any ChessPiece) -> String = { "move from \($0) to \($1) of \($2.color) \($2.type) should not be possible" },
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
         guard let testee else {
             Issue.record("testee is nil", sourceLocation: sourceLocation)
             return
         }
-        let startFigure = Figure.create(from, type: type, color: color)!
+        let startFigure = Piece.create(from, type: type, color: color)!
         let move = Move(to, piece: startFigure, type: moveType)!
         do { try testee.move(move) } catch { return }
         Issue.record("\(message(from, to, startFigure))", sourceLocation: sourceLocation)
@@ -112,7 +112,7 @@ class ChessTestBase {
 
     func moveAndAssertError(
         _ move: Move,
-        message: (Move, any ChessFigure) -> String = { "move from \($0.piece.fieldInfo) to \($0.field) of \($1.color) \($1.type) should not be possible" },
+        message: (Move, any ChessPiece) -> String = { "move from \($0.piece.squareInfo) to \($0.square) of \($1.color) \($1.type) should not be possible" },
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
         guard let testee else {
@@ -141,7 +141,7 @@ class ChessTestBase {
         to: String,
         type: PieceType,
         color: PieceColor,
-        message: (String, String, any ChessFigure) -> String = { "\($2.color) \($2.type) on \($0) could not capture on \($1)" },
+        message: (String, String, any ChessPiece) -> String = { "\($2.color) \($2.type) on \($0) could not capture on \($1)" },
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
         guard let testee else {
@@ -149,8 +149,8 @@ class ChessTestBase {
             return
         }
         let pieceCount = testee.figures.count - 1
-        let startFigure = Figure.create(from, type: type, color: color)!
-        let endFigure = Figure.create(to, type: type, color: color)!
+        let startFigure = Piece.create(from, type: type, color: color)!
+        let endFigure = Piece.create(to, type: type, color: color)!
         let move = Move(to, piece: startFigure, type: .normal)!
         let nextColorToMoveDidNotChange = testee.colorToMove == color
         var moveError = false
@@ -167,14 +167,14 @@ class ChessTestBase {
         to: String,
         type: PieceType,
         color: PieceColor,
-        message: (String, String, any ChessFigure) -> String = { "\($2.color) \($2.type) on \($0) could not capture on \($1)" },
+        message: (String, String, any ChessPiece) -> String = { "\($2.color) \($2.type) on \($0) could not capture on \($1)" },
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
         guard let testee else {
             Issue.record("testee is nil", sourceLocation: sourceLocation)
             return
         }
-        let startFigure = Figure.create(from, type: type, color: color)!
+        let startFigure = Piece.create(from, type: type, color: color)!
         let move = Move(to, piece: startFigure, type: .normal)!
         do { try testee.move(move) } catch { return }
         Issue.record("\(message(from, to, startFigure))", sourceLocation: sourceLocation)
@@ -185,7 +185,7 @@ class ChessTestBase {
         to: String,
         type: PieceType,
         color: PieceColor,
-        message: (String, String, any ChessFigure) -> String = { "\($2.color) \($2.type) on \($0) could not capture on \($1)" },
+        message: (String, String, any ChessPiece) -> String = { "\($2.color) \($2.type) on \($0) could not capture on \($1)" },
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
         guard let testee else {
@@ -193,8 +193,8 @@ class ChessTestBase {
             return
         }
         let pieceCount = testee.figures.count - 1
-        let startFigure = Figure.create(from, type: type, color: color)!
-        let endFigure = Figure.create(to, type: .queen, color: color)!
+        let startFigure = Piece.create(from, type: type, color: color)!
+        let endFigure = Piece.create(to, type: .queen, color: color)!
         let move = Move(to, piece: startFigure, type: .promotion)!
         let nextColorToMoveDidNotChange = testee.colorToMove == color
         var moveError = false
@@ -210,7 +210,7 @@ class ChessTestBase {
     }
 
     func assertPossibleMoves(
-        forFigure: any ChessFigure,
+        forFigure: any ChessPiece,
         moves: [Move],
         message: () -> String = { "moves are not equal" },
         sourceLocation: SourceLocation = #_sourceLocation
@@ -226,8 +226,8 @@ class ChessTestBase {
     }
 
     func assertFigureExists(
-        _ f: any ChessFigure,
-        message: (any ChessFigure) -> String = { "\($0.info()) does not exist" },
+        _ f: any ChessPiece,
+        message: (any ChessPiece) -> String = { "\($0.info()) does not exist" },
         sourceLocation: SourceLocation = #_sourceLocation
     ) {
         guard let testee else {
@@ -239,8 +239,8 @@ class ChessTestBase {
     }
 
     func assertFigureNotExists(
-        _ f: any ChessFigure,
-        message: (any ChessFigure) -> String = { "\($0.info()) still exists" },
+        _ f: any ChessPiece,
+        message: (any ChessPiece) -> String = { "\($0.info()) still exists" },
         sourceLocation: SourceLocation = #_sourceLocation
     ) {
         guard let testee else {
@@ -293,7 +293,7 @@ class ChessTestBase {
         Issue.record("\(message(gameState, expectedState, fen))", sourceLocation: sourceLocation)
     }
 
-    func figureExist(_ figure: any ChessFigure, testee: ChessGame) -> Bool {
+    func figureExist(_ figure: any ChessPiece, testee: ChessGame) -> Bool {
         testee.figures.contains(where: { $0.equals(figure) })
     }
 

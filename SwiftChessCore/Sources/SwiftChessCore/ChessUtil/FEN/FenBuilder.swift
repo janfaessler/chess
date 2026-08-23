@@ -73,11 +73,11 @@ public class FenBuilder {
         return output
     }
     
-    private static func createEnPassantTarget(_ field:Field?) -> String {
+    private static func createEnPassantTarget(_ field:Square?) -> String {
         return field?.info ?? "-"
     }
     
-    private static func getPieceIdent(_ fig:any ChessFigure) -> String {
+    private static func getPieceIdent(_ fig:any ChessPiece) -> String {
         return String(fig.type.fenChar(for: fig.color))
     }
 }

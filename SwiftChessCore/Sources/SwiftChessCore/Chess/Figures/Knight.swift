@@ -1,5 +1,5 @@
 import Foundation
-class Knight : Figure, @unchecked Sendable {
+class Knight : Piece, @unchecked Sendable {
 
     init(color: PieceColor, row:Int, file:Int, moved:Bool = false) {
         super.init(type: .knight, color: color, row: row, file: file, moved: moved)
