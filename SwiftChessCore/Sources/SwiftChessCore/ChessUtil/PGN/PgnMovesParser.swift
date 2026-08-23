@@ -7,15 +7,10 @@ public class PgnMovesParser {
     private enum PgnCharacter {
         static let commentOpen: Character = "{"
         static let commentClose: Character = "}"
-        static let variationOpen: Character = "("
-        static let variationClose: Character = ")"
     }
 
-    nonisolated(unsafe) private static let cslRegex = /\[%csl ([^\]]+)\]/
-    nonisolated(unsafe) private static let calRegex = /\[%cal ([^\]]+)\]/
-
     public static func parse(_ pgn: String) -> [PgnMove] {
-        let variations = parseVariations(pgn)
+        let variations = PgnVariationParser.extractVariations(pgn)
         let pgnWithoutVariations = removeVariations(pgn, variations: variations)
         return parseMoves(pgnWithoutVariations, variations)
     }
@@ -53,11 +48,11 @@ public class PgnMovesParser {
 
     private static func parseMove(_ input: String, variationInput: [String]) -> PgnMove {
         let notation = parseNotation(input)
-        let annotation = parseMoveAnnotation(input)
+        let annotation = AnnotationParser.parse(input)
         let rawComment = extractRawComment(input)
-        let highlights = rawComment.map { parseHighlights($0) } ?? []
-        let arrows = rawComment.map { parseArrows($0) } ?? []
-        let comment = rawComment.flatMap { stripAnnotationCommands($0) }
+        let highlights = rawComment.map { PgnHighlightArrowParser.parseHighlights($0) } ?? []
+        let arrows = rawComment.map { PgnHighlightArrowParser.parseArrows($0) } ?? []
+        let comment = rawComment.flatMap { PgnHighlightArrowParser.stripCommands($0) }
         let variations = variationInput.map { parse($0) }
         return PgnMove(move: notation, annotation: annotation, variations: variations, comment: comment, highlights: highlights, arrows: arrows)
     }
@@ -70,17 +65,6 @@ public class PgnMovesParser {
         return PgnRegex.parse(PgnRegex.notation, input: input).first ?? ""
     }
 
-    private static func parseMoveAnnotation(_ input: String) -> MoveAnnotation? {
-        if let match = input.firstMatch(of: PgnRegex.numericAnnotation) {
-            let nag = String(match.output).filter(\.isNumber)
-            return MoveAnnotation.fromNAG(nag)
-        }
-        if let match = input.firstMatch(of: PgnRegex.annotation) {
-            return MoveAnnotation.fromSymbol(String(match.output))
-        }
-        return nil
-    }
-
     private static func extractRawComment(_ input: String) -> String? {
         guard
             let startIndex = input.firstIndex(where: { $0 == PgnCharacter.commentOpen }),
@@ -89,77 +73,6 @@ public class PgnMovesParser {
             return nil
         }
         return String(input[input.index(after: startIndex)...input.index(before: endIndex)]).trimmingCharacters(in: [" "])
-    }
-
-    private static func parseHighlights(_ text: String) -> [SquareHighlight] {
-        text.matches(of: cslRegex).flatMap { match in
-            String(match.1).split(separator: ",").compactMap { parseSquareHighlight(String($0)) }
-        }
-    }
-
-    private static func parseSquareHighlight(_ token: String) -> SquareHighlight? {
-        let t = token.trimmingCharacters(in: .whitespaces)
-        guard t.count == 3,
-              let colorChar = t.first,
-              let color = AnnotationColor(rawValue: String(colorChar))
-        else { return nil }
-        return SquareHighlight(color: color, square: String(t.dropFirst()))
-    }
-
-    private static func parseArrows(_ text: String) -> [BoardArrow] {
-        text.matches(of: calRegex).flatMap { match in
-            String(match.1).split(separator: ",").compactMap { parseBoardArrow(String($0)) }
-        }
-    }
-
-    private static func parseBoardArrow(_ token: String) -> BoardArrow? {
-        let t = token.trimmingCharacters(in: .whitespaces)
-        guard t.count == 5,
-              let colorChar = t.first,
-              let color = AnnotationColor(rawValue: String(colorChar))
-        else { return nil }
-        let from = String(t.dropFirst().prefix(2))
-        let to = String(t.dropFirst(3))
-        return BoardArrow(color: color, from: from, to: to)
-    }
-
-    private static func stripAnnotationCommands(_ text: String) -> String? {
-        var result = text
-        result = result.replacing(cslRegex, with: "")
-        result = result.replacing(calRegex, with: "")
-        let trimmed = result.trimmingCharacters(in: .whitespacesAndNewlines)
-        return trimmed.isEmpty ? nil : trimmed
-    }
-
-    private static func parseVariations(_ input: String) -> [String] {
-        var variations: [String] = []
-        var current: String = ""
-        var variationCount = 0
-        var comment = false
-        for char in input {
-            if char == PgnCharacter.commentOpen {
-                if variationCount > 0 { current.append(char) }
-                comment = true
-            } else if char == PgnCharacter.commentClose {
-                if variationCount > 0 { current.append(char) }
-                comment = false
-            } else if comment {
-                if variationCount > 0 { current.append(char) }
-            } else if char == PgnCharacter.variationOpen {
-                if variationCount > 0 { current.append(char) }
-                variationCount += 1
-            } else if char == PgnCharacter.variationClose {
-                variationCount -= 1
-                if variationCount > 0 { current.append(char) }
-                if variationCount == 0 {
-                    variations.append(current.trimmingCharacters(in: [" "]))
-                    current = ""
-                }
-            } else if variationCount > 0 {
-                current.append(char)
-            }
-        }
-        return variations
     }
 
     private static func removeVariations(_ input: String, variations: [String]) -> String {
