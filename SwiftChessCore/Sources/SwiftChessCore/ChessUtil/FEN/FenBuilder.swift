@@ -51,25 +51,13 @@ public class FenBuilder {
     }
     
     private static func createCastlingRights(_ pos:Position) -> String {
+        let rights = pos.castlingRights
+        if rights.isEmpty { return "-" }
         var output = ""
-        if pos.canWhiteCastleKingside {
-            output.append("K")
-        }
-        if pos.canWhiteCastleQueenside {
-            output.append("Q")
-        }
-        if pos.canBlackCastleKingside {
-            output.append("k")
-        }
-        if pos.canBlackCastleQueenside {
-            output.append("q")
-        }
-        if !pos.canWhiteCastleKingside
-            && !pos.canWhiteCastleQueenside
-            && !pos.canBlackCastleKingside
-            && !pos.canBlackCastleQueenside {
-            output.append("-")
-        }
+        if rights.whiteKingside  { output.append("K") }
+        if rights.whiteQueenside { output.append("Q") }
+        if rights.blackKingside  { output.append("k") }
+        if rights.blackQueenside { output.append("q") }
         return output
     }
     

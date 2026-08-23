@@ -15,10 +15,7 @@ public class FenParser {
         return Position(getPieces(parts[0]),
                         colorToMove: getNextMove(parts[1]),
                         enPassantTarget: getEnPassantTarget(parts[3]),
-                        whiteCanCastleKingside: canWhiteCastleShort(parts[2]),
-                        whiteCanCastleQueenside: canWhiteCastleLong(parts[2]),
-                        blackCanCastleKingside: canBlackCastleShort(parts[2]),
-                        blackCanCastleQueenside: canBlackCastleLong(parts[2]),
+                        castlingRights: parseCastlingRights(parts[2]),
                         moveClock: parseInt(parts[5]) - 1,
                         halfmoveClock: parseInt(parts[4]))
 
@@ -45,22 +42,15 @@ public class FenParser {
         return nextMove.lowercased() == "w" ? .white : .black
     }
     
-    private static func canWhiteCastleShort(_ str:String) -> Bool {
-        return str.contains(PieceType.king.fenChar(for: .white))
+    private static func parseCastlingRights(_ str: String) -> CastlingRights {
+        CastlingRights(
+            whiteKingside:  str.contains(PieceType.king.fenChar(for: .white)),
+            whiteQueenside: str.contains(PieceType.queen.fenChar(for: .white)),
+            blackKingside:  str.contains(PieceType.king.fenChar(for: .black)),
+            blackQueenside: str.contains(PieceType.queen.fenChar(for: .black))
+        )
     }
 
-    private static func canWhiteCastleLong(_ str:String) -> Bool {
-        return str.contains(PieceType.queen.fenChar(for: .white))
-    }
-
-    private static func canBlackCastleShort(_ str:String) -> Bool {
-        return str.contains(PieceType.king.fenChar(for: .black))
-    }
-
-    private static func canBlackCastleLong(_ str:String) -> Bool {
-        return str.contains(PieceType.queen.fenChar(for: .black))
-    }
-    
     private static func getEnPassantTarget(_ str:String) -> Square? {
         return Square(str)
     }

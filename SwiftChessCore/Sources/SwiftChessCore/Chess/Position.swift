@@ -5,10 +5,7 @@ public struct Position: Sendable {
     private let board:Board
     public let colorToMove:PieceColor
     public let enPassantTarget:Square?
-    public let canWhiteCastleKingside:Bool
-    public let canWhiteCastleQueenside:Bool
-    public let canBlackCastleKingside:Bool
-    public let canBlackCastleQueenside:Bool
+    public let castlingRights:CastlingRights
     public let halfmoveClock:Int
     public let moveClock:Int
 
@@ -18,20 +15,14 @@ public struct Position: Sendable {
         _ figures: [any ChessPiece],
         colorToMove:PieceColor,
         enPassantTarget:Square?,
-        whiteCanCastleKingside:Bool,
-        whiteCanCastleQueenside:Bool,
-        blackCanCastleKingside:Bool,
-        blackCanCastleQueenside:Bool,
+        castlingRights:CastlingRights,
         moveClock:Int,
         halfmoveClock:Int
     ) {
         self.board = Board(figures)
         self.colorToMove = colorToMove
         self.enPassantTarget = enPassantTarget
-        self.canWhiteCastleKingside = whiteCanCastleKingside
-        self.canWhiteCastleQueenside = whiteCanCastleQueenside
-        self.canBlackCastleKingside = blackCanCastleKingside
-        self.canBlackCastleQueenside = blackCanCastleQueenside
+        self.castlingRights = castlingRights
         self.moveClock = moveClock
         self.halfmoveClock = halfmoveClock
     }
@@ -56,10 +47,7 @@ public struct Position: Sendable {
         var hasher = Hasher()
         board.hash(into: &hasher)
         hasher.combine(colorToMove)
-        hasher.combine(canWhiteCastleKingside)
-        hasher.combine(canWhiteCastleQueenside)
-        hasher.combine(canBlackCastleKingside)
-        hasher.combine(canBlackCastleQueenside)
+        hasher.combine(castlingRights)
         hasher.combine(enPassantTarget)
         return hasher.finalize()
     }

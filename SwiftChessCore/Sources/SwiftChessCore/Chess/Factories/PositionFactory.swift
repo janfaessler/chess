@@ -46,10 +46,7 @@ public class PositionFactory {
             figures,
             colorToMove: createColorToMove(afterMove),
             enPassantTarget: EnPassantRules.target(afterMove: afterMove),
-            whiteCanCastleKingside: CastlingRules.retainsRights(afterMove: afterMove, color: .white, rookStartingFile: Rook.CastleKingsideStartingFile, capturedPiece: capturedPiece, oldPosition: oldPosition),
-            whiteCanCastleQueenside: CastlingRules.retainsRights(afterMove: afterMove, color: .white, rookStartingFile: Rook.CastleQueensideStartingFile, capturedPiece: capturedPiece, oldPosition: oldPosition),
-            blackCanCastleKingside: CastlingRules.retainsRights(afterMove: afterMove, color: .black, rookStartingFile: Rook.CastleKingsideStartingFile, capturedPiece: capturedPiece, oldPosition: oldPosition),
-            blackCanCastleQueenside: CastlingRules.retainsRights(afterMove: afterMove, color: .black, rookStartingFile: Rook.CastleQueensideStartingFile, capturedPiece: capturedPiece, oldPosition: oldPosition),
+            castlingRights: CastlingRules.updatedRights(afterMove: afterMove, capturedPiece: capturedPiece, oldPosition: oldPosition),
             moveClock: oldPosition.moveClock + 1,
             halfmoveClock: getHalfmoveClock(afterMove, capturedPiece != nil, oldPosition: oldPosition))
     }
