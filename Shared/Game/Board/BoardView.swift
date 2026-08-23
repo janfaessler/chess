@@ -13,12 +13,12 @@ struct BoardView: View {
                 RightClickOverlay(
                     fieldSize: fieldSize,
                     orientation: model.orientation,
-                    onHighlightSquare: { model.toggleUserHighlight(square: $0) },
-                    onArrowDrawn: { model.toggleUserArrow(from: $0, to: $1, color: $2) }
+                    onHighlightSquare: { model.annotations.toggleHighlight(square: $0) },
+                    onArrowDrawn: { model.annotations.toggleArrow(from: $0, to: $1, color: $2) }
                 )
                 .frame(width: fieldSize * 8, height: fieldSize * 8)
 
-                ForEach(Array(model.allHighlights.enumerated()), id: \.offset) { _, highlight in
+                ForEach(Array(model.annotations.allHighlights.enumerated()), id: \.offset) { _, highlight in
                     SquareHighlightView(highlight: highlight, fieldSize: fieldSize, orientation: model.orientation)
                 }
 
@@ -31,7 +31,7 @@ struct BoardView: View {
                         .onTapGesture { model.playFocusFigureMove(move) }
                 }
 
-                BoardArrowsView(arrows: model.allArrows, fieldSize: fieldSize, orientation: model.orientation)
+                BoardArrowsView(arrows: model.annotations.allArrows, fieldSize: fieldSize, orientation: model.orientation)
 
                 PromotionChooseView(board: model, fieldSize: fieldSize)
 

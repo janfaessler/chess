@@ -76,10 +76,10 @@ class ControlModel {
         self.logger.info("movePlayed: \(notation)")
         let position = self.board.position
         self.moveList.movePlayed(notation, color: color)
-        self.board.clearUserAnnotations()
+        self.board.annotations.clearUserAnnotations()
         self.engine.newPosition(position)
     }
-    
+
     private func observePositionChanges() {
         let stream = moveList.positionChanged
         observationTasks.append(Task { @MainActor [weak self] in
@@ -92,8 +92,8 @@ class ControlModel {
     private func positionChange(_ position: Position) {
         self.logger.info("positionChange")
         self.board.updatePosition(position)
-        self.board.clearUserAnnotations()
-        self.board.updateAnnotations(
+        self.board.annotations.clearUserAnnotations()
+        self.board.annotations.updatePgn(
             highlights: moveList.currentMove?.highlights ?? [],
             arrows: moveList.currentMove?.arrows ?? []
         )

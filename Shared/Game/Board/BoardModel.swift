@@ -15,17 +15,9 @@ class BoardModel {
     var moveToPromote: Move?
     var orientation: BoardOrientation = BoardOrientation(isFlipped: false)
 
-    private var pgnHighlights: [SquareHighlight] = []
-    private var pgnArrows: [BoardArrow] = []
-    private(set) var userHighlights: [SquareHighlight] = []
-    private(set) var userArrows: [BoardArrow] = []
-
-    var allHighlights: [SquareHighlight] { pgnHighlights + userHighlights }
-    var allArrows: [BoardArrow] { pgnArrows + userArrows }
+    let annotations = AnnotationModel()
 
     private var game: ChessGame
-
-    private static let highlightColorCycle: [AnnotationColor] = [.green, .yellow, .red, .blue]
 
     init(_ position: Position? = nil) {
         let position = position ?? PositionFactory.startingPosition()
@@ -100,42 +92,6 @@ class BoardModel {
         self.game = ChessGame(pos)
         self.figures = self.getFigures()
         self.result = ResultModel(self.game.getGameState())
-    }
-
-    func updateAnnotations(highlights: [SquareHighlight], arrows: [BoardArrow]) {
-        self.pgnHighlights = highlights
-        self.pgnArrows = arrows
-    }
-
-    func toggleUserHighlight(square: String) {
-        if let idx = userHighlights.firstIndex(where: { $0.square == square }) {
-            let currentColor = userHighlights[idx].color
-            let cycleIdx = Self.highlightColorCycle.firstIndex(of: currentColor)
-            if let cycleIdx, cycleIdx + 1 < Self.highlightColorCycle.count {
-                userHighlights[idx] = SquareHighlight(color: Self.highlightColorCycle[cycleIdx + 1], square: square)
-            } else {
-                userHighlights.remove(at: idx)
-            }
-        } else {
-            userHighlights.append(SquareHighlight(color: .green, square: square))
-        }
-    }
-
-    func toggleUserArrow(from: String, to: String, color: AnnotationColor) {
-        if let idx = userArrows.firstIndex(where: { $0.from == from && $0.to == to }) {
-            if userArrows[idx].color == color {
-                userArrows.remove(at: idx)
-            } else {
-                userArrows[idx] = BoardArrow(color: color, from: from, to: to)
-            }
-        } else {
-            userArrows.append(BoardArrow(color: color, from: from, to: to))
-        }
-    }
-
-    func clearUserAnnotations() {
-        userHighlights.removeAll()
-        userArrows.removeAll()
     }
 
     func moveFocusFigureTo(_ location: CGPoint, fieldSize: CGFloat) {
