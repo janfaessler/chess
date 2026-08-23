@@ -1,62 +1,40 @@
 import Foundation
 
-private let logger = Log.logger("PersistenceConversions")
-
-private func encode<T: Encodable>(_ value: T, field: String) -> Data? {
-    do {
-        return try JSONEncoder().encode(value)
-    } catch {
-        logger.error("Failed to encode \(field): \(error)")
-        return nil
-    }
+private func encode<T: Encodable>(_ value: T) throws -> Data {
+    try JSONEncoder().encode(value)
 }
 
-private func decode<T: Decodable>(_ data: Data, as type: T.Type) -> T? {
-    do {
-        return try JSONDecoder().decode(type, from: data)
-    } catch {
-        logger.error("Failed to decode \(type): \(error)")
-        return nil
-    }
+private func decode<T: Decodable>(_ data: Data, as type: T.Type) throws -> T {
+    try JSONDecoder().decode(type, from: data)
 }
 
 extension GameEntity {
-    convenience init?(from gameData: GameData, order: Int) {
-        guard let headersData = encode(gameData.headers, field: "headers"),
-              let movesData = encode(gameData.moves, field: "moves")
-        else { return nil }
-
+    convenience init(from gameData: GameData, order: Int) throws {
         self.init(
             id: gameData.id,
             title: gameData.getTitle(),
-            headersData: headersData,
-            movesData: movesData,
+            headersData: try encode(gameData.headers),
+            movesData: try encode(gameData.moves),
             result: gameData.result,
             comment: gameData.comment,
             order: order
         )
     }
 
-    func update(from gameData: GameData, order: Int) {
-        guard let headersData = encode(gameData.headers, field: "headers"),
-              let movesData = encode(gameData.moves, field: "moves")
-        else { return }
-        self.headersData = headersData
-        self.movesData = movesData
+    func update(from gameData: GameData, order: Int) throws {
+        self.headersData = try encode(gameData.headers)
+        self.movesData = try encode(gameData.moves)
         title = gameData.getTitle()
         result = gameData.result
         comment = gameData.comment
         self.order = order
     }
 
-    func toGameData() -> GameData? {
-        guard let headers = decode(headersData, as: [String: String].self),
-              let moves = decode(movesData, as: [MoveData].self)
-        else { return nil }
-        return GameData(
+    func toGameData() throws -> GameData {
+        GameData(
             id: id,
-            headers: headers,
-            moves: moves,
+            headers: try decode(headersData, as: [String: String].self),
+            moves: try decode(movesData, as: [MoveData].self),
             result: result,
             comment: comment
         )
@@ -64,9 +42,9 @@ extension GameEntity {
 }
 
 extension CollectionEntity {
-    func toGameCollection() -> GameCollection {
+    func toGameCollection() throws -> GameCollection {
         let sortedGames = games.sorted { $0.order < $1.order }
-        let gameDataArray = sortedGames.compactMap { $0.toGameData() }
+        let gameDataArray = try sortedGames.map { try $0.toGameData() }
         return GameCollection(
             id: id,
             name: name,

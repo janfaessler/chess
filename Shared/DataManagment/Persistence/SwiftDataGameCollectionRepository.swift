@@ -24,7 +24,7 @@ final class SwiftDataGameCollectionRepository: GameCollectionRepository {
                 sortBy: [SortDescriptor(\.order)]
             )
             let entities = try modelContext.fetch(descriptor)
-            return entities.map { $0.toGameCollection() }
+            return try entities.map { try $0.toGameCollection() }
         } catch {
             logger.error("Failed to load collections: \(error)")
             throw RepositoryError.loadCollectionFailed(error)
@@ -47,7 +47,7 @@ final class SwiftDataGameCollectionRepository: GameCollectionRepository {
                     entity = CollectionEntity(id: collection.id, name: collection.name, expanded: collection.expanded, order: index)
                     modelContext.insert(entity)
                 }
-                syncGames(of: collection, into: entity)
+                try syncGames(of: collection, into: entity)
             }
 
             for (_, removed) in existingByID {
@@ -61,17 +61,16 @@ final class SwiftDataGameCollectionRepository: GameCollectionRepository {
         }
     }
 
-    private func syncGames(of collection: GameCollection, into entity: CollectionEntity) {
+    private func syncGames(of collection: GameCollection, into entity: CollectionEntity) throws {
         var existingByID = Dictionary(uniqueKeysWithValues: entity.games.map { ($0.id, $0) })
 
         for (gameIndex, gameData) in collection.games.enumerated() {
             if let found = existingByID.removeValue(forKey: gameData.id) {
-                found.update(from: gameData, order: gameIndex)
-            } else if let gameEntity = GameEntity(from: gameData, order: gameIndex) {
+                try found.update(from: gameData, order: gameIndex)
+            } else {
+                let gameEntity = try GameEntity(from: gameData, order: gameIndex)
                 gameEntity.collection = entity
                 entity.games.append(gameEntity)
-            } else {
-                logger.error("Failed to encode game \(gameData.id) '\(gameData.getTitle())' — game was not saved")
             }
         }
 
@@ -79,6 +78,4 @@ final class SwiftDataGameCollectionRepository: GameCollectionRepository {
             modelContext.delete(removed)
         }
     }
-
-
 }
