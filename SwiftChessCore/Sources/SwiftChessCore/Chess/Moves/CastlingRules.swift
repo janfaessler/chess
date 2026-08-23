@@ -24,9 +24,9 @@ struct CastlingRules {
     static func pathIsInCheck(_ move: Move, position: Position) -> Bool {
         let row = move.piece.row
         let validator = MoveValidator(position)
-        return validator.isFieldInCheck(row, move.piece.file)
-            || validator.isFieldInCheck(row, transitFile(for: move))
-            || validator.isFieldInCheck(row, move.file)
+        return validator.isSquareAttackedByOpponent(row: row, file: move.piece.file)
+            || validator.isSquareAttackedByOpponent(row: row, file: transitFile(for: move))
+            || validator.isSquareAttackedByOpponent(row: row, file: move.file)
     }
 
     static func canCastle(_ move: Move, position: Position) -> Bool {

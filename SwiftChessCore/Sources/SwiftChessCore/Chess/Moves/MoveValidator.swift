@@ -17,7 +17,7 @@ struct MoveValidator {
     func isCheck(_ move: Move) -> Bool {
         guard let opponentKing = position.figures.first(where: { $0.type == .king && $0.color != move.piece.color }) else { return false }
         let newPosition = position.applying(move)
-        return MoveValidator(newPosition).isFieldInCheck(opponentKing.row, opponentKing.file)
+        return MoveValidator(newPosition).isSquareAttackedByOpponent(row: opponentKing.row, file: opponentKing.file)
     }
 
     func isCheckMate(_ move: Move) -> Bool {
@@ -25,7 +25,7 @@ struct MoveValidator {
         return !validator.playerHasLegalMove() && validator.isKingInCheck()
     }
 
-    func isFieldInCheck(_ row: Int, _ file: Int) -> Bool {
+    func isSquareAttackedByOpponent(row: Int, file: Int) -> Bool {
         return position.figures.contains(where: {
             if $0.color == position.colorToMove { return false }
             guard let move = Move(row, file, piece: $0) else { return false }
@@ -40,7 +40,7 @@ struct MoveValidator {
 
     func isKingInCheck() -> Bool {
         guard let king = position.figures.first(where: { $0.type == .king && $0.color == position.colorToMove }) else { return false }
-        return isFieldInCheck(king.row, king.file)
+        return isSquareAttackedByOpponent(row: king.row, file: king.file)
     }
     
     func figureExists(_ move: Move) -> Bool {
