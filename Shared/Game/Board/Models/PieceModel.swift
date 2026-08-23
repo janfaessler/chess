@@ -65,7 +65,7 @@ class PieceModel: Identifiable {
     }
 
     var squareInfo: String {
-        Square(row: row, file: file).info
+        Square(row: row, file: file)?.info ?? "??"
     }
 
     func getPiece() -> any ChessPiece {

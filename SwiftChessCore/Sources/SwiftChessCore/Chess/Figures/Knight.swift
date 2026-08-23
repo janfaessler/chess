@@ -8,7 +8,7 @@ class Knight : Piece, @unchecked Sendable {
     override func getPossibleMoves() -> [Move] {
         let row = row
         let file = file
-        let moves = [
+        return [
             createMove(row+1, file+2),
             createMove(row+1, file-2),
             createMove(row-1, file+2),
@@ -17,8 +17,7 @@ class Knight : Piece, @unchecked Sendable {
             createMove(row+2, file-1),
             createMove(row-2, file+1),
             createMove(row-2, file-1)
-        ]
-        return moves.filter({ move in inBoard(move) })
+        ].compactMap { $0 }
     }
     
     override func isMovePossible( _ move: Move, position:Position) -> Bool {

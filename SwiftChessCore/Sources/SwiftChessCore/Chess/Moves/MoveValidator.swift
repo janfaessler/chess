@@ -9,7 +9,6 @@ struct MoveValidator {
     }
 
     func isLegalMove(_ target: Move) -> Bool {
-        guard isMoveInBoard(target) else { return false }
         guard target.piece.isMovePossible(target, position: position) else { return false }
         guard !doesMovePutOwnKingInCheck(target) else { return false }
         return true
@@ -29,7 +28,8 @@ struct MoveValidator {
     func isFieldInCheck(_ row: Int, _ file: Int) -> Bool {
         return position.figures.contains(where: {
             if $0.color == position.colorToMove { return false }
-            return $0.isMovePossible(Move(row, file, piece: $0), position: position)
+            guard let move = Move(row, file, piece: $0) else { return false }
+            return $0.isMovePossible(move, position: position)
         })
     }
 
@@ -61,11 +61,9 @@ struct MoveValidator {
 
         return figures.contains(where: {
             guard $0.color != position.colorToMove else { return false }
-            return $0.isMovePossible($0.createMove(rowToCheck, fileToCheck, MoveType.normal), position: newPos)
+            guard let move = $0.createMove(rowToCheck, fileToCheck, MoveType.normal) else { return false }
+            return $0.isMovePossible(move, position: newPos)
         })
     }
 
-    private func isMoveInBoard(_ move: Move) -> Bool {
-        return 1...8 ~= move.row && 1...8 ~= move.file
-    }
 }

@@ -9,9 +9,14 @@ public struct Square: Equatable, Hashable, Sendable {
     public let row: Int
     public let file: Int
 
-    public init(row: Int, file: Int) {
+    public init?(row: Int, file: Int) {
+        guard 1...8 ~= row && 1...8 ~= file else { return nil }
         self.row = row
         self.file = file
+    }
+
+    public static func isValid(row: Int, file: Int) -> Bool {
+        1...8 ~= row && 1...8 ~= file
     }
 
     public init?(_ square: any StringProtocol) {

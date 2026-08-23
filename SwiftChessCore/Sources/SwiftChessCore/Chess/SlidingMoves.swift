@@ -7,7 +7,7 @@ enum SlidingMoves {
             var r = piece.row + direction.row
             var f = piece.file + direction.file
             while 1...8 ~= r && 1...8 ~= f {
-                moves.append(piece.createMove(r, f, .normal))
+                if let move = piece.createMove(r, f, .normal) { moves.append(move) }
                 r += direction.row
                 f += direction.file
             }

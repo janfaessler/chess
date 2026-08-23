@@ -213,7 +213,7 @@ final class RawMovesTests: ChessTestBase {
         try moveAndAssert(from: "e1", to: "g1", type: .king, color: .white, moveType: .castle)
         try moveAndAssert(from: "g8", to: "h8", type: .king, color: .black)
         try moveAndAssert(from: "g1", to: "h1", type: .king, color: .white)
-        try moveAndAssertError(Move(8, 9, piece: Piece.create("h8", type: .king, color: .black)!, type: MoveType.normal))
+        #expect(Move(8, 9, piece: Piece.create("h8", type: .king, color: .black)!, type: .normal) == nil)
         try assertMoves(["e4", "e5", "Bc4", "Bb4", "c3", "Nf6", "Nf3", "O-O", "cxb4", "Re8", "O-O", "Kh8", "Kh1"])
     }
 

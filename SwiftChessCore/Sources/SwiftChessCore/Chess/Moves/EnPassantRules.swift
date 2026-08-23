@@ -18,6 +18,6 @@ struct EnPassantRules {
     }
 
     static func capturedPawnSquare(for move: Move) -> Square {
-        Square(row: move.piece.row, file: move.file)
+        Square(row: move.piece.row, file: move.file)!
     }
 }

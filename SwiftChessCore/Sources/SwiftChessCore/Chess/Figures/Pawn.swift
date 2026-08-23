@@ -15,23 +15,23 @@ class Pawn: Piece, @unchecked Sendable {
         let moveType: MoveType = isOnPromotionRank ? .promotion : .normal
         switch color {
         case .black:
-            var moves = [
+            var optionals: [Move?] = [
                 createMove(row-1, file-1, moveType),
                 createMove(row-1, file, moveType),
                 createMove(row-1, file+1, moveType)]
             if row == Pawn.startingRowForBlack {
-                moves.append(createMove(row-2, file, .double))
+                optionals.append(createMove(row-2, file, .double))
             }
-            return moves
+            return optionals.compactMap { $0 }
         case .white:
-            var moves = [
+            var optionals: [Move?] = [
                 createMove(row+1, file-1, moveType),
                 createMove(row+1, file, moveType),
                 createMove(row+1, file+1, moveType)]
             if row == Pawn.startingRowForWhite {
-                moves.append(createMove(row+2, file, .double))
+                optionals.append(createMove(row+2, file, .double))
             }
-            return moves
+            return optionals.compactMap { $0 }
         }
     }
 

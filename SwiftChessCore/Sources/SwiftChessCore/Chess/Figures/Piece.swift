@@ -57,21 +57,17 @@ class Piece: Identifiable, ChessPiece, @unchecked Sendable {
         return isCaptureablePiece(move, pieceToCapture: intersectingPiece)
     }
 
-    var square: Square { Square(row: row, file: file) }
+    var square: Square { Square(row: row, file: file)! }
     var squareInfo: String { square.info }
 
     func info() -> String { "(\(color) \(type) \(squareInfo))" }
     func hasMoved() -> Bool { moved }
 
-    func inBoard(_ m: Move) -> Bool {
-        return 1...8 ~= m.row && 1...8 ~= m.file
-    }
-
     func createMove(_ filename: any StringProtocol) -> Move? {
         return createMove(filename, type: .normal)
     }
 
-    func createMove(_ row: Int, _ file: Int, _ type: MoveType = .normal) -> Move {
+    func createMove(_ row: Int, _ file: Int, _ type: MoveType = .normal) -> Move? {
         return Move(row, file, piece: Piece.create(type: self.type, color: self.color, row: self.row, file: self.file), type: type)
     }
 

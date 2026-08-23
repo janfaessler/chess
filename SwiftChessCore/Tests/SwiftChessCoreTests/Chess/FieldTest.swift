@@ -35,4 +35,27 @@ struct SquareTests {
     @Test func testInit_dash_returnsNil() {
         #expect(Square("-") == nil)
     }
+
+    @Test func testInit_rowFile_validCorners_returnsSquare() {
+        #expect(Square(row: 1, file: 1) != nil)
+        #expect(Square(row: 8, file: 8) != nil)
+        #expect(Square(row: 1, file: 8) != nil)
+        #expect(Square(row: 8, file: 1) != nil)
+    }
+
+    @Test func testInit_rowFile_outOfBounds_returnsNil() {
+        #expect(Square(row: 0, file: 1) == nil)
+        #expect(Square(row: 9, file: 1) == nil)
+        #expect(Square(row: 1, file: 0) == nil)
+        #expect(Square(row: 1, file: 9) == nil)
+    }
+
+    @Test func testIsValid_inBounds_returnsTrue() {
+        #expect(Square.isValid(row: 4, file: 4))
+    }
+
+    @Test func testIsValid_outOfBounds_returnsFalse() {
+        #expect(!Square.isValid(row: 0, file: 4))
+        #expect(!Square.isValid(row: 4, file: 9))
+    }
 }

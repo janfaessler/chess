@@ -12,7 +12,7 @@ class King: Piece, @unchecked Sendable {
     override func getPossibleMoves() -> [Move] {
         let row = row
         let file = file
-        var moves = [
+        var optionals: [Move?] = [
             createMove(row+1, file+1),
             createMove(row, file+1),
             createMove(row+1, file),
@@ -23,12 +23,12 @@ class King: Piece, @unchecked Sendable {
             createMove(row+1, file-1)
         ]
         if !hasMoved() {
-            moves.append(contentsOf: [
+            optionals += [
                 createMove(row, King.CastleQueensidePosition, .castle),
                 createMove(row, King.CastleKingsidePosition, .castle)
-            ])
+            ]
         }
-        return moves.filter({ move in inBoard(move) })
+        return optionals.compactMap { $0 }
     }
 
     override func isMovePossible(_ move: Move, position: Position) -> Bool {
