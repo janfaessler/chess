@@ -22,8 +22,14 @@ struct ControlView: View {
                 Label("Moves", systemImage: "list.bullet")
                     .font(.headline)
                     .foregroundStyle(.secondary)
-                
-                MoveListView(model: model.moveList)
+
+                if model.isLoading {
+                    ProgressView()
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                } else {
+                    MoveListView(model: model.moveList)
+                }
             }
             .padding()
             .background(.regularMaterial, in: .rect(cornerRadius: 12))

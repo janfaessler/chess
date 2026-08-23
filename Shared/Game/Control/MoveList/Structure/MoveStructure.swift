@@ -1,6 +1,6 @@
 import Foundation
 
-class MoveStructure {
+class MoveStructure: @unchecked Sendable {
     private var line:LineModel
     private var parentMoves:[UUID:MoveModel]
     

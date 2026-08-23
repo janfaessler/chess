@@ -21,6 +21,7 @@ class ControlModel {
 
     private var observationTasks: [Task<Void, Never>] = []
     private var isStarted = false
+    var isLoading = false
 
     init(_ game: GameData) {
         self.game = game
@@ -31,10 +32,6 @@ class ControlModel {
             board = BoardModel()
         }
         engine = TestSupport.isUITesting ? StubEngine() : ChessEngine()
-
-        
-        let structure = StructureFactory.create(game)
-        self.moveList.load(structure)
     }
 
     func start() {
@@ -47,6 +44,16 @@ class ControlModel {
 
         if TestSupport.isUITesting {
             engine.newPosition(board.position)
+        }
+
+        guard let game else { return }
+        isLoading = true
+        Task.detached(priority: .userInitiated) { [weak self, game] in
+            let structure = StructureFactory.create(game)
+            await MainActor.run { [weak self] in
+                self?.moveList.load(structure)
+                self?.isLoading = false
+            }
         }
     }
 
