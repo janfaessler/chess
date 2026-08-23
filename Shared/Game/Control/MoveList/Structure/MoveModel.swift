@@ -13,12 +13,11 @@ class MoveModel : Identifiable, Equatable {
     var highlights: [SquareHighlight]
     var arrows: [BoardArrow]
 
-    private var variations: [String: LineModel]
+    var variationManager = VariationManager()
 
     init(
         move: String,
         color: PieceColor,
-        variations: [String: LineModel] = [:],
         note: String? = nil,
         annotation: MoveAnnotation? = nil,
         highlights: [SquareHighlight] = [],
@@ -26,7 +25,6 @@ class MoveModel : Identifiable, Equatable {
         resultingPosition: Position? = nil
     ) {
         self.move = move
-        self.variations = variations
         self.note = note
         self.annotation = annotation
         self.highlights = highlights
@@ -36,59 +34,43 @@ class MoveModel : Identifiable, Equatable {
     }
 
     func getVariationName(_ ofMove: MoveModel) -> String? {
-        for variation in variations {
-            if variation.value.all.contains(where: { $0.white?.id == ofMove.id || $0.black?.id == ofMove.id }) {
-                return variation.key
-            }
-        }
-        return nil
+        variationManager.variationName(for: ofMove)
     }
 
     func getVariation(_ ofMove: MoveModel) -> LineModel? {
-        guard let name = getVariationName(ofMove) else { return nil }
-        return variations[name]
+        variationManager.variation(for: ofMove)
     }
 
     func getVariation(_ name: String) -> LineModel? {
-        guard let variation = variations[name] else { return LineModel() }
-        return variation
+        variationManager.variation(named: name)
     }
 
-    private static let keyDisambiguator: Character = "\u{1}"
-
     func addVariation(_ name: String, variation: LineModel) {
-        variations[uniqueVariationKey(for: name)] = variation
+        variationManager.add(name: name, line: variation)
     }
 
     static func displayName(forVariation key: String) -> String {
-        String(key.prefix(while: { $0 != keyDisambiguator }))
-    }
-
-    private func uniqueVariationKey(for name: String) -> String {
-        guard variations[name] != nil else { return name }
-        var suffix = 2
-        while variations["\(name)\(MoveModel.keyDisambiguator)\(suffix)"] != nil { suffix += 1 }
-        return "\(name)\(MoveModel.keyDisambiguator)\(suffix)"
+        VariationManager.displayName(forKey: key)
     }
 
     func appendVariation(_ container: MoveModel, variation: String) {
-        variations[variation]?.last?.black = container
+        variationManager.appendMove(container, toVariationNamed: variation)
     }
 
     func appendVariation(_ container: MovePairModel, variation: String) {
-        variations[variation]?.add(container)
+        variationManager.appendPair(container, toVariationNamed: variation)
     }
 
     func hasVariations() -> Bool {
-        variations.count > 0
+        variationManager.hasVariations
     }
 
     func getVariations() -> [String] {
-        variations.keys.map({ $0 })
+        variationManager.keys
     }
 
     func removeVariation(_ name: String) {
-        variations.removeValue(forKey: name)
+        variationManager.remove(named: name)
     }
 
     static func == (lhs: MoveModel, rhs: MoveModel) -> Bool {
