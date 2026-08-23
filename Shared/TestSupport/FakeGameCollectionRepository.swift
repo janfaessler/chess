@@ -1,26 +1,19 @@
 import Foundation
 
-
 @MainActor
 final class FakeGameCollectionRepository: GameCollectionRepository {
 
     private(set) var storedCollections: [GameCollection]
-    var importResult: [GameData]
 
-    init(collections: [GameCollection] = [], importResult: [GameData] = []) {
+    init(collections: [GameCollection] = []) {
         self.storedCollections = collections
-        self.importResult = importResult
     }
 
-    func load() -> [GameCollection] {
+    func load() throws -> [GameCollection] {
         storedCollections
     }
 
-    func save(_ collections: [GameCollection]) {
+    func save(_ collections: [GameCollection]) throws {
         storedCollections = collections
-    }
-
-    func importGames(from url: URL) async -> [GameData] {
-        importResult
     }
 }

@@ -74,7 +74,7 @@ enum TestSupport {
 
         for (index, pgn) in [seededGamePgn, seededSecondGamePgn].enumerated() {
             guard let pgnGame = PgnParser.parse(pgn).first,
-                  let gameEntity = GameEntity(from: GameData.from(pgnGame), order: index) else { continue }
+                  let gameEntity = try? GameEntity(from: GameData.from(pgnGame), order: index) else { continue }
             gameEntity.collection = collection
             collection.games.append(gameEntity)
         }

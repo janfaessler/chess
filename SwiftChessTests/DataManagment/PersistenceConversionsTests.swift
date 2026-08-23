@@ -11,7 +11,7 @@ struct PersistenceConversionsTests {
         return ModelContext(container)
     }
 
-    @Test func testToGameData_corruptMovesData_returnsNil() throws {
+    @Test func testToGameData_corruptMovesData_throws() throws {
         let context = try makeContext()
         let entity = GameEntity(
             title: "corrupt",
@@ -23,15 +23,15 @@ struct PersistenceConversionsTests {
         )
         context.insert(entity)
 
-        #expect(entity.toGameData() == nil, "a game with undecodable moves must decode to nil, not empty data")
+        #expect(throws: (any Error).self) { try entity.toGameData() }
     }
 
     @Test func testToGameData_validData_roundTrips() throws {
         let context = try makeContext()
-        let entity = try #require(GameEntity(from: GameData(headers: ["White": "A"], moves: [], result: "*", comment: nil), order: 0))
+        let entity = try GameEntity(from: GameData(headers: ["White": "A"], moves: [], result: "*", comment: nil), order: 0)
         context.insert(entity)
 
-        let gameData = try #require(entity.toGameData())
+        let gameData = try entity.toGameData()
         #expect(gameData.headers["White"] == "A")
     }
 }
