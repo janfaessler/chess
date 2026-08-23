@@ -71,7 +71,7 @@ class Piece: Identifiable, ChessPiece, @unchecked Sendable {
         return Move(row, file, piece: Piece.create(type: self.type, color: self.color, row: self.row, file: self.file), type: type)
     }
 
-    func createMove(_ move: any StringProtocol, type: MoveType, promoteTo: PieceType) -> Move? {
+    func createMove(_ move: any StringProtocol, type: MoveType, promoteTo: PromotionPiece) -> Move? {
         return Move(move, piece: Piece.create(type: self.type, color: self.color, row: self.row, file: self.file), type: type, promoteTo: promoteTo)
     }
 

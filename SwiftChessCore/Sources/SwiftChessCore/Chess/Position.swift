@@ -85,6 +85,6 @@ public struct Position: Sendable {
     
     private func applyPromotion(_ figures: inout [any ChessPiece], move: Move) {
         figures.removeAll(where: { PromotionRules.isPawnBeingPromoted($0, by: move) })
-        figures.append(Piece.create(type: move.promoteTo, color: move.piece.color, row: move.row, file: move.file))
+        figures.append(Piece.create(type: move.promoteTo.pieceType, color: move.piece.color, row: move.row, file: move.file))
     }
 }

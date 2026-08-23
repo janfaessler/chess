@@ -66,7 +66,7 @@ class BoardModel {
         }
     }
 
-    func doPromote(_ to: PieceType) throws {
+    func doPromote(_ to: PromotionPiece) throws {
         guard let move = moveToPromote else { return }
         try doMove(Move(move, promoteTo: to))
         moveToPromote = nil

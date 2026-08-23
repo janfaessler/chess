@@ -130,10 +130,12 @@ class MoveFactory {
         return promotionParts.count > 1
     }
     
-    private static func getPromotToFigure(_ input:any StringProtocol) -> PieceType {
+    private static func getPromotToFigure(_ input:any StringProtocol) -> PromotionPiece {
         let promotionParts = input.split(separator: NotationFactory.Promotion)
-        guard let lastPart = promotionParts.last else { return .queen }
-        return getPieceType(clean(String(lastPart))) ?? .queen
+        guard let lastPart = promotionParts.last,
+              let firstChar = clean(String(lastPart)).first,
+              let piece = PromotionPiece(fenChar: firstChar) else { return .queen }
+        return piece
     }
     
     private static func isCastlingMove(_ input:any StringProtocol) -> Bool {

@@ -10,12 +10,12 @@ public struct Move: Identifiable, Equatable, Sendable {
     public let piece: any ChessPiece
     public let type: MoveType
     public let startingSquare: Square
-    public let promoteTo: PieceType
+    public let promoteTo: PromotionPiece
 
     public var row: Int { destination.row }
     public var file: Int { destination.file }
 
-    public init?(_ r: Int, _ f: Int, piece: any ChessPiece, type: MoveType = MoveType.normal, promoteTo: PieceType = PieceType.queen) {
+    public init?(_ r: Int, _ f: Int, piece: any ChessPiece, type: MoveType = MoveType.normal, promoteTo: PromotionPiece = .queen) {
         guard let destination = Square(row: r, file: f) else { return nil }
         self.destination = destination
         self.piece = piece
@@ -24,7 +24,7 @@ public struct Move: Identifiable, Equatable, Sendable {
         self.promoteTo = promoteTo
     }
 
-    public init(_ move: Move, promoteTo: PieceType) {
+    public init(_ move: Move, promoteTo: PromotionPiece) {
         self.destination = move.destination
         self.piece = move.piece
         self.startingSquare = move.startingSquare
@@ -32,7 +32,7 @@ public struct Move: Identifiable, Equatable, Sendable {
         self.promoteTo = promoteTo
     }
 
-    public init?(_ squareName: any StringProtocol, piece: any ChessPiece, type: MoveType, promoteTo: PieceType = PieceType.queen) {
+    public init?(_ squareName: any StringProtocol, piece: any ChessPiece, type: MoveType, promoteTo: PromotionPiece = .queen) {
         guard let square = Square(squareName) else { return nil }
         self.destination = square
         self.piece = piece
