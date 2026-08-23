@@ -29,7 +29,7 @@ class RightClickView: NSView {
     private var rightDragStartSquare: String?
     private var dragColor: AnnotationColor = .green
     private var isTrackingRightMouse = false
-    nonisolated(unsafe) private var eventMonitor: Any?
+    private var eventMonitor: Any?
 
     override var isFlipped: Bool { true }
 
@@ -49,7 +49,7 @@ class RightClickView: NSView {
         }
     }
 
-    deinit {
+    isolated deinit {
         if let eventMonitor { NSEvent.removeMonitor(eventMonitor) }
     }
 
