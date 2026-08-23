@@ -2,6 +2,7 @@ import SwiftUI
 
 struct NavigationManagerView: View {
     var model: NavigationManagerModel
+    @Environment(EngineSettings.self) private var engineSettings
     @State var sideBarVisibility: NavigationSplitViewVisibility = .doubleColumn
     @State var selectedSideBarItem: SideBarItem = .openPgn
     @FocusState private var focusOnGame: Bool
@@ -123,7 +124,7 @@ struct NavigationManagerView: View {
                     }
                     .navigationTitle("")
                 case .game(let gameData):
-                    GameView(gameData)
+                    GameView(gameData, settings: engineSettings)
                         .id(gameData.id)
                         .focused($focusOnGame)
                         .navigationTitle(gameData.getTitle())

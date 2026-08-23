@@ -18,20 +18,22 @@ class ControlModel {
     var moveList = MoveListModel()
 
     var engine: any EngineProtocol
+    let settings: EngineSettings
 
     private var observationTasks: [Task<Void, Never>] = []
     private var isStarted = false
     var isLoading = false
 
-    init(_ game: GameData) {
+    init(_ game: GameData, settings: EngineSettings = EngineSettings()) {
         self.game = game
+        self.settings = settings
 
         if let fen = TestSupport.boardFen, let position = try? FenParser.parse(fen) {
             board = BoardModel(position)
         } else {
             board = BoardModel()
         }
-        engine = TestSupport.isUITesting ? StubEngine() : ChessEngine()
+        engine = TestSupport.isUITesting ? StubEngine() : ChessEngine(settings: settings)
     }
 
     func start() {

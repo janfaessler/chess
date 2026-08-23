@@ -6,8 +6,8 @@ struct GameView: View {
 
     @State private var model: ControlModel
 
-    init(_ game: GameData) {
-        _model = State(wrappedValue: ControlModel(game))
+    init(_ game: GameData, settings: EngineSettings) {
+        _model = State(wrappedValue: ControlModel(game, settings: settings))
     }
 
     var body: some View {

@@ -12,7 +12,7 @@ final class ChessEngine: EngineProtocol {
     private let evalContinuation: AsyncStream<[EngineLine]>.Continuation
 
     private let engine: Engine
-    private let settings = EngineSettings.shared
+    private let settings: EngineSettings
     private var lines: [EngineLine] = []
     private var pos: Position = PositionFactory.startingPosition()
 
@@ -22,9 +22,10 @@ final class ChessEngine: EngineProtocol {
     private var settingsTask: Task<Void, Never>?
     private let debounceDelay = Duration.seconds(1)
 
-    init() {
+    init(settings: EngineSettings = EngineSettings()) {
         (evalStream, evalContinuation) = AsyncStream.makeStream(of: [EngineLine].self)
         engine = Engine(type: .stockfish)
+        self.settings = settings
     }
 
     private func startIfNeeded() {

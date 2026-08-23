@@ -2,7 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
 
-    private var settings: EngineSettings { EngineSettings.shared }
+    @Environment(EngineSettings.self) private var settings
 
     private let maxCores = ProcessInfo.processInfo.processorCount
 

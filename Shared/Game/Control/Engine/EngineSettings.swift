@@ -4,8 +4,6 @@ import Foundation
 @MainActor
 final class EngineSettings {
 
-    static let shared = EngineSettings()
-
     static let defaultCoreCount = 2
     static let defaultLineCount = 3
     static let defaultDepth = 15
@@ -42,7 +40,7 @@ final class EngineSettings {
         }
     }
 
-    private init() {
+    init() {
         (changes, changesContinuation) = AsyncStream.makeStream(of: Void.self)
     }
 }

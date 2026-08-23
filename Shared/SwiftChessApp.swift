@@ -5,6 +5,7 @@ import SwiftData
 struct SwiftChessApp: App {
 
     private let container: ModelContainer
+    @State private var engineSettings = EngineSettings()
 
     init() {
         NSWindow.allowsAutomaticWindowTabbing = false
@@ -40,10 +41,12 @@ struct SwiftChessApp: App {
             ContentView()
         }
         .modelContainer(container)
+        .environment(engineSettings)
         #if os(macOS)
         Settings {
             SettingsView()
         }
+        .environment(engineSettings)
         #endif
     }
 }
