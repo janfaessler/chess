@@ -96,5 +96,5 @@ struct OpenPgnView: View {
 #Preview {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: CollectionEntity.self, GameEntity.self, configurations: config)
-    OpenPgnView(model: NavigationManagerModel(repository: SwiftDataGameCollectionRepository(modelContext: container.mainContext)))
+    OpenPgnView(model: NavigationManagerModel(gameDataRepo: SwiftDataGameCollectionRepository(modelContext: container.mainContext), fileRepo: PgnFilesRepository()))
 }

@@ -6,21 +6,34 @@ import os
 public class NavigationManagerModel {
 
     var collections: [GameCollection] = []
+    var errorAlert: String?
 
-    private let repository: GameCollectionRepository
+    private let gameDataRepo: GameCollectionRepository
+    private let fileRepo: FileRepository
 
-    init(repository: GameCollectionRepository) {
-        self.repository = repository
-        collections = repository.load()
+    init(gameDataRepo: GameCollectionRepository, fileRepo: FileRepository) {
+        self.gameDataRepo = gameDataRepo
+        self.fileRepo = fileRepo
+        do {
+            collections = try gameDataRepo.load()
+        }
+        catch {
+            errorAlert = "Failed to load collections: \(error.localizedDescription)"
+        }
     }
 
     func openFiles(urls: [URL]) async {
         for url in urls {
-            let gameDataArray = await repository.importGames(from: url)
-            collections.append(
-                GameCollection(name: url.lastPathComponent, expanded: true, games: gameDataArray)
-            )
-            save()
+            do {
+                let gameDataArray = try await fileRepo.importGames(from: url)
+                collections.append(
+                    GameCollection(name: url.lastPathComponent, expanded: true, games: gameDataArray)
+                )
+                save()
+            }
+            catch {
+                errorAlert = "Failed to import \(url.lastPathComponent): \(error.localizedDescription)"
+            }
         }
     }
 
@@ -61,6 +74,15 @@ public class NavigationManagerModel {
     }
 
     func save() {
-        repository.save(collections)
+        do {
+            try gameDataRepo.save(collections)
+        }
+        catch {
+            errorAlert = "Failed to save collections: \(error.localizedDescription)"
+        }        
+    }
+
+    func clearError() {
+        errorAlert = nil
     }
 }

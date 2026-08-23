@@ -17,7 +17,8 @@ struct ContentView: View {
         .onAppear {
             if model == nil {
                 let repository = SwiftDataGameCollectionRepository(modelContext: modelContext)
-                model = NavigationManagerModel(repository: repository)
+                let fileRepo = PgnFilesRepository()
+                model = NavigationManagerModel(gameDataRepo: repository, fileRepo: fileRepo)
             }
         }
     }

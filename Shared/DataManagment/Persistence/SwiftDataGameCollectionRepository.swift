@@ -2,6 +2,11 @@ import Foundation
 import SwiftData
 import SwiftChessCore
 
+enum RepositoryError: Error {
+    case persistenceFailed(Error),
+         loadCollectionFailed(Error)
+}
+
 @MainActor
 final class SwiftDataGameCollectionRepository: GameCollectionRepository {
 
@@ -13,7 +18,7 @@ final class SwiftDataGameCollectionRepository: GameCollectionRepository {
         self.modelContext = modelContext
     }
 
-    func load() -> [GameCollection] {
+    func load() throws -> [GameCollection] {
         do {
             let descriptor = FetchDescriptor<CollectionEntity>(
                 sortBy: [SortDescriptor(\.order)]
@@ -22,11 +27,11 @@ final class SwiftDataGameCollectionRepository: GameCollectionRepository {
             return entities.map { $0.toGameCollection() }
         } catch {
             logger.error("Failed to load collections: \(error)")
-            return []
+            throw RepositoryError.loadCollectionFailed(error)
         }
     }
 
-    func save(_ collections: [GameCollection]) {
+    func save(_ collections: [GameCollection]) throws {
         do {
             let existing = try modelContext.fetch(FetchDescriptor<CollectionEntity>())
             var existingByID = Dictionary(uniqueKeysWithValues: existing.map { ($0.id, $0) })
@@ -52,6 +57,7 @@ final class SwiftDataGameCollectionRepository: GameCollectionRepository {
             try modelContext.save()
         } catch {
             logger.error("Failed to save collections: \(error)")
+            throw RepositoryError.persistenceFailed(error)
         }
     }
 
@@ -74,26 +80,5 @@ final class SwiftDataGameCollectionRepository: GameCollectionRepository {
         }
     }
 
-    func importGames(from url: URL) async -> [GameData] {
-        let pgnGames = await loadGames(url)
-        return pgnGames.map { GameData.from($0) }
-    }
 
-    private func loadGames(_ url: URL) async -> [PgnGame] {
-        await Task.detached(priority: .utility) {
-            let pgn = Self.getFileContent(url)
-            return PgnParser.parse(pgn)
-        }.value
-    }
-
-    nonisolated private static func getFileContent(_ url: URL) -> String {
-        let path = url.path(percentEncoded: false)
-        do {
-            var encoding: String.Encoding = .utf8
-            return try String(contentsOfFile: path, usedEncoding: &encoding)
-        } catch {
-            Log.logger("SwiftDataGameCollectionRepository").info("content of path <\(path)> could not be loaded: \(error)")
-        }
-        return ""
-    }
 }
