@@ -7,19 +7,40 @@ class ChessUITestCase: XCTestCase {
     let secondGameTitle = "Carol - Dave"
     let seededCollectionName = "UITest Collection"
 
+    nonisolated(unsafe) static var sharedApp: XCUIApplication?
+
+    nonisolated override class func tearDown() {
+        MainActor.assumeIsolated {
+            sharedApp?.terminate()
+            sharedApp = nil
+        }
+        super.tearDown()
+    }
+
+    nonisolated class func launchShared() {
+        MainActor.assumeIsolated {
+            let app = XCUIApplication()
+            app.launchArguments += ["-uiTesting", "-AppleInterfaceStyle", "Dark"]
+            app.launch()
+            sharedApp = app
+        }
+    }
+
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
     }
 
     func launchApp(boardFen: String? = nil) -> XCUIApplication {
+        if boardFen == nil, let app = Self.sharedApp {
+            return app
+        }
         let app = XCUIApplication()
         app.launchArguments += ["-uiTesting", "-AppleInterfaceStyle", "Dark"]
         if let boardFen {
             app.launchEnvironment["UITEST_BOARD_FEN"] = boardFen
         }
         app.launch()
-
         return app
     }
     

@@ -2,6 +2,23 @@ import XCTest
 
 final class MoveListNavigationUITests: ChessUITestCase {
 
+    override class func setUp() {
+        super.setUp()
+        launchShared()
+    }
+
+    override func setUp() {
+        super.setUp()
+        MainActor.assumeIsolated {
+            guard let app = Self.sharedApp else { return }
+            openGame(app, firstGameTitle)
+            let navStart = element(app, "nav-start")
+            if navStart.waitForExistence(timeout: 3) {
+                navStart.click()
+            }
+        }
+    }
+
     func testForwardPlaysFirstMove() {
         let app = launchApp()
         openGame(app, firstGameTitle)

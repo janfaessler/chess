@@ -2,6 +2,25 @@ import XCTest
 
 final class AnnotationUITests: ChessUITestCase {
 
+    override class func setUp() {
+        super.setUp()
+        launchShared()
+    }
+
+    override func setUp() {
+        super.setUp()
+        MainActor.assumeIsolated {
+            guard let app = Self.sharedApp else { return }
+            openGame(app, firstGameTitle)
+            // Navigate to end then start so any in-memory user highlights are cleared by navigation
+            let navEnd = element(app, "nav-end")
+            if navEnd.waitForExistence(timeout: 3) {
+                navEnd.click()
+            }
+            click(app, "nav-start")
+        }
+    }
+
     // Normalized board coordinates for a square (not-flipped white-at-bottom orientation).
     // file: a=1…h=8, rank: 1…8
     private func boardCoord(file: Int, rank: Int) -> CGVector {
