@@ -24,10 +24,6 @@ public class FenParser {
 
     }
 
-    public static func parse(trusted fen:String) -> Position {
-        try! parse(fen)
-    }
-
     private static func isValidBoard(_ board: String) -> Bool {
         guard board.split(separator: "/").count == 8 else { return false }
         let allowed = Set("pnbrqkPNBRQK12345678")

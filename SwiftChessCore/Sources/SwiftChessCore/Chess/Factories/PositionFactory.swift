@@ -5,7 +5,12 @@ public class PositionFactory {
     static let startingPositionFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
     public static func startingPosition() -> Position {
-        return FenParser.parse(trusted: startingPositionFen)
+        guard let position = try? FenParser.parse(startingPositionFen)
+        else
+        {
+            fatalError("Failed to parse starting position")
+        }
+        return position
     }
 
     public static func loadPosition(_ fen:String) -> Position? {
