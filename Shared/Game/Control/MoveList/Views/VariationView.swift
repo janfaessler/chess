@@ -3,130 +3,111 @@ import SwiftUI
 struct VariationView: View {
     var model: MoveListModel
     var move: MoveModel
-    @State private var variation: String?
-    @State private var isExpanded: Bool = false
-    var moveNumber: Int
     var nestingLevel: Int = 0
 
-    private var backgroundColor: Color {
-        switch nestingLevel {
-        case 1: return .blue.opacity(0.06)
-        case 2: return .green.opacity(0.06)
-        case 3: return .orange.opacity(0.06)
-        default: return .purple.opacity(0.06)
-        }
-    }
-
-    private var accentColor: Color {
-        switch nestingLevel {
-        case 1: return .blue
-        case 2: return .green
-        case 3: return .orange
-        default: return .purple
-        }
-    }
-
-    private var displayedVariation: String? {
-        activeVariation ?? (isExpanded ? variation : nil)
-    }
-
-    private var activeVariation: String? {
-        guard let current = model.currentMove else { return nil }
-        for name in move.getVariations() {
-            guard let line = move.getVariation(name) else { continue }
-            for pair in line.all {
-                if let white = pair.white, white == current || model.isMove(current, childOf: white) {
-                    return name
-                }
-                if let black = pair.black, black == current || model.isMove(current, childOf: black) {
-                    return name
-                }
-            }
-        }
-        return nil
-    }
+    @State private var collapsed: Set<String> = []
+    @State private var pendingDeleteVariation: String? = nil
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Menu {
-                ForEach(move.getVariations(), id: \.self) { variationName in
-                    Button(action: {
-                        if self.variation == variationName {
-                            self.variation = nil
-                            self.isExpanded = false
-                        } else {
-                            self.variation = variationName
-                            self.isExpanded = true
+        VStack(alignment: .leading, spacing: 3) {
+            ForEach(move.getVariations(), id: \.self) { variationName in
+                if let variationLine = move.getVariation(variationName) {
+                    let isActive = isActiveVariation(variationName)
+                    let isCollapsed = collapsed.contains(variationName)
+
+                    VStack(alignment: .leading, spacing: 0) {
+                        HStack(spacing: 4) {
+                            Button {
+                                if isCollapsed {
+                                    collapsed.remove(variationName)
+                                } else {
+                                    collapsed.insert(variationName)
+                                }
+                            } label: {
+                                Image(systemName: isCollapsed ? "chevron.right" : "chevron.down")
+                                    .font(.system(size: 8, weight: .semibold))
+                                    .foregroundStyle(.secondary)
+                                    .frame(width: 10)
+                            }
+                            .buttonStyle(.plain)
+
+                            Text(firstMoveLabel(variationLine))
+                                .font(.system(size: 10))
+                                .foregroundStyle(isActive ? Color.primary : Color.secondary)
+
+                            Spacer()
+
+                            Button {
+                                pendingDeleteVariation = variationName
+                            } label: {
+                                Image(systemName: "xmark")
+                                    .font(.system(size: 8))
+                                    .foregroundStyle(.secondary)
+                            }
+                            .buttonStyle(.plain)
+                            .help("Delete variation")
+                            .accessibilityIdentifier("variation-delete")
                         }
-                    }) {
-                        HStack {
-                            Text(getName(variationName))
-                            if displayedVariation == variationName {
-                                Image(systemName: "checkmark")
+                        .padding(.horizontal, 2)
+                        .padding(.vertical, 2)
+
+                        if !isCollapsed {
+                            HStack(alignment: .top, spacing: 0) {
+                                RoundedRectangle(cornerRadius: 1)
+                                    .fill(isActive ? Color.accentColor.opacity(0.7) : Color.secondary.opacity(0.3))
+                                    .frame(width: 2)
+                                LineView(model: model, line: variationLine, nestingLevel: nestingLevel)
+                                    .padding(.leading, 6)
+                                    .padding(.vertical, 2)
                             }
                         }
                     }
                 }
-            } label: {
-                HStack(spacing: 3) {
-                    Image(systemName: "arrow.triangle.branch")
-                        .font(.system(size: 9))
-                        .foregroundStyle(accentColor)
-
-                    Text(verbatim: "Var (\(move.getVariations().count))")
-                        .font(.system(size: 10))
-
-                    if let dv = displayedVariation {
-                        Text("• \(getName(dv))")
-                            .font(.system(size: 10))
-                            .foregroundStyle(.secondary)
-                            .lineLimit(1)
-                    }
-
-                    Spacer()
-
-                    Image(systemName: displayedVariation != nil ? "chevron.down" : "chevron.right")
-                        .font(.system(size: 8))
-                        .foregroundStyle(accentColor.opacity(0.7))
-                }
-                .padding(.horizontal, 6)
-                .padding(.vertical, 3)
-                .background(backgroundColor, in: RoundedRectangle(cornerRadius: 4))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 4)
-                        .strokeBorder(accentColor.opacity(0.25), lineWidth: 0.5)
-                )
-            }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("variation-menu")
-
-            if let selectedVariation = displayedVariation,
-               let variationLine = move.getVariation(selectedVariation) {
-                LineView(model: model, line: variationLine, nestingLevel: nestingLevel)
-                    .padding(.leading, 6)
-                    .padding(.top, 2)
-                    .padding(.trailing, 2)
-                    .padding(.bottom, 2)
-                    .background(
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(backgroundColor.opacity(0.4))
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 4)
-                            .strokeBorder(accentColor.opacity(0.15), lineWidth: 0.5)
-                    )
             }
         }
         .padding(.vertical, 1)
+        .accessibilityIdentifier("variation-view")
+        .alert("Delete Variation?", isPresented: Binding(
+            get: { pendingDeleteVariation != nil },
+            set: { if !$0 { pendingDeleteVariation = nil } }
+        )) {
+            Button("Delete", role: .destructive) {
+                if let name = pendingDeleteVariation {
+                    model.deleteVariation(name: name, from: move)
+                }
+                pendingDeleteVariation = nil
+            }
+            Button("Cancel", role: .cancel) {
+                pendingDeleteVariation = nil
+            }
+        } message: {
+            if let name = pendingDeleteVariation,
+               let line = move.getVariation(name) {
+                Text("Delete the variation starting with \(firstMoveLabel(line))? This cannot be undone.")
+            }
+        }
     }
 
-    func getName(_ variation: String) -> String {
-        let displayed = MoveModel.displayName(forVariation: variation)
-        switch move.color {
-        case .white:
-            return "\(moveNumber). \(displayed)"
-        case .black:
-            return "\(moveNumber)... \(displayed)"
+    private func firstMoveLabel(_ line: LineModel) -> String {
+        guard let first = line.first else { return "" }
+        let number = line.variationStartNumber
+        switch first.color {
+        case .white: return "\(number). \(first.move)"
+        case .black: return "\(number)... \(first.move)"
         }
+    }
+
+    private func isActiveVariation(_ name: String) -> Bool {
+        guard let current = model.currentMove else { return false }
+        guard let line = move.getVariation(name) else { return false }
+        for pair in line.all {
+            if let white = pair.white, white == current || model.isMove(current, childOf: white) {
+                return true
+            }
+            if let black = pair.black, black == current || model.isMove(current, childOf: black) {
+                return true
+            }
+        }
+        return false
     }
 }

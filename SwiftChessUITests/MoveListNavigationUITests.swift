@@ -43,11 +43,10 @@ final class MoveListNavigationUITests: ChessUITestCase {
         assertExists(app, "figure-e2", "Left arrow should undo the move")
     }
 
-    func testVariationMenuAppearsForMoveWithVariations() {
+    func testVariationsAlwaysVisibleForMoveWithVariations() {
         let app = launchApp()
         openGame(app, firstGameTitle)
 
-        click(app, "movelist-Nc6")
-        assertExists(app, "variation-menu", "A variation control should be shown for Nc6")
+        assertExists(app, "variation-view", "Variations should always be visible without requiring a click")
     }
 }

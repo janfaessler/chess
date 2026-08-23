@@ -20,6 +20,8 @@ struct MoveView: View {
     let move: MoveModel
     let action: () -> Void
 
+    @State private var showDeleteConfirmation = false
+
     var body: some View {
         Button {
             action()
@@ -56,5 +58,35 @@ struct MoveView: View {
         .buttonStyle(.plain)
         .accessibilityIdentifier("movelist-\(move.move)")
         .accessibilityAddTraits(model.isCurrentMove(move) ? .isSelected : [])
+        .contextMenu {
+            Menu("Assessment") {
+                Button("None") { model.setAnnotation(nil, for: move) }
+                Divider()
+                ForEach(MoveAnnotation.allCases, id: \.self) { annotation in
+                    Button {
+                        model.setAnnotation(annotation, for: move)
+                    } label: {
+                        Label(
+                            "\(annotation.symbol) \(annotation.displayName)",
+                            systemImage: move.annotation == annotation ? "checkmark" : "circle"
+                        )
+                    }
+                }
+            }
+            Divider()
+            Button(role: .destructive) {
+                showDeleteConfirmation = true
+            } label: {
+                Label("Delete from here", systemImage: "trash")
+            }
+        }
+        .alert("Delete from here?", isPresented: $showDeleteConfirmation) {
+            Button("Delete", role: .destructive) {
+                model.deleteFrom(move)
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Delete \"\(move.move)\" and all following moves? This cannot be undone.")
+        }
     }
 }

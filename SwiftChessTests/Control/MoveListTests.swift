@@ -6,100 +6,194 @@ struct MoveListTests {
 
     let testee = MoveListModel()
 
-    @Test func testShouldShowVariationList() throws {
+    // MARK: - Annotation
+
+    @Test func testSetAnnotation() throws {
+        testee.movePlayed("e4")
+        let e4 = try #require(testee.currentMove)
+        #expect(e4.annotation == nil)
+
+        testee.setAnnotation(.brilliant, for: e4)
+        #expect(e4.annotation == .brilliant)
+
+        testee.setAnnotation(.blunder, for: e4)
+        #expect(e4.annotation == .blunder)
+
+        testee.setAnnotation(nil, for: e4)
+        #expect(e4.annotation == nil)
+    }
+
+    @Test func testSetAnnotationDoesNotAffectNavigation() throws {
+        testee.movePlayed("e4")
+        testee.movePlayed("e5")
+        let e4 = try #require(testee.list[0].white)
+
+        testee.setAnnotation(.mistake, for: e4)
+        #expect(e4.annotation == .mistake)
+
+        testee.start()
+        testee.forward()
+        #expect(testee.currentMove?.move == "e4")
+        #expect(testee.currentMove?.annotation == .mistake)
+    }
+
+    // MARK: - Delete from main line
+
+    @Test func testDeleteWhiteMoveFromMainLine() throws {
+        testee.movePlayed("e4")
+        testee.movePlayed("e5")
+        testee.movePlayed("Nc3")
+        testee.movePlayed("Nc6")
+
+        let nc3 = try #require(testee.list[1].white)
+        #expect(nc3.move == "Nc3")
+
+        testee.goToMove(nc3)
+        testee.deleteFrom(nc3)
+
+        #expect(testee.list.count == 1)
+        #expect(testee.list[0].white?.move == "e4")
+        #expect(testee.list[0].black?.move == "e5")
+        #expect(testee.currentMove == nil)
+    }
+
+    @Test func testDeleteBlackMoveKeepsWhiteInPair() throws {
+        testee.movePlayed("e4")
+        testee.movePlayed("e5")
+        testee.movePlayed("Nc3")
+
+        let e5 = try #require(testee.list[0].black)
+        #expect(e5.move == "e5")
+
+        testee.deleteFrom(e5)
+
+        #expect(testee.list[0].white?.move == "e4")
+        #expect(testee.list[0].black == nil)
+        #expect(testee.list.count == 1)
+        #expect(testee.currentMove == nil)
+    }
+
+    @Test func testDeleteFromKeepsCurrentMoveIfBeforeDeletion() throws {
+        testee.movePlayed("e4")
+        testee.movePlayed("e5")
+        testee.movePlayed("Nc3")
+        testee.movePlayed("Nc6")
+
+        let e4 = try #require(testee.list[0].white)
+        let nc3 = try #require(testee.list[1].white)
+        testee.goToMove(e4)
+        testee.deleteFrom(nc3)
+
+        #expect(testee.currentMove?.move == "e4")
+    }
+
+    @Test func testDeleteFromResetsCurrentMoveIfDeleted() throws {
+        testee.movePlayed("e4")
+        testee.movePlayed("e5")
+        testee.movePlayed("Nc3")
+
+        let nc3 = try #require(testee.list[1].white)
+        testee.goToMove(nc3)
+        testee.deleteFrom(nc3)
+
+        #expect(testee.currentMove == nil)
+    }
+
+    // MARK: - Delete variation
+
+    @Test func testDeleteVariationRemovesIt() throws {
+        testee.movePlayed("e4")
+        testee.movePlayed("e5")
+        testee.movePlayed("Nc3")
+        testee.back()
+        testee.movePlayed("Nf3")
+
+        let branchMove = try #require(testee.list[1].white)
+        #expect(branchMove.hasVariations() == true)
+        #expect(branchMove.getVariations().count == 1)
+
+        let variationName = try #require(branchMove.getVariations().first)
+        testee.deleteVariation(name: variationName, from: branchMove)
+
+        #expect(branchMove.hasVariations() == false)
+        #expect(branchMove.getVariations().count == 0)
+    }
+
+    @Test func testDeleteVariationResetsCurrentMoveIfInsideIt() throws {
+        testee.movePlayed("e4")
+        testee.movePlayed("e5")
+        testee.movePlayed("Nc3")
+        testee.back()
+        testee.movePlayed("Nf3")
+
+        let branchMove = try #require(testee.list[1].white)
+        let variationName = try #require(branchMove.getVariations().first)
+        #expect(testee.currentMove?.move == "Nf3")
+
+        testee.deleteVariation(name: variationName, from: branchMove)
+
+        #expect(testee.currentMove == nil)
+    }
+
+    @Test func testDeleteVariationKeepsCurrentMoveIfElsewhere() throws {
         testee.movePlayed("e4")
         testee.movePlayed("e5")
         testee.movePlayed("Nc3")
         testee.movePlayed("Nc6")
         testee.back()
-        let root = try #require(testee.currentMove)
-        let rootPair = testee.list[1]
-        #expect(root.move == "Nc3")
-        #expect(rootPair.white?.move == root.move)
-        #expect(root.hasVariations() == false)
-        #expect(!showVariations(rootPair, in: testee))
-        #expect(!showVariations(rootPair, color: .white, in: testee))
-        #expect(!showVariations(rootPair, color: .black, in: testee))
-
         testee.back()
         testee.movePlayed("Nf3")
-        let variationFirst = try #require(testee.currentMove)
-        let variation = try #require(root.getVariation(variationFirst))
-        let variationPair = variation.all[0]
-        #expect(variationFirst.move == "Nf3")
-        #expect(variationPair.white?.move == "Nf3")
-        #expect(root.hasVariations() == true)
-        #expect(showVariations(rootPair, in: testee))
-        #expect(showVariations(rootPair, color: .white, in: testee))
-        #expect(!showVariations(rootPair, color: .black, in: testee))
-        #expect(!showVariations(variationPair, in: testee))
-        #expect(!showVariations(variationPair, color: .white, in: testee))
-        #expect(!showVariations(variationPair, color: .black, in: testee))
 
-        testee.movePlayed("Nf6")
-        let variationSecound = try #require(testee.currentMove)
-        #expect(variationSecound.move == "Nf6")
-        #expect(variationPair.white?.move == "Nf3")
-        #expect(variationPair.black?.move == "Nf6")
-        #expect(root.hasVariations() == true)
-        #expect(showVariations(rootPair, in: testee))
-        #expect(showVariations(rootPair, color: .white, in: testee))
-        #expect(!showVariations(rootPair, color: .black, in: testee))
-        #expect(!showVariations(variationPair, in: testee))
-        #expect(!showVariations(variationPair, color: .white, in: testee))
-        #expect(!showVariations(variationPair, color: .black, in: testee))
+        let branchMove = try #require(testee.list[1].white)
+        let variationName = try #require(branchMove.getVariations().first)
 
-        testee.back()
-        testee.movePlayed("Nc6")
-        let supVariationFirst = try #require(testee.currentMove)
-        let supVariation = try #require(variationSecound.getVariation(supVariationFirst))
-        let supVariationPairFirst = supVariation.all[0]
-        #expect(supVariationFirst.move == "Nc6")
-        #expect(supVariationPairFirst.white == nil)
-        #expect(supVariationPairFirst.black?.move == "Nc6")
-        #expect(root.hasVariations() == true)
-        #expect(variationSecound.hasVariations() == true)
-        #expect(showVariations(rootPair, in: testee))
-        #expect(showVariations(rootPair, color: .white, in: testee))
-        #expect(!showVariations(rootPair, color: .black, in: testee))
-        #expect(showVariations(variationPair, in: testee))
-        #expect(!showVariations(variationPair, color: .white, in: testee))
-        #expect(showVariations(variationPair, color: .black, in: testee))
-        #expect(!showVariations(supVariationPairFirst, in: testee))
-        #expect(!showVariations(supVariationPairFirst, color: .white, in: testee))
-        #expect(!showVariations(supVariationPairFirst, color: .black, in: testee))
+        let nc6 = try #require(testee.list[1].black)
+        testee.goToMove(nc6)
+        testee.deleteVariation(name: variationName, from: branchMove)
 
+        #expect(testee.currentMove?.move == "Nc6")
+    }
+
+    // MARK: - Delete from variation
+
+    @Test func testDeleteFromVariationMove() throws {
+        testee.movePlayed("e4")
+        testee.movePlayed("e5")
         testee.movePlayed("Nc3")
-        let supVariationSecound = try #require(testee.currentMove)
-        let supVariationPairSecond = supVariation.all[1]
-        #expect(supVariationSecound.move == "Nc3")
-        #expect(supVariationPairSecond.white?.move == "Nc3")
-        #expect(supVariationPairSecond.black == nil)
-        #expect(root.hasVariations() == true)
-        #expect(variationSecound.hasVariations() == true)
-        #expect(showVariations(rootPair, in: testee))
-        #expect(showVariations(rootPair, color: .white, in: testee))
-        #expect(!showVariations(rootPair, color: .black, in: testee))
-        #expect(showVariations(variationPair, in: testee))
-        #expect(!showVariations(variationPair, color: .white, in: testee))
-        #expect(showVariations(variationPair, color: .black, in: testee))
-        #expect(!showVariations(supVariationPairFirst, in: testee))
-        #expect(!showVariations(supVariationPairFirst, color: .white, in: testee))
-        #expect(!showVariations(supVariationPairFirst, color: .black, in: testee))
+        testee.back()
+        testee.movePlayed("Nf3")
+        testee.movePlayed("Nf6")
+
+        let branchMove = try #require(testee.list[1].white)
+        let variationName = try #require(branchMove.getVariations().first)
+        let variation = try #require(branchMove.getVariation(variationName))
+
+        let nf6 = try #require(variation.all[0].black)
+        #expect(nf6.move == "Nf6")
+
+        testee.deleteFrom(nf6)
+
+        #expect(variation.all[0].black == nil)
+        #expect(variation.all.count == 1)
+        #expect(testee.currentMove == nil)
     }
 
-    private func showVariations(_ pair: MovePairModel, in model: MoveListModel) -> Bool {
-        showVariations(pair, color: .white, in: model) || showVariations(pair, color: .black, in: model)
-    }
+    @Test func testDeleteFromVariationResetsCurrentMoveIfDeleted() throws {
+        testee.movePlayed("e4")
+        testee.movePlayed("e5")
+        testee.movePlayed("Nc3")
+        testee.back()
+        testee.movePlayed("Nf3")
+        testee.movePlayed("Nf6")
 
-    private func showVariations(_ pair: MovePairModel, color: PieceColor, in model: MoveListModel) -> Bool {
-        guard let current = model.currentMove else { return false }
-        if color == .white {
-            guard let white = pair.white else { return false }
-            return current == white ? white.hasVariations() : model.isMove(current, childOf: white)
-        } else {
-            guard let black = pair.black else { return false }
-            return current == black ? black.hasVariations() : model.isMove(current, childOf: black)
-        }
+        let branchMove = try #require(testee.list[1].white)
+        let variationName = try #require(branchMove.getVariations().first)
+        let variation = try #require(branchMove.getVariation(variationName))
+        let nf3 = try #require(variation.all[0].white)
+
+        testee.goToMove(nf3)
+        testee.deleteFrom(nf3)
+
+        #expect(testee.currentMove == nil)
     }
 }

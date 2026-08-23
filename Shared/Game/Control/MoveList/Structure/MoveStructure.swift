@@ -145,4 +145,45 @@ class MoveStructure {
         }
         parentMoves[container.id] = to
     }
+
+    func deleteFrom(_ move: MoveModel) {
+        let removed: [MoveModel]
+        if line.index(of: move) != nil {
+            removed = line.truncate(from: move)
+        } else if let parent = parentMoves[move.id],
+                  let variationName = parent.getVariationName(move),
+                  let variation = parent.getVariation(variationName) {
+            removed = variation.truncate(from: move)
+        } else {
+            return
+        }
+        cleanupParentMoves(for: removed)
+    }
+
+    func deleteVariation(name: String, from: MoveModel) {
+        guard let variation = from.getVariation(name) else { return }
+        var removed: [MoveModel] = []
+        for pair in variation.all {
+            if let w = pair.white { removed.append(w) }
+            if let b = pair.black { removed.append(b) }
+        }
+        cleanupParentMoves(for: removed)
+        from.removeVariation(name)
+    }
+
+    private func cleanupParentMoves(for moves: [MoveModel]) {
+        for move in moves {
+            parentMoves.removeValue(forKey: move.id)
+            for variationName in move.getVariations() {
+                if let variation = move.getVariation(variationName) {
+                    var nested: [MoveModel] = []
+                    for pair in variation.all {
+                        if let w = pair.white { nested.append(w) }
+                        if let b = pair.black { nested.append(b) }
+                    }
+                    cleanupParentMoves(for: nested)
+                }
+            }
+        }
+    }
 }

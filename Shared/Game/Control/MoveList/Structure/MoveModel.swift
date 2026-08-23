@@ -87,6 +87,10 @@ class MoveModel : Identifiable, Equatable {
         variations.keys.map({ $0 })
     }
 
+    func removeVariation(_ name: String) {
+        variations.removeValue(forKey: name)
+    }
+
     static func == (lhs: MoveModel, rhs: MoveModel) -> Bool {
         lhs.id == rhs.id
     }

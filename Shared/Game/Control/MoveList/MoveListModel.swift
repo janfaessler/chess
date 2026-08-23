@@ -109,6 +109,34 @@ class MoveListModel {
         structure.move(move, isChildOf: parent)
     }
 
+    func deleteFrom(_ move: MoveModel) {
+        structure.deleteFrom(move)
+        resetCurrentMoveIfNeeded()
+    }
+
+    func deleteVariation(name: String, from: MoveModel) {
+        structure.deleteVariation(name: name, from: from)
+        resetCurrentMoveIfNeeded()
+    }
+
+    func setAnnotation(_ annotation: MoveAnnotation?, for move: MoveModel) {
+        move.annotation = annotation
+    }
+
+    private func resetCurrentMoveIfNeeded() {
+        guard let current = currentMove else { return }
+        guard !isCurrentMoveReachable(current) else { return }
+        currentMove = nil
+        history.clear()
+        updatePosition()
+    }
+
+    private func isCurrentMoveReachable(_ move: MoveModel) -> Bool {
+        if structure.lineModel.index(of: move) != nil { return true }
+        if structure.parent(of: move) != nil { return true }
+        return false
+    }
+
     private func updatePosition() {
         guard let position = self.position else {
             self.logger.warning("updatePosition: no position available")
