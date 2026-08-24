@@ -1,13 +1,14 @@
 import Foundation
 
 public struct PgnGame : Identifiable, Hashable, Equatable, Sendable {
-    public let id = UUID()
+    public let id: UUID
     public let headers:[String:String]
     public let moves:[PgnMove]
     public let result:String
     public let comment:String?
 
-    public init(headers: [String: String], moves: [PgnMove], result: String, comment: String?) {
+    public init(id: UUID = UUID(), headers: [String: String], moves: [PgnMove], result: String, comment: String?) {
+        self.id = id
         self.headers = headers
         self.moves = moves
         self.result = result

@@ -25,6 +25,7 @@ struct GameData: Identifiable, Hashable, Codable {
 
     static func from(_ pgnGame: PgnGame) -> GameData {
         GameData(
+            id: pgnGame.id,
             headers: pgnGame.headers,
             moves: pgnGame.moves.map { MoveData.from($0) },
             result: pgnGame.result,
