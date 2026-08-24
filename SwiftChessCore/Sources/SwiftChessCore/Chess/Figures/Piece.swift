@@ -51,9 +51,9 @@ class Piece: Identifiable, ChessPiece, @unchecked Sendable {
         fatalError("Subclasses must override getPossibleMoves()")
     }
 
-    func isMovePossible(_ move: Move, position: Position) -> Bool {
+    func isMovePossible(_ move: Move, board: any BoardQuery) -> Bool {
         guard canDo(move: move) else { return false }
-        guard let intersectingPiece = position.checkNextIntersection(move) else { return true }
+        guard let intersectingPiece = board.checkNextIntersection(move) else { return true }
         return isCaptureablePiece(move, pieceToCapture: intersectingPiece)
     }
 

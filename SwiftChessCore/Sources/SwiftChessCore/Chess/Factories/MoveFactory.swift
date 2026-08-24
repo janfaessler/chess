@@ -99,7 +99,7 @@ class MoveFactory {
         let figuresOfTypeAndColor = allFigures.filter({ $0.type == type && $0.color == color})
         return figuresOfTypeAndColor.filter {
             guard let move = $0.createMove(targetField) else { return false }
-            return $0.isMovePossible(move, position: position)
+            return $0.isMovePossible(move, board: position)
         }
     }
     
@@ -108,14 +108,14 @@ class MoveFactory {
         let hasRowInfo = hasRowInfo(input)
         let offset = hasFileInfo || hasRowInfo ? 2 : 1
         guard let fieldStartIndex = input.index(input.startIndex, offsetBy: offset, limitedBy: input.endIndex) else { return nil }
-        let promotionParts = input[fieldStartIndex...].split(separator:NotationFactory.Promotion)
+        let promotionParts = input[fieldStartIndex...].split(separator:ChessNotation.promotion)
         guard let field = promotionParts.first else { return nil }
         return String(field)
     }
     private static func getField(_ input:any StringProtocol) -> (any StringProtocol)? {
-        let input = String(input).replacing(NotationFactory.Check, with: "")
-        let captureParts = input.split(separator: NotationFactory.Capture)
-        let promotionParts = captureParts.last?.split(separator: NotationFactory.Promotion)
+        let input = String(input).replacing(ChessNotation.check, with: "")
+        let captureParts = input.split(separator: ChessNotation.capture)
+        let promotionParts = captureParts.last?.split(separator: ChessNotation.promotion)
         return promotionParts?.first
     }
     
@@ -124,14 +124,14 @@ class MoveFactory {
     }
     
     private static func isPromotion(_ input:any StringProtocol) -> Bool {
-        let captureParts = input.split(separator: NotationFactory.Capture)
+        let captureParts = input.split(separator: ChessNotation.capture)
         guard let lastPart = captureParts.last else { return false }
-        let promotionParts = lastPart.split(separator: NotationFactory.Promotion)
+        let promotionParts = lastPart.split(separator: ChessNotation.promotion)
         return promotionParts.count > 1
     }
     
     private static func getPromotToFigure(_ input:any StringProtocol) -> PromotionPiece {
-        let promotionParts = input.split(separator: NotationFactory.Promotion)
+        let promotionParts = input.split(separator: ChessNotation.promotion)
         guard let lastPart = promotionParts.last,
               let firstChar = clean(String(lastPart)).first,
               let piece = PromotionPiece(fenChar: firstChar) else { return .queen }
@@ -139,7 +139,7 @@ class MoveFactory {
     }
     
     private static func isCastlingMove(_ input:any StringProtocol) -> Bool {
-        return String(input) == NotationFactory.LongCastle || String(input) == NotationFactory.ShortCastle
+        return String(input) == ChessNotation.queensideCastle || String(input) == ChessNotation.kingsideCastle
     }
     
     private static func getEndOfPieceIdentIndex(_ input: any StringProtocol) -> String.Index? {
@@ -151,7 +151,7 @@ class MoveFactory {
     }
     
     private static func getFileOfKing(_ input: any StringProtocol) -> String {
-        return String(input) == NotationFactory.ShortCastle ? ShortCastleTargetFile : LongCastleTargetFile
+        return String(input) == ChessNotation.kingsideCastle ? ShortCastleTargetFile : LongCastleTargetFile
     }
     
     private static func hasFileInfo(_ input: any StringProtocol) -> Bool {
@@ -167,7 +167,7 @@ class MoveFactory {
     }
     
     private static func clean(_ input: any StringProtocol) -> String {
-        return String(input.filter({ $0 != NotationFactory.Check && $0 != NotationFactory.Checkmate && $0 != NotationFactory.Capture }))
+        return String(input.filter({ $0 != ChessNotation.check && $0 != ChessNotation.checkmate && $0 != ChessNotation.capture }))
     }
 }
 

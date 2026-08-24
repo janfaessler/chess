@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Position: Sendable {
+public struct Position: BoardQuery, Sendable {
 
     private let board:Board
     public let colorToMove:PieceColor
@@ -39,7 +39,7 @@ public struct Position: Sendable {
         return board.isNotEmpty(atRow: atRow, atFile: atFile)
     }
 
-    func checkNextIntersection(_ move: Move) -> (any ChessPiece)? {
+    public func checkNextIntersection(_ move: Move) -> (any ChessPiece)? {
         return board.checkNextIntersection(move)
     }
 

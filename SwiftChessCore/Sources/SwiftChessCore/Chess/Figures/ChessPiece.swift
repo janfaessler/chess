@@ -9,7 +9,7 @@ public protocol ChessPiece: Hashable, Equatable, Sendable {
     var squareInfo: String { get }
     func canDo(move: Move) -> Bool
     func getPossibleMoves() -> [Move]
-    func isMovePossible(_ move: Move, position: Position) -> Bool
+    func isMovePossible(_ move: Move, board: any BoardQuery) -> Bool
     func equals(_ other: any ChessPiece) -> Bool
     func hasMoved() -> Bool
     func info() -> String

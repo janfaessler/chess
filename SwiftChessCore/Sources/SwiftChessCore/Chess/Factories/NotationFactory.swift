@@ -1,14 +1,7 @@
 import Foundation
 
 public class NotationFactory {
-    
-    static let LongCastle = "O-O-O"
-    static let ShortCastle = "O-O"
-    static let Capture:Character = "x"
-    static let Promotion:Character = "="
-    static let Check:Character = "+"
-    static let Checkmate:Character = "#"
-    
+
     public static func generate(_ move:Move, position:Position) -> String {
         guard !CastlingRules.isCastlingMove(move) else {
             return getCastlingNotation(move, position:position)
@@ -25,9 +18,9 @@ public class NotationFactory {
     
     private static func getCastlingNotation(_ move:Move, position:Position) -> String {
         if CastlingRules.isQueensideCastling(move) {
-            return LongCastle
+            return ChessNotation.queensideCastle
         } else if CastlingRules.isKingsideCastling(move) {
-            return ShortCastle
+            return ChessNotation.kingsideCastle
         }
         return ""
     }
@@ -46,16 +39,16 @@ public class NotationFactory {
     
     private static func getCheckIdentifier(_ move:Move, position: Position) -> String {
         let validator = MoveValidator(position)
-        return validator.isCheckMate(move) ? String(Checkmate) : (validator.isCheck(move) ? String(Check) : "")
+        return validator.isCheckMate(move) ? String(ChessNotation.checkmate) : (validator.isCheck(move) ? String(ChessNotation.check) : "")
     }
     
     private static func getPromotionIdentifier(_ move:Move) -> String {
         guard move.type == .promotion else { return "" }
-        return "\(Promotion)\(move.promoteTo.pieceType.sanIdent)"
+        return "\(ChessNotation.promotion)\(move.promoteTo.pieceType.sanIdent)"
     }
     
     private static func getCaptureIdentifier(_ move:Move, position:Position) -> String {
-        return isCapture(move, position: position) ? String(Capture) : ""
+        return isCapture(move, position: position) ? String(ChessNotation.capture) : ""
     }
     
     private static func getDuplicateIdentifier(_ move: Move, position: Position) -> String {

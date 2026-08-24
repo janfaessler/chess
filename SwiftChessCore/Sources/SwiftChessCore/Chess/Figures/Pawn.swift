@@ -35,11 +35,11 @@ class Pawn: Piece, @unchecked Sendable {
         }
     }
 
-    override func isMovePossible(_ move: Move, position: Position) -> Bool {
+    override func isMovePossible(_ move: Move, board: any BoardQuery) -> Bool {
         guard canDo(move: move) else { return false }
-        let once = canMoveOnce(move, position: position)
-        let twice = canMoveTwice(move, position: position)
-        let capture = canCapture(move, position: position)
+        let once = canMoveOnce(move, board: board)
+        let twice = canMoveTwice(move, board: board)
+        let capture = canCapture(move, board: board)
         return once || twice || capture
     }
 
@@ -47,41 +47,41 @@ class Pawn: Piece, @unchecked Sendable {
         return Move(move, piece: Pawn(color: self.color, row: self.row, file: self.file), type: getMoveType(move))
     }
 
-    private func canMoveOnce(_ move: Move, position: Position) -> Bool {
+    private func canMoveOnce(_ move: Move, board: any BoardQuery) -> Bool {
         guard move.type == .normal || move.type == .promotion else { return false }
         guard moveDoesNotChangeFile(move) else { return false }
-        return position.isEmpty(atRow: move.row, atFile: move.file)
+        return board.isEmpty(atRow: move.row, atFile: move.file)
     }
 
-    private func canMoveTwice(_ move: Move, position: Position) -> Bool {
+    private func canMoveTwice(_ move: Move, board: any BoardQuery) -> Bool {
         guard move.type == .double else { return false }
         guard !move.piece.hasMoved() else { return false }
         guard moveDoesNotChangeFile(move) else { return false }
-        guard position.isEmpty(atRow: move.row, atFile: move.file) else { return false }
+        guard board.isEmpty(atRow: move.row, atFile: move.file) else { return false }
 
         if move.piece.color == PieceColor.white {
-            return position.isEmpty(atRow: move.piece.row+1, atFile: move.file)
+            return board.isEmpty(atRow: move.piece.row+1, atFile: move.file)
         } else {
-            return position.isEmpty(atRow: move.piece.row-1, atFile: move.file)
+            return board.isEmpty(atRow: move.piece.row-1, atFile: move.file)
         }
     }
 
-    private func canCapture(_ move: Move, position: Position) -> Bool {
+    private func canCapture(_ move: Move, board: any BoardQuery) -> Bool {
         guard move.type == .normal || move.type == .promotion else { return false }
 
         let row = move.piece.row + (move.piece.color == PieceColor.white ? +1 : -1)
         let leftFile = move.piece.file - 1
         let rightFile = move.piece.file + 1
 
-        let enemyToCaptureOnLeft = hasEnemy(atRow: row, atFile: leftFile, position: position)
-        let enemyToCaptureOnRight = hasEnemy(atRow: row, atFile: rightFile, position: position)
-        let canEnPassant = EnPassantRules.canEnPassant(move, position: position)
+        let enemyToCaptureOnLeft = hasEnemy(atRow: row, atFile: leftFile, board: board)
+        let enemyToCaptureOnRight = hasEnemy(atRow: row, atFile: rightFile, board: board)
+        let canEnPassant = (board as? Position).map { EnPassantRules.canEnPassant(move, position: $0) } ?? false
 
         return (enemyToCaptureOnLeft && leftFile == move.file) || (enemyToCaptureOnRight && rightFile == move.file) || canEnPassant
     }
 
-    private func hasEnemy(atRow row: Int, atFile file: Int, position: Position) -> Bool {
-        guard let target = position.get(atRow: row, atFile: file) else { return false }
+    private func hasEnemy(atRow row: Int, atFile file: Int, board: any BoardQuery) -> Bool {
+        guard let target = board.get(atRow: row, atFile: file) else { return false }
         return target.color != color
     }
 

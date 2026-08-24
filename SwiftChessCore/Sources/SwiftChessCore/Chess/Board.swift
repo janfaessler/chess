@@ -1,7 +1,7 @@
 import Foundation
 import os
 
-struct Board: Sendable {
+struct Board: BoardQuery, Sendable {
     private static let logger = Log.logger("Board")
 
     private let grid:[Int:[Int:any ChessPiece]]

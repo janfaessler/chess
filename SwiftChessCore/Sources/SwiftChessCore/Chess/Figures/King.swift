@@ -31,11 +31,12 @@ class King: Piece, @unchecked Sendable {
         return optionals.compactMap { $0 }
     }
 
-    override func isMovePossible(_ move: Move, position: Position) -> Bool {
+    override func isMovePossible(_ move: Move, board: any BoardQuery) -> Bool {
         if CastlingRules.isCastlingMove(move) {
+            guard let position = board as? Position else { return false }
             return CastlingRules.canCastle(move, position: position)
         }
-        return super.isMovePossible(move, position: position)
+        return super.isMovePossible(move, board: board)
     }
 
     override func createMove(_ filename: any StringProtocol) -> Move? {

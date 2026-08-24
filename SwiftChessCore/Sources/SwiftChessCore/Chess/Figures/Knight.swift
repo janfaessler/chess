@@ -20,15 +20,9 @@ class Knight : Piece, @unchecked Sendable {
         ].compactMap { $0 }
     }
     
-    override func isMovePossible( _ move: Move, position:Position) -> Bool {
-        guard canDo(move: move) else {
-            return false
-        }
-        
-        guard let pieceAtTarget = position.checkNextIntersection(move) else {
-            return true
-        }
-        
-        return super.isCaptureablePiece(move, pieceToCapture: pieceAtTarget);
+    override func isMovePossible(_ move: Move, board: any BoardQuery) -> Bool {
+        guard canDo(move: move) else { return false }
+        guard let pieceAtTarget = board.checkNextIntersection(move) else { return true }
+        return super.isCaptureablePiece(move, pieceToCapture: pieceAtTarget)
     }
 }
