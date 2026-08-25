@@ -309,6 +309,6 @@ final class RawMovesTests: ChessTestBase {
         // Moving bishop off the e-file reveals a rook check along the e-file
         loadFen("4k3/8/8/4B3/8/8/8/4RK2 w - - 0 1")
         try moveAndAssert(notation: "Bd6", toField: "d6", type: .bishop, color: .white)
-        #expect(testee?.moveLog.last?.contains("+") == true, "Bd6 should give discovered check via rook on e-file")
+        #expect(moveLogNotations().last?.contains("+") == true, "Bd6 should give discovered check via rook on e-file")
     }
 }

@@ -9,7 +9,7 @@ public class ChessGame {
     private var hasStarted: Bool { position.moveClock > 0 }
 
     public private(set) var position: Position
-    public private(set) var moveLog: [String] = []
+    public private(set) var moveLog: [Move] = []
     public var colorToMove: PieceColor { position.colorToMove }
     public var figures:[any ChessPiece] { position.figures }
 
@@ -18,18 +18,10 @@ public class ChessGame {
         positionCount = [pos.getHash(): 1]
     }
 
-    public func move(_ moveNotation: String) throws {
-        guard let createdMove = MoveFactory.create(moveNotation, position: position) else {
-            logger.error("can not identify move: \(moveNotation)")
-            throw ValidationError.canNotIdentifyMove
-        }
-        try move(createdMove)
-    }
-
     public func move(_ move: Move) throws {
         let validator = MoveValidator(position)
         guard validator.isLegalMove(move) else {
-            logger.error("move (\(move.info) -> \(NotationFactory.generate(move, position: self.position))) is not allowed")
+            logger.error("move (\(move.info)) is not allowed")
             throw ValidationError.moveNotLegalMoveOnTheBoard
         }
         guard validator.figureExists(move) else {
@@ -68,15 +60,10 @@ public class ChessGame {
     }
 
     private func doMove(_ move: Move) throws {
-        logMove(move)
+        logger.log("play \(move.info)")
+        moveLog.append(move)
         position = position.applying(move)
         increasePositionCount()
-    }
-
-    private func logMove(_ move: Move) {
-        let logInfo = NotationFactory.generate(move, position: position)
-        logger.log("play \(logInfo) \(move.info)")
-        moveLog += [logInfo]
     }
 
     private func increasePositionCount() {

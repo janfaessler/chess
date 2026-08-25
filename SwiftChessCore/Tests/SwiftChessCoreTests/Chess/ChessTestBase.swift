@@ -4,10 +4,13 @@ import Testing
 class ChessTestBase {
 
     var testee: ChessGame?
-    var moveLog: [String] = []
+    var moveLog: [Move] = []
+    private var startingPosition: Position = PositionFactory.startingPosition()
 
     init() {
-        testee = ChessGame(PositionFactory.startingPosition())
+        let pos = PositionFactory.startingPosition()
+        testee = ChessGame(pos)
+        startingPosition = pos
         moveLog = []
     }
 
@@ -64,7 +67,7 @@ class ChessTestBase {
         )
         let endFigure = Piece.create(toField, type: type, color: color, moved: true)!
         try testee.move(move)
-        moveLog += [notation]
+        moveLog.append(move)
         #expect(figureExist(endFigure, testee: testee), "\(color) \(type) should be at \(toField) after \(notation)", sourceLocation: sourceLocation)
     }
 
@@ -188,21 +191,40 @@ class ChessTestBase {
         #expect(!figureExist(f, testee: testee), "\(f.info()) still exists", sourceLocation: sourceLocation)
     }
 
+    /// Generates SAN notation for each move in the game log by replaying from the starting position.
+    func moveLogNotations() -> [String] {
+        guard let testee else { return [] }
+        var position = startingPosition
+        return testee.moveLog.map { move in
+            let notation = NotationFactory.generate(move, position: position)
+            position = position.applying(move)
+            return notation
+        }
+    }
+
     func assertMoves(
         _ expectedMoves: [String],
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
-        let testee = try #require(self.testee, sourceLocation: sourceLocation)
-        let moves = testee.moveLog
-        #expect(moves == expectedMoves, "[\(moves.joined(separator: ","))] is not equal [\(expectedMoves.joined(separator: ","))]", sourceLocation: sourceLocation)
+        try #require(self.testee, sourceLocation: sourceLocation)
+        let actual = moveLogNotations()
+        #expect(
+            actual == expectedMoves,
+            "[\(actual.joined(separator: ","))] is not equal [\(expectedMoves.joined(separator: ","))]",
+            sourceLocation: sourceLocation
+        )
     }
 
     func assertMoves(
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
         let testee = try #require(self.testee, sourceLocation: sourceLocation)
-        let moves = testee.moveLog
-        #expect(moves == moveLog, "[\(moves.joined(separator: ","))] is not equal [\(moveLog.joined(separator: ","))]", sourceLocation: sourceLocation)
+        let actual = testee.moveLog
+        #expect(
+            actual == moveLog,
+            "[\(actual.map(\.info).joined(separator: ","))] is not equal [\(moveLog.map(\.info).joined(separator: ","))]",
+            sourceLocation: sourceLocation
+        )
     }
 
     func assertGameState(
@@ -223,6 +245,8 @@ class ChessTestBase {
         let position = PositionFactory.loadPosition(fen)
         #expect(position != nil, "Invalid FEN: \(fen)", sourceLocation: sourceLocation)
         guard let position else { return }
+        startingPosition = position
+        moveLog = []
         testee = ChessGame(position)
     }
 }
