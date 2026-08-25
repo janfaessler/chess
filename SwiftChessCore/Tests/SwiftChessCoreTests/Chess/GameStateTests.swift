@@ -60,7 +60,7 @@ final class GameStateTests: ChessTestBase {
         try assertGameState(.blackWins)
     }
 
-    @Test func testGropsAttack() throws {
+    @Test func testGrobAttack() throws {
         try assertGameState(.notStarted)
 
         try moveAndAssert(notation: "g4", toField: "g4", type: .pawn, color: .white)

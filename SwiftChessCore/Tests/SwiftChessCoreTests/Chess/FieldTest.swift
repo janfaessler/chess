@@ -3,7 +3,7 @@ import Testing
 
 struct SquareTests {
 
-    @Test func testExample() throws {
+    @Test func testAlgebraicNotationMapsToRowAndFile() throws {
         let data = [
             "a3": (row: 3, file: 1),
             "a4": (row: 4, file: 1),

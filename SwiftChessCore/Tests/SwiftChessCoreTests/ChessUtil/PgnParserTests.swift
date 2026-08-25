@@ -207,4 +207,39 @@ struct PgnParserTests {
         #expect(game.moves[0].annotation == .brilliant)
         #expect(game.moves[1].annotation == .mistake)
     }
+
+    @Test func testParse_unterminatedVariation_doesNotCrash() {
+        let pgn = """
+        [Event "x"]
+
+        1. e4 e5 2. Nf3 ( 2. Nc3 d5
+        """
+        let games = PgnParser.parse(pgn)
+        #expect(!games.isEmpty)
+    }
+
+    @Test func testParse_missingResultTag_parsesMovesWithUnknownResult() throws {
+        let pgn = """
+        [Event "x"]
+
+        1. e4 e5 2. Nf3 Nc6
+        """
+        let games = PgnParser.parse(pgn)
+        let game = try #require(games.first)
+        #expect(game.moves.count == 4)
+        #expect(game.moves[0].move == "e4")
+        #expect(game.moves[3].move == "Nc6")
+    }
+
+    @Test func testParse_annotationOnLastMove_parsed() throws {
+        let pgn = """
+        [Event "x"]
+
+        1. e4 e5!! 1-0
+        """
+        let games = PgnParser.parse(pgn)
+        let game = try #require(games.first)
+        #expect(game.moves.count == 2)
+        #expect(game.moves[1].annotation == .brilliant)
+    }
 }

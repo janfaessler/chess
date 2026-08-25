@@ -10,14 +10,17 @@ public class FenParser {
         guard parts.count == 6 else { throw FenError.malformed(fen) }
         guard isValidBoard(parts[0]) else { throw FenError.malformed(fen) }
         guard parts[1].lowercased() == "w" || parts[1].lowercased() == "b" else { throw FenError.malformed(fen) }
-        guard Int(parts[4]) != nil, Int(parts[5]) != nil else { throw FenError.malformed(fen) }
+        guard isValidCastlingRights(parts[2]) else { throw FenError.malformed(fen) }
+        guard isValidEnPassant(parts[3]) else { throw FenError.malformed(fen) }
+        guard let halfmove = Int(parts[4]), halfmove <= BoardConstants.halfmoveClockLimit else { throw FenError.malformed(fen) }
+        guard Int(parts[5]) != nil else { throw FenError.malformed(fen) }
 
         return Position(getPieces(parts[0]),
                         colorToMove: getNextMove(parts[1]),
                         enPassantTarget: getEnPassantTarget(parts[3]),
                         castlingRights: parseCastlingRights(parts[2]),
                         moveClock: parseInt(parts[5]) - 1,
-                        halfmoveClock: parseInt(parts[4]))
+                        halfmoveClock: halfmove)
 
     }
 
@@ -25,6 +28,14 @@ public class FenParser {
         guard board.split(separator: "/").count == 8 else { return false }
         let allowed = Set("pnbrqkPNBRQK12345678")
         return board.allSatisfy { $0 == "/" || allowed.contains($0) }
+    }
+
+    private static func isValidCastlingRights(_ str: String) -> Bool {
+        str == "-" || (!str.isEmpty && str.allSatisfy { "KQkq".contains($0) } && Set(str).count == str.count)
+    }
+
+    private static func isValidEnPassant(_ str: String) -> Bool {
+        str == "-" || Square(str) != nil
     }
     
     private static func getPieces(_ position: String) -> [Piece] {
