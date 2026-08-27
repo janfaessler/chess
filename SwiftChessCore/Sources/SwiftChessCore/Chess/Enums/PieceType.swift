@@ -29,8 +29,4 @@ extension PieceType {
         }
     }
 
-    public func fenChar(for color: PieceColor) -> Character {
-        color == .white ? char : Character(char.lowercased())
-    }
-
 }
