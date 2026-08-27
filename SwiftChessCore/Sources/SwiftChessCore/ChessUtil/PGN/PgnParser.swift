@@ -6,7 +6,7 @@ public enum PgnError: Error {
     case unexpectedEndOfInput
 }
 
-public class PgnParser {
+public enum PgnParser {
     private static let logger = Log.logger("PgnParser")
 
     public static func parse(_ pgn: String) -> [PgnGame] {

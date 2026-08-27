@@ -2,7 +2,7 @@ import Foundation
 
 enum FenError: Error { case malformed(String) }
 
-public class FenParser {
+public enum FenParser {
 
     public static func parse(_ fen:String) throws -> Position {
         let parts = fen.split(separator: " ").map({String($0)})
@@ -69,8 +69,8 @@ public class FenParser {
     private static func parseLine(_ rowPart: String.SubSequence,  rowNumber: Int) -> [Piece]{
         var figures:[Piece] = []
         var file = 1
-        for part in Array(rowPart) {
-            let digit = Int("\(part)")
+        for part in rowPart {
+            let digit = part.wholeNumberValue
             if (digit == nil) {
                 guard let fig = parsePiece(part, rowNumber: rowNumber, fileNumber: file) else {
                     break

@@ -1,6 +1,6 @@
 import Foundation
 
-class MoveFactory {
+enum MoveFactory {
 
     private static let whiteStartingRow = "1"
     private static let blackStartingRow = "8"
@@ -44,7 +44,7 @@ class MoveFactory {
         guard let field = getField(input) else { return nil }
         var fig:(any ChessPiece)?
         if hasFileInfo(clean(input)) {
-            let fileInfo = String(Array(input)[0])
+            let fileInfo = String(input.first ?? " ")
             fig = getFigure(field, withFile: fileInfo, type: .pawn, color: color, position: position)
         } else {
             fig = getFigure(targetField: field, type: .pawn, color: color, position: position)
@@ -120,7 +120,7 @@ class MoveFactory {
     }
     
     private static func isNotAPawnMove(_ input: any StringProtocol) -> Bool {
-        return Array(input).first?.isUppercase ?? false
+        return input.first?.isUppercase ?? false
     }
     
     private static func isPromotion(_ input:any StringProtocol) -> Bool {
@@ -163,7 +163,7 @@ class MoveFactory {
     }
     
     private static func getPiecePositionInfo(_ cleanedInput: any StringProtocol) -> String {
-        return String(Array(cleanedInput)[1])
+        return String(cleanedInput.dropFirst().first ?? " ")
     }
     
     private static func clean(_ input: any StringProtocol) -> String {

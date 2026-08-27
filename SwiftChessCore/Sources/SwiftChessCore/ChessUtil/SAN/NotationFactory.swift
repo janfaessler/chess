@@ -1,6 +1,6 @@
 import Foundation
 
-public class NotationFactory {
+public enum NotationFactory {
 
     public static func generate(_ move:Move, position:Position) -> String {
         guard !CastlingRules.isCastlingMove(move) else {

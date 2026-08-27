@@ -1,6 +1,6 @@
 import Foundation
 
-public class PositionFactory {
+public enum PositionFactory {
 
     static let startingPositionFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 

@@ -2,9 +2,7 @@ import Foundation
 
 public struct Square: Equatable, Hashable, Sendable {
 
-    private static let PossibleFileNames: String = "abcdefgh"
-    private static let fileNames: [Character: Int] = zip(PossibleFileNames, 1...BoardConstants.size).reduce(into: [:]) { $0[$1.0] = $1.1 }
-    private static let fileNamesOut: [Int: Character] = zip(1...BoardConstants.size, PossibleFileNames).reduce(into: [:]) { $0[$1.0] = $1.1 }
+    private static let aAscii: UInt8 = Character("a").asciiValue!
 
     public let row: Int
     public let file: Int
@@ -20,22 +18,25 @@ public struct Square: Equatable, Hashable, Sendable {
     }
 
     public init?(_ square: any StringProtocol) {
-        let chars = [Character](square)
-        guard chars.count >= 2,
-              let file = Square.fileNames[chars[0]],
-              let row = Int(String(chars[1])) else { return nil }
+        guard let fileChar = square.first,
+              let fVal = fileChar.asciiValue,
+              fVal >= Square.aAscii,
+              let secondChar = square.dropFirst().first,
+              let row = secondChar.wholeNumberValue,
+              1...BoardConstants.size ~= row else { return nil }
+        let file = Int(fVal - Square.aAscii) + 1
+        guard 1...BoardConstants.size ~= file else { return nil }
         self.file = file
         self.row = row
     }
 
     public var info: String {
-        guard let filename = Square.fileNamesOut[file] else { return "??" }
-        return "\(filename)\(row)"
+        let fileChar = Character(UnicodeScalar(Int(Square.aAscii) + file - 1)!)
+        return "\(fileChar)\(row)"
     }
 
     public var fileName: String {
-        guard let filename = Square.fileNamesOut[file] else { return "??" }
-        return "\(filename)"
+        String(Character(UnicodeScalar(Int(Square.aAscii) + file - 1)!))
     }
 
     public static func == (l: Square, r: Square) -> Bool {

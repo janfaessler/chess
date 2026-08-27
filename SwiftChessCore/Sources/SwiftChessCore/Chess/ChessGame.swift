@@ -18,7 +18,7 @@ public class ChessGame {
         positionCount = [pos.getHash(): 1]
     }
 
-    public func move(_ move: Move) throws {
+    public func move(_ move: Move) throws(ValidationError) {
         let validator = MoveValidator(position)
         guard validator.isLegalMove(move) else {
             logger.error("move (\(move.info)) is not allowed")
@@ -28,7 +28,7 @@ public class ChessGame {
             logger.error("figure \(move.piece.info()) does not exists")
             throw ValidationError.pieceDoesNotExist(move.piece)
         }
-        try doMove(move)
+        doMove(move)
     }
 
     public func getGameState() -> GameState {
@@ -59,7 +59,7 @@ public class ChessGame {
         return forPiece.getPossibleMoves().filter({ validator.isLegalMove($0) })
     }
 
-    private func doMove(_ move: Move) throws {
+    private func doMove(_ move: Move) {
         logger.log("play \(move.info)")
         moveLog.append(move)
         position = position.applying(move)
