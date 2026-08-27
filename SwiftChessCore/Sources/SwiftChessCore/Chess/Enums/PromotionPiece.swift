@@ -13,12 +13,8 @@ public enum PromotionPiece: CaseIterable, Hashable, Sendable {
     }
 
     public init?(fenChar: Character) {
-        switch fenChar.uppercased() {
-        case "Q": self = .queen
-        case "R": self = .rook
-        case "B": self = .bishop
-        case "N": self = .knight
-        default: return nil
-        }
+        guard let type = PieceType(fenChar: fenChar),
+              let piece = PromotionPiece.allCases.first(where: { $0.pieceType == type }) else { return nil }
+        self = piece
     }
 }

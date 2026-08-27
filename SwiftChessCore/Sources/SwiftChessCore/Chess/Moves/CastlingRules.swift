@@ -7,18 +7,18 @@ struct CastlingRules {
     }
 
     static func isKingsideCastling(_ move: Move) -> Bool {
-        isCastlingMove(move) && move.file == King.CastleKingsidePosition
+        isCastlingMove(move) && move.file == BoardConstants.kingCastleKingsideFile
     }
 
     static func isQueensideCastling(_ move: Move) -> Bool {
-        isCastlingMove(move) && move.file == King.CastleQueensidePosition
+        isCastlingMove(move) && move.file == BoardConstants.kingCastleQueensideFile
     }
 
     static func castlingRookMove(for move: Move) -> (fromFile: Int, toFile: Int)? {
         guard isCastlingMove(move) else { return nil }
         return isQueensideCastling(move)
-            ? (Rook.CastleQueensideStartingFile, Rook.CastleQueensideEndFile)
-            : (Rook.CastleKingsideStartingFile, Rook.CastleKingsideEndFile)
+            ? (BoardConstants.rookCastleQueensideStartFile, BoardConstants.rookCastleQueensideEndFile)
+            : (BoardConstants.rookCastleKingsideStartFile, BoardConstants.rookCastleKingsideEndFile)
     }
 
     static func pathIsInCheck(_ move: Move, position: Position) -> Bool {
@@ -52,16 +52,16 @@ struct CastlingRules {
     private static func retainsRight(afterMove move: Move, kingside: Bool, color: PieceColor, capturedPiece: (any ChessPiece)?, old: CastlingRights) -> Bool {
         guard old.canCastle(kingside: kingside, for: color) else { return false }
         if move.piece.color == color && move.piece.type == .king { return false }
-        let rookFile = kingside ? Rook.CastleKingsideStartingFile : Rook.CastleQueensideStartingFile
+        let rookFile = kingside ? BoardConstants.rookCastleKingsideStartFile : BoardConstants.rookCastleQueensideStartFile
         if move.piece.color == color && move.piece.type == .rook && move.piece.file == rookFile { return false }
         if let captured = capturedPiece, captured.color == color, captured.type == .rook {
-            if captured.file == Rook.CastleKingsideStartingFile || captured.file == Rook.CastleQueensideStartingFile { return false }
+            if captured.file == BoardConstants.rookCastleKingsideStartFile || captured.file == BoardConstants.rookCastleQueensideStartFile { return false }
         }
         return true
     }
 
     private static func pathIsClear(_ move: Move, board: any BoardQuery) -> Bool {
-        let rookFile = isKingsideCastling(move) ? Rook.CastleKingsideStartingFile : Rook.CastleQueensideStartingFile
+        let rookFile = isKingsideCastling(move) ? BoardConstants.rookCastleKingsideStartFile : BoardConstants.rookCastleQueensideStartFile
         let kingFile = move.piece.file
         let row = move.piece.row
         let lo = min(kingFile, rookFile) + 1

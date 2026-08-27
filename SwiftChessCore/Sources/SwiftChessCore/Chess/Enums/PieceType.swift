@@ -18,27 +18,19 @@ extension PieceType {
         }
     }
 
-    public func fenChar(for color: PieceColor) -> Character {
-        let upper: Character
+    public var char: Character {
         switch self {
-        case .pawn: upper = "P"
-        case .knight: upper = "N"
-        case .bishop: upper = "B"
-        case .rook: upper = "R"
-        case .queen: upper = "Q"
-        case .king: upper = "K"
-        }
-        return color == .white ? upper : Character(upper.lowercased())
-    }
-
-    public var sanIdent: String {
-        switch self {
-        case .pawn: return ""
+        case .pawn:   return "P"
         case .knight: return "N"
         case .bishop: return "B"
-        case .rook: return "R"
-        case .queen: return "Q"
-        case .king: return "K"
+        case .rook:   return "R"
+        case .queen:  return "Q"
+        case .king:   return "K"
         }
     }
+
+    public func fenChar(for color: PieceColor) -> Character {
+        color == .white ? char : Character(char.lowercased())
+    }
+
 }

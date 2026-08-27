@@ -25,6 +25,10 @@ public enum NotationFactory {
         return ""
     }
     
+    private static func sanIdent(for type: PieceType) -> String {
+        type == .pawn ? "" : String(type.char)
+    }
+
     private static func getPieceIdentifier(_ move:Move, position:Position) -> String {
         if move.piece.type == .pawn {
             if isCapture(move, position: position) {
@@ -33,10 +37,10 @@ public enum NotationFactory {
                 return ""
             }
         } else {
-            return move.piece.type.sanIdent
+            return sanIdent(for: move.piece.type)
         }
     }
-    
+
     private static func getCheckIdentifier(_ move:Move, position: Position) -> String {
         let validator = MoveValidator(position)
         return validator.isCheckMate(move) ? String(ChessNotation.checkmate) : (validator.isCheck(move) ? String(ChessNotation.check) : "")
@@ -44,7 +48,7 @@ public enum NotationFactory {
     
     private static func getPromotionIdentifier(_ move:Move) -> String {
         guard move.type == .promotion else { return "" }
-        return "\(ChessNotation.promotion)\(move.promoteTo.pieceType.sanIdent)"
+        return "\(ChessNotation.promotion)\(sanIdent(for: move.promoteTo.pieceType))"
     }
     
     private static func getCaptureIdentifier(_ move:Move, position:Position) -> String {

@@ -42,12 +42,4 @@ struct PieceTypeMappingTests {
         }
     }
 
-    @Test func testSanIdent() {
-        #expect(PieceType.pawn.sanIdent == "")
-        #expect(PieceType.knight.sanIdent == "N")
-        #expect(PieceType.bishop.sanIdent == "B")
-        #expect(PieceType.rook.sanIdent == "R")
-        #expect(PieceType.queen.sanIdent == "Q")
-        #expect(PieceType.king.sanIdent == "K")
-    }
 }
