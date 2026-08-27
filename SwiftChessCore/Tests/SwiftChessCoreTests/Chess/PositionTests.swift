@@ -23,7 +23,7 @@ final class PositionTests: ChessTestBase {
     }
 
     @Test func testFenCreation() throws {
-        let startPosition = FenBuilder.create(PositionFactory.startingPosition())
+        let startPosition = FenBuilder.create(try PositionFactory.startingPosition())
         #expect(startPosition == PositionFactory.startingPositionFen)
     }
 }

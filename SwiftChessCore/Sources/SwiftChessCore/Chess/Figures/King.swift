@@ -33,8 +33,7 @@ class King: Piece, @unchecked Sendable {
 
     override func isMovePossible(_ move: Move, board: any BoardQuery) -> Bool {
         if CastlingRules.isCastlingMove(move) {
-            guard let position = board as? Position else { return false }
-            return CastlingRules.canCastle(move, position: position)
+            return CastlingRules.canCastle(move, board: board)
         }
         return super.isMovePossible(move, board: board)
     }

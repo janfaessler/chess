@@ -9,7 +9,7 @@ struct PgnGameParser {
 
     var isAtEnd: Bool { remaining.isEmpty }
 
-    mutating func parseGame() -> PgnGame? {
+    mutating func parseGame() throws -> PgnGame? {
         skipWhitespace()
         guard !isAtEnd else { return nil }
         let headers = parseHeaders()

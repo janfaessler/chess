@@ -1,7 +1,7 @@
 import Foundation
 import SwiftChessCore
 
-struct MoveData: Codable, Hashable {
+struct MoveData: Codable, Hashable, Sendable {
     let move: String
     let annotation: MoveAnnotation?
     let variations: [[MoveData]]

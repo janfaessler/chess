@@ -42,9 +42,17 @@ extension GameEntity {
 }
 
 extension CollectionEntity {
-    func toGameCollection() throws -> GameCollection {
+    func toGameCollection() -> GameCollection {
+        let logger = Log.logger("CollectionEntity")
         let sortedGames = games.sorted { $0.order < $1.order }
-        let gameDataArray = try sortedGames.map { try $0.toGameData() }
+        let gameDataArray = sortedGames.compactMap { game -> GameData? in
+            do {
+                return try game.toGameData()
+            } catch {
+                logger.warning("Skipping corrupted game \(game.id): \(error)")
+                return nil
+            }
+        }
         return GameCollection(
             id: id,
             name: name,

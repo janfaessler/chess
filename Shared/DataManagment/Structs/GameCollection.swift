@@ -1,6 +1,6 @@
 import Foundation
 
-struct GameCollection: Identifiable, Hashable {
+struct GameCollection: Identifiable, Hashable, Sendable {
     let id: UUID
     var name: String
     var expanded: Bool

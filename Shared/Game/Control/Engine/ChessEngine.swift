@@ -14,7 +14,7 @@ final class ChessEngine: EngineProtocol {
     private let engine: Engine
     private let settings: EngineSettings
     private var lines: [EngineLine] = []
-    private var pos: Position = PositionFactory.startingPosition()
+    private var pos: Position = try! PositionFactory.startingPosition()
 
     private var configurationTask: Task<Void, Never>?
     private var responseTask: Task<Void, Never>?

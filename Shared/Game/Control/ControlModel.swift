@@ -24,7 +24,7 @@ class ControlModel {
     private var isStarted = false
     var isLoading = false
 
-    init(_ game: GameData, settings: EngineSettings = EngineSettings()) {
+    init(_ game: GameData, engine: (any EngineProtocol)? = nil, settings: EngineSettings = EngineSettings()) {
         self.game = game
         self.settings = settings
 
@@ -33,7 +33,7 @@ class ControlModel {
         } else {
             board = BoardModel()
         }
-        engine = TestSupport.isUITesting ? StubEngine() : ChessEngine(settings: settings)
+        self.engine = engine ?? ChessEngine(settings: settings)
     }
 
     func start() {
@@ -43,10 +43,6 @@ class ControlModel {
         observeBoardMoves()
         observePositionChanges()
         observeEngineEval()
-
-        if TestSupport.isUITesting {
-            engine.newPosition(board.position)
-        }
 
         guard let game else { return }
         isLoading = true

@@ -4,7 +4,7 @@ import SwiftChessCore
 class StructureFactory {
 
     static func create(_ game: GameData) -> MoveStructure {
-        let rows = getRowContainers(game.moves, startingColor: .white, startingMoveNumber:1, startingPosition: PositionFactory.startingPosition())
+        let rows = getRowContainers(game.moves, startingColor: .white, startingMoveNumber:1, startingPosition: try! PositionFactory.startingPosition())
         let cache = createVariationCache(rows.all)
         return MoveStructure(line: rows, parentMoves: cache)
     }

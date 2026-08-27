@@ -29,11 +29,13 @@ struct CastlingRules {
             || validator.isSquareAttackedByOpponent(row: row, file: move.file)
     }
 
-    static func canCastle(_ move: Move, position: Position) -> Bool {
+    static func canCastle(_ move: Move, board: any BoardQuery) -> Bool {
         guard isCastlingMove(move) else { return false }
-        guard position.castlingRights.canCastle(kingside: isKingsideCastling(move), for: move.piece.color) else { return false }
-        guard pathIsClear(move, position: position) else { return false }
-        guard !pathIsInCheck(move, position: position) else { return false }
+        guard board.castlingRights.canCastle(kingside: isKingsideCastling(move), for: move.piece.color) else { return false }
+        guard pathIsClear(move, board: board) else { return false }
+        if let position = board as? Position {
+            guard !pathIsInCheck(move, position: position) else { return false }
+        }
         return true
     }
 
@@ -58,13 +60,13 @@ struct CastlingRules {
         return true
     }
 
-    private static func pathIsClear(_ move: Move, position: Position) -> Bool {
+    private static func pathIsClear(_ move: Move, board: any BoardQuery) -> Bool {
         let rookFile = isKingsideCastling(move) ? Rook.CastleKingsideStartingFile : Rook.CastleQueensideStartingFile
         let kingFile = move.piece.file
         let row = move.piece.row
         let lo = min(kingFile, rookFile) + 1
         let hi = max(kingFile, rookFile)
-        return (lo..<hi).allSatisfy { position.isEmpty(atRow: row, atFile: $0) }
+        return (lo..<hi).allSatisfy { board.isEmpty(atRow: row, atFile: $0) }
     }
 
     private static func transitFile(for move: Move) -> Int {

@@ -5,4 +5,11 @@ public protocol BoardQuery {
     func get(atRow: Int, atFile: Int) -> (any ChessPiece)?
     func isEmpty(atRow: Int, atFile: Int) -> Bool
     func isNotEmpty(atRow: Int, atFile: Int) -> Bool
+    var enPassantTarget: Square? { get }
+    var castlingRights: CastlingRights { get }
+}
+
+public extension BoardQuery {
+    var enPassantTarget: Square? { nil }
+    var castlingRights: CastlingRights { .none }
 }

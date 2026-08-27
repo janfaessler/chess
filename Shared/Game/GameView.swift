@@ -7,7 +7,8 @@ struct GameView: View {
     @State private var model: ControlModel
 
     init(_ game: GameData, settings: EngineSettings) {
-        _model = State(wrappedValue: ControlModel(game, settings: settings))
+        let engine: (any EngineProtocol)? = TestSupport.isUITesting ? StubEngine() : nil
+        _model = State(wrappedValue: ControlModel(game, engine: engine, settings: settings))
     }
 
     var body: some View {

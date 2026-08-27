@@ -75,7 +75,7 @@ class Pawn: Piece, @unchecked Sendable {
 
         let enemyToCaptureOnLeft = hasEnemy(atRow: row, atFile: leftFile, board: board)
         let enemyToCaptureOnRight = hasEnemy(atRow: row, atFile: rightFile, board: board)
-        let canEnPassant = (board as? Position).map { EnPassantRules.canEnPassant(move, position: $0) } ?? false
+        let canEnPassant = EnPassantRules.canEnPassant(move, board: board)
 
         return (enemyToCaptureOnLeft && leftFile == move.file) || (enemyToCaptureOnRight && rightFile == move.file) || canEnPassant
     }

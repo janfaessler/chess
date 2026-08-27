@@ -4,7 +4,7 @@ import Testing
 struct MoveFactoryTests {
 
     @Test func testPawnMoves() throws {
-        var board = PositionFactory.startingPosition()
+        var board = try PositionFactory.startingPosition()
         try assertMove("e4",   board: &board, field: "e4", type: .pawn, color: .white, moveType: .double)
         try assertMove("e5",   board: &board, field: "e5", type: .pawn, color: .black, moveType: .double)
         try assertMove("d4",   board: &board, field: "d4", type: .pawn, color: .white, moveType: .double)
@@ -20,7 +20,7 @@ struct MoveFactoryTests {
     }
 
     @Test func testPieceMoves() throws {
-        var board = PositionFactory.startingPosition()
+        var board = try PositionFactory.startingPosition()
         try assertMove("e4",    board: &board, field: "e4",  type: .pawn,   color: .white, moveType: .double)
         try assertMove("e5",    board: &board, field: "e5",  type: .pawn,   color: .black, moveType: .double)
         try assertMove("Nc3",   board: &board, field: "c3",  type: .knight, color: .white)
@@ -41,7 +41,7 @@ struct MoveFactoryTests {
     }
 
     @Test func testShortCastle() throws {
-        var board = PositionFactory.startingPosition()
+        var board = try PositionFactory.startingPosition()
         try assertMove("e4",  board: &board, field: "e4",  type: .pawn,   color: .white, moveType: .double)
         try assertMove("e5",  board: &board, field: "e5",  type: .pawn,   color: .black, moveType: .double)
         try assertMove("Bc4", board: &board, field: "c4",  type: .bishop, color: .white)
@@ -53,7 +53,7 @@ struct MoveFactoryTests {
     }
 
     @Test func testLongCastle() throws {
-        var board = PositionFactory.startingPosition()
+        var board = try PositionFactory.startingPosition()
         try assertMove("b3",    board: &board, field: "b3",  type: .pawn,   color: .white)
         try assertMove("b6",    board: &board, field: "b6",  type: .pawn,   color: .black)
         try assertMove("Bb2",   board: &board, field: "b2",  type: .bishop, color: .white)
@@ -69,7 +69,7 @@ struct MoveFactoryTests {
     }
 
     @Test func testUncertainKnightMoves() throws {
-        var board = PositionFactory.startingPosition()
+        var board = try PositionFactory.startingPosition()
         try assertMove("e4",   board: &board, field: "e4",  type: .pawn,   color: .white, moveType: .double)
         try assertMove("c6",   board: &board, field: "c6",  type: .pawn,   color: .black)
         try assertMove("d3",   board: &board, field: "d3",  type: .pawn,   color: .white)
@@ -94,7 +94,7 @@ struct MoveFactoryTests {
     }
 
     @Test func testUncertainRookMoves() throws {
-        var board = PositionFactory.startingPosition()
+        var board = try PositionFactory.startingPosition()
         try assertMove("e4",   board: &board, field: "e4",  type: .pawn,   color: .white, moveType: .double)
         try assertMove("e5",   board: &board, field: "e5",  type: .pawn,   color: .black, moveType: .double)
         try assertMove("Nf3",  board: &board, field: "f3",  type: .knight, color: .white)
@@ -118,7 +118,7 @@ struct MoveFactoryTests {
     }
 
     @Test func testUncertainPawnMove() throws {
-        var board = PositionFactory.startingPosition()
+        var board = try PositionFactory.startingPosition()
         try assertMove("e4",   board: &board, field: "e4",  type: .pawn,   color: .white, moveType: .double)
         try assertMove("c6",   board: &board, field: "c6",  type: .pawn,   color: .black)
         try assertMove("d4",   board: &board, field: "d4",  type: .pawn,   color: .white, moveType: .double)
@@ -135,7 +135,7 @@ struct MoveFactoryTests {
     }
 
     @Test func testMalformedInputReturnsNilInsteadOfCrashing() {
-        let board = PositionFactory.startingPosition()
+        let board = try! PositionFactory.startingPosition()
         #expect(MoveFactory.create("",  position: board) == nil)
         #expect(MoveFactory.create("N", position: board) == nil)
         #expect(MoveFactory.create("R", position: board) == nil)

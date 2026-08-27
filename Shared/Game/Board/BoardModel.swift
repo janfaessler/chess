@@ -20,12 +20,16 @@ class BoardModel {
     private var game: ChessGame
 
     init(_ position: Position? = nil) {
-        let position = position ?? PositionFactory.startingPosition()
+        let position = position ?? (try! PositionFactory.startingPosition())
         let game = ChessGame(position)
         self.game = game
         result = ResultModel(game.getGameState())
         (gameEvents, gameEventContinuation) = AsyncStream.makeStream(of: GameEvent.self)
         figures = getFigures()
+    }
+
+    deinit {
+        gameEventContinuation.finish()
     }
 
     var promotionColor: PieceColor {

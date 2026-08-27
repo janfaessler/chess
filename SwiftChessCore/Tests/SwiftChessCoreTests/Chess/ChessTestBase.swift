@@ -5,10 +5,10 @@ class ChessTestBase {
 
     var testee: ChessGame?
     var moveLog: [Move] = []
-    private var startingPosition: Position = PositionFactory.startingPosition()
+    private var startingPosition: Position = try! PositionFactory.startingPosition()
 
     init() {
-        let pos = PositionFactory.startingPosition()
+        let pos = try! PositionFactory.startingPosition()
         testee = ChessGame(pos)
         startingPosition = pos
         moveLog = []
@@ -16,7 +16,7 @@ class ChessTestBase {
 
     func loadMoves(_ pgn: String) -> [Move] {
         var result: [Move] = []
-        var position = PositionFactory.startingPosition()
+        var position = try! PositionFactory.startingPosition()
         let pgnMoves = PgnParser.parse(pgn).first?.moves ?? []
         for pgnmove in pgnMoves {
             if let move = MoveFactory.create(pgnmove.move, position: position) {

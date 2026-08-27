@@ -68,7 +68,7 @@ public struct Position: BoardQuery, Sendable {
     }
     
     private func applyMovement(_ figures: inout [any ChessPiece], move: Move, capturedPiece: (any ChessPiece)?) {
-        if EnPassantRules.isEnPassant(move, position: self) {
+        if EnPassantRules.isEnPassant(move, board: self) {
             let captured = EnPassantRules.capturedPawnSquare(for: move)
             figures.removeAll(where: { $0.row == captured.row && $0.file == captured.file })
         }

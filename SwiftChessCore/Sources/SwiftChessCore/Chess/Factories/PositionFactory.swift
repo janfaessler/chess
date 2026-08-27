@@ -4,13 +4,8 @@ public class PositionFactory {
 
     static let startingPositionFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
-    public static func startingPosition() -> Position {
-        guard let position = try? FenParser.parse(startingPositionFen)
-        else
-        {
-            fatalError("Failed to parse starting position")
-        }
-        return position
+    public static func startingPosition() throws -> Position {
+        try FenParser.parse(startingPositionFen)
     }
 
     public static func loadPosition(_ fen:String) -> Position? {
@@ -18,7 +13,7 @@ public class PositionFactory {
     }
 
     public static func loadPosition(_ moves: [any StringProtocol]) -> Position? {
-        var position = startingPosition()
+        guard var position = try? startingPosition() else { return nil }
         for notation in moves {
             guard let newPosition = apply(notation, to: position) else { return nil }
             position = newPosition

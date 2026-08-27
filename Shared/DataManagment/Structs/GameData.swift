@@ -1,7 +1,7 @@
 import Foundation
 import SwiftChessCore
 
-struct GameData: Identifiable, Hashable, Codable {
+struct GameData: Identifiable, Hashable, Codable, Sendable {
     let id: UUID
     let headers: [String: String]
     let moves: [MoveData]

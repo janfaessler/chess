@@ -24,7 +24,7 @@ final class SwiftDataGameCollectionRepository: GameCollectionRepository {
                 sortBy: [SortDescriptor(\.order)]
             )
             let entities = try modelContext.fetch(descriptor)
-            return try entities.map { try $0.toGameCollection() }
+            return entities.map { $0.toGameCollection() }
         } catch {
             logger.error("Failed to load collections: \(error)")
             throw RepositoryError.loadCollectionFailed(error)

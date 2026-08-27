@@ -4,13 +4,13 @@ import Testing
 struct LanParserTests {
 
     @Test func testParse_shortString_returnsNil() {
-        let position = PositionFactory.startingPosition()
+        let position = try! PositionFactory.startingPosition()
         #expect(LanParser.parse(lan: "e2", position: position) == nil)
         #expect(LanParser.parse(lan: "", position: position) == nil)
     }
 
     @Test func testParse_normalMove_ok() {
-        let position = PositionFactory.startingPosition()
+        let position = try! PositionFactory.startingPosition()
         let move = LanParser.parse(lan: "e2e4", position: position)
         #expect(move != nil)
         #expect(move?.row == 4)

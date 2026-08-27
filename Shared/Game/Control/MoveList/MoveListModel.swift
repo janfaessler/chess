@@ -74,7 +74,7 @@ class MoveListModel {
             history.add(nextMove)
             return
         }
-        let basePosition = currentMove?.resultingPosition ?? PositionFactory.startingPosition()
+        let basePosition = currentMove?.resultingPosition ?? (try! PositionFactory.startingPosition())
         let container = MoveModel(move: move, color: color, resultingPosition: PositionFactory.apply(move, to: basePosition))
         structure.add(container, currentMove: currentMove)
         history.add(container)
@@ -87,7 +87,7 @@ class MoveListModel {
     }
     
     var position: Position? {
-        guard let currentMove else { return PositionFactory.startingPosition() }
+        guard let currentMove else { return try! PositionFactory.startingPosition() }
         return currentMove.resultingPosition ?? PositionFactory.loadPosition(getMoveNotations())
     }
     
