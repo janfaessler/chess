@@ -3,11 +3,11 @@ import Foundation
 struct PromotionRules {
 
     static func rankBeforePromotion(for color: PieceColor) -> Int {
-        color == .white ? 7 : 2
+        color == .white ? BoardConstants.rankBeforePromotionWhite : BoardConstants.rankBeforePromotionBlack
     }
 
     static func promotionRank(for color: PieceColor) -> Int {
-        color == .white ? 8 : 1
+        color == .white ? BoardConstants.promotionRankWhite : BoardConstants.promotionRankBlack
     }
 
     static func isOnRankBeforePromotion(_ figure: any ChessPiece) -> Bool {

@@ -2,9 +2,6 @@ import Foundation
 
 class Pawn: Piece, @unchecked Sendable {
 
-    static let startingRowForWhite = 2
-    static let startingRowForBlack = 7
-
     init(color: PieceColor, row: Int, file: Int, moved: Bool = false) {
         super.init(type: .pawn, color: color, row: row, file: file, moved: moved)
     }
@@ -19,7 +16,7 @@ class Pawn: Piece, @unchecked Sendable {
                 createMove(row-1, file-1, moveType),
                 createMove(row-1, file, moveType),
                 createMove(row-1, file+1, moveType)]
-            if row == Pawn.startingRowForBlack {
+            if row == BoardConstants.pawnStartingRowBlack {
                 optionals.append(createMove(row-2, file, .double))
             }
             return optionals.compactMap { $0 }
@@ -28,7 +25,7 @@ class Pawn: Piece, @unchecked Sendable {
                 createMove(row+1, file-1, moveType),
                 createMove(row+1, file, moveType),
                 createMove(row+1, file+1, moveType)]
-            if row == Pawn.startingRowForWhite {
+            if row == BoardConstants.pawnStartingRowWhite {
                 optionals.append(createMove(row+2, file, .double))
             }
             return optionals.compactMap { $0 }

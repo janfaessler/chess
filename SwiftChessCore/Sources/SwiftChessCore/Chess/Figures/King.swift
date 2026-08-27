@@ -2,9 +2,6 @@ import Foundation
 
 class King: Piece, @unchecked Sendable {
 
-    static let CastleQueensidePosition = 3
-    static let CastleKingsidePosition = 7
-
     init(color: PieceColor, row: Int, file: Int, moved: Bool = false) {
         super.init(type: .king, color: color, row: row, file: file, moved: moved)
     }
@@ -24,8 +21,8 @@ class King: Piece, @unchecked Sendable {
         ]
         if !hasMoved() {
             optionals += [
-                createMove(row, King.CastleQueensidePosition, .castle),
-                createMove(row, King.CastleKingsidePosition, .castle)
+                createMove(row, BoardConstants.kingCastleQueensideFile, .castle),
+                createMove(row, BoardConstants.kingCastleKingsideFile, .castle)
             ]
         }
         return optionals.compactMap { $0 }

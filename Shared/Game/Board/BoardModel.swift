@@ -18,6 +18,7 @@ class BoardModel {
     let annotations = AnnotationModel()
 
     private var game: ChessGame
+    private var generation = 0
 
     init(_ position: Position? = nil) {
         let position = position ?? (try! PositionFactory.startingPosition())
@@ -93,6 +94,8 @@ class BoardModel {
     }
 
     func updatePosition(_ pos: Position) {
+        generation += 1
+        focus = nil
         self.game = ChessGame(pos)
         self.figures = self.getFigures()
         self.result = ResultModel(self.game.getGameState())
@@ -126,8 +129,10 @@ class BoardModel {
 
     private func getFigures() -> [PieceModel] {
         let orientation = self.orientation
+        let gen = generation
         return self.game.figures.map { [weak self] figure in
             PieceModel(figure, orientation: orientation) { [weak self] event in
+                guard self?.generation == gen else { return }
                 switch event {
                 case .moved(let fig, let dRow, let dFile): self?.move(figure: fig, deltaRow: dRow, deltaFile: dFile)
                 case .focusSet(let fig): self?.setFocus(fig)
