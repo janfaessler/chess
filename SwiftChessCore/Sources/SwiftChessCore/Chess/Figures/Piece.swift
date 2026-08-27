@@ -57,7 +57,12 @@ class Piece: Identifiable, ChessPiece, @unchecked Sendable {
         return isCaptureablePiece(move, pieceToCapture: intersectingPiece)
     }
 
-    var square: Square { Square(row: row, file: file)! }
+    var square: Square {
+        guard let s = Square(row: row, file: file) else {
+            preconditionFailure("Square coordinate out of bounds: row=\(row) file=\(file)")
+        }
+        return s
+    }
     var squareInfo: String { square.info }
 
     func info() -> String { "(\(color) \(type) \(squareInfo))" }

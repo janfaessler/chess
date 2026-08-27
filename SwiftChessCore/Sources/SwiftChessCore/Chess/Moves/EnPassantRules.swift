@@ -18,6 +18,9 @@ struct EnPassantRules {
     }
 
     static func capturedPawnSquare(for move: Move) -> Square {
-        Square(row: move.piece.row, file: move.file)!
+        guard let s = Square(row: move.piece.row, file: move.file) else {
+            preconditionFailure("Square coordinate out of bounds: row=\(move.piece.row) file=\(move.file)")
+        }
+        return s
     }
 }

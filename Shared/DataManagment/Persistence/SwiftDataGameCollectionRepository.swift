@@ -3,8 +3,11 @@ import SwiftData
 import SwiftChessCore
 
 enum RepositoryError: Error {
-    case persistenceFailed(Error),
-         loadCollectionFailed(Error)
+    case persistenceFailed(Error)
+    case loadCollectionFailed(Error)
+    case corruptedData(gameId: UUID, reason: String)
+    case diskFull
+    case contextNotAvailable
 }
 
 @MainActor
@@ -55,8 +58,14 @@ final class SwiftDataGameCollectionRepository: GameCollectionRepository {
             }
 
             try modelContext.save()
+        } catch let error as RepositoryError {
+            throw error
         } catch {
             logger.error("Failed to save collections: \(error)")
+            let nsError = error as NSError
+            if nsError.domain == NSCocoaErrorDomain && nsError.code == NSFileWriteOutOfSpaceError {
+                throw RepositoryError.diskFull
+            }
             throw RepositoryError.persistenceFailed(error)
         }
     }

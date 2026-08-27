@@ -11,13 +11,19 @@ struct NavigationManagerView: View {
         @Bindable var bModel = model
         
         VStack(spacing: 0) {
-            if let error = model.errorAlert {
+            if let error = model.appError {
                 HStack {
                     Image(systemName: "exclamationmark.octagon.fill")
-                    Text(error)
+                    Text(error.message)
                     Spacer()
+                    if error.isRetryable {
+                        Button("Retry") {
+                            model.retry()
+                        }
+                        .buttonStyle(.borderless)
+                    }
                     Button("OK") {
-                        model.clearError()
+                        model.dismissError()
                     }
                     .buttonStyle(.borderless)
                 }

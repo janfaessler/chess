@@ -118,4 +118,62 @@ struct NavigationManagerModelTests {
         #expect(testee.collections == [keep])
         #expect(gameDataRepo.storedCollections == [keep])
     }
+
+    @Test func testInit_loadFailure_setsLoadFailedError() {
+        let repo = FakeGameCollectionRepository()
+        repo.shouldThrowOnLoad = true
+        let testee = NavigationManagerModel(gameDataRepo: repo, fileRepo: FakeFileRepository())
+
+        guard case .loadFailed = testee.appError else {
+            Issue.record("Expected loadFailed error, got \(String(describing: testee.appError))")
+            return
+        }
+    }
+
+    @Test func testSave_failure_setsSaveFailedError() {
+        let (testee, repo, _) = makeSut()
+        repo.shouldThrowOnSave = true
+
+        testee.save()
+
+        guard case .saveFailed = testee.appError else {
+            Issue.record("Expected saveFailed error, got \(String(describing: testee.appError))")
+            return
+        }
+    }
+
+    @Test func testDismissError_clearsError() {
+        let (testee, repo, _) = makeSut()
+        repo.shouldThrowOnSave = true
+        testee.save()
+
+        testee.dismissError()
+
+        #expect(testee.appError == nil)
+    }
+
+    @Test func testRetry_afterSaveFailure_retriesSave() {
+        let (testee, repo, _) = makeSut()
+        repo.shouldThrowOnSave = true
+        testee.save()
+
+        repo.shouldThrowOnSave = false
+        testee.retry()
+
+        #expect(testee.appError == nil)
+        #expect(repo.storedCollections == testee.collections)
+    }
+
+    @Test func testRetry_afterLoadFailure_reloadsCollections() throws {
+        let collection = GameCollection(name: "Saved", expanded: true)
+        let repo = FakeGameCollectionRepository(collections: [collection])
+        repo.shouldThrowOnLoad = true
+        let testee = NavigationManagerModel(gameDataRepo: repo, fileRepo: FakeFileRepository())
+
+        repo.shouldThrowOnLoad = false
+        testee.retry()
+
+        #expect(testee.appError == nil)
+        #expect(testee.collections == [collection])
+    }
 }

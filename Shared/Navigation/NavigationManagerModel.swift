@@ -6,7 +6,7 @@ import os
 public class NavigationManagerModel {
 
     var collections: [GameCollection] = []
-    var errorAlert: String?
+    var appError: AppError?
 
     private let gameDataRepo: GameCollectionRepository
     private let fileRepo: FileRepository
@@ -16,9 +16,8 @@ public class NavigationManagerModel {
         self.fileRepo = fileRepo
         do {
             collections = try gameDataRepo.load()
-        }
-        catch {
-            errorAlert = "Failed to load collections: \(error.localizedDescription)"
+        } catch {
+            appError = .loadFailed(error)
         }
     }
 
@@ -30,9 +29,8 @@ public class NavigationManagerModel {
                     GameCollection(name: url.lastPathComponent, expanded: true, games: gameDataArray)
                 )
                 save()
-            }
-            catch {
-                errorAlert = "Failed to import \(url.lastPathComponent): \(error.localizedDescription)"
+            } catch {
+                appError = .importFailed(filename: url.lastPathComponent, error)
             }
         }
     }
@@ -76,13 +74,33 @@ public class NavigationManagerModel {
     func save() {
         do {
             try gameDataRepo.save(collections)
+        } catch {
+            appError = .saveFailed(error)
         }
-        catch {
-            errorAlert = "Failed to save collections: \(error.localizedDescription)"
-        }        
     }
 
-    func clearError() {
-        errorAlert = nil
+    func dismissError() {
+        appError = nil
+    }
+
+    func retry() {
+        guard let error = appError else { return }
+        appError = nil
+        switch error {
+        case .loadFailed:
+            reload()
+        case .saveFailed:
+            save()
+        case .importFailed:
+            break
+        }
+    }
+
+    private func reload() {
+        do {
+            collections = try gameDataRepo.load()
+        } catch {
+            appError = .loadFailed(error)
+        }
     }
 }

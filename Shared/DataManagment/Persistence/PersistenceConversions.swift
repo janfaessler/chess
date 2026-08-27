@@ -1,11 +1,19 @@
 import Foundation
 
-private func encode<T: Encodable>(_ value: T) throws -> Data {
-    try JSONEncoder().encode(value)
+private func encode<T: Encodable>(_ value: T, for gameId: UUID) throws -> Data {
+    do {
+        return try JSONEncoder().encode(value)
+    } catch {
+        throw RepositoryError.corruptedData(gameId: gameId, reason: "encoding failed: \(error.localizedDescription)")
+    }
 }
 
-private func decode<T: Decodable>(_ data: Data, as type: T.Type) throws -> T {
-    try JSONDecoder().decode(type, from: data)
+private func decode<T: Decodable>(_ data: Data, as type: T.Type, for gameId: UUID) throws -> T {
+    do {
+        return try JSONDecoder().decode(type, from: data)
+    } catch {
+        throw RepositoryError.corruptedData(gameId: gameId, reason: "decoding failed: \(error.localizedDescription)")
+    }
 }
 
 extension GameEntity {
@@ -13,8 +21,8 @@ extension GameEntity {
         self.init(
             id: gameData.id,
             title: gameData.getTitle(),
-            headersData: try encode(gameData.headers),
-            movesData: try encode(gameData.moves),
+            headersData: try encode(gameData.headers, for: gameData.id),
+            movesData: try encode(gameData.moves, for: gameData.id),
             result: gameData.result,
             comment: gameData.comment,
             order: order
@@ -22,8 +30,8 @@ extension GameEntity {
     }
 
     func update(from gameData: GameData, order: Int) throws {
-        self.headersData = try encode(gameData.headers)
-        self.movesData = try encode(gameData.moves)
+        self.headersData = try encode(gameData.headers, for: gameData.id)
+        self.movesData = try encode(gameData.moves, for: gameData.id)
         title = gameData.getTitle()
         result = gameData.result
         comment = gameData.comment
@@ -33,8 +41,8 @@ extension GameEntity {
     func toGameData() throws -> GameData {
         GameData(
             id: id,
-            headers: try decode(headersData, as: [String: String].self),
-            moves: try decode(movesData, as: [MoveData].self),
+            headers: try decode(headersData, as: [String: String].self, for: id),
+            moves: try decode(movesData, as: [MoveData].self, for: id),
             result: result,
             comment: comment
         )
