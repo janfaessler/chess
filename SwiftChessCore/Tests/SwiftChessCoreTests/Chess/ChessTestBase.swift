@@ -17,8 +17,8 @@ class ChessTestBase {
     func loadMoves(_ pgn: String) -> [Move] {
         var result: [Move] = []
         var position = PositionFactory.startingPosition()
-        let game = PgnMovesParser.parse(pgn)
-        for pgnmove in game {
+        let pgnMoves = PgnParser.parse(pgn).first?.moves ?? []
+        for pgnmove in pgnMoves {
             if let move = MoveFactory.create(pgnmove.move, position: position) {
                 result += [move]
                 if let newPosition = PositionFactory.getPosition(move, position: position) {

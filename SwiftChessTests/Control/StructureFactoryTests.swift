@@ -5,7 +5,8 @@ import SwiftChessCore
 struct StructureFactoryTests {
 
     @Test func testFactory() throws {
-        let game = GameData.from(PgnGameParser.parse("1. e4 e5 2. Nc3 ( 2. d3 d6 ) 2... Nf6 ( 2... d6 3. d3 )"))
+        let pgnGame = try #require(PgnParser.parse("1. e4 e5 2. Nc3 ( 2. d3 d6 ) 2... Nf6 ( 2... d6 3. d3 )").first)
+        let game = GameData.from(pgnGame)
         let structure = StructureFactory.create(game)
 
         #expect(structure.list[0].white?.move == "e4")
