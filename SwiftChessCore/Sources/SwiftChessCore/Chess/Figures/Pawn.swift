@@ -10,26 +10,21 @@ class Pawn: Piece, @unchecked Sendable {
         let row = row
         let file = file
         let moveType: MoveType = isOnPromotionRank ? .promotion : .normal
+        var moves: [Move] = []
+        moves.reserveCapacity(4)
         switch color {
         case .black:
-            var optionals: [Move?] = [
-                createMove(row-1, file-1, moveType),
-                createMove(row-1, file, moveType),
-                createMove(row-1, file+1, moveType)]
-            if row == BoardConstants.pawnStartingRowBlack {
-                optionals.append(createMove(row-2, file, .double))
-            }
-            return optionals.compactMap { $0 }
+            if let m = createMove(row-1, file-1, moveType) { moves.append(m) }
+            if let m = createMove(row-1, file, moveType) { moves.append(m) }
+            if let m = createMove(row-1, file+1, moveType) { moves.append(m) }
+            if row == BoardConstants.pawnStartingRowBlack, let m = createMove(row-2, file, .double) { moves.append(m) }
         case .white:
-            var optionals: [Move?] = [
-                createMove(row+1, file-1, moveType),
-                createMove(row+1, file, moveType),
-                createMove(row+1, file+1, moveType)]
-            if row == BoardConstants.pawnStartingRowWhite {
-                optionals.append(createMove(row+2, file, .double))
-            }
-            return optionals.compactMap { $0 }
+            if let m = createMove(row+1, file-1, moveType) { moves.append(m) }
+            if let m = createMove(row+1, file, moveType) { moves.append(m) }
+            if let m = createMove(row+1, file+1, moveType) { moves.append(m) }
+            if row == BoardConstants.pawnStartingRowWhite, let m = createMove(row+2, file, .double) { moves.append(m) }
         }
+        return moves
     }
 
     override func isMovePossible(_ move: Move, board: any BoardQuery) -> Bool {

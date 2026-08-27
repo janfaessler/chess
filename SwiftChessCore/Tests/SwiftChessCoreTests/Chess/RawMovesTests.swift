@@ -290,14 +290,12 @@ final class RawMovesTests: ChessTestBase {
     }
 
     @Test func testKingCannotMoveIntoCheck() throws {
-        // White king e1, black rook h1 — king cannot step onto rank 1 (covered by rook)
         loadFen("k7/8/8/8/8/8/8/4K2r w - - 0 1")
         try moveAndAssertError("e1", to: "f1", type: .king, color: .white)
         try moveAndAssertError("e1", to: "d1", type: .king, color: .white)
     }
 
     @Test func testPinnedPieceCannotMove() throws {
-        // White king e1, white bishop e4, black rook e8 — bishop is pinned along the e-file
         loadFen("k3r3/8/8/8/4B3/8/8/4K3 w - - 0 1")
         let testee = try #require(testee)
         let bishop = try #require(testee.figures.first { $0.equals(Piece.create("e4", type: .bishop, color: .white)!) })
@@ -305,8 +303,6 @@ final class RawMovesTests: ChessTestBase {
     }
 
     @Test func testDiscoveredCheck_moveNotationIncludesCheck() throws {
-        // White rook e1, white bishop e5 blocking, white king f1, black king e8
-        // Moving bishop off the e-file reveals a rook check along the e-file
         loadFen("4k3/8/8/4B3/8/8/8/4RK2 w - - 0 1")
         try moveAndAssert(notation: "Bd6", toField: "d6", type: .bishop, color: .white)
         #expect(moveLogNotations().last?.contains("+") == true, "Bd6 should give discovered check via rook on e-file")

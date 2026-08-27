@@ -3,8 +3,6 @@ import Testing
 
 struct DrawConditionEvaluatorTests {
 
-    // MARK: - isInsufficientMaterial
-
     @Test func testInsufficientMaterial_onlyKings_isTrue() {
         let figures: [any ChessPiece] = [
             Piece.create("e1", type: .king, color: .white)!,
@@ -32,7 +30,6 @@ struct DrawConditionEvaluatorTests {
     }
 
     @Test func testInsufficientMaterial_bishopsOnSameSquareColor_isTrue() {
-        // c1: (row1+file3)%2=0 (dark), f8: (row8+file6)%2=0 (dark) — same square color
         let figures: [any ChessPiece] = [
             Piece.create("e1", type: .king, color: .white)!,
             Piece.create("c1", type: .bishop, color: .white)!,
@@ -43,7 +40,6 @@ struct DrawConditionEvaluatorTests {
     }
 
     @Test func testInsufficientMaterial_bishopsOnOppositeSquareColor_isFalse() {
-        // c1: (row1+file3)%2=0 (dark), c8: (row8+file3)%2=1 (light) — different square color
         let figures: [any ChessPiece] = [
             Piece.create("e1", type: .king, color: .white)!,
             Piece.create("c1", type: .bishop, color: .white)!,
@@ -71,8 +67,6 @@ struct DrawConditionEvaluatorTests {
         #expect(!DrawConditionEvaluator.isInsufficientMaterial(figures: figures))
     }
 
-    // MARK: - isThreefoldRepetition
-
     @Test func testThreefoldRepetition_atThreshold_isTrue() {
         let hash = 42
         #expect(DrawConditionEvaluator.isThreefoldRepetition(positionCount: [hash: 3], currentHash: hash))
@@ -91,8 +85,6 @@ struct DrawConditionEvaluatorTests {
     @Test func testThreefoldRepetition_hashNotPresent_isFalse() {
         #expect(!DrawConditionEvaluator.isThreefoldRepetition(positionCount: [:], currentHash: 99))
     }
-
-    // MARK: - has50MoveRuleTriggered
 
     @Test func test50MoveRule_atLimit_isTrue() {
         #expect(DrawConditionEvaluator.has50MoveRuleTriggered(halfmoveClock: 100))

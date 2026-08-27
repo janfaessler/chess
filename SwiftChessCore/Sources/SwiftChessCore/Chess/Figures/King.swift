@@ -9,23 +9,21 @@ class King: Piece, @unchecked Sendable {
     override func getPossibleMoves() -> [Move] {
         let row = row
         let file = file
-        var optionals: [Move?] = [
-            createMove(row+1, file+1),
-            createMove(row, file+1),
-            createMove(row+1, file),
-            createMove(row-1, file-1),
-            createMove(row, file-1),
-            createMove(row-1, file),
-            createMove(row-1, file+1),
-            createMove(row+1, file-1)
-        ]
+        var moves: [Move] = []
+        moves.reserveCapacity(10)
+        if let m = createMove(row+1, file+1) { moves.append(m) }
+        if let m = createMove(row, file+1) { moves.append(m) }
+        if let m = createMove(row+1, file) { moves.append(m) }
+        if let m = createMove(row-1, file-1) { moves.append(m) }
+        if let m = createMove(row, file-1) { moves.append(m) }
+        if let m = createMove(row-1, file) { moves.append(m) }
+        if let m = createMove(row-1, file+1) { moves.append(m) }
+        if let m = createMove(row+1, file-1) { moves.append(m) }
         if !hasMoved() {
-            optionals += [
-                createMove(row, BoardConstants.kingCastleQueensideFile, .castle),
-                createMove(row, BoardConstants.kingCastleKingsideFile, .castle)
-            ]
+            if let m = createMove(row, BoardConstants.kingCastleQueensideFile, .castle) { moves.append(m) }
+            if let m = createMove(row, BoardConstants.kingCastleKingsideFile, .castle) { moves.append(m) }
         }
-        return optionals.compactMap { $0 }
+        return moves
     }
 
     override func isMovePossible(_ move: Move, board: any BoardQuery) -> Bool {

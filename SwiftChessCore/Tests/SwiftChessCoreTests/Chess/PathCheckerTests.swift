@@ -7,8 +7,6 @@ struct PathCheckerTests {
         PathChecker(Board(figures))
     }
 
-    // MARK: - Row
-
     @Test func testRow_blockerBeforeTarget_returnsBlocker() throws {
         let rook = Piece.create(type: .rook, color: .white, row: 1, file: 1)
         let blocker = Piece.create(type: .pawn, color: .black, row: 1, file: 3)
@@ -28,8 +26,6 @@ struct PathCheckerTests {
         #expect(makeChecker([rook]).firstPieceOnPath(from: Square(row: 1, file: 1)!, to: Square(row: 1, file: 5)!) == nil)
     }
 
-    // MARK: - File
-
     @Test func testFile_blockerBeforeTarget_returnsBlocker() throws {
         let rook = Piece.create(type: .rook, color: .white, row: 1, file: 1)
         let blocker = Piece.create(type: .pawn, color: .black, row: 3, file: 1)
@@ -41,8 +37,6 @@ struct PathCheckerTests {
         let rook = Piece.create(type: .rook, color: .white, row: 1, file: 1)
         #expect(makeChecker([rook]).firstPieceOnPath(from: Square(row: 1, file: 1)!, to: Square(row: 5, file: 1)!) == nil)
     }
-
-    // MARK: - Diagonal
 
     @Test func testDiagonal_blockerBeforeTarget_returnsBlocker() throws {
         let bishop = Piece.create(type: .bishop, color: .white, row: 1, file: 1)
@@ -57,8 +51,6 @@ struct PathCheckerTests {
         let result = try #require(makeChecker([bishop, target]).firstPieceOnPath(from: Square(row: 1, file: 1)!, to: Square(row: 2, file: 2)!))
         #expect(result.equals(target))
     }
-
-    // MARK: - Non-sliding (knight)
 
     @Test func testNonSliding_occupiedTarget_returnsTargetPiece() throws {
         let knight = Piece.create(type: .knight, color: .white, row: 1, file: 1)

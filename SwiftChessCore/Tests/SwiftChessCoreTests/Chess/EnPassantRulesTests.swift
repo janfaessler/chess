@@ -56,13 +56,11 @@ struct EnPassantRulesTests {
     }
 
     @Test func testEnPassantTarget_expiredAfterOpponentPlaysElsewhere() throws {
-        // After white plays a3 instead of capturing en passant, the target disappears
         let pos = try #require(PositionFactory.loadPosition(["e4", "d5", "e5", "d4", "a3"]))
         #expect(pos.enPassantTarget == nil, "en passant target must expire once white plays a non-capturing move")
     }
 
     @Test func testEnPassantTarget_presentImmediatelyAfterDoublePush() throws {
-        // After black double-pushes d7→d5 with white pawn already on e5, en passant target d6 is set
         let pos = try #require(PositionFactory.loadPosition(["e4", "a6", "e5", "d5"]))
         #expect(pos.enPassantTarget == Square(row: 6, file: 4), "en passant target d6 must be set immediately after black double-push d7→d5")
     }

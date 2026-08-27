@@ -46,9 +46,7 @@ struct PgnParserTests {
         #expect(game.moves[2].variations[0][5].move == "Bxf3")
         #expect(game.moves[2].variations[0][6].move == "Qxf3")
         #expect(game.moves[2].variations[0][7].move == "e6")
-        // [%csl ...] stripped from comment text
         #expect(game.moves[2].variations[0][7].comment == "fu:")
-        // highlights parsed from [%csl Gb7,Gc1,Gc6,Gd5,Ge6,Gf1,Gf7]
         #expect(game.moves[2].variations[0][7].highlights.count == 7)
         #expect(game.moves[2].variations[0][7].highlights[0] == SquareHighlight(color: .green, square: "b7"))
         #expect(game.moves[2].variations[0][7].highlights[6] == SquareHighlight(color: .green, square: "f7"))

@@ -2,21 +2,22 @@ import Foundation
 
 public enum NotationFactory {
 
-    public static func generate(_ move:Move, position:Position) -> String {
+    public static func generate(_ move: Move, position: Position) -> String {
         guard !CastlingRules.isCastlingMove(move) else {
-            return getCastlingNotation(move, position:position)
+            return getCastlingNotation(move, position: position)
         }
-        let checkIdentifier = getCheckIdentifier(move, position: position)
-
+        let newValidator = MoveValidator(position.applying(move))
+        let validator = MoveValidator(position)
+        let checkIdentifier = getCheckIdentifier(newValidator)
         let piece = getPieceIdentifier(move, position: position)
-        let duplicateIdentifier = getDuplicateIdentifier(move, position: position)
+        let duplicateIdentifier = getDuplicateIdentifier(move, position: position, validator: validator)
         let captureIdentifier = getCaptureIdentifier(move, position: position)
         let square = move.squareInfo
         let promotionIdentifier = getPromotionIdentifier(move)
         return "\(piece)\(duplicateIdentifier)\(captureIdentifier)\(square)\(promotionIdentifier)\(checkIdentifier)"
     }
-    
-    private static func getCastlingNotation(_ move:Move, position:Position) -> String {
+
+    private static func getCastlingNotation(_ move: Move, position: Position) -> String {
         if CastlingRules.isQueensideCastling(move) {
             return ChessNotation.queensideCastle
         } else if CastlingRules.isKingsideCastling(move) {
@@ -24,12 +25,12 @@ public enum NotationFactory {
         }
         return ""
     }
-    
+
     private static func sanIdent(for type: PieceType) -> String {
         type == .pawn ? "" : String(type.char)
     }
 
-    private static func getPieceIdentifier(_ move:Move, position:Position) -> String {
+    private static func getPieceIdentifier(_ move: Move, position: Position) -> String {
         if move.piece.type == .pawn {
             if isCapture(move, position: position) {
                 return move.piece.square.fileName
@@ -41,24 +42,24 @@ public enum NotationFactory {
         }
     }
 
-    private static func getCheckIdentifier(_ move:Move, position: Position) -> String {
-        let validator = MoveValidator(position)
-        return validator.isCheckMate(move) ? String(ChessNotation.checkmate) : (validator.isCheck(move) ? String(ChessNotation.check) : "")
+    private static func getCheckIdentifier(_ validator: MoveValidator) -> String {
+        guard validator.isKingInCheck() else { return "" }
+        return validator.playerHasLegalMove() ? String(ChessNotation.check) : String(ChessNotation.checkmate)
     }
-    
-    private static func getPromotionIdentifier(_ move:Move) -> String {
+
+    private static func getPromotionIdentifier(_ move: Move) -> String {
         guard move.type == .promotion else { return "" }
         return "\(ChessNotation.promotion)\(sanIdent(for: move.promoteTo.pieceType))"
     }
-    
-    private static func getCaptureIdentifier(_ move:Move, position:Position) -> String {
+
+    private static func getCaptureIdentifier(_ move: Move, position: Position) -> String {
         return isCapture(move, position: position) ? String(ChessNotation.capture) : ""
     }
-    
-    private static func getDuplicateIdentifier(_ move: Move, position: Position) -> String {
+
+    private static func getDuplicateIdentifier(_ move: Move, position: Position, validator: MoveValidator) -> String {
         guard move.piece.type != .pawn else { return "" }
 
-        let ambiguousPieces = getPiecesForPossibleMoveDuplicate(move, position: position)
+        let ambiguousPieces = getPiecesForPossibleMoveDuplicate(move, position: position, validator: validator)
         guard !ambiguousPieces.isEmpty else { return "" }
 
         let shareFile = ambiguousPieces.contains { $0.file == move.piece.file }
@@ -71,9 +72,8 @@ public enum NotationFactory {
             return "\(move.piece.square.fileName)\(move.piece.row)"
         }
     }
-    
-    private static func getPiecesForPossibleMoveDuplicate(_ move:Move, position:Position) -> [any ChessPiece] {
-        let validator = MoveValidator(position)
+
+    private static func getPiecesForPossibleMoveDuplicate(_ move: Move, position: Position, validator: MoveValidator) -> [any ChessPiece] {
         return position.figures.filter { figure in
             guard figure.color == move.piece.color,
                   figure.type == move.piece.type,
@@ -82,10 +82,10 @@ public enum NotationFactory {
             return validator.isLegalMove(candidate)
         }
     }
-    
-    private static func isCapture(_ move:Move, position:Position) -> Bool {
+
+    private static func isCapture(_ move: Move, position: Position) -> Bool {
         let pieceAtPosition = position.get(atRow: move.row, atFile: move.file)
         return pieceAtPosition != nil || EnPassantRules.isEnPassant(move, board: position)
     }
-    
+
 }

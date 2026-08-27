@@ -3,8 +3,6 @@ import Testing
 
 final class CastlingRulesTests: ChessTestBase {
 
-    // MARK: — Clean-path success
-
     @Test func testWhiteKingside_cleanPath_succeeds() throws {
         loadFen("4k3/8/8/8/8/8/8/4K2R w K - 0 1")
         try moveAndAssert(notation: "O-O", toField: "g1", type: .king, color: .white, moveType: .castle)
@@ -25,27 +23,20 @@ final class CastlingRulesTests: ChessTestBase {
         try moveAndAssert(notation: "O-O-O", toField: "c8", type: .king, color: .black, moveType: .castle)
     }
 
-    // MARK: — King path attacked
-
     @Test func testCastlingBlocked_kingPassesThroughAttackedSquare() throws {
-        // Black rook on f7 covers the f-file, so f1 is attacked — white O-O blocked
         loadFen("4k3/5r2/8/8/8/8/8/4K2R w K - 0 1")
         try moveAndAssertError("O-O")
     }
 
     @Test func testCastlingBlocked_kingInCheck() throws {
-        // Black rook on e7 covers e1 — white king in check, O-O blocked
         loadFen("4k3/4r3/8/8/8/8/8/4K2R w K - 0 1")
         try moveAndAssertError("O-O")
     }
 
     @Test func testCastlingBlocked_destinationSquareAttacked() throws {
-        // Black rook on g7 covers g1 — white O-O destination attacked
         loadFen("4k3/6r1/8/8/8/8/8/4K2R w K - 0 1")
         try moveAndAssertError("O-O")
     }
-
-    // MARK: — Rights lost
 
     @Test func testCastlingBlocked_kingHasMovedPreviously() throws {
         loadFen("4k3/8/8/8/8/8/8/4K2R w K - 0 1")
@@ -75,21 +66,15 @@ final class CastlingRulesTests: ChessTestBase {
     }
 
     @Test func testCastlingBlocked_kingsideRookCaptured() throws {
-        // Black knight on g3 can capture white rook on h1 via Nxh1
         loadFen("4k3/8/8/8/8/6n1/8/4K2R b K - 0 1")
         try captureAndAssert("g3", to: "h1", type: .knight, color: .black)
         try moveAndAssertError("O-O")
     }
 
-    // MARK: — Path blocked by own piece
-
     @Test func testCastlingBlocked_piecesBetweenKingAndRook() throws {
-        // White knight on f1 blocks kingside castling path
         loadFen("4k3/8/8/8/8/8/8/4KN1R w K - 0 1")
         try moveAndAssertError("O-O")
     }
-
-    // MARK: — Post-castling state
 
     @Test func testAfterKingsideCastling_rookOccupiesF1() throws {
         loadFen("4k3/8/8/8/8/8/8/4K2R w K - 0 1")

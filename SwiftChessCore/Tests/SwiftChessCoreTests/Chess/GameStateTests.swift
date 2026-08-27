@@ -243,7 +243,6 @@ final class GameStateTests: ChessTestBase {
     }
 
     @Test func test50MoveRule_resetByPawnMove() throws {
-        // Halfmove clock at 49 — a pawn move resets to 0, preventing the draw
         loadFen("4k3/p7/8/8/8/8/P7/4K3 w - - 49 30")
         try assertGameState(.running)
         try moveAndAssert(notation: "a4", toField: "a4", type: .pawn, color: .white, moveType: .double)
@@ -251,7 +250,6 @@ final class GameStateTests: ChessTestBase {
     }
 
     @Test func test50MoveRule_resetByCapture() throws {
-        // Halfmove clock at 49 — a capture resets to 0, preventing the draw
         loadFen("4k3/8/8/3p4/4P3/8/8/4K3 w - - 49 30")
         try assertGameState(.running)
         try moveAndAssert(notation: "exd5", toField: "d5", type: .pawn, color: .white)
@@ -259,7 +257,6 @@ final class GameStateTests: ChessTestBase {
     }
 
     @Test func testStalemate_queenMoveStalesBlackKingInCorner() throws {
-        // White queen h2 moves to f2 — black king h1 then has no legal moves and is not in check
         loadFen("8/8/8/8/8/6K1/7Q/7k w - - 1 10")
         try assertGameState(.running)
         try moveAndAssert(notation: "Qf2", toField: "f2", type: .queen, color: .white)
@@ -267,7 +264,6 @@ final class GameStateTests: ChessTestBase {
     }
 
     @Test func testStalemate_twoAdditionalPatterns() throws {
-        // Use non-zero halfmove so hasStarted is true; both are known stalemate positions
         let stalematePositions = [
             "k7/2Q5/1K6/8/8/8/8/8 b - - 1 10",  // queen + king vs king, black king cornered
             "8/8/8/8/8/2K5/1R6/k7 b - - 1 10"   // rook + king vs king, black king cornered

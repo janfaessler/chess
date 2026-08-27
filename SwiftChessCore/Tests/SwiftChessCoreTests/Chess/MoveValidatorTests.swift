@@ -12,12 +12,10 @@ struct MoveValidatorTests {
     }
 
     @Test func testIsLegalMove_moveExposingKing_returnsFalse() throws {
-        // White bishop on e2 is pinned: white king on e1, black rook on e8
         let fen = "4r3/8/8/8/8/8/4B3/4K3 w - - 0 1"
         let position = try #require(PositionFactory.loadPosition(fen))
         let validator = MoveValidator(position)
         let bishop = try #require(position.get(atRow: 2, atFile: 5))
-        // Moving the bishop off the e-file exposes the king to the rook
         let move = try #require(Move("d3", piece: bishop, type: .normal))
         #expect(!validator.isLegalMove(move))
     }
@@ -71,7 +69,6 @@ struct MoveValidatorTests {
     }
 
     @Test func testIsCheckMate_matePosition_returnsTrue() throws {
-        // Back-rank mate: white Re8# — black king on g8 boxed in by own pawns, no rook to block
         let fen = "6k1/5ppp/8/8/8/8/8/4R2K w - - 0 1"
         let position = try #require(PositionFactory.loadPosition(fen))
         let validator = MoveValidator(position)

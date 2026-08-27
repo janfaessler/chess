@@ -8,16 +8,17 @@ class Knight : Piece, @unchecked Sendable {
     override func getPossibleMoves() -> [Move] {
         let row = row
         let file = file
-        return [
-            createMove(row+1, file+2),
-            createMove(row+1, file-2),
-            createMove(row-1, file+2),
-            createMove(row-1, file-2),
-            createMove(row+2, file+1),
-            createMove(row+2, file-1),
-            createMove(row-2, file+1),
-            createMove(row-2, file-1)
-        ].compactMap { $0 }
+        var moves: [Move] = []
+        moves.reserveCapacity(8)
+        if let m = createMove(row+1, file+2) { moves.append(m) }
+        if let m = createMove(row+1, file-2) { moves.append(m) }
+        if let m = createMove(row-1, file+2) { moves.append(m) }
+        if let m = createMove(row-1, file-2) { moves.append(m) }
+        if let m = createMove(row+2, file+1) { moves.append(m) }
+        if let m = createMove(row+2, file-1) { moves.append(m) }
+        if let m = createMove(row-2, file+1) { moves.append(m) }
+        if let m = createMove(row-2, file-1) { moves.append(m) }
+        return moves
     }
     
     override func isMovePossible(_ move: Move, board: any BoardQuery) -> Bool {
