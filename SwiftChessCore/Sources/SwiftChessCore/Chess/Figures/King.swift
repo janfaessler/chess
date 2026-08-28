@@ -1,14 +1,30 @@
 import Foundation
 
-class King: Piece, @unchecked Sendable {
+public struct King: ChessPiece, Sendable {
+    public let color: PieceColor
+    public let row: Int
+    public let file: Int
+    private let moved: Bool
+
+    public var type: PieceType { .king }
 
     init(color: PieceColor, row: Int, file: Int, moved: Bool = false) {
-        super.init(type: .king, color: color, row: row, file: file, moved: moved)
+        self.color = color
+        self.row = row
+        self.file = file
+        self.moved = moved
     }
 
-    override func getPossibleMoves() -> [Move] {
-        let row = row
-        let file = file
+    public func hasMoved() -> Bool { moved }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(type)
+        hasher.combine(color)
+        hasher.combine(row)
+        hasher.combine(file)
+    }
+
+    public func getPossibleMoves() -> [Move] {
         var moves: [Move] = []
         moves.reserveCapacity(10)
         if let m = createMove(row+1, file+1) { moves.append(m) }
@@ -19,22 +35,31 @@ class King: Piece, @unchecked Sendable {
         if let m = createMove(row-1, file) { moves.append(m) }
         if let m = createMove(row-1, file+1) { moves.append(m) }
         if let m = createMove(row+1, file-1) { moves.append(m) }
-        if !hasMoved() {
+        if !moved {
             if let m = createMove(row, BoardConstants.kingCastleQueensideFile, .castle) { moves.append(m) }
             if let m = createMove(row, BoardConstants.kingCastleKingsideFile, .castle) { moves.append(m) }
         }
         return moves
     }
 
-    override func isMovePossible(_ move: Move, board: any BoardQuery) -> Bool {
+    public func canDo(move: Move) -> Bool {
+        let dr = abs(move.row - row)
+        let df = abs(move.file - file)
+        if dr <= 1 && df <= 1 && dr + df > 0 { return true }
+        guard !moved, move.type == .castle, move.row == row else { return false }
+        return move.file == BoardConstants.kingCastleKingsideFile || move.file == BoardConstants.kingCastleQueensideFile
+    }
+
+    public func isMovePossible(_ move: Move, board: any BoardQuery) -> Bool {
         if CastlingRules.isCastlingMove(move) {
             return CastlingRules.canCastle(move, board: board)
         }
-        return super.isMovePossible(move, board: board)
+        guard canDo(move: move) else { return false }
+        guard let intersectingPiece = board.checkNextIntersection(move) else { return true }
+        return isCaptureablePiece(move, pieceToCapture: intersectingPiece)
     }
 
-    override func createMove(_ filename: any StringProtocol) -> Move? {
-        let possibleMoves = getPossibleMoves()
-        return possibleMoves.first(where: { $0.squareInfo == filename })
+    public func createMove(_ move: any StringProtocol) -> Move? {
+        getPossibleMoves().first(where: { $0.squareInfo == move })
     }
 }

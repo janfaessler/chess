@@ -38,8 +38,8 @@ public enum FenParser {
         str == "-" || Square(str) != nil
     }
     
-    private static func getPieces(_ position: String) -> [Piece] {
-        var figures:[Piece] = []
+    private static func getPieces(_ position: String) -> [any ChessPiece] {
+        var figures:[any ChessPiece] = []
         var row = 8
         for rowPart in position.split(separator: "/") {
             let figuresLine = parseLine(rowPart, rowNumber: row)
@@ -66,8 +66,8 @@ public enum FenParser {
         return Square(str)
     }
     
-    private static func parseLine(_ rowPart: String.SubSequence,  rowNumber: Int) -> [Piece]{
-        var figures:[Piece] = []
+    private static func parseLine(_ rowPart: String.SubSequence,  rowNumber: Int) -> [any ChessPiece]{
+        var figures:[any ChessPiece] = []
         var file = 1
         for part in rowPart {
             let digit = part.wholeNumberValue
@@ -85,13 +85,13 @@ public enum FenParser {
         return figures
     }
     
-    private static func parsePiece(_ str: Character, rowNumber:Int, fileNumber:Int) -> Piece? {
+    private static func parsePiece(_ str: Character, rowNumber:Int, fileNumber:Int) -> (any ChessPiece)? {
         let pieceType = PieceType(fenChar: str)
         let pieceColor = parseColor(str)
         return createPiece(pieceType, pieceColor, rowNumber, fileNumber)
     }
     
-    private static func createPiece(_ pieceType: PieceType?, _ pieceColor: PieceColor, _ rowNumber: Int, _ fileNumber: Int) -> Piece? {
+    private static func createPiece(_ pieceType: PieceType?, _ pieceColor: PieceColor, _ rowNumber: Int, _ fileNumber: Int) -> (any ChessPiece)? {
         switch (pieceType) {
             case .pawn:
                 return Pawn(color: pieceColor, row: rowNumber, file: fileNumber)

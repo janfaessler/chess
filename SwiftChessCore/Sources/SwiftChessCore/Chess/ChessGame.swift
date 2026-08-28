@@ -25,8 +25,9 @@ public class ChessGame {
             throw ValidationError.moveNotLegalMoveOnTheBoard
         }
         guard validator.figureExists(move) else {
-            logger.error("figure \(move.piece.info()) does not exists")
-            throw ValidationError.pieceDoesNotExist(move.piece)
+            let figDesc = "\(move.color) \(move.pieceType) \(move.startingSquare.info)"
+            logger.error("figure (\(figDesc)) does not exist")
+            throw ValidationError.pieceDoesNotExist(move.startingSquare)
         }
         doMove(move)
     }

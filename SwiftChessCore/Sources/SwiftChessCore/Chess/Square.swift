@@ -12,22 +12,17 @@ public struct Square: Equatable, Hashable, Sendable {
         self.row = row
         self.file = file
     }
-
-    public static func isValid(row: Int, file: Int) -> Bool {
-        1...BoardConstants.size ~= row && 1...BoardConstants.size ~= file
-    }
-
+    
     public init?(_ square: any StringProtocol) {
-        guard let fileChar = square.first,
-              let fVal = fileChar.asciiValue,
-              fVal >= Square.aAscii,
-              let secondChar = square.dropFirst().first,
-              let row = secondChar.wholeNumberValue,
-              1...BoardConstants.size ~= row else { return nil }
-        let file = Int(fVal - Square.aAscii) + 1
+        let (row, file) = Square.parseSquare(square)
+        guard let row, let file else { return nil }
         guard 1...BoardConstants.size ~= file else { return nil }
         self.file = file
         self.row = row
+    }
+
+    public static func isValid(row: Int, file: Int) -> Bool {
+        1...BoardConstants.size ~= row && 1...BoardConstants.size ~= file
     }
 
     public var info: String {
@@ -41,5 +36,16 @@ public struct Square: Equatable, Hashable, Sendable {
 
     public static func == (l: Square, r: Square) -> Bool {
         return l.row == r.row && l.file == r.file
+    }
+    
+    private static func parseSquare(_ square: any StringProtocol) -> (row:Int?, file:Int?) {
+        guard let fileChar = square.first,
+              let fVal = fileChar.asciiValue,
+              fVal >= Square.aAscii,
+              let secondChar = square.dropFirst().first,
+              let row = secondChar.wholeNumberValue,
+              1...BoardConstants.size ~= row else { return (nil, nil) }
+        let file = Int(fVal - Square.aAscii) + 1
+        return (row: row, file: file)
     }
 }

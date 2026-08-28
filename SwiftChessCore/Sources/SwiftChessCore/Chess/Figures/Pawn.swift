@@ -1,14 +1,30 @@
 import Foundation
 
-class Pawn: Piece, @unchecked Sendable {
+public struct Pawn: ChessPiece, Sendable {
+    public let color: PieceColor
+    public let row: Int
+    public let file: Int
+    private let moved: Bool
+
+    public var type: PieceType { .pawn }
 
     init(color: PieceColor, row: Int, file: Int, moved: Bool = false) {
-        super.init(type: .pawn, color: color, row: row, file: file, moved: moved)
+        self.color = color
+        self.row = row
+        self.file = file
+        self.moved = moved
     }
 
-    override func getPossibleMoves() -> [Move] {
-        let row = row
-        let file = file
+    public func hasMoved() -> Bool { moved }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(type)
+        hasher.combine(color)
+        hasher.combine(row)
+        hasher.combine(file)
+    }
+
+    public func getPossibleMoves() -> [Move] {
         let moveType: MoveType = isOnPromotionRank ? .promotion : .normal
         var moves: [Move] = []
         moves.reserveCapacity(4)
@@ -27,58 +43,56 @@ class Pawn: Piece, @unchecked Sendable {
         return moves
     }
 
-    override func isMovePossible(_ move: Move, board: any BoardQuery) -> Bool {
-        guard canDo(move: move) else { return false }
-        let once = canMoveOnce(move, board: board)
-        let twice = canMoveTwice(move, board: board)
-        let capture = canCapture(move, board: board)
-        return once || twice || capture
+    public func canDo(move: Move) -> Bool {
+        let direction = color == .white ? 1 : -1
+        let dr = move.row - row
+        let df = abs(move.file - file)
+        if dr == direction && df <= 1 { return true }
+        if dr == 2 * direction && df == 0 { return true }
+        return false
     }
 
-    override func createMove(_ move: any StringProtocol) -> Move? {
-        return Move(move, piece: Pawn(color: self.color, row: self.row, file: self.file), type: getMoveType(move))
+    public func isMovePossible(_ move: Move, board: any BoardQuery) -> Bool {
+        guard canDo(move: move) else { return false }
+        return canMoveOnce(move, board: board) || canMoveTwice(move, board: board) || canCapture(move, board: board)
+    }
+
+    public func createMove(_ move: any StringProtocol) -> Move? {
+        Move(move, startingSquare: square, color: color, pieceType: .pawn, hasMoved: moved, type: getMoveType(move), promoteTo: .queen)
     }
 
     private func canMoveOnce(_ move: Move, board: any BoardQuery) -> Bool {
         guard move.type == .normal || move.type == .promotion else { return false }
-        guard moveDoesNotChangeFile(move) else { return false }
+        guard move.file == file else { return false }
         return board.isEmpty(atRow: move.row, atFile: move.file)
     }
 
     private func canMoveTwice(_ move: Move, board: any BoardQuery) -> Bool {
         guard move.type == .double else { return false }
-        guard !move.piece.hasMoved() else { return false }
-        guard moveDoesNotChangeFile(move) else { return false }
+        guard !moved else { return false }
+        guard move.file == file else { return false }
         guard board.isEmpty(atRow: move.row, atFile: move.file) else { return false }
-
-        if move.piece.color == PieceColor.white {
-            return board.isEmpty(atRow: move.piece.row+1, atFile: move.file)
+        if color == .white {
+            return board.isEmpty(atRow: row+1, atFile: move.file)
         } else {
-            return board.isEmpty(atRow: move.piece.row-1, atFile: move.file)
+            return board.isEmpty(atRow: row-1, atFile: move.file)
         }
     }
 
     private func canCapture(_ move: Move, board: any BoardQuery) -> Bool {
         guard move.type == .normal || move.type == .promotion else { return false }
-
-        let row = move.piece.row + (move.piece.color == PieceColor.white ? +1 : -1)
-        let leftFile = move.piece.file - 1
-        let rightFile = move.piece.file + 1
-
-        let enemyToCaptureOnLeft = hasEnemy(atRow: row, atFile: leftFile, board: board)
-        let enemyToCaptureOnRight = hasEnemy(atRow: row, atFile: rightFile, board: board)
+        let captureRow = row + (color == .white ? +1 : -1)
+        let leftFile = file - 1
+        let rightFile = file + 1
+        let enemyLeft = hasEnemy(atRow: captureRow, atFile: leftFile, board: board)
+        let enemyRight = hasEnemy(atRow: captureRow, atFile: rightFile, board: board)
         let canEnPassant = EnPassantRules.canEnPassant(move, board: board)
-
-        return (enemyToCaptureOnLeft && leftFile == move.file) || (enemyToCaptureOnRight && rightFile == move.file) || canEnPassant
+        return (enemyLeft && leftFile == move.file) || (enemyRight && rightFile == move.file) || canEnPassant
     }
 
-    private func hasEnemy(atRow row: Int, atFile file: Int, board: any BoardQuery) -> Bool {
-        guard let target = board.get(atRow: row, atFile: file) else { return false }
+    private func hasEnemy(atRow r: Int, atFile f: Int, board: any BoardQuery) -> Bool {
+        guard let target = board.get(atRow: r, atFile: f) else { return false }
         return target.color != color
-    }
-
-    private func moveDoesNotChangeFile(_ move: Move) -> Bool {
-        return move.file == move.piece.file
     }
 
     private func getMoveType(_ move: any StringProtocol) -> MoveType {

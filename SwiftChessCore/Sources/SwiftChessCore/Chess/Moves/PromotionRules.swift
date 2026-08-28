@@ -15,10 +15,10 @@ struct PromotionRules {
     }
 
     static func isPromotion(_ move: Move) -> Bool {
-        move.piece.type == .pawn && move.row == promotionRank(for: move.piece.color)
+        move.pieceType == .pawn && move.row == promotionRank(for: move.color)
     }
 
     static func isPawnBeingPromoted(_ figure: any ChessPiece, by move: Move) -> Bool {
-        figure.type == .pawn && figure.color == move.piece.color && figure.row == move.row && figure.file == move.file
+        figure.type == .pawn && figure.color == move.color && figure.row == move.row && figure.file == move.file
     }
 }

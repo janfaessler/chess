@@ -53,7 +53,7 @@ struct PromotionChooseView: View {
 
     func getOffsetY() -> CGFloat {
         guard let move = board.moveToPromote else { return 0 }
-        let correction = move.piece.color == .white ? -7 : 4
+        let correction = move.color == .white ? -7 : 4
         return calcOffset(move.row + correction)
     }
     

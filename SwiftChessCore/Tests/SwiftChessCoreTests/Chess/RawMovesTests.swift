@@ -4,14 +4,14 @@ import Testing
 final class RawMovesTests: ChessTestBase {
 
     @Test func testEquality_underpromotionsAreDistinct() throws {
-        let pawn = Piece.create("e7", type: .pawn, color: .white)!
+        let pawn = PieceFactory.create("e7", type: .pawn, color: .white)!
         let toQueen = try #require(pawn.createMove("e8", type: .promotion, promoteTo: .queen))
         let toKnight = try #require(pawn.createMove("e8", type: .promotion, promoteTo: .knight))
         #expect(toQueen != toKnight, "e8=Q and e8=N must not compare equal")
     }
 
     @Test func testIdentity_equalMovesShareId() throws {
-        let pawn = Piece.create("e7", type: .pawn, color: .white)!
+        let pawn = PieceFactory.create("e7", type: .pawn, color: .white)!
         let a = try #require(pawn.createMove("e8", type: .promotion, promoteTo: .knight))
         let b = try #require(pawn.createMove("e8", type: .promotion, promoteTo: .knight))
         let queen = try #require(pawn.createMove("e8", type: .promotion, promoteTo: .queen))
@@ -21,9 +21,9 @@ final class RawMovesTests: ChessTestBase {
     }
 
     @Test func testSlidingMoves_countMatches() throws {
-        let rook = Piece.create("d4", type: .rook, color: .white)!
-        let bishop = Piece.create("d4", type: .bishop, color: .white)!
-        let queen = Piece.create("d4", type: .queen, color: .white)!
+        let rook = PieceFactory.create("d4", type: .rook, color: .white)!
+        let bishop = PieceFactory.create("d4", type: .bishop, color: .white)!
+        let queen = PieceFactory.create("d4", type: .queen, color: .white)!
 
         let rookMoves = rook.getPossibleMoves()
         let bishopMoves = bishop.getPossibleMoves()
@@ -213,7 +213,7 @@ final class RawMovesTests: ChessTestBase {
         try moveAndAssert(from: "e1", to: "g1", type: .king, color: .white, moveType: .castle)
         try moveAndAssert(from: "g8", to: "h8", type: .king, color: .black)
         try moveAndAssert(from: "g1", to: "h1", type: .king, color: .white)
-        #expect(Move(8, 9, piece: Piece.create("h8", type: .king, color: .black)!, type: .normal) == nil)
+        #expect(PieceFactory.create("h8", type: .king, color: .black)!.createMove(8, 9) == nil)
         try assertMoves(["e4", "e5", "Bc4", "Bb4", "c3", "Nf6", "Nf3", "O-O", "cxb4", "Re8", "O-O", "Kh8", "Kh1"])
     }
 
@@ -237,13 +237,13 @@ final class RawMovesTests: ChessTestBase {
         try moveAndAssert(from: "g7", to: "g5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssert(from: "d1", to: "h5", type: .queen, color: .white)
 
-        let king = Piece.create("e8", type: .king, color: .black)!
+        let king = PieceFactory.create("e8", type: .king, color: .black)!
         try assertPossibleMoves(forFigure: king, moves: [king.createMove("e7")!])
 
         try moveAndAssert(from: "e8", to: "e7", type: .king, color: .black)
         try moveAndAssert(from: "e4", to: "e5", type: .pawn, color: .white)
 
-        try assertPossibleMoves(forFigure: Piece.create("e7", type: .king, color: .black)!, moves: [])
+        try assertPossibleMoves(forFigure: PieceFactory.create("e7", type: .king, color: .black)!, moves: [])
 
         try moveAndAssert(from: "a7", to: "a6", type: .pawn, color: .black)
         try moveAndAssert(from: "d2", to: "d3", type: .pawn, color: .white)
@@ -258,18 +258,18 @@ final class RawMovesTests: ChessTestBase {
         loadFen("4k3/8/8/3B4/4P3/8/8/4K3 w - - 0 1")
         let testee = try #require(testee)
 
-        let pawn = try #require(testee.figures.first { $0.equals(Piece.create("e4", type: .pawn, color: .white)!) })
+        let pawn = try #require(testee.figures.first { $0.equals(PieceFactory.create("e4", type: .pawn, color: .white)!) })
         let canCaptureOwnBishop = testee.getPossibleMoves(forPiece: pawn).contains { $0.square == Square(row: 5, file: 4) }
         #expect(!canCaptureOwnBishop, "white pawn on e4 must not be able to capture its own bishop on d5")
 
-        try moveAndAssertError(Move("d5", piece: Piece.create("e4", type: .pawn, color: .white)!, type: .normal)!)
+        try moveAndAssertError(PieceFactory.create("e4", type: .pawn, color: .white)!.createMove("d5", type: .normal, promoteTo: .queen)!)
     }
 
     @Test func testPawnCanStillCaptureEnemyPiece() throws {
         loadFen("4k3/8/8/3b4/4P3/8/8/4K3 w - - 0 1")
         let testee = try #require(testee)
 
-        let pawn = try #require(testee.figures.first { $0.equals(Piece.create("e4", type: .pawn, color: .white)!) })
+        let pawn = try #require(testee.figures.first { $0.equals(PieceFactory.create("e4", type: .pawn, color: .white)!) })
         let canCaptureEnemyBishop = testee.getPossibleMoves(forPiece: pawn).contains { $0.square == Square(row: 5, file: 4) }
         #expect(canCaptureEnemyBishop, "white pawn on e4 must be able to capture the black bishop on d5")
     }
@@ -278,15 +278,15 @@ final class RawMovesTests: ChessTestBase {
         loadFen("4k3/P7/8/8/8/8/8/4K3 w - - 0 1")
         let testee = try #require(testee)
 
-        let pawn = try #require(testee.figures.first { $0.equals(Piece.create("a7", type: .pawn, color: .white)!) })
+        let pawn = try #require(testee.figures.first { $0.equals(PieceFactory.create("a7", type: .pawn, color: .white)!) })
         let canPushToPromote = testee.getPossibleMoves(forPiece: pawn).contains { $0.square == Square(row: 8, file: 1) }
         #expect(canPushToPromote, "white pawn on a7 must be able to push to a8 to promote")
 
-        let move = try #require(Move("a8", piece: Piece.create("a7", type: .pawn, color: .white)!, type: .promotion))
+        let move = try #require(PieceFactory.create("a7", type: .pawn, color: .white)!.createMove("a8", type: .promotion, promoteTo: .queen))
         try testee.move(move)
 
-        assertFigureNotExists(Piece.create("a7", type: .pawn, color: .white)!)
-        assertFigureExists(Piece.create("a8", type: .queen, color: .white)!)
+        assertFigureNotExists(PieceFactory.create("a7", type: .pawn, color: .white)!)
+        assertFigureExists(PieceFactory.create("a8", type: .queen, color: .white)!)
     }
 
     @Test func testKingCannotMoveIntoCheck() throws {
@@ -298,7 +298,7 @@ final class RawMovesTests: ChessTestBase {
     @Test func testPinnedPieceCannotMove() throws {
         loadFen("k3r3/8/8/8/4B3/8/8/4K3 w - - 0 1")
         let testee = try #require(testee)
-        let bishop = try #require(testee.figures.first { $0.equals(Piece.create("e4", type: .bishop, color: .white)!) })
+        let bishop = try #require(testee.figures.first { $0.equals(PieceFactory.create("e4", type: .bishop, color: .white)!) })
         #expect(testee.getPossibleMoves(forPiece: bishop).isEmpty, "pinned bishop must have no legal moves")
     }
 

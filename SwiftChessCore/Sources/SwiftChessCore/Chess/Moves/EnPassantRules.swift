@@ -4,7 +4,7 @@ struct EnPassantRules {
 
     static func target(afterMove move: Move) -> Square? {
         guard move.type == .double else { return nil }
-        let targetRow = move.piece.color == .white ? move.row - 1 : move.row + 1
+        let targetRow = move.color == .white ? move.row - 1 : move.row + 1
         return Square(row: targetRow, file: move.file)
     }
 
@@ -18,8 +18,8 @@ struct EnPassantRules {
     }
 
     static func capturedPawnSquare(for move: Move) -> Square {
-        guard let s = Square(row: move.piece.row, file: move.file) else {
-            preconditionFailure("Square coordinate out of bounds: row=\(move.piece.row) file=\(move.file)")
+        guard let s = Square(row: move.startingSquare.row, file: move.file) else {
+            preconditionFailure("Square coordinate out of bounds: row=\(move.startingSquare.row) file=\(move.file)")
         }
         return s
     }

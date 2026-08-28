@@ -25,12 +25,12 @@ public enum PositionFactory {
         guard let move = MoveFactory.create(notation, position: position) else { return nil }
         return getPosition(move, position: position)
     }
-    
+
     static func getPosition(_ move: Move, position: Position) -> Position? {
-        guard position.figures.contains(where: { $0.equals(move.piece) }) else { return nil }
+        guard position.get(atRow: move.startingSquare.row, atFile: move.startingSquare.file) != nil else { return nil }
         return position.applying(move)
     }
-    
+
     static func create(
         _ oldPosition:Position,
         afterMove:Move,
@@ -45,13 +45,13 @@ public enum PositionFactory {
             moveClock: oldPosition.moveClock + 1,
             halfmoveClock: getHalfmoveClock(afterMove, capturedPiece != nil, oldPosition: oldPosition))
     }
-    
+
     private static func createColorToMove(_ move:Move) -> PieceColor {
-        return move.piece.color == .white ? .black : .white
+        return move.color == .white ? .black : .white
     }
-    
+
     private static func getHalfmoveClock(_ move: Move, _ isCapture: Bool, oldPosition:Position) -> Int {
-        if move.piece.type == .pawn || isCapture  {
+        if move.pieceType == .pawn || isCapture {
             return 0
         } else {
             return oldPosition.halfmoveClock + 1

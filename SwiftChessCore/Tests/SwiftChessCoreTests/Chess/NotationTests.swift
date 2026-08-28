@@ -217,13 +217,13 @@ final class NotationTests: ChessTestBase {
         try moveAndAssert(notation: "g5", toField: "g5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssert(notation: "Qh5+", toField: "h5", type: .queen, color: .white)
 
-        let king = Piece.create("e8", type: .king, color: .black)!
+        let king = PieceFactory.create("e8", type: .king, color: .black)!
         try assertPossibleMoves(forFigure: king, moves: [king.createMove("e7")!])
 
         try moveAndAssert(notation: "Ke7", toField: "e7", type: .king, color: .black)
         try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .white)
 
-        try assertPossibleMoves(forFigure: Piece.create("e7", type: .king, color: .black)!, moves: [])
+        try assertPossibleMoves(forFigure: PieceFactory.create("e7", type: .king, color: .black)!, moves: [])
 
         try moveAndAssert(notation: "a6", toField: "a6", type: .pawn, color: .black)
         try moveAndAssert(notation: "d3", toField: "d3", type: .pawn, color: .white)
@@ -286,7 +286,7 @@ final class NotationTests: ChessTestBase {
         let testee = try #require(testee)
         let move = try #require(MoveFactory.create("a8=Q", position: testee.position))
         try testee.move(move)
-        assertFigureNotExists(Piece.create("a7", type: .pawn, color: .white)!)
-        assertFigureExists(Piece.create("a8", type: .queen, color: .white)!)
+        assertFigureNotExists(PieceFactory.create("a7", type: .pawn, color: .white)!)
+        assertFigureExists(PieceFactory.create("a8", type: .queen, color: .white)!)
     }
 }

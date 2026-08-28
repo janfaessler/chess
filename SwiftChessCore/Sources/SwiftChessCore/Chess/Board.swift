@@ -26,7 +26,7 @@ struct Board: BoardQuery, Sendable {
     }
 
     func checkNextIntersection(_ move: Move) -> (any ChessPiece)? {
-        PathChecker(self).firstPieceOnPath(from: move.piece.square, to: move.square)
+        PathChecker(self).firstPieceOnPath(from: move.startingSquare, to: move.square)
     }
 
     func hash(into hasher: inout Hasher) {

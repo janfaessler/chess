@@ -4,21 +4,21 @@ import Testing
 class ChessTestBase {
 
     var testee: ChessGame?
-    var moveLog: [Move] = []
-    private var startingPosition: Position = try! PositionFactory.startingPosition()
+    var initialPosition: Position = try! PositionFactory.startingPosition()
+    var moveLog: [String] = []
 
     init() {
-        let pos = try! PositionFactory.startingPosition()
-        testee = ChessGame(pos)
-        startingPosition = pos
+        let position = try! PositionFactory.startingPosition()
+        initialPosition = position
+        testee = ChessGame(position)
         moveLog = []
     }
 
     func loadMoves(_ pgn: String) -> [Move] {
         var result: [Move] = []
         var position = try! PositionFactory.startingPosition()
-        let pgnMoves = PgnParser.parse(pgn).first?.moves ?? []
-        for pgnmove in pgnMoves {
+        let game = PgnParser.parse(pgn).first?.moves ?? []
+        for pgnmove in game {
             if let move = MoveFactory.create(pgnmove.move, position: position) {
                 result += [move]
                 if let newPosition = PositionFactory.getPosition(move, position: position) {
@@ -38,9 +38,9 @@ class ChessTestBase {
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
         let testee = try #require(self.testee, sourceLocation: sourceLocation)
-        guard let startFigure = Piece.create(from, type: type, color: color),
-              let endFigure = Piece.create(to, type: type, color: color, moved: true),
-              let move = Move(to, piece: startFigure, type: moveType) else {
+        guard let startFigure = PieceFactory.create(from, type: type, color: color),
+              let endFigure = PieceFactory.create(to, type: type, color: color, moved: true),
+              let move = startFigure.createMove(to, type: moveType) else {
             Issue.record("Could not construct move from \(from) to \(to)", sourceLocation: sourceLocation)
             return
         }
@@ -65,9 +65,9 @@ class ChessTestBase {
             "move \(notation) could not be created",
             sourceLocation: sourceLocation
         )
-        let endFigure = Piece.create(toField, type: type, color: color, moved: true)!
+        let endFigure = PieceFactory.create(toField, type: type, color: color, moved: true)!
         try testee.move(move)
-        moveLog.append(move)
+        moveLog += [notation]
         #expect(figureExist(endFigure, testee: testee), "\(color) \(type) should be at \(toField) after \(notation)", sourceLocation: sourceLocation)
     }
 
@@ -80,8 +80,8 @@ class ChessTestBase {
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
         let testee = try #require(self.testee, sourceLocation: sourceLocation)
-        let startFigure = Piece.create(from, type: type, color: color)!
-        let move = Move(to, piece: startFigure, type: moveType)!
+        let startFigure = PieceFactory.create(from, type: type, color: color)!
+        let move = startFigure.createMove(to, type: moveType)!
         #expect(throws: (any Error).self, sourceLocation: sourceLocation) {
             try testee.move(move)
         }
@@ -102,8 +102,10 @@ class ChessTestBase {
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
         let testee = try #require(self.testee, sourceLocation: sourceLocation)
-        #expect(throws: (any Error).self, sourceLocation: sourceLocation) {
-            try testee.move(notation)
+        if let move = MoveFactory.create(notation, position: testee.position) {
+            #expect(throws: (any Error).self, sourceLocation: sourceLocation) {
+                try testee.move(move)
+            }
         }
     }
 
@@ -115,9 +117,9 @@ class ChessTestBase {
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
         let testee = try #require(self.testee, sourceLocation: sourceLocation)
-        let startFigure = Piece.create(from, type: type, color: color)!
-        let endFigure = Piece.create(to, type: type, color: color)!
-        let move = Move(to, piece: startFigure, type: .normal)!
+        let startFigure = PieceFactory.create(from, type: type, color: color)!
+        let endFigure = PieceFactory.create(to, type: type, color: color)!
+        let move = startFigure.createMove(to)!
         let pieceCount = testee.figures.count
         try testee.move(move)
         #expect(!figureExist(startFigure, testee: testee), "\(color) \(type) should have left \(from)", sourceLocation: sourceLocation)
@@ -133,8 +135,8 @@ class ChessTestBase {
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
         let testee = try #require(self.testee, sourceLocation: sourceLocation)
-        let startFigure = Piece.create(from, type: type, color: color)!
-        let move = Move(to, piece: startFigure, type: .normal)!
+        let startFigure = PieceFactory.create(from, type: type, color: color)!
+        let move = startFigure.createMove(to)!
         #expect(throws: (any Error).self, sourceLocation: sourceLocation) {
             try testee.move(move)
         }
@@ -148,9 +150,9 @@ class ChessTestBase {
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
         let testee = try #require(self.testee, sourceLocation: sourceLocation)
-        let startFigure = Piece.create(from, type: type, color: color)!
-        let endFigure = Piece.create(to, type: .queen, color: color)!
-        let move = Move(to, piece: startFigure, type: .promotion)!
+        let startFigure = PieceFactory.create(from, type: type, color: color)!
+        let endFigure = PieceFactory.create(to, type: .queen, color: color)!
+        let move = startFigure.createMove(to, type: .promotion)!
         let pieceCount = testee.figures.count
         try testee.move(move)
         #expect(!figureExist(startFigure, testee: testee), "\(color) \(type) should have left \(from)", sourceLocation: sourceLocation)
@@ -190,41 +192,29 @@ class ChessTestBase {
         }
         #expect(!figureExist(f, testee: testee), "\(f.info()) still exists", sourceLocation: sourceLocation)
     }
-
-    /// Generates SAN notation for each move in the game log by replaying from the starting position.
-    func moveLogNotations() -> [String] {
-        guard let testee else { return [] }
-        var position = startingPosition
-        return testee.moveLog.map { move in
-            let notation = NotationFactory.generate(move, position: position)
-            position = position.applying(move)
-            return notation
-        }
-    }
-
+    
     func assertMoves(
         _ expectedMoves: [String],
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
-        try #require(self.testee, sourceLocation: sourceLocation)
-        let actual = moveLogNotations()
-        #expect(
-            actual == expectedMoves,
-            "[\(actual.joined(separator: ","))] is not equal [\(expectedMoves.joined(separator: ","))]",
-            sourceLocation: sourceLocation
-        )
+        let testee = try #require(self.testee, sourceLocation: sourceLocation)
+        
+        let moves = getMoveNotations(testee)
+        
+        #expect(moves == expectedMoves, "[\(moves.joined(separator: ","))] is not equal [\(expectedMoves.joined(separator: ","))]", sourceLocation: sourceLocation)
     }
 
     func assertMoves(
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
         let testee = try #require(self.testee, sourceLocation: sourceLocation)
-        let actual = testee.moveLog
-        #expect(
-            actual == moveLog,
-            "[\(actual.map(\.info).joined(separator: ","))] is not equal [\(moveLog.map(\.info).joined(separator: ","))]",
-            sourceLocation: sourceLocation
-        )
+        let moves = getMoveNotations(testee)
+        #expect(moves == moveLog, "[\(moves.joined(separator: ","))] is not equal [\(moveLog.joined(separator: ","))]", sourceLocation: sourceLocation)
+    }
+
+    func moveLogNotations() -> [String] {
+        guard let testee = self.testee else { return [] }
+        return getMoveNotations(testee)
     }
 
     func assertGameState(
@@ -245,8 +235,18 @@ class ChessTestBase {
         let position = PositionFactory.loadPosition(fen)
         #expect(position != nil, "Invalid FEN: \(fen)", sourceLocation: sourceLocation)
         guard let position else { return }
-        startingPosition = position
-        moveLog = []
+        initialPosition = position
         testee = ChessGame(position)
+    }
+    
+    private func getMoveNotations(_ testee: ChessGame) -> [String] {
+        var position = initialPosition
+        var moveNotation: [String] = []
+        moveNotation.reserveCapacity(testee.moveLog.count)
+        for move in testee.moveLog {
+            moveNotation += [NotationFactory.generate(move, position: position)]
+            position = position.applying(move)
+        }
+        return moveNotation
     }
 }

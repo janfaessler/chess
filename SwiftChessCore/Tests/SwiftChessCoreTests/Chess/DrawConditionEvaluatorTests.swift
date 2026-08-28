@@ -5,64 +5,64 @@ struct DrawConditionEvaluatorTests {
 
     @Test func testInsufficientMaterial_onlyKings_isTrue() {
         let figures: [any ChessPiece] = [
-            Piece.create("e1", type: .king, color: .white)!,
-            Piece.create("e8", type: .king, color: .black)!
+            PieceFactory.create("e1", type: .king, color: .white)!,
+            PieceFactory.create("e8", type: .king, color: .black)!
         ]
         #expect(DrawConditionEvaluator.isInsufficientMaterial(figures: figures))
     }
 
     @Test func testInsufficientMaterial_kingAndKnight_isTrue() {
         let figures: [any ChessPiece] = [
-            Piece.create("e1", type: .king, color: .white)!,
-            Piece.create("g1", type: .knight, color: .white)!,
-            Piece.create("e8", type: .king, color: .black)!
+            PieceFactory.create("e1", type: .king, color: .white)!,
+            PieceFactory.create("g1", type: .knight, color: .white)!,
+            PieceFactory.create("e8", type: .king, color: .black)!
         ]
         #expect(DrawConditionEvaluator.isInsufficientMaterial(figures: figures))
     }
 
     @Test func testInsufficientMaterial_kingAndBishop_isTrue() {
         let figures: [any ChessPiece] = [
-            Piece.create("e1", type: .king, color: .white)!,
-            Piece.create("c1", type: .bishop, color: .white)!,
-            Piece.create("e8", type: .king, color: .black)!
+            PieceFactory.create("e1", type: .king, color: .white)!,
+            PieceFactory.create("c1", type: .bishop, color: .white)!,
+            PieceFactory.create("e8", type: .king, color: .black)!
         ]
         #expect(DrawConditionEvaluator.isInsufficientMaterial(figures: figures))
     }
 
     @Test func testInsufficientMaterial_bishopsOnSameSquareColor_isTrue() {
         let figures: [any ChessPiece] = [
-            Piece.create("e1", type: .king, color: .white)!,
-            Piece.create("c1", type: .bishop, color: .white)!,
-            Piece.create("e8", type: .king, color: .black)!,
-            Piece.create("f8", type: .bishop, color: .black)!
+            PieceFactory.create("e1", type: .king, color: .white)!,
+            PieceFactory.create("c1", type: .bishop, color: .white)!,
+            PieceFactory.create("e8", type: .king, color: .black)!,
+            PieceFactory.create("f8", type: .bishop, color: .black)!
         ]
         #expect(DrawConditionEvaluator.isInsufficientMaterial(figures: figures))
     }
 
     @Test func testInsufficientMaterial_bishopsOnOppositeSquareColor_isFalse() {
         let figures: [any ChessPiece] = [
-            Piece.create("e1", type: .king, color: .white)!,
-            Piece.create("c1", type: .bishop, color: .white)!,
-            Piece.create("e8", type: .king, color: .black)!,
-            Piece.create("c8", type: .bishop, color: .black)!
+            PieceFactory.create("e1", type: .king, color: .white)!,
+            PieceFactory.create("c1", type: .bishop, color: .white)!,
+            PieceFactory.create("e8", type: .king, color: .black)!,
+            PieceFactory.create("c8", type: .bishop, color: .black)!
         ]
         #expect(!DrawConditionEvaluator.isInsufficientMaterial(figures: figures))
     }
 
     @Test func testInsufficientMaterial_kingAndRook_isFalse() {
         let figures: [any ChessPiece] = [
-            Piece.create("e1", type: .king, color: .white)!,
-            Piece.create("a1", type: .rook, color: .white)!,
-            Piece.create("e8", type: .king, color: .black)!
+            PieceFactory.create("e1", type: .king, color: .white)!,
+            PieceFactory.create("a1", type: .rook, color: .white)!,
+            PieceFactory.create("e8", type: .king, color: .black)!
         ]
         #expect(!DrawConditionEvaluator.isInsufficientMaterial(figures: figures))
     }
 
     @Test func testInsufficientMaterial_kingAndQueen_isFalse() {
         let figures: [any ChessPiece] = [
-            Piece.create("e1", type: .king, color: .white)!,
-            Piece.create("d1", type: .queen, color: .white)!,
-            Piece.create("e8", type: .king, color: .black)!
+            PieceFactory.create("e1", type: .king, color: .white)!,
+            PieceFactory.create("d1", type: .queen, color: .white)!,
+            PieceFactory.create("e8", type: .king, color: .black)!
         ]
         #expect(!DrawConditionEvaluator.isInsufficientMaterial(figures: figures))
     }

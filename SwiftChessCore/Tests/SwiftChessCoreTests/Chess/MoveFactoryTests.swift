@@ -154,8 +154,8 @@ struct MoveFactoryTests {
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
         let move = try #require(MoveFactory.create(moveName, position: board), "move \(moveName) could not be created", sourceLocation: sourceLocation)
-        #expect(move.piece.type == type, "\(moveName): piece type mismatch", sourceLocation: sourceLocation)
-        #expect(move.piece.color == color, "\(moveName): piece color mismatch", sourceLocation: sourceLocation)
+        #expect(move.pieceType == type, "\(moveName): piece type mismatch", sourceLocation: sourceLocation)
+        #expect(move.color == color, "\(moveName): piece color mismatch", sourceLocation: sourceLocation)
         #expect(move.squareInfo == field, "\(moveName): target square mismatch", sourceLocation: sourceLocation)
         #expect(move.type == moveType, "\(moveName): move type mismatch", sourceLocation: sourceLocation)
         board = board.applying(move)

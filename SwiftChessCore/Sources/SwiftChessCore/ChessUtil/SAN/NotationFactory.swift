@@ -31,14 +31,14 @@ public enum NotationFactory {
     }
 
     private static func getPieceIdentifier(_ move: Move, position: Position) -> String {
-        if move.piece.type == .pawn {
+        if move.pieceType == .pawn {
             if isCapture(move, position: position) {
-                return move.piece.square.fileName
+                return move.startingSquare.fileName
             } else {
                 return ""
             }
         } else {
-            return sanIdent(for: move.piece.type)
+            return sanIdent(for: move.pieceType)
         }
     }
 
@@ -57,27 +57,27 @@ public enum NotationFactory {
     }
 
     private static func getDuplicateIdentifier(_ move: Move, position: Position, validator: MoveValidator) -> String {
-        guard move.piece.type != .pawn else { return "" }
+        guard move.pieceType != .pawn else { return "" }
 
         let ambiguousPieces = getPiecesForPossibleMoveDuplicate(move, position: position, validator: validator)
         guard !ambiguousPieces.isEmpty else { return "" }
 
-        let shareFile = ambiguousPieces.contains { $0.file == move.piece.file }
-        let shareRank = ambiguousPieces.contains { $0.row == move.piece.row }
+        let shareFile = ambiguousPieces.contains { $0.file == move.startingSquare.file }
+        let shareRank = ambiguousPieces.contains { $0.row == move.startingSquare.row }
         if !shareFile {
-            return move.piece.square.fileName
+            return move.startingSquare.fileName
         } else if !shareRank {
-            return String(move.piece.row)
+            return String(move.startingSquare.row)
         } else {
-            return "\(move.piece.square.fileName)\(move.piece.row)"
+            return "\(move.startingSquare.fileName)\(move.startingSquare.row)"
         }
     }
 
     private static func getPiecesForPossibleMoveDuplicate(_ move: Move, position: Position, validator: MoveValidator) -> [any ChessPiece] {
         return position.figures.filter { figure in
-            guard figure.color == move.piece.color,
-                  figure.type == move.piece.type,
-                  figure.square != move.piece.square,
+            guard figure.color == move.color,
+                  figure.type == move.pieceType,
+                  figure.square != move.startingSquare,
                   let candidate = figure.createMove(move.squareInfo) else { return false }
             return validator.isLegalMove(candidate)
         }

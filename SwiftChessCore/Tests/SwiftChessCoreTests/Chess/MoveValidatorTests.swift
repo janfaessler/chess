@@ -7,7 +7,7 @@ struct MoveValidatorTests {
         let position = try PositionFactory.startingPosition()
         let validator = MoveValidator(position)
         let pawn = try #require(position.get(atRow: 2, atFile: 5))
-        let move = try #require(Move("e4", piece: pawn, type: .double))
+        let move = try #require(pawn.createMove("e4", type: .double, promoteTo: .queen))
         #expect(validator.isLegalMove(move))
     }
 
@@ -16,7 +16,7 @@ struct MoveValidatorTests {
         let position = try #require(PositionFactory.loadPosition(fen))
         let validator = MoveValidator(position)
         let bishop = try #require(position.get(atRow: 2, atFile: 5))
-        let move = try #require(Move("d3", piece: bishop, type: .normal))
+        let move = try #require(bishop.createMove("d3", type: .normal, promoteTo: .queen))
         #expect(!validator.isLegalMove(move))
     }
 
@@ -64,7 +64,7 @@ struct MoveValidatorTests {
         let position = try #require(PositionFactory.loadPosition(fen))
         let validator = MoveValidator(position)
         let queen = try #require(position.get(atRow: 1, atFile: 4))
-        let move = try #require(Move("d8", piece: queen, type: .normal))
+        let move = try #require(queen.createMove("d8", type: .normal, promoteTo: .queen))
         #expect(validator.isCheck(move))
     }
 
@@ -73,7 +73,7 @@ struct MoveValidatorTests {
         let position = try #require(PositionFactory.loadPosition(fen))
         let validator = MoveValidator(position)
         let rook = try #require(position.get(atRow: 1, atFile: 5))
-        let move = try #require(Move("e8", piece: rook, type: .normal))
+        let move = try #require(rook.createMove("e8", type: .normal, promoteTo: .queen))
         #expect(validator.isCheckMate(move))
     }
 }

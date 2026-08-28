@@ -3,7 +3,7 @@ import Foundation
 struct CastlingRules {
 
     static func isCastlingMove(_ move: Move) -> Bool {
-        move.piece.type == .king && move.type == .castle
+        move.pieceType == .king && move.type == .castle
     }
 
     static func isKingsideCastling(_ move: Move) -> Bool {
@@ -22,16 +22,16 @@ struct CastlingRules {
     }
 
     static func pathIsInCheck(_ move: Move, position: Position) -> Bool {
-        let row = move.piece.row
+        let row = move.startingSquare.row
         let validator = MoveValidator(position)
-        return validator.isSquareAttackedByOpponent(row: row, file: move.piece.file)
+        return validator.isSquareAttackedByOpponent(row: row, file: move.startingSquare.file)
             || validator.isSquareAttackedByOpponent(row: row, file: transitFile(for: move))
             || validator.isSquareAttackedByOpponent(row: row, file: move.file)
     }
 
     static func canCastle(_ move: Move, board: any BoardQuery) -> Bool {
         guard isCastlingMove(move) else { return false }
-        guard board.castlingRights.canCastle(kingside: isKingsideCastling(move), for: move.piece.color) else { return false }
+        guard board.castlingRights.canCastle(kingside: isKingsideCastling(move), for: move.color) else { return false }
         guard pathIsClear(move, board: board) else { return false }
         if let position = board as? Position {
             guard !pathIsInCheck(move, position: position) else { return false }
@@ -51,9 +51,9 @@ struct CastlingRules {
 
     private static func retainsRight(afterMove move: Move, kingside: Bool, color: PieceColor, capturedPiece: (any ChessPiece)?, old: CastlingRights) -> Bool {
         guard old.canCastle(kingside: kingside, for: color) else { return false }
-        if move.piece.color == color && move.piece.type == .king { return false }
+        if move.color == color && move.pieceType == .king { return false }
         let rookFile = kingside ? BoardConstants.rookCastleKingsideStartFile : BoardConstants.rookCastleQueensideStartFile
-        if move.piece.color == color && move.piece.type == .rook && move.piece.file == rookFile { return false }
+        if move.color == color && move.pieceType == .rook && move.startingSquare.file == rookFile { return false }
         if let captured = capturedPiece, captured.color == color, captured.type == .rook {
             if captured.file == BoardConstants.rookCastleKingsideStartFile || captured.file == BoardConstants.rookCastleQueensideStartFile { return false }
         }
@@ -62,8 +62,8 @@ struct CastlingRules {
 
     private static func pathIsClear(_ move: Move, board: any BoardQuery) -> Bool {
         let rookFile = isKingsideCastling(move) ? BoardConstants.rookCastleKingsideStartFile : BoardConstants.rookCastleQueensideStartFile
-        let kingFile = move.piece.file
-        let row = move.piece.row
+        let kingFile = move.startingSquare.file
+        let row = move.startingSquare.row
         let lo = min(kingFile, rookFile) + 1
         let hi = max(kingFile, rookFile)
         return (lo..<hi).allSatisfy { board.isEmpty(atRow: row, atFile: $0) }
