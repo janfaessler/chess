@@ -1,5 +1,4 @@
 import Foundation
-import os
 
 public class ChessGame {
 
@@ -15,7 +14,7 @@ public class ChessGame {
 
     public init(_ pos: Position) {
         position = pos
-        positionCount = [pos.getHash(): 1]
+        positionCount = [pos.hash: 1]
     }
 
     public func move(_ move: Move) throws(ValidationError) {
@@ -39,7 +38,7 @@ public class ChessGame {
         if !hasStarted {
             return .notStarted
         }
-        if DrawConditionEvaluator.isThreefoldRepetition(positionCount: positionCount, currentHash: position.getHash()) {
+        if DrawConditionEvaluator.isThreefoldRepetition(positionCount: positionCount, currentHash: position.hash) {
             return .drawByRepetition
         }
         if DrawConditionEvaluator.has50MoveRuleTriggered(halfmoveClock: position.halfmoveClock) {
@@ -61,14 +60,12 @@ public class ChessGame {
     }
 
     private func doMove(_ move: Move) {
-        logger.log("play \(move.info)")
         moveLog.append(move)
         position = position.applying(move)
         increasePositionCount()
     }
 
     private func increasePositionCount() {
-        let hash = position.getHash()
-        positionCount[hash, default: 0] += 1
+        positionCount[position.hash, default: 0] += 1
     }
 }

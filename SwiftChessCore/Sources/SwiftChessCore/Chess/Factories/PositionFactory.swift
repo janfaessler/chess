@@ -32,13 +32,13 @@ public enum PositionFactory {
     }
 
     static func create(
-        _ oldPosition:Position,
-        afterMove:Move,
-        figures: [any ChessPiece],
-        capturedPiece:(any ChessPiece)? = nil
+        _ oldPosition: Position,
+        afterMove: Move,
+        board: Board,
+        capturedPiece: (any ChessPiece)? = nil
     ) -> Position {
         return Position(
-            figures,
+            board: board,
             colorToMove: createColorToMove(afterMove),
             enPassantTarget: EnPassantRules.target(afterMove: afterMove),
             castlingRights: CastlingRules.updatedRights(afterMove: afterMove, capturedPiece: capturedPiece, oldPosition: oldPosition),

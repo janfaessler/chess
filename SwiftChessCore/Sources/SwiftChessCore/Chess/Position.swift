@@ -1,93 +1,77 @@
 import Foundation
 
-public struct Position: BoardQuery, Sendable {
+public struct Position: BoardQuery, Sendable, Hashable {
 
-    private let board:Board
-    public let colorToMove:PieceColor
-    public let enPassantTarget:Square?
-    public let castlingRights:CastlingRights
-    public let halfmoveClock:Int
-    public let moveClock:Int
+    private let board: Board
+    public let colorToMove: PieceColor
+    public let enPassantTarget: Square?
+    public let castlingRights: CastlingRights
+    public let halfmoveClock: Int
+    public let moveClock: Int
+    public let hash: Int
 
-    public var figures:[any ChessPiece] { board.figures }
+    public var figures: [any ChessPiece] { board.figures }
 
     public init(
         _ figures: [any ChessPiece],
-        colorToMove:PieceColor,
-        enPassantTarget:Square?,
-        castlingRights:CastlingRights,
-        moveClock:Int,
-        halfmoveClock:Int
+        colorToMove: PieceColor,
+        enPassantTarget: Square?,
+        castlingRights: CastlingRights,
+        moveClock: Int,
+        halfmoveClock: Int
     ) {
-        self.board = Board(figures)
+        let board = Board(figures)
+        self.init(board: board, colorToMove: colorToMove, enPassantTarget: enPassantTarget, castlingRights: castlingRights, moveClock: moveClock, halfmoveClock: halfmoveClock)
+    }
+
+    init(
+        board: Board,
+        colorToMove: PieceColor,
+        enPassantTarget: Square?,
+        castlingRights: CastlingRights,
+        moveClock: Int,
+        halfmoveClock: Int
+    ) {
+        self.board = board
         self.colorToMove = colorToMove
         self.enPassantTarget = enPassantTarget
         self.castlingRights = castlingRights
         self.moveClock = moveClock
         self.halfmoveClock = halfmoveClock
+        self.hash = Position.computeHash(board: board, colorToMove: colorToMove, enPassantTarget: enPassantTarget, castlingRights: castlingRights)
+    }
+    
+    public func get(atRow: Int, atFile: Int) -> (any ChessPiece)? {
+        board.get(atRow: atRow, atFile: atFile)
     }
 
-    public func get(atRow:Int, atFile:Int) -> (any ChessPiece)? {
-        return board.get(atRow: atRow, atFile: atFile)
+    public func isEmpty(atRow: Int, atFile: Int) -> Bool {
+        board.isEmpty(atRow: atRow, atFile: atFile)
     }
 
-    public func isEmpty(atRow:Int, atFile:Int) -> Bool {
-        return board.isEmpty(atRow: atRow, atFile: atFile)
-    }
-
-    public func isNotEmpty(atRow:Int, atFile:Int) -> Bool {
-        return board.isNotEmpty(atRow: atRow, atFile: atFile)
+    public func isNotEmpty(atRow: Int, atFile: Int) -> Bool {
+        board.isNotEmpty(atRow: atRow, atFile: atFile)
     }
 
     public func checkNextIntersection(_ move: Move) -> (any ChessPiece)? {
-        return board.checkNextIntersection(move)
+        board.checkNextIntersection(move)
     }
 
-    public func getHash() -> Int {
+    public func applying(_ move: Move) -> Position {
+        let (newBoard, capturedPiece) = board.applying(move, enPassantTarget: enPassantTarget)
+        return PositionFactory.create(self, afterMove: move, board: newBoard, capturedPiece: capturedPiece)
+    }
+    
+    public static func == (lhs: Position, rhs: Position) -> Bool {
+        lhs.hash == rhs.hash
+    }
+    
+    private static func computeHash(board: Board, colorToMove: PieceColor, enPassantTarget: Square?, castlingRights: CastlingRights) -> Int {
         var hasher = Hasher()
-        board.hash(into: &hasher)
+        hasher.combine(board.hash)
         hasher.combine(colorToMove)
         hasher.combine(castlingRights)
         hasher.combine(enPassantTarget)
         return hasher.finalize()
-    }
-
-    public func applying(_ move: Move) -> Position {
-        var figures = figures
-        let capturedPiece = applyCapture(&figures, move: move)
-        applyMovement(&figures, move: move)
-        if CastlingRules.isCastlingMove(move) { applyCastlingRook(&figures, move: move) }
-        if PromotionRules.isPromotion(move) { applyPromotion(&figures, move: move) }
-        return PositionFactory.create(self, afterMove: move, figures: figures, capturedPiece: capturedPiece)
-    }
-
-    private func applyCapture(_ figures: inout [any ChessPiece], move: Move) -> (any ChessPiece)? {
-        let capturedPiece = get(atRow: move.row, atFile: move.file)
-        figures.removeAll(where: {
-            ($0.row == move.startingSquare.row && $0.file == move.startingSquare.file) ||
-            capturedPiece?.equals($0) == true
-        })
-        return capturedPiece
-    }
-
-    private func applyMovement(_ figures: inout [any ChessPiece], move: Move) {
-        if EnPassantRules.isEnPassant(move, board: self) {
-            let captured = EnPassantRules.capturedPawnSquare(for: move)
-            figures.removeAll(where: { $0.row == captured.row && $0.file == captured.file })
-        }
-        figures.append(PieceFactory.create(type: move.pieceType, color: move.color, row: move.row, file: move.file, moved: true))
-    }
-
-    private func applyCastlingRook(_ figures: inout [any ChessPiece], move: Move) {
-        guard let (fromFile, toFile) = CastlingRules.castlingRookMove(for: move) else { return }
-        let rookRow = move.startingSquare.row
-        let rookColor = move.color
-        figures.removeAll(where: { $0.type == .rook && $0.color == rookColor && $0.row == rookRow && $0.file == fromFile })
-        figures.append(PieceFactory.create(type: .rook, color: rookColor, row: rookRow, file: toFile, moved: true))
-    }
-
-    private func applyPromotion(_ figures: inout [any ChessPiece], move: Move) {
-        figures.removeAll(where: { PromotionRules.isPawnBeingPromoted($0, by: move) })
-        figures.append(PieceFactory.create(type: move.promoteTo.pieceType, color: move.color, row: move.row, file: move.file))
     }
 }

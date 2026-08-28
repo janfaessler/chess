@@ -9,7 +9,7 @@ struct MoveListView: View {
     var body: some View {
         ScrollView {
             Spacer().id(topID)
-            LineView(model: model, line: model.lineModel)
+            LineView(model: model, line: model.lineModel, lazy: true)
                 .padding(10)
             Spacer().id(bottomID)
         }

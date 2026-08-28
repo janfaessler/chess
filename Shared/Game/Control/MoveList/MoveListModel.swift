@@ -1,5 +1,4 @@
 import Foundation
-import os
 import SwiftChessCore
 
 @Observable
@@ -7,7 +6,6 @@ class MoveListModel {
     
     private let logger = Log.logger("MoveListModel")
 
-    /// Emits the board position whenever navigation changes the current move.
     let positionChanged: AsyncStream<Position>
     private let positionContinuation: AsyncStream<Position>.Continuation
 
@@ -107,6 +105,10 @@ class MoveListModel {
     
     func isMove(_ move: MoveModel?, childOf parent: MoveModel) -> Bool {
         structure.move(move, isChildOf: parent)
+    }
+
+    func parent(of move: MoveModel) -> MoveModel? {
+        structure.parent(of: move)
     }
 
     func deleteFrom(_ move: MoveModel) {

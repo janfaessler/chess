@@ -61,7 +61,7 @@ class ControlModel {
 
     private func observeBoardMoves() {
         let stream = board.gameEvents
-        observationTasks.append(Task { @MainActor [weak self] in
+        observationTasks.append(Task { [weak self] in
             for await event in stream {
                 if case .moveMade(let notation, let color) = event {
                     self?.movePlayed(notation, color: color)
@@ -70,6 +70,7 @@ class ControlModel {
         })
     }
 
+    @MainActor
     private func movePlayed(_ notation: String, color: PieceColor) {
         self.logger.info("movePlayed: \(notation)")
         let position = self.board.position
@@ -80,13 +81,14 @@ class ControlModel {
 
     private func observePositionChanges() {
         let stream = moveList.positionChanged
-        observationTasks.append(Task { @MainActor [weak self] in
+        observationTasks.append(Task { [weak self] in
             for await position in stream {
                 self?.positionChange(position)
             }
         })
     }
 
+    @MainActor
     private func positionChange(_ position: Position) {
         self.logger.info("positionChange")
         self.board.updatePosition(position)
@@ -100,15 +102,15 @@ class ControlModel {
     
     private func observeEngineEval() {
         let stream = engine.evalStream
-        observationTasks.append(Task { @MainActor [weak self] in
+        observationTasks.append(Task { [weak self] in
             for await lines in stream {
                 self?.updateEval(lines)
             }
         })
     }
 
+    @MainActor
     private func updateEval(_ lines: [EngineLine]) {
-        self.logger.info("updateEval \(lines)")
         self.lines = lines
     }
 }

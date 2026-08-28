@@ -218,13 +218,13 @@ final class GameStateTests: ChessTestBase {
     @Test func testThreefold_samePlacementDifferentSideToMove_notEqual() throws {
         let white = try #require(PositionFactory.loadPosition("4k3/8/8/8/8/8/8/4K3 w - - 0 1"))
         let black = try #require(PositionFactory.loadPosition("4k3/8/8/8/8/8/8/4K3 b - - 0 1"))
-        #expect(white.getHash() != black.getHash())
+        #expect(white.hash != black.hash)
     }
 
     @Test func testThreefold_castlingRightsLostBreaksRepetition() throws {
         let full = try #require(PositionFactory.loadPosition("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1"))
         let none = try #require(PositionFactory.loadPosition("r3k2r/8/8/8/8/8/8/R3K2R w - - 0 1"))
-        #expect(full.getHash() != none.getHash())
+        #expect(full.hash != none.hash)
     }
 
     @Test func testThreefold_countsInitialPosition() throws {

@@ -7,10 +7,14 @@ struct VariationView: View {
 
     @State private var collapsed: Set<String> = []
     @State private var pendingDeleteVariation: String? = nil
+    
+    private var variations: [String] {
+        move.getVariations()
+    }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 3) {
-            ForEach(move.getVariations(), id: \.self) { variationName in
+        LazyVStack(alignment: .leading, spacing: 3) {
+            ForEach(variations, id: \.self) { variationName in
                 if let variationLine = move.getVariation(variationName) {
                     let isActive = isActiveVariation(variationName)
                     let isCollapsed = collapsed.contains(variationName)
@@ -100,13 +104,10 @@ struct VariationView: View {
     private func isActiveVariation(_ name: String) -> Bool {
         guard let current = model.currentMove else { return false }
         guard let line = move.getVariation(name) else { return false }
-        for pair in line.all {
-            if let white = pair.white, white == current || model.isMove(current, childOf: white) {
-                return true
-            }
-            if let black = pair.black, black == current || model.isMove(current, childOf: black) {
-                return true
-            }
+        var check: MoveModel? = current
+        while let c = check {
+            if line.index(of: c) != nil { return true }
+            check = model.parent(of: c)
         }
         return false
     }
