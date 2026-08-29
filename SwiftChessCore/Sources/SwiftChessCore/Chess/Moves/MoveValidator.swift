@@ -35,8 +35,10 @@ struct MoveValidator {
     }
 
     func playerHasLegalMove() -> Bool {
-        let figuresOfCurrentPlayer = position.figures.filter({ $0.color == position.colorToMove })
-        return figuresOfCurrentPlayer.contains(where: { fig in fig.getPossibleMoves().contains(where: { move in isLegalMove(move) }) })
+        return position.figures.contains(where: { fig in
+            guard fig.color == position.colorToMove else { return false }
+            return fig.getPossibleMoves().contains(where: { isLegalMove($0) })
+        })
     }
 
     func isKingInCheck() -> Bool {
