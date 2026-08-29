@@ -46,7 +46,7 @@ class ControlModel {
 
         guard let game else { return }
         isLoading = true
-        Task.detached(priority: .userInitiated) { [weak self, game] in
+        Task(name: "ControlModel.StructureFactory.create"){ @concurrent [weak self, game] in
             let structure = StructureFactory.create(game)
             await MainActor.run { [weak self] in
                 self?.moveList.load(structure)
@@ -61,16 +61,15 @@ class ControlModel {
 
     private func observeBoardMoves() {
         let stream = board.gameEvents
-        observationTasks.append(Task { [weak self] in
+        observationTasks.append(Task(name: "Board.gameEvents") { @concurrent [weak self] in
             for await event in stream {
                 if case .moveMade(let notation, let color) = event {
-                    self?.movePlayed(notation, color: color)
+                    await self?.movePlayed(notation, color: color)
                 }
             }
         })
     }
 
-    @MainActor
     private func movePlayed(_ notation: String, color: PieceColor) {
         self.logger.info("movePlayed: \(notation)")
         let position = self.board.position
@@ -81,16 +80,15 @@ class ControlModel {
 
     private func observePositionChanges() {
         let stream = moveList.positionChanged
-        observationTasks.append(Task { [weak self] in
+        observationTasks.append(Task(name:"MoveList.positionChanged") { @concurrent [weak self] in
             for await position in stream {
-                self?.positionChange(position)
+                await self?.positionChange(position)
             }
         })
     }
 
-    @MainActor
     private func positionChange(_ position: Position) {
-        self.logger.info("positionChange")
+        self.logger.info("positionChange position: \(FenBuilder.create(position))")
         self.board.updatePosition(position)
         self.board.annotations.clearUserAnnotations()
         self.board.annotations.updatePgn(
@@ -102,14 +100,13 @@ class ControlModel {
     
     private func observeEngineEval() {
         let stream = engine.evalStream
-        observationTasks.append(Task { [weak self] in
+        observationTasks.append(Task(name:"Engine.evalStream") { @concurrent [weak self] in
             for await lines in stream {
-                self?.updateEval(lines)
+                 await self?.updateEval(lines)
             }
         })
     }
 
-    @MainActor
     private func updateEval(_ lines: [EngineLine]) {
         self.lines = lines
     }

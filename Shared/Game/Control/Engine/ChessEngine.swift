@@ -3,7 +3,6 @@ import ChessKitEngine
 import SwiftChessCore
 
 @Observable
-@MainActor
 final class ChessEngine: EngineProtocol {
 
     private let logger = Log.logger("ChessEngine")
@@ -11,7 +10,7 @@ final class ChessEngine: EngineProtocol {
     let evalStream: AsyncStream<[EngineLine]>
     private let evalContinuation: AsyncStream<[EngineLine]>.Continuation
 
-    private let engine: Engine
+    private static let engine = Engine(type: .stockfish)
     private let settings: EngineSettings
     private var lines: [EngineLine] = []
     private var pos: Position = try! PositionFactory.startingPosition()
@@ -24,26 +23,24 @@ final class ChessEngine: EngineProtocol {
 
     init(settings: EngineSettings = EngineSettings()) {
         (evalStream, evalContinuation) = AsyncStream.makeStream(of: [EngineLine].self)
-        engine = Engine(type: .stockfish)
         self.settings = settings
     }
 
     private func startIfNeeded() {
-        guard configurationTask == nil else { return }
-
-        let engine = engine
+        guard self.configurationTask == nil else { return }
+        let engine = ChessEngine.engine
         let coreCount = settings.coreCount
         let lineCount = settings.lineCount
         let debug = settings.debug
 
-        configurationTask = Task {
+        self.configurationTask = Task(name: "ChessEngine.configuration") {
+            guard await !engine.isRunning else { return }
             await engine.set(loggingEnabled: debug)
             await engine.start(coreCount: coreCount, multipv: lineCount)
-
             while await !engine.isRunning, !Task.isCancelled {
                 try? await Task.sleep(for: .milliseconds(50))
             }
-
+            guard !Task.isCancelled else { return }
             guard let evalFile = Bundle.main.url(forResource: "nn-1111cefa1111", withExtension: "nnue") else {
                 return
             }
@@ -54,20 +51,22 @@ final class ChessEngine: EngineProtocol {
             await engine.send(command: .setoption(id: "EvalFileSmall", value: evalFile.absoluteURL.path()))
         }
 
-        responseTask = Task { [weak self, engine] in
+        responseTask = Task(name: "ChessEngine.responseStream") { [weak self] in
             await self?.configurationTask?.value
             guard let stream = await engine.responseStream else { return }
             for await response in stream {
+                guard !Task.isCancelled else { return }
                 self?.handleEngineResponse(response)
             }
         }
 
-        settingsTask = Task { [weak self] in
+        let settings = self.settings
+        settingsTask = Task(name: "ChessEngine.settings") { [weak self] in
             await self?.configurationTask?.value
-            guard let self else { return }
             for await _ in settings.changes {
+                guard !Task.isCancelled, let self else { return }
                 guard await engine.isRunning else { continue }
-                newPosition(pos)
+                self.newPosition(self.pos)
             }
         }
     }
@@ -78,6 +77,7 @@ final class ChessEngine: EngineProtocol {
         analysisTask?.cancel()
         settingsTask?.cancel()
         evalContinuation.finish()
+        logger.info("deinit")
     }
 
     public func newPosition(_ pos: Position) {
@@ -88,9 +88,10 @@ final class ChessEngine: EngineProtocol {
         let coreCount = settings.coreCount
         let lineCount = settings.lineCount
         let debug = settings.debug
+        let engine = ChessEngine.engine
 
         analysisTask?.cancel()
-        analysisTask = Task { [engine, configurationTask, debounceDelay] in
+        analysisTask = Task(name: "ChessEngine.analyze(\(fen)") { [configurationTask, debounceDelay] in
             await configurationTask?.value
             guard await engine.isRunning else { return }
             await engine.send(command: .stop)
