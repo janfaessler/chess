@@ -3,8 +3,7 @@ import Testing
 
 struct PgnParserTests {
 
-    @Test func testParsingWithVariationsAndSubvariations() throws {
-
+    private func parseComplexPgn() throws -> PgnGame {
         let pgn =
 """
 [Event "moep"]
@@ -13,78 +12,97 @@ struct PgnParserTests {
 
 { initial game comment. } 1. e4 c6 {bla1}  2. d4 {bla2}  ( 2. Nc3 d5 3. Nf3 { bla bla.}  3... Bg4 { moep}  ( 3... dxe4 { bla bla ( sbla )  bla.}  4. Nxe4 Nf6 )( 3... a6 { bla3} )4. h3 Bxf3 5. Qxf3 e6 { [%csl Gb7,Gc1,Gc6,Gd5,Ge6,Gf1,Gf7] fu:}  )( 2. Nf3 d5 3. exd5 cxd5 4. d4 { bar.}  )2... d5 3. Nc3 { bla bla  ( 3. e5 ) .}  ( 3. e5 $1 { fu bar 3..c5!}  3... c5 $5 4. dxc5 $1  ( 4. c3 Nc6 5. Nf3 Bg4 6. Be2 e6 )( 4. c4 $5 )4... Nc6 $5 ( 4... e6))3... dxe4
 """
+        return try #require(PgnParser.parse(pgn).first)
+    }
 
-        let games = PgnParser.parse(pgn)
-        let game = try #require(games.first)
-
+    @Test func testVariationParsing_headersAndComment() throws {
+        let game = try parseComplexPgn()
         #expect(game.headers["Event"] == "moep")
         #expect(game.headers["White"] == "whites name")
         #expect(game.headers["Black"] == "blacks name")
-
         #expect(game.comment == "initial game comment.")
+    }
+
+    @Test func testVariationParsing_mainLine() throws {
+        let game = try parseComplexPgn()
         #expect(game.moves[0].move == "e4")
         #expect(game.moves[1].move == "c6")
         #expect(game.moves[1].comment == "bla1")
         #expect(game.moves[2].move == "d4")
         #expect(game.moves[2].comment == "bla2")
-        #expect(game.moves[2].variations[0][0].move == "Nc3")
-        #expect(game.moves[2].variations[0][1].move == "d5")
-        #expect(game.moves[2].variations[0][2].move == "Nf3")
-        #expect(game.moves[2].variations[0][2].comment == "bla bla.")
-        #expect(game.moves[2].variations[0][3].move == "Bg4")
-        #expect(game.moves[2].variations[0][3].comment == "moep")
-
-        #expect(game.moves[2].variations[0][3].variations[0][0].move == "dxe4")
-        #expect(game.moves[2].variations[0][3].variations[0][0].comment == "bla bla ( sbla ) bla.")
-        #expect(game.moves[2].variations[0][3].variations[0][1].move == "Nxe4")
-        #expect(game.moves[2].variations[0][3].variations[0][2].move == "Nf6")
-
-        #expect(game.moves[2].variations[0][3].variations[1][0].move == "a6")
-        #expect(game.moves[2].variations[0][3].variations[1][0].comment == "bla3")
-
-        #expect(game.moves[2].variations[0][4].move == "h3")
-        #expect(game.moves[2].variations[0][5].move == "Bxf3")
-        #expect(game.moves[2].variations[0][6].move == "Qxf3")
-        #expect(game.moves[2].variations[0][7].move == "e6")
-        #expect(game.moves[2].variations[0][7].comment == "fu:")
-        #expect(game.moves[2].variations[0][7].highlights.count == 7)
-        #expect(game.moves[2].variations[0][7].highlights[0] == SquareHighlight(color: .green, square: "b7"))
-        #expect(game.moves[2].variations[0][7].highlights[6] == SquareHighlight(color: .green, square: "f7"))
-
-        #expect(game.moves[2].variations[1][0].move == "Nf3")
-        #expect(game.moves[2].variations[1][1].move == "d5")
-        #expect(game.moves[2].variations[1][2].move == "exd5")
-        #expect(game.moves[2].variations[1][3].move == "cxd5")
-        #expect(game.moves[2].variations[1][4].move == "d4")
-        #expect(game.moves[2].variations[1][4].comment == "bar.")
-
         #expect(game.moves[3].move == "d5")
         #expect(game.moves[4].move == "Nc3")
         #expect(game.moves[4].comment == "bla bla ( 3. e5 ) .")
-
-        #expect(game.moves[4].variations[0][0].move == "e5")
-        #expect(game.moves[4].variations[0][0].comment == "fu bar 3..c5!")
-        #expect(game.moves[4].variations[0][0].annotation == .good)
-        #expect(game.moves[4].variations[0][1].move == "c5")
-        #expect(game.moves[4].variations[0][1].annotation == .interesting)
-        #expect(game.moves[4].variations[0][2].move == "dxc5")
-        #expect(game.moves[4].variations[0][2].annotation == .good)
-
-        #expect(game.moves[4].variations[0][2].variations[0][0].move == "c3")
-        #expect(game.moves[4].variations[0][2].variations[0][1].move == "Nc6")
-        #expect(game.moves[4].variations[0][2].variations[0][2].move == "Nf3")
-        #expect(game.moves[4].variations[0][2].variations[0][3].move == "Bg4")
-        #expect(game.moves[4].variations[0][2].variations[0][4].move == "Be2")
-        #expect(game.moves[4].variations[0][2].variations[0][5].move == "e6")
-
-        #expect(game.moves[4].variations[0][2].variations[1][0].move == "c4")
-        #expect(game.moves[4].variations[0][2].variations[1][0].annotation == .interesting)
-
-        #expect(game.moves[4].variations[0][3].move == "Nc6")
-        #expect(game.moves[4].variations[0][3].annotation == .interesting)
-        #expect(game.moves[4].variations[0][3].variations[0][0].move == "e6")
-
         #expect(game.moves[5].move == "dxe4")
+    }
+
+    @Test func testVariationParsing_firstVariation() throws {
+        let game = try parseComplexPgn()
+        let v = game.moves[2].variations[0]
+        #expect(v[0].move == "Nc3")
+        #expect(v[1].move == "d5")
+        #expect(v[2].move == "Nf3")
+        #expect(v[2].comment == "bla bla.")
+        #expect(v[3].move == "Bg4")
+        #expect(v[3].comment == "moep")
+        #expect(v[4].move == "h3")
+        #expect(v[5].move == "Bxf3")
+        #expect(v[6].move == "Qxf3")
+        #expect(v[7].move == "e6")
+        #expect(v[7].comment == "fu:")
+    }
+
+    @Test func testVariationParsing_firstVariationHighlights() throws {
+        let game = try parseComplexPgn()
+        let e6 = game.moves[2].variations[0][7]
+        #expect(e6.highlights.count == 7)
+        #expect(e6.highlights[0] == SquareHighlight(color: .green, square: "b7"))
+        #expect(e6.highlights[6] == SquareHighlight(color: .green, square: "f7"))
+    }
+
+    @Test func testVariationParsing_nestedVariationsInFirstVariation() throws {
+        let game = try parseComplexPgn()
+        let bg4 = game.moves[2].variations[0][3]
+        #expect(bg4.variations[0][0].move == "dxe4")
+        #expect(bg4.variations[0][0].comment == "bla bla ( sbla ) bla.")
+        #expect(bg4.variations[0][1].move == "Nxe4")
+        #expect(bg4.variations[0][2].move == "Nf6")
+        #expect(bg4.variations[1][0].move == "a6")
+        #expect(bg4.variations[1][0].comment == "bla3")
+    }
+
+    @Test func testVariationParsing_secondVariation() throws {
+        let game = try parseComplexPgn()
+        let v = game.moves[2].variations[1]
+        #expect(v[0].move == "Nf3")
+        #expect(v[1].move == "d5")
+        #expect(v[2].move == "exd5")
+        #expect(v[3].move == "cxd5")
+        #expect(v[4].move == "d4")
+        #expect(v[4].comment == "bar.")
+    }
+
+    @Test func testVariationParsing_nagAnnotationsAndSubVariations() throws {
+        let game = try parseComplexPgn()
+        let e5line = game.moves[4].variations[0]
+        #expect(e5line[0].move == "e5")
+        #expect(e5line[0].comment == "fu bar 3..c5!")
+        #expect(e5line[0].annotation == .good)
+        #expect(e5line[1].move == "c5")
+        #expect(e5line[1].annotation == .interesting)
+        #expect(e5line[2].move == "dxc5")
+        #expect(e5line[2].annotation == .good)
+        #expect(e5line[2].variations[0][0].move == "c3")
+        #expect(e5line[2].variations[0][1].move == "Nc6")
+        #expect(e5line[2].variations[0][2].move == "Nf3")
+        #expect(e5line[2].variations[0][3].move == "Bg4")
+        #expect(e5line[2].variations[0][4].move == "Be2")
+        #expect(e5line[2].variations[0][5].move == "e6")
+        #expect(e5line[2].variations[1][0].move == "c4")
+        #expect(e5line[2].variations[1][0].annotation == .interesting)
+        #expect(e5line[3].move == "Nc6")
+        #expect(e5line[3].annotation == .interesting)
+        #expect(e5line[3].variations[0][0].move == "e6")
     }
 
     @Test func testParse_unterminatedComment_doesNotCrash() {

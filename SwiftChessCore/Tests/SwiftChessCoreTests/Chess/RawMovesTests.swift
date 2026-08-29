@@ -196,14 +196,25 @@ final class RawMovesTests: ChessTestBase {
         try assertMoves(["Nf3", "b6", "g3", "Bb7", "Bg2", "e5", "Nxe5", "Bxg2", "Nxf7", "Bxh1", "Nxd8", "Kxd8"])
     }
 
-    @Test func testSimpleCastleWithTryingWrongMoves() throws {
+    @Test func testBishopRejectsMoveToNonDiagonalSquare() throws {
         try moveAndAssert(from: "e2", to: "e4", type: .pawn, color: .white, moveType: .double)
         try moveAndAssert(from: "e7", to: "e5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssertError("f1", to: "c5", type: .bishop, color: .white)
-        try moveAndAssert(from: "f1", to: "c4", type: .bishop, color: .white)
-        try moveAndAssert(from: "f8", to: "b4", type: .bishop, color: .black)
+        try assertMoves(["e4", "e5"])
+    }
+
+    @Test func testPinnedPawnCannotPush() throws {
+        // 1. e4 e5 2. Bc4 Bb4 — Bb4 pins the d-pawn along the b4–e1 diagonal
+        loadFen("r1bqk1nr/pppp1ppp/8/4p3/1bB1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3")
         try moveAndAssertError("d2", to: "d3", type: .pawn, color: .white)
         try moveAndAssertError("d2", to: "d4", type: .pawn, color: .white, moveType: .double)
+    }
+
+    @Test func testCastleSucceedsAfterCapturingPinningBishop() throws {
+        try moveAndAssert(from: "e2", to: "e4", type: .pawn, color: .white, moveType: .double)
+        try moveAndAssert(from: "e7", to: "e5", type: .pawn, color: .black, moveType: .double)
+        try moveAndAssert(from: "f1", to: "c4", type: .bishop, color: .white)
+        try moveAndAssert(from: "f8", to: "b4", type: .bishop, color: .black)
         try moveAndAssert(from: "c2", to: "c3", type: .pawn, color: .white)
         try moveAndAssert(from: "g8", to: "f6", type: .knight, color: .black)
         try moveAndAssert(from: "g1", to: "f3", type: .knight, color: .white)

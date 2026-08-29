@@ -4,9 +4,8 @@ import SwiftChessCore
 
 struct MoveHistoryTests {
 
-    let testee = MoveListModel()
-
     @Test func testMoveHistory() throws {
+        let testee = MoveListModel()
         let game = GameData.from(try #require(PgnParser.parse("1. e4 e5 2. Nc3 Nf6").first))
         let containers = StructureFactory.create(game)
 
@@ -69,6 +68,7 @@ struct MoveHistoryTests {
     }
 
     @Test func testUpdateMoves() throws {
+        let testee = MoveListModel()
         let game = GameData.from(try #require(PgnParser.parse("1. e4 e5 ( 1... d5 2. d3 ( 2. a3 a6 ) )2. Nc3 ( 2. Nf3 Nf6 3. b3 b6 )  Nf6").first))
         let containers = StructureFactory.create(game)
 

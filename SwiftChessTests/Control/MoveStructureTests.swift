@@ -3,9 +3,25 @@ import Testing
 
 struct MoveStructureTests {
 
-    let testee = MoveListModel()
+    private func subVariationBlackOnWhiteModel() -> MoveListModel {
+        let model = MoveListModel()
+        for move in ["e4", "e5", "Nc3", "Nc6"] { model.movePlayed(move) }
+        model.back()
+        model.movePlayed("Bc5")
+        model.movePlayed("Bc4")
+        model.movePlayed("d6")
+        model.movePlayed("d3")
+        model.back()
+        model.back()
+        model.back()
+        model.movePlayed("d3")
+        model.movePlayed("d6")
+        model.movePlayed("Be2")
+        return model
+    }
 
     @Test func testTopLevelMoveNavigation() throws {
+        let testee = MoveListModel()
         let testMoves = ["e4", "e5", "Nc3", "Nc6"]
         for move in testMoves {
             testee.movePlayed(move)
@@ -29,6 +45,7 @@ struct MoveStructureTests {
     }
 
     @Test func testMoveVariationOnBlack() throws {
+        let testee = MoveListModel()
         let testMoves = ["e4", "e5", "Nc3", "Nc6"]
         for move in testMoves {
             testee.movePlayed(move)
@@ -70,6 +87,7 @@ struct MoveStructureTests {
     }
 
     @Test func testMoveVariationOnWhite() throws {
+        let testee = MoveListModel()
         let testMoves = ["e4", "e5", "Nc3", "Nc6"]
         for move in testMoves {
             testee.movePlayed(move)
@@ -116,6 +134,7 @@ struct MoveStructureTests {
     }
 
     @Test func testGoToMoveWithTwoVariations() throws {
+        let testee = MoveListModel()
         let testMoves = ["e4", "e5", "Nc3", "Nc6"]
         for move in testMoves {
             testee.movePlayed(move)
@@ -157,11 +176,9 @@ struct MoveStructureTests {
         #expect(variationBc4?[0].black!.getVariations().count == 0)
     }
 
-    @Test func testSubVariationBlackOnWhite() throws {
-        let testMoves = ["e4", "e5", "Nc3", "Nc6"]
-        for move in testMoves {
-            testee.movePlayed(move)
-        }
+    @Test func testSubVariationBlackOnWhite_navigation() {
+        let testee = MoveListModel()
+        for move in ["e4", "e5", "Nc3", "Nc6"] { testee.movePlayed(move) }
 
         testee.back()
         #expect(testee.currentMove?.move == "Nc3")
@@ -186,16 +203,10 @@ struct MoveStructureTests {
 
         testee.back()
         #expect(testee.currentMove?.move == "Bc5")
+    }
 
-        testee.movePlayed("d3")
-        #expect(testee.currentMove?.move == "d3")
-
-        testee.movePlayed("d6")
-        #expect(testee.currentMove?.move == "d6")
-
-        testee.movePlayed("Be2")
-        #expect(testee.currentMove?.move == "Be2")
-
+    @Test func testSubVariationBlackOnWhite_topVariation() {
+        let testee = subVariationBlackOnWhiteModel()
         #expect(testee.list[1].black?.getVariations().count == 1)
         let variation = testee.list[1].black?.getVariation("Bc5")?.all
         #expect(variation?[0].moveNumber == 2)
@@ -209,7 +220,11 @@ struct MoveStructureTests {
         #expect(variation?[2].moveNumber == 4)
         #expect(variation?[2].white!.move == "d3")
         #expect(variation?[2].white!.getVariations().count == 0)
+    }
 
+    @Test func testSubVariationBlackOnWhite_subVariation() {
+        let testee = subVariationBlackOnWhiteModel()
+        let variation = testee.list[1].black?.getVariation("Bc5")?.all
         let subVariation = variation?[1].white?.getVariation("d3")?.all
         #expect(subVariation?[0].moveNumber == 3)
         #expect(subVariation?[0].white!.move == "d3")
@@ -223,6 +238,7 @@ struct MoveStructureTests {
     }
 
     @Test func testSubVariationWhiteOnBlack() throws {
+        let testee = MoveListModel()
         let testMoves = ["e4", "e5", "Nc3", "Nc6"]
         for move in testMoves {
             testee.movePlayed(move)

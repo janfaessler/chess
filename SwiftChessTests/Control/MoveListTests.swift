@@ -4,11 +4,10 @@ import SwiftChessCore
 
 struct MoveListTests {
 
-    let testee = MoveListModel()
-
     // MARK: - Annotation
 
     @Test func testSetAnnotation() throws {
+        let testee = MoveListModel()
         testee.movePlayed("e4")
         let e4 = try #require(testee.currentMove)
         #expect(e4.annotation == nil)
@@ -24,6 +23,7 @@ struct MoveListTests {
     }
 
     @Test func testSetAnnotationDoesNotAffectNavigation() throws {
+        let testee = MoveListModel()
         testee.movePlayed("e4")
         testee.movePlayed("e5")
         let e4 = try #require(testee.list[0].white)
@@ -40,6 +40,7 @@ struct MoveListTests {
     // MARK: - Delete from main line
 
     @Test func testDeleteWhiteMoveFromMainLine() throws {
+        let testee = MoveListModel()
         testee.movePlayed("e4")
         testee.movePlayed("e5")
         testee.movePlayed("Nc3")
@@ -58,6 +59,7 @@ struct MoveListTests {
     }
 
     @Test func testDeleteBlackMoveKeepsWhiteInPair() throws {
+        let testee = MoveListModel()
         testee.movePlayed("e4")
         testee.movePlayed("e5")
         testee.movePlayed("Nc3")
@@ -74,6 +76,7 @@ struct MoveListTests {
     }
 
     @Test func testDeleteFromKeepsCurrentMoveIfBeforeDeletion() throws {
+        let testee = MoveListModel()
         testee.movePlayed("e4")
         testee.movePlayed("e5")
         testee.movePlayed("Nc3")
@@ -88,6 +91,7 @@ struct MoveListTests {
     }
 
     @Test func testDeleteFromResetsCurrentMoveIfDeleted() throws {
+        let testee = MoveListModel()
         testee.movePlayed("e4")
         testee.movePlayed("e5")
         testee.movePlayed("Nc3")
@@ -102,6 +106,7 @@ struct MoveListTests {
     // MARK: - Delete variation
 
     @Test func testDeleteVariationRemovesIt() throws {
+        let testee = MoveListModel()
         testee.movePlayed("e4")
         testee.movePlayed("e5")
         testee.movePlayed("Nc3")
@@ -120,6 +125,7 @@ struct MoveListTests {
     }
 
     @Test func testDeleteVariationResetsCurrentMoveIfInsideIt() throws {
+        let testee = MoveListModel()
         testee.movePlayed("e4")
         testee.movePlayed("e5")
         testee.movePlayed("Nc3")
@@ -136,6 +142,7 @@ struct MoveListTests {
     }
 
     @Test func testDeleteVariationKeepsCurrentMoveIfElsewhere() throws {
+        let testee = MoveListModel()
         testee.movePlayed("e4")
         testee.movePlayed("e5")
         testee.movePlayed("Nc3")
@@ -157,6 +164,7 @@ struct MoveListTests {
     // MARK: - Delete from variation
 
     @Test func testDeleteFromVariationMove() throws {
+        let testee = MoveListModel()
         testee.movePlayed("e4")
         testee.movePlayed("e5")
         testee.movePlayed("Nc3")
@@ -179,6 +187,7 @@ struct MoveListTests {
     }
 
     @Test func testDeleteFromVariationResetsCurrentMoveIfDeleted() throws {
+        let testee = MoveListModel()
         testee.movePlayed("e4")
         testee.movePlayed("e5")
         testee.movePlayed("Nc3")
