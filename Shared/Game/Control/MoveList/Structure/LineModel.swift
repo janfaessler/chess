@@ -71,22 +71,18 @@ class LineModel {
         line.firstIndex(where: { $0.white?.id == of.id || $0.black?.id == of.id })
     }
 
-    /// Removes the given move and everything after it in this line.
-    /// Returns all MoveModels that were removed (for parentMoves cache cleanup).
     func truncate(from move: MoveModel) -> [MoveModel] {
         guard let index = index(of: move) else { return [] }
         let pair = line[index]
         var removed: [MoveModel] = []
 
         if pair.white == nil || move == pair.white {
-            // Remove this pair and all following
             for p in line[index...] {
                 if let w = p.white { removed.append(w) }
                 if let b = p.black { removed.append(b) }
             }
             line = Array(line[..<index])
         } else {
-            // move is black and white exists: keep white, remove black and all following pairs
             if let b = pair.black { removed.append(b) }
             pair.black = nil
             for p in line[(index + 1)...] {

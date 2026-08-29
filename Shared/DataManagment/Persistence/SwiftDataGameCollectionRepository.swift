@@ -10,7 +10,6 @@ enum RepositoryError: Error {
     case contextNotAvailable
 }
 
-@MainActor
 final class SwiftDataGameCollectionRepository: GameCollectionRepository {
 
     private let logger = Log.logger("SwiftDataGameCollectionRepository")

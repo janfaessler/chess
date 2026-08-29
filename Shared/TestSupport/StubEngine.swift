@@ -1,7 +1,6 @@
 import Foundation
 import SwiftChessCore
 
-@MainActor
 final class StubEngine: EngineProtocol {
 
     let evalStream: AsyncStream<[EngineLine]>

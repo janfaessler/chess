@@ -7,7 +7,6 @@ struct HeaderEntry: Identifiable {
 }
 
 @Observable
-@MainActor
 class EditGameModel {
 
     var white: String

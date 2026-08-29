@@ -1,6 +1,5 @@
 import Foundation
 
-@MainActor
 final class FakeFileRepository: FileRepository {
 
     var importResult: [GameData]

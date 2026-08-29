@@ -55,8 +55,8 @@ final class ChessEngine: EngineProtocol {
             await self?.configurationTask?.value
             guard let stream = await engine.responseStream else { return }
             for await response in stream {
-                guard !Task.isCancelled else { return }
-                self?.handleEngineResponse(response)
+                guard !Task.isCancelled, let self else { return }
+                self.handleEngineResponse(response)
             }
         }
 
@@ -77,7 +77,6 @@ final class ChessEngine: EngineProtocol {
         analysisTask?.cancel()
         settingsTask?.cancel()
         evalContinuation.finish()
-        logger.info("deinit")
     }
 
     public func newPosition(_ pos: Position) {

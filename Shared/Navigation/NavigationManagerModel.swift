@@ -1,7 +1,6 @@
 import Foundation
 import os
 
-@MainActor
 @Observable
 public class NavigationManagerModel {
 

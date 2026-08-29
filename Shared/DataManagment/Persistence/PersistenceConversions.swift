@@ -17,7 +17,7 @@ private func decode<T: Decodable>(_ data: Data, as type: T.Type, for gameId: UUI
 }
 
 extension GameEntity {
-    convenience init(from gameData: GameData, order: Int) throws {
+    @MainActor convenience init(from gameData: GameData, order: Int) throws {
         self.init(
             id: gameData.id,
             title: gameData.getTitle(),
@@ -29,7 +29,7 @@ extension GameEntity {
         )
     }
 
-    func update(from gameData: GameData, order: Int) throws {
+    @MainActor func update(from gameData: GameData, order: Int) throws {
         self.headersData = try encode(gameData.headers, for: gameData.id)
         self.movesData = try encode(gameData.moves, for: gameData.id)
         title = gameData.getTitle()
@@ -38,7 +38,7 @@ extension GameEntity {
         self.order = order
     }
 
-    func toGameData() throws -> GameData {
+    @MainActor func toGameData() throws -> GameData {
         GameData(
             id: id,
             headers: try decode(headersData, as: [String: String].self, for: id),
@@ -50,7 +50,7 @@ extension GameEntity {
 }
 
 extension CollectionEntity {
-    func toGameCollection() -> GameCollection {
+    @MainActor func toGameCollection() -> GameCollection {
         let logger = Log.logger("CollectionEntity")
         let sortedGames = games.sorted { $0.order < $1.order }
         let gameDataArray = sortedGames.compactMap { game -> GameData? in

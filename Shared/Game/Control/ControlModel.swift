@@ -2,7 +2,6 @@ import SwiftUI
 import SwiftChessCore
 
 @Observable
-@MainActor
 class ControlModel {
 
     private let logger = Log.logger("ControlModel")
@@ -46,9 +45,9 @@ class ControlModel {
 
         guard let game else { return }
         isLoading = true
-        Task(name: "ControlModel.StructureFactory.create"){ @concurrent [weak self, game] in
+        Task(name: "ControlModel.StructureFactory.create"){ [weak self, game] in
             let structure = StructureFactory.create(game)
-            await self?.updateStructure(structure)
+            self?.updateStructure(structure)
         }
     }
 

@@ -1,6 +1,5 @@
 import Foundation
 
-@MainActor
 final class FakeGameCollectionRepository: GameCollectionRepository {
 
     private(set) var storedCollections: [GameCollection]
