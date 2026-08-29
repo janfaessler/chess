@@ -48,15 +48,17 @@ class ControlModel {
         isLoading = true
         Task(name: "ControlModel.StructureFactory.create"){ @concurrent [weak self, game] in
             let structure = StructureFactory.create(game)
-            await MainActor.run { [weak self] in
-                self?.moveList.load(structure)
-                self?.isLoading = false
-            }
+            await self?.updateStructure(structure)
         }
     }
 
     isolated deinit {
         observationTasks.forEach { $0.cancel() }
+    }
+    
+    private func updateStructure(_ structure:MoveStructure) {
+        self.moveList.load(structure)
+        self.isLoading = false
     }
 
     private func observeBoardMoves() {
@@ -88,7 +90,7 @@ class ControlModel {
     }
 
     private func positionChange(_ position: Position) {
-        self.logger.info("positionChange position: \(FenBuilder.create(position))")
+        self.logger.info("positionChange: \(FenBuilder.create(position))")
         self.board.updatePosition(position)
         self.board.annotations.clearUserAnnotations()
         self.board.annotations.updatePgn(
