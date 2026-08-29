@@ -263,6 +263,11 @@ final class GameStateTests: ChessTestBase {
         try assertGameState(.drawByStalemate)
     }
 
+    @Test func testCaptureCheckerIsLegal() throws {
+        loadFen("rnbqkb1r/pp2pppp/2p2N2/8/8/5N2/PPPP1PPP/R1BQKB1R b KQkq - 0 10")
+        try assertGameState(.running)
+    }
+
     @Test func testStalemate_twoAdditionalPatterns() throws {
         let stalematePositions = [
             "k7/2Q5/1K6/8/8/8/8/8 b - - 1 10",  // queen + king vs king, black king cornered

@@ -60,7 +60,7 @@ struct MoveValidator {
         let fileToCheck = isKingMove ? move.file : king.file
         let newPos = position.applying(move)
 
-        return figures.contains(where: {
+        return newPos.figures.contains(where: {
             guard $0.color != position.colorToMove else { return false }
             guard let attackMove = $0.createMove(rowToCheck, fileToCheck, MoveType.normal) else { return false }
             return $0.isMovePossible(attackMove, board: newPos)
