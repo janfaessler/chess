@@ -1,8 +1,6 @@
 import Foundation
 
-public class LanParser {
-
-    private init() {}
+public enum LanParser {
 
     public static func parse(lan: String, position: Position) -> Move? {
         guard lan.count >= 4 else { return nil }

@@ -8,6 +8,8 @@ public struct LanAdapter: MoveNotationPort {
     }
 
     public func generate(_ move: Move, in position: Position) -> String {
-        move.info
+        let lan = move.startingSquare.info + move.destination.info
+        guard move.type == .promotion else { return lan }
+        return lan + String(move.promoteTo.pieceType.fenChar(for: .black))
     }
 }

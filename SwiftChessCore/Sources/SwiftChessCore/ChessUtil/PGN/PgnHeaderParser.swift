@@ -1,7 +1,7 @@
 import Foundation
 import RegexBuilder
 
-public class PgnHeaderParser {
+public enum PgnHeaderParser {
     
     nonisolated(unsafe) static let header = Regex {
         One("[")

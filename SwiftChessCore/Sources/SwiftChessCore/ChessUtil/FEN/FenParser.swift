@@ -15,13 +15,15 @@ public enum FenParser {
         guard let halfmove = Int(parts[4]), halfmove <= BoardConstants.halfmoveClockLimit else { throw FenError.malformed(fen) }
         guard Int(parts[5]) != nil else { throw FenError.malformed(fen) }
 
-        return Position(getPieces(parts[0]),
-                        colorToMove: getNextMove(parts[1]),
-                        enPassantTarget: getEnPassantTarget(parts[3]),
-                        castlingRights: parseCastlingRights(parts[2]),
-                        moveClock: parseInt(parts[5]) - 1,
-                        halfmoveClock: halfmove)
-
+        guard let position = Position(getPieces(parts[0]),
+                                      colorToMove: getNextMove(parts[1]),
+                                      enPassantTarget: getEnPassantTarget(parts[3]),
+                                      castlingRights: parseCastlingRights(parts[2]),
+                                      moveClock: parseInt(parts[5]) - 1,
+                                      halfmoveClock: halfmove) else {
+            throw FenError.malformed(fen)
+        }
+        return position
     }
 
     private static func isValidBoard(_ board: String) -> Bool {
@@ -73,7 +75,7 @@ public enum FenParser {
             let digit = part.wholeNumberValue
             if (digit == nil) {
                 guard let fig = parsePiece(part, rowNumber: rowNumber, fileNumber: file) else {
-                    break
+                    continue
                 }
                 figures.append(fig)
                 file += 1
@@ -86,28 +88,8 @@ public enum FenParser {
     }
     
     private static func parsePiece(_ str: Character, rowNumber:Int, fileNumber:Int) -> (any ChessPiece)? {
-        let pieceType = PieceType(fenChar: str)
-        let pieceColor = parseColor(str)
-        return createPiece(pieceType, pieceColor, rowNumber, fileNumber)
-    }
-    
-    private static func createPiece(_ pieceType: PieceType?, _ pieceColor: PieceColor, _ rowNumber: Int, _ fileNumber: Int) -> (any ChessPiece)? {
-        switch (pieceType) {
-            case .pawn:
-                return Pawn(color: pieceColor, row: rowNumber, file: fileNumber)
-            case .bishop:
-                return Bishop(color: pieceColor, row: rowNumber, file: fileNumber)
-            case .knight:
-                return Knight(color: pieceColor, row: rowNumber, file: fileNumber)
-            case .rook:
-                return Rook(color: pieceColor, row: rowNumber, file: fileNumber)
-            case .queen:
-                return Queen(color: pieceColor, row: rowNumber, file: fileNumber)
-            case .king:
-                return King(color: pieceColor, row: rowNumber, file: fileNumber)
-            case .none:
-                return nil
-        }
+        guard let pieceType = PieceType(fenChar: str) else { return nil }
+        return PieceFactory.create(type: pieceType, color: parseColor(str), row: rowNumber, file: fileNumber)
     }
     
     private static func parseColor(_ str:Character) -> PieceColor {

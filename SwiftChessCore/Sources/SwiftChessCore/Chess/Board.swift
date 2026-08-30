@@ -14,11 +14,8 @@ struct Board: BoardQuery, Sendable, Hashable {
     let figures: [any ChessPiece]
     let hash: Int
 
-    init(_ figures: [any ChessPiece]) {
-        guard let grid = Board.createGrid(figures) else {
-            self.init(grid: Array(repeating: nil, count: 64))
-            return
-        }
+    init?(_ figures: [any ChessPiece]) {
+        guard let grid = Board.createGrid(figures) else { return nil }
         self.init(grid: grid)
     }
 
@@ -59,7 +56,7 @@ struct Board: BoardQuery, Sendable, Hashable {
     }
     
     static func == (lhs: Board, rhs: Board) -> Bool {
-        lhs.hash == rhs.hash
+        lhs.grid == rhs.grid
     }
     
     private static func createGrid(_ figures: [any ChessPiece]) -> [StoredPiece?]? {

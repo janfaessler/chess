@@ -1,6 +1,6 @@
 import Foundation
 
-public class FenBuilder {
+public enum FenBuilder {
 
     public static func create(_ pos:Position) -> String {
         

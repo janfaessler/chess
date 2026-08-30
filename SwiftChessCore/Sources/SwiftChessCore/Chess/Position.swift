@@ -12,7 +12,7 @@ public struct Position: BoardQuery, Sendable, Hashable {
 
     public var figures: [any ChessPiece] { board.figures }
 
-    public init(
+    public init?(
         _ figures: [any ChessPiece],
         colorToMove: PieceColor,
         enPassantTarget: Square?,
@@ -20,7 +20,7 @@ public struct Position: BoardQuery, Sendable, Hashable {
         moveClock: Int,
         halfmoveClock: Int
     ) {
-        let board = Board(figures)
+        guard let board = Board(figures) else { return nil }
         self.init(board: board, colorToMove: colorToMove, enPassantTarget: enPassantTarget, castlingRights: castlingRights, moveClock: moveClock, halfmoveClock: halfmoveClock)
     }
 
@@ -63,7 +63,10 @@ public struct Position: BoardQuery, Sendable, Hashable {
     }
     
     public static func == (lhs: Position, rhs: Position) -> Bool {
-        lhs.hash == rhs.hash
+        lhs.board == rhs.board &&
+        lhs.colorToMove == rhs.colorToMove &&
+        lhs.castlingRights == rhs.castlingRights &&
+        lhs.enPassantTarget == rhs.enPassantTarget
     }
     
     private static func computeHash(board: Board, colorToMove: PieceColor, enPassantTarget: Square?, castlingRights: CastlingRights) -> Int {

@@ -25,17 +25,17 @@ final class CastlingRulesTests: ChessTestBase {
 
     @Test func testCastlingBlocked_kingPassesThroughAttackedSquare() throws {
         loadFen("4k3/5r2/8/8/8/8/8/4K2R w K - 0 1")
-        try moveAndAssertError("O-O")
+        try moveAndAssertError("e1", to: "g1", type: .king, color: .white, moveType: .castle)
     }
 
     @Test func testCastlingBlocked_kingInCheck() throws {
         loadFen("4k3/4r3/8/8/8/8/8/4K2R w K - 0 1")
-        try moveAndAssertError("O-O")
+        try moveAndAssertError("e1", to: "g1", type: .king, color: .white, moveType: .castle)
     }
 
     @Test func testCastlingBlocked_destinationSquareAttacked() throws {
         loadFen("4k3/6r1/8/8/8/8/8/4K2R w K - 0 1")
-        try moveAndAssertError("O-O")
+        try moveAndAssertError("e1", to: "g1", type: .king, color: .white, moveType: .castle)
     }
 
     @Test func testCastlingBlocked_kingHasMovedPreviously() throws {
@@ -44,7 +44,7 @@ final class CastlingRulesTests: ChessTestBase {
         try moveAndAssert(from: "e8", to: "d8", type: .king, color: .black)
         try moveAndAssert(from: "d1", to: "e1", type: .king, color: .white)
         try moveAndAssert(from: "d8", to: "e8", type: .king, color: .black)
-        try moveAndAssertError("O-O")
+        try moveAndAssertError("e1", to: "g1", type: .king, color: .white, moveType: .castle)
     }
 
     @Test func testCastlingBlocked_kingsideRookHasMoved() throws {
@@ -53,7 +53,7 @@ final class CastlingRulesTests: ChessTestBase {
         try moveAndAssert(from: "e8", to: "d8", type: .king, color: .black)
         try moveAndAssert(from: "g1", to: "h1", type: .rook, color: .white)
         try moveAndAssert(from: "d8", to: "e8", type: .king, color: .black)
-        try moveAndAssertError("O-O")
+        try moveAndAssertError("e1", to: "g1", type: .king, color: .white, moveType: .castle)
     }
 
     @Test func testCastlingBlocked_queensideRookHasMoved() throws {
@@ -62,18 +62,18 @@ final class CastlingRulesTests: ChessTestBase {
         try moveAndAssert(from: "e8", to: "d8", type: .king, color: .black)
         try moveAndAssert(from: "b1", to: "a1", type: .rook, color: .white)
         try moveAndAssert(from: "d8", to: "e8", type: .king, color: .black)
-        try moveAndAssertError("O-O-O")
+        try moveAndAssertError("e1", to: "c1", type: .king, color: .white, moveType: .castle)
     }
 
     @Test func testCastlingBlocked_kingsideRookCaptured() throws {
         loadFen("4k3/8/8/8/8/6n1/8/4K2R b K - 0 1")
         try captureAndAssert("g3", to: "h1", type: .knight, color: .black)
-        try moveAndAssertError("O-O")
+        try moveAndAssertError("e1", to: "g1", type: .king, color: .white, moveType: .castle)
     }
 
     @Test func testCastlingBlocked_piecesBetweenKingAndRook() throws {
         loadFen("4k3/8/8/8/8/8/8/4KN1R w K - 0 1")
-        try moveAndAssertError("O-O")
+        try moveAndAssertError("e1", to: "g1", type: .king, color: .white, moveType: .castle)
     }
 
     @Test func testAfterKingsideCastling_rookOccupiesF1() throws {

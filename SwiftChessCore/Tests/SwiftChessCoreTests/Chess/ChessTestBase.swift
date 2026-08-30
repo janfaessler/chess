@@ -102,10 +102,12 @@ class ChessTestBase {
         sourceLocation: SourceLocation = #_sourceLocation
     ) throws {
         let testee = try #require(self.testee, sourceLocation: sourceLocation)
-        if let move = MoveFactory.create(notation, position: testee.position) {
-            #expect(throws: (any Error).self, sourceLocation: sourceLocation) {
-                try testee.move(move)
-            }
+        guard let move = MoveFactory.create(notation, position: testee.position) else {
+            Issue.record("move \(notation) could not be created", sourceLocation: sourceLocation)
+            return
+        }
+        #expect(throws: (any Error).self, sourceLocation: sourceLocation) {
+            try testee.move(move)
         }
     }
 

@@ -4,7 +4,7 @@ import Testing
 struct PathCheckerTests {
 
     private func makeChecker(_ figures: [any ChessPiece]) -> PathChecker {
-        PathChecker(Board(figures))
+        PathChecker(Board(figures)!)
     }
 
     @Test func testRow_blockerBeforeTarget_returnsBlocker() throws {
