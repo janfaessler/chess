@@ -97,6 +97,7 @@ class MoveListModel {
         currentMove = nil
         history.clear()
         self.structure = structure
+        updatePosition()
     }
     
     func getMoveNotations() -> [String] {

@@ -3,10 +3,15 @@ import SwiftChessCore
 
 final class StubEngine: EngineProtocol {
 
-    let evalStream: AsyncStream<[EngineLine]>
-    private let evalContinuation: AsyncStream<[EngineLine]>.Continuation
+    private(set) var evalStream: AsyncStream<[EngineLine]>
+    private var evalContinuation: AsyncStream<[EngineLine]>.Continuation
 
     init() {
+        (evalStream, evalContinuation) = AsyncStream.makeStream(of: [EngineLine].self)
+    }
+
+    func prepareForNewGame() {
+        evalContinuation.finish()
         (evalStream, evalContinuation) = AsyncStream.makeStream(of: [EngineLine].self)
     }
 

@@ -5,13 +5,15 @@ import SwiftChessCore
 @Observable
 final class ChessEngine: EngineProtocol {
 
+    static let shared = ChessEngine()
+
     private let logger = Log.logger("ChessEngine")
 
-    let evalStream: AsyncStream<[EngineLine]>
-    private let evalContinuation: AsyncStream<[EngineLine]>.Continuation
+    private(set) var evalStream: AsyncStream<[EngineLine]>
+    private var evalContinuation: AsyncStream<[EngineLine]>.Continuation
 
     private static let engine = Engine(type: .stockfish)
-    private let settings: EngineSettings
+    var settings: EngineSettings
     private var lines: [EngineLine] = []
     private var pos: Position = try! PositionFactory.startingPosition()
 
@@ -21,9 +23,15 @@ final class ChessEngine: EngineProtocol {
     private var settingsTask: Task<Void, Never>?
     private let debounceDelay = Duration.seconds(1)
 
-    init(settings: EngineSettings = EngineSettings()) {
+    private init(settings: EngineSettings = EngineSettings()) {
         (evalStream, evalContinuation) = AsyncStream.makeStream(of: [EngineLine].self)
         self.settings = settings
+    }
+
+    func prepareForNewGame() {
+        lines = []
+        evalContinuation.finish()
+        (evalStream, evalContinuation) = AsyncStream.makeStream(of: [EngineLine].self)
     }
 
     private func startIfNeeded() {

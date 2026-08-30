@@ -32,7 +32,12 @@ class ControlModel {
         } else {
             board = BoardModel()
         }
-        self.engine = engine ?? ChessEngine(settings: settings)
+        if let engine {
+            self.engine = engine
+        } else {
+            ChessEngine.shared.settings = settings
+            self.engine = ChessEngine.shared
+        }
     }
 
     func start() {
@@ -41,6 +46,7 @@ class ControlModel {
 
         observeBoardMoves()
         observePositionChanges()
+        engine.prepareForNewGame()
         observeEngineEval()
 
         guard let game else { return }
