@@ -50,4 +50,28 @@ struct SlidingMovesTests {
         #expect(moves.count > 0)
         #expect(moves.allSatisfy { (1...8).contains($0.row) && (1...8).contains($0.file) })
     }
+
+    @Test func testAlong_bishopOnCornerA1_onlyNERayAvailable() throws {
+        let bishop = PieceFactory.create("a1", type: .bishop, color: .white)!
+        let allDiagonals = [(-1,-1),(+1,+1),(-1,+1),(+1,-1)].map { (row: $0.0, file: $0.1) }
+        let moves = SlidingMoves.along(rays: allDiagonals, piece: bishop)
+        #expect(moves.count == 7, "bishop on a1 has only the NE ray (b2–h8), 7 squares")
+        #expect(moves.allSatisfy { $0.row == $0.file }, "all reachable squares lie on the main a1–h8 diagonal")
+    }
+
+    @Test func testAlong_rookOnCornerH1_hasLimitedMoves() throws {
+        let rook = PieceFactory.create("h1", type: .rook, color: .white)!
+        let allRays = [(0,+1),(0,-1),(+1,0),(-1,0)].map { (row: $0.0, file: $0.1) }
+        let moves = SlidingMoves.along(rays: allRays, piece: rook)
+        #expect(moves.count == 14, "rook on h1 has 7 west squares + 7 north squares = 14")
+        #expect(moves.allSatisfy { (1...8).contains($0.row) && (1...8).contains($0.file) })
+    }
+
+    @Test func testAlong_bishopOnCornerH8_onlySWRayAvailable() throws {
+        let bishop = PieceFactory.create("h8", type: .bishop, color: .white)!
+        let allDiagonals = [(-1,-1),(+1,+1),(-1,+1),(+1,-1)].map { (row: $0.0, file: $0.1) }
+        let moves = SlidingMoves.along(rays: allDiagonals, piece: bishop)
+        #expect(moves.count == 7, "bishop on h8 has only the SW ray (g7–a1), 7 squares")
+        #expect(moves.allSatisfy { $0.row == $0.file }, "all reachable squares lie on the main a1–h8 diagonal")
+    }
 }

@@ -318,4 +318,99 @@ final class RawMovesTests: ChessTestBase {
         try moveAndAssert(notation: "Bd6", toField: "d6", type: .bishop, color: .white)
         #expect(moveLogNotations().last?.contains("+") == true, "Bd6 should give discovered check via rook on e-file")
     }
+
+    @Test func testEnPassantByBlack_capturesWhitePawnOnD4() throws {
+        // White pawn d4, black pawn e4, ep target d3 — black captures en passant
+        loadFen("4k3/8/8/8/3Pp3/8/8/4K3 b - d3 0 1")
+        let testee = try #require(testee)
+        let pawn = try #require(testee.figures.first { $0.equals(PieceFactory.create("e4", type: .pawn, color: .black)!) })
+        let move = try #require(pawn.createMove("d3"))
+        try testee.move(move)
+        assertFigureExists(PieceFactory.create("d3", type: .pawn, color: .black)!)
+        assertFigureNotExists(PieceFactory.create("d4", type: .pawn, color: .white)!)
+    }
+
+    @Test func testEnPassantByWhite_exposingKingAlongRank_isIllegal() throws {
+        // bxc6 ep would remove c5 pawn, exposing white king on d5 to black rook on a5 along rank 5
+        loadFen("8/8/7k/rPpK4/8/8/8/8 w - c6 0 1")
+        try moveAndAssertError("b5", to: "c6", type: .pawn, color: .white)
+    }
+
+    @Test func testPawnBlockedByPieceInFront_hasNoLegalMoves() throws {
+        loadFen("4k3/8/8/8/8/4p3/4P3/4K3 w - - 0 1")
+        let testee = try #require(testee)
+        let pawn = try #require(testee.figures.first { $0.equals(PieceFactory.create("e2", type: .pawn, color: .white)!) })
+        #expect(testee.getPossibleMoves(forPiece: pawn).isEmpty, "white pawn on e2 must have no legal moves when blocked by black pawn on e3")
+    }
+
+    @Test func testPawnCannotMoveBackward_whitePawnsOnlyMoveForward() throws {
+        let position = try PositionFactory.startingPosition()
+        let game = ChessGame(position)
+        for pawn in position.figures where pawn.type == .pawn && pawn.color == .white {
+            let moves = game.getPossibleMoves(forPiece: pawn)
+            #expect(!moves.isEmpty, "white pawn at \(pawn.squareInfo) should have legal moves")
+            #expect(moves.allSatisfy { $0.row > pawn.row }, "white pawn at \(pawn.squareInfo) must only move to higher ranks")
+        }
+    }
+
+    @Test func testPawnCannotMoveBackward_blackPawnsOnlyMoveForward() throws {
+        // Use a black-to-move position so getPossibleMoves filters correctly
+        let position = try #require(PositionFactory.loadPosition("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"))
+        let game = ChessGame(position)
+        for pawn in position.figures where pawn.type == .pawn && pawn.color == .black {
+            let moves = game.getPossibleMoves(forPiece: pawn)
+            #expect(!moves.isEmpty, "black pawn at \(pawn.squareInfo) should have legal moves")
+            #expect(moves.allSatisfy { $0.row < pawn.row }, "black pawn at \(pawn.squareInfo) must only move to lower ranks")
+        }
+    }
+
+    @Test func testKnightMovesAllEightDirections() throws {
+        loadFen("4k3/8/8/3N4/8/8/8/4K3 w - - 0 1")
+        let testee = try #require(testee)
+        let knight = try #require(testee.figures.first { $0.type == .knight && $0.color == .white })
+        let moves = testee.getPossibleMoves(forPiece: knight)
+        // From d5 (row5, file4): all 8 L-shapes
+        let expectedTargets: [(Int, Int)] = [(7,5),(7,3),(3,5),(3,3),(6,6),(6,2),(4,6),(4,2)]
+        for (row, file) in expectedTargets {
+            #expect(moves.contains { $0.row == row && $0.file == file }, "knight from d5 should reach row \(row) file \(file)")
+        }
+        #expect(moves.count == 8, "knight in open center should have exactly 8 moves")
+    }
+
+    @Test func testBishopReachesAllFourDiagonalRays() throws {
+        loadFen("4k3/8/8/8/4B3/8/8/4K3 w - - 0 1")
+        let testee = try #require(testee)
+        let bishop = try #require(testee.figures.first { $0.type == .bishop && $0.color == .white })
+        let moves = testee.getPossibleMoves(forPiece: bishop)
+        // From e4 (row4, file5): endpoints of each diagonal ray
+        #expect(moves.contains { $0.row == 7 && $0.file == 8 }, "bishop reaches h7 (NE ray)")
+        #expect(moves.contains { $0.row == 1 && $0.file == 2 }, "bishop reaches b1 (SW ray)")
+        #expect(moves.contains { $0.row == 8 && $0.file == 1 }, "bishop reaches a8 (NW ray)")
+        #expect(moves.contains { $0.row == 1 && $0.file == 8 }, "bishop reaches h1 (SE ray)")
+        #expect(!moves.contains { $0.file == 5 && $0.row != 4 }, "bishop must not move along the e-file")
+        #expect(!moves.contains { $0.row == 4 && $0.file != 5 }, "bishop must not move along rank 4")
+    }
+
+    @Test func testBishopRejectsHorizontalMove() throws {
+        loadFen("4k3/8/8/8/4B3/8/8/4K3 w - - 0 1")
+        try moveAndAssertError("e4", to: "h4", type: .bishop, color: .white)
+    }
+
+    @Test func testBishopRejectsVerticalMove() throws {
+        loadFen("4k3/8/8/8/4B3/8/8/4K3 w - - 0 1")
+        try moveAndAssertError("e4", to: "e7", type: .bishop, color: .white)
+    }
+
+    @Test func testKingCanReachAllAdjacentSquares() throws {
+        loadFen("7k/8/8/8/3K4/8/8/8 w - - 0 1")
+        let testee = try #require(testee)
+        let king = try #require(testee.figures.first { $0.type == .king && $0.color == .white })
+        let moves = testee.getPossibleMoves(forPiece: king)
+        // From d4 (row4, file4): all 8 adjacent squares
+        let expectedTargets: [(Int, Int)] = [(3,3),(3,4),(3,5),(4,3),(4,5),(5,3),(5,4),(5,5)]
+        for (row, file) in expectedTargets {
+            #expect(moves.contains { $0.row == row && $0.file == file }, "king from d4 should reach row \(row) file \(file)")
+        }
+        #expect(moves.count == 8, "king in open center should have exactly 8 moves")
+    }
 }

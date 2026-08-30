@@ -177,7 +177,7 @@ final class GameStateTests: ChessTestBase {
             } else {
                 try assertGameState(.notStarted)
             }
-            try testee?.move(move)
+            try #require(testee).move(move)
         }
         try assertGameState(.drawBy50MoveRule)
     }
@@ -228,16 +228,18 @@ final class GameStateTests: ChessTestBase {
     }
 
     @Test func testThreefold_countsInitialPosition() throws {
+        let game = try #require(testee)
         for notation in ["Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8"] {
-            try testee?.move(notation)
+            try game.move(notation)
         }
         try assertGameState(.drawByRepetition)
     }
 
     @Test func testThreefold_fromLoadedFen_triggers() throws {
         loadFen("7k/8/8/8/3R4/8/8/K7 w - - 0 20")
+        let game = try #require(testee)
         for notation in ["Kb1", "Kg8", "Ka1", "Kh8", "Kb1", "Kg8", "Ka1", "Kh8"] {
-            try testee?.move(notation)
+            try game.move(notation)
         }
         try assertGameState(.drawByRepetition)
     }
@@ -277,5 +279,36 @@ final class GameStateTests: ChessTestBase {
             loadFen(fen)
             try assertGameState(.drawByStalemate, fen: fen)
         }
+    }
+
+    @Test func testBlockCheckByInterposition_rookInterposes() throws {
+        // White Re2 gives check to black king on e8 along the e-file; black Ra7 interposes on e7
+        loadFen("4k3/r7/8/8/8/8/4R3/4K3 b - - 0 1")
+        try moveAndAssert(from: "a7", to: "e7", type: .rook, color: .black)
+    }
+
+    @Test func testDoubleCheck_kingIsInDoubleCheck() throws {
+        // After Nc5-d7: discovered check from Ra5 along rank 5, direct check from Nd7
+        loadFen("8/8/8/R1N1k3/8/8/8/7K w - - 0 1")
+        try moveAndAssert(from: "c5", to: "d7", type: .knight, color: .white)
+        let game = try #require(testee)
+        let validator = MoveValidator(game.position)
+        #expect(validator.isKingInCheck(), "black king should be in double check after Nc5-d7")
+    }
+
+    @Test func test50MoveRule_quietMoveIncrementsHalfmoveClock() throws {
+        loadFen("4k3/8/8/8/8/8/R7/4K3 w - - 5 30")
+        try moveAndAssert(from: "a2", to: "a4", type: .rook, color: .white)
+        let game = try #require(testee)
+        #expect(game.position.halfmoveClock == 6, "rook move should increment halfmoveClock from 5 to 6")
+    }
+
+    @Test func testCaptureCheckerIsLegal_inGetPossibleMoves() throws {
+        // White Nf6 gives check to black king on e8; g7 pawn can capture the checker
+        loadFen("rnbqkb1r/pp2pppp/2p2N2/8/8/5N2/PPPP1PPP/R1BQKB1R b KQkq - 0 10")
+        let game = try #require(testee)
+        let pawn = try #require(game.figures.first { $0.equals(PieceFactory.create("g7", type: .pawn, color: .black)!) })
+        let captureMove = try #require(pawn.createMove("f6"))
+        #expect(game.getPossibleMoves(forPiece: pawn).contains(captureMove), "g7 pawn can capture the checking knight on f6")
     }
 }

@@ -101,4 +101,25 @@ struct DrawConditionEvaluatorTests {
     @Test func test50MoveRule_atZero_isFalse() {
         #expect(!DrawConditionEvaluator.has50MoveRuleTriggered(halfmoveClock: 0))
     }
+
+    @Test func testInsufficientMaterial_throughChessGame_returnsDrawState() throws {
+        let position = try #require(PositionFactory.loadPosition("8/5k2/8/3K4/8/8/8/8 w - - 0 1"))
+        let game = ChessGame(position)
+        #expect(game.getGameState() == .drawByInsufficientMaterial)
+    }
+
+    @Test func testThreefoldRepetition_throughChessGame_returnsDrawState() throws {
+        let position = try PositionFactory.startingPosition()
+        let game = ChessGame(position)
+        for notation in ["Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8", "Nf3"] {
+            try game.move(notation)
+        }
+        #expect(game.getGameState() == .drawByRepetition)
+    }
+
+    @Test func test50MoveRule_throughChessGame_returnsDrawState() throws {
+        let position = try #require(PositionFactory.loadPosition("4k3/8/8/8/8/8/R7/4K3 w - - 100 60"))
+        let game = ChessGame(position)
+        #expect(game.getGameState() == .drawBy50MoveRule)
+    }
 }

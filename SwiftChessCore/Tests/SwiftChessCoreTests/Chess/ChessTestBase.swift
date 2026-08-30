@@ -122,11 +122,15 @@ class ChessTestBase {
         let startFigure = PieceFactory.create(from, type: type, color: color)!
         let endFigure = PieceFactory.create(to, type: type, color: color)!
         let move = startFigure.createMove(to)!
+        let capturedPiece = testee.position.get(atRow: endFigure.row, atFile: endFigure.file)
         let pieceCount = testee.figures.count
         try testee.move(move)
         #expect(!figureExist(startFigure, testee: testee), "\(color) \(type) should have left \(from)", sourceLocation: sourceLocation)
         #expect(figureExist(endFigure, testee: testee), "\(color) \(type) should be at \(to)", sourceLocation: sourceLocation)
         #expect(testee.figures.count == pieceCount - 1, "capture should reduce piece count by 1", sourceLocation: sourceLocation)
+        if let captured = capturedPiece {
+            #expect(!figureExist(captured, testee: testee), "captured \(captured.color) \(captured.type) at \(to) should no longer exist", sourceLocation: sourceLocation)
+        }
     }
 
     func captureAndAssertError(
@@ -170,7 +174,7 @@ class ChessTestBase {
         let testee = try #require(self.testee, sourceLocation: sourceLocation)
         let piece = testee.figures.first(where: { $0.equals(forFigure) })!
         let possibleMoves = testee.getPossibleMoves(forPiece: piece)
-        #expect(possibleMoves.elementsEqual(moves), sourceLocation: sourceLocation)
+        #expect(Set(possibleMoves) == Set(moves), sourceLocation: sourceLocation)
     }
 
     func assertFigureExists(

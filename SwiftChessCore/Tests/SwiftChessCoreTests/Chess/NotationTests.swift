@@ -34,6 +34,7 @@ final class NotationTests: ChessTestBase {
         try moveAndAssert(notation: "e5", toField: "e5", type: .pawn, color: .white)
         try moveAndAssert(notation: "d5", toField: "d5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssert(notation: "exd6", toField: "d6", type: .pawn, color: .white)
+        assertFigureNotExists(PieceFactory.create("d5", type: .pawn, color: .black)!)
         try moveAndAssert(notation: "b5", toField: "b5", type: .pawn, color: .black, moveType: .double)
         try moveAndAssert(notation: "dxe7", toField: "e7", type: .pawn, color: .white)
         try moveAndAssert(notation: "c5", toField: "c5", type: .pawn, color: .black, moveType: .double)
@@ -279,6 +280,36 @@ final class NotationTests: ChessTestBase {
     @Test func testPawnCannotCaptureOwnPiece() throws {
         loadFen("4k3/8/8/3B4/4P3/8/8/4K3 w - - 0 1")
         try moveAndAssertError("e4", to: "d5", type: .pawn, color: .white)
+    }
+
+    @Test func testRookUnderpromotion() throws {
+        loadFen("4k3/P7/8/8/8/8/8/4K3 w - - 0 1")
+        let testee = try #require(testee)
+        let pawn = try #require(testee.position.get(atRow: 7, atFile: 1))
+        let move = try #require(pawn.createMove("a8", type: .promotion, promoteTo: .rook))
+        try testee.move(move)
+        assertFigureNotExists(PieceFactory.create("a7", type: .pawn, color: .white)!)
+        assertFigureExists(PieceFactory.create("a8", type: .rook, color: .white)!)
+    }
+
+    @Test func testBishopUnderpromotion() throws {
+        loadFen("4k3/P7/8/8/8/8/8/4K3 w - - 0 1")
+        let testee = try #require(testee)
+        let pawn = try #require(testee.position.get(atRow: 7, atFile: 1))
+        let move = try #require(pawn.createMove("a8", type: .promotion, promoteTo: .bishop))
+        try testee.move(move)
+        assertFigureNotExists(PieceFactory.create("a7", type: .pawn, color: .white)!)
+        assertFigureExists(PieceFactory.create("a8", type: .bishop, color: .white)!)
+    }
+
+    @Test func testBlackPawnPromotion() throws {
+        loadFen("4k3/8/8/8/8/8/p7/4K3 b - - 0 1")
+        let testee = try #require(testee)
+        let pawn = try #require(testee.position.get(atRow: 2, atFile: 1))
+        let move = try #require(pawn.createMove("a1", type: .promotion, promoteTo: .queen))
+        try testee.move(move)
+        assertFigureNotExists(PieceFactory.create("a2", type: .pawn, color: .black)!)
+        assertFigureExists(PieceFactory.create("a1", type: .queen, color: .black)!)
     }
 
     @Test func testStraightPromotionByPush() throws {

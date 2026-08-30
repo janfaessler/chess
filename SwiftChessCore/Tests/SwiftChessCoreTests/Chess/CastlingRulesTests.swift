@@ -91,4 +91,10 @@ final class CastlingRulesTests: ChessTestBase {
         let testee = try #require(testee)
         #expect(testee.position.enPassantTarget == nil, "en passant target should be nil after castling")
     }
+
+    @Test func testQueensideCastling_b1Attacked_isStillLegal() throws {
+        // Black queen on b5 attacks b1, but b1 is not a square the king traverses (e1→d1→c1)
+        loadFen("r3k3/8/8/1q6/8/8/8/R3K2R w KQq - 0 1")
+        try moveAndAssert(from: "e1", to: "c1", type: .king, color: .white, moveType: .castle)
+    }
 }

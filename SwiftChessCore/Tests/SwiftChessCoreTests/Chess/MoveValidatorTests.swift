@@ -76,4 +76,14 @@ struct MoveValidatorTests {
         let move = try #require(rook.createMove("e8", type: .normal, promoteTo: .queen))
         #expect(validator.isCheckMate(move))
     }
+
+    @Test func testDiscoveredCheck_isKingInCheck_returnsTrue() throws {
+        // Be5-d6 moves bishop off the e-file, revealing Re1 check on black king e8
+        let position = try #require(PositionFactory.loadPosition("4k3/8/8/4B3/8/8/8/4RK2 w - - 0 1"))
+        let bishop = try #require(position.get(atRow: 5, atFile: 5))
+        let move = try #require(bishop.createMove("d6"))
+        let newPosition = position.applying(move)
+        let validator = MoveValidator(newPosition)
+        #expect(validator.isKingInCheck(), "black king should be in check after Bd6 reveals Re1 on the e-file")
+    }
 }
