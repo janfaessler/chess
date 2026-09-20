@@ -57,6 +57,12 @@ public struct Pawn: ChessPiece, Sendable {
         return canMoveOnce(move, board: board) || canMoveTwice(move, board: board) || canCapture(move, board: board)
     }
 
+    public func attacksSquare(row: Int, file: Int, board: any BoardQuery) -> Bool {
+        let attackRow = color == .white ? self.row + 1 : self.row - 1
+        guard row == attackRow else { return false }
+        return file == self.file - 1 || file == self.file + 1
+    }
+
     public func createMove(_ move: any StringProtocol) -> Move? {
         Move(move, startingSquare: square, color: color, pieceType: .pawn, hasMoved: moved, type: getMoveType(move), promoteTo: .queen)
     }

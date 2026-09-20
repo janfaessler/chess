@@ -4,6 +4,16 @@ import Testing
 
 final class GameStateTests: ChessTestBase {
 
+    @Test func testMove_wrongSideToMove_throwsWrongSideToMoveError() throws {
+        let testee = try #require(self.testee)
+        let blackPawn = try #require(testee.position.get(atRow: 7, atFile: 5))
+        let move = try #require(blackPawn.createMove("e5", type: .double))
+        #expect(throws: ValidationError.wrongSideToMove) {
+            try testee.move(move)
+        }
+        #expect(testee.position.colorToMove == .white, "an out-of-turn move must not be applied to the position")
+    }
+
     @Test func testCheckMate() throws {
         try assertGameState(.notStarted)
 

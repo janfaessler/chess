@@ -49,9 +49,11 @@ struct CastlingRules {
         guard old.canCastle(kingside: kingside, for: color) else { return false }
         if move.color == color && move.pieceType == .king { return false }
         let rookFile = kingside ? BoardConstants.rookCastleKingsideStartFile : BoardConstants.rookCastleQueensideStartFile
+        let homeRow = color == .white ? BoardConstants.pawnStartingRowWhite - 1 : BoardConstants.pawnStartingRowBlack + 1
         if move.color == color && move.pieceType == .rook && move.startingSquare.file == rookFile { return false }
-        if let captured = capturedPiece, captured.color == color, captured.type == .rook {
-            if captured.file == BoardConstants.rookCastleKingsideStartFile || captured.file == BoardConstants.rookCastleQueensideStartFile { return false }
+        if let captured = capturedPiece, captured.color == color, captured.type == .rook,
+           captured.row == homeRow, captured.file == rookFile {
+            return false
         }
         return true
     }

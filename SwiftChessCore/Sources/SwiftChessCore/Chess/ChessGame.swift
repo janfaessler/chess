@@ -18,6 +18,11 @@ public class ChessGame {
     }
 
     public func move(_ move: Move) throws(ValidationError) {
+        guard move.color == position.colorToMove else {
+            let turnDesc = "\(position.colorToMove)"
+            logger.error("move (\(move.info)) attempted out of turn; \(turnDesc) to move")
+            throw ValidationError.wrongSideToMove
+        }
         let validator = MoveValidator(position)
         guard validator.isLegalMove(move) else {
             logger.error("move (\(move.info)) is not allowed")

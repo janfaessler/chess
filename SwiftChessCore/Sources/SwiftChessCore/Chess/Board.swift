@@ -79,7 +79,8 @@ struct Board: BoardQuery, Sendable, Hashable {
         newGrid[Board.index(row: move.startingSquare.row, file: move.startingSquare.file)] = nil
         newGrid[Board.index(row: move.row, file: move.file)] = nil
 
-        if let target = enPassantTarget,
+        if move.pieceType == .pawn,
+           let target = enPassantTarget,
            move.square == target,
            isEmpty(atRow: move.row, atFile: move.file) {
             let sq = EnPassantRules.capturedPawnSquare(for: move)

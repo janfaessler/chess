@@ -77,6 +77,14 @@ struct MoveValidatorTests {
         #expect(validator.isCheckMate(move))
     }
 
+    @Test func testIsLegalMove_wrongSideToMove_returnsFalse() throws {
+        let position = try PositionFactory.startingPosition()
+        let validator = MoveValidator(position)
+        let blackPawn = try #require(position.get(atRow: 7, atFile: 5))
+        let move = try #require(blackPawn.createMove("e5", type: .double))
+        #expect(!validator.isLegalMove(move))
+    }
+
     @Test func testDiscoveredCheck_isKingInCheck_returnsTrue() throws {
         // Be5-d6 moves bishop off the e-file, revealing Re1 check on black king e8
         let position = try #require(PositionFactory.loadPosition("4k3/8/8/4B3/8/8/8/4RK2 w - - 0 1"))

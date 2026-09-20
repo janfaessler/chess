@@ -9,6 +9,7 @@ struct EnPassantRules {
     }
 
     static func canEnPassant(_ move: Move, board: any BoardQuery) -> Bool {
+        guard move.pieceType == .pawn else { return false }
         guard let target = board.enPassantTarget else { return false }
         return move.square == target
     }

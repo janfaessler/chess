@@ -9,6 +9,7 @@ struct MoveValidator {
     }
 
     func isLegalMove(_ target: Move) -> Bool {
+        guard target.color == position.colorToMove else { return false }
         guard let piece = position.get(atRow: target.startingSquare.row, atFile: target.startingSquare.file) else { return false }
         guard piece.isMovePossible(target, board: position) else { return false }
         guard !doesMovePutOwnKingInCheck(target) else { return false }
@@ -28,9 +29,8 @@ struct MoveValidator {
 
     func isSquareAttackedByOpponent(row: Int, file: Int) -> Bool {
         return position.figures.contains(where: {
-            if $0.color == position.colorToMove { return false }
-            guard let move = $0.createMove(row, file, .normal) else { return false }
-            return $0.isMovePossible(move, board: position)
+            guard $0.color != position.colorToMove else { return false }
+            return $0.attacksSquare(row: row, file: file, board: position)
         })
     }
 
@@ -64,8 +64,7 @@ struct MoveValidator {
 
         return newPos.figures.contains(where: {
             guard $0.color != position.colorToMove else { return false }
-            guard let attackMove = $0.createMove(rowToCheck, fileToCheck, MoveType.normal) else { return false }
-            return $0.isMovePossible(attackMove, board: newPos)
+            return $0.attacksSquare(row: rowToCheck, file: fileToCheck, board: newPos)
         })
     }
 

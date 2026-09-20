@@ -10,6 +10,7 @@ public protocol ChessPiece: Hashable, Equatable, Sendable {
     func canDo(move: Move) -> Bool
     func getPossibleMoves() -> [Move]
     func isMovePossible(_ move: Move, board: any BoardQuery) -> Bool
+    func attacksSquare(row: Int, file: Int, board: any BoardQuery) -> Bool
     func equals(_ other: any ChessPiece) -> Bool
     func hasMoved() -> Bool
     func info() -> String
@@ -51,6 +52,11 @@ extension ChessPiece {
         guard canDo(move: move) else { return false }
         guard let intersectingPiece = board.checkNextIntersection(move) else { return true }
         return isCaptureablePiece(move, pieceToCapture: intersectingPiece)
+    }
+
+    public func attacksSquare(row: Int, file: Int, board: any BoardQuery) -> Bool {
+        guard let move = createMove(row, file, .normal) else { return false }
+        return isMovePossible(move, board: board)
     }
 
     public func createMove(_ row: Int, _ file: Int) -> Move? {

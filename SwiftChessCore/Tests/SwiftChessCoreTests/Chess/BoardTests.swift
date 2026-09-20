@@ -61,4 +61,13 @@ struct BoardTests {
         let b = PieceFactory.create(type: .queen, color: .black, row: 1, file: 1)
         #expect(Board([a, b]) == nil)
     }
+
+    @Test func testApplying_nonPawnMoveLandingOnEnPassantTarget_doesNotDeleteUnrelatedPiece() throws {
+        let king = PieceFactory.create(type: .king, color: .black, row: 4, file: 8) // h4
+        let survivor = PieceFactory.create(type: .pawn, color: .white, row: 4, file: 7) // g4
+        let board = try #require(Board([king, survivor]))
+        let move = try #require(king.createMove(3, 7)) // Kh4-g3, coincides with en passant target g3
+        let (newBoard, _) = board.applying(move, enPassantTarget: Square(row: 3, file: 7))
+        #expect(newBoard.get(atRow: 4, atFile: 7)?.type == .pawn, "unrelated piece on g4 must survive a king move that merely lands on the en passant target square")
+    }
 }

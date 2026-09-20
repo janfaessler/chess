@@ -64,4 +64,16 @@ struct EnPassantRulesTests {
         let pos = try #require(PositionFactory.loadPosition(["e4", "a6", "e5", "d5"]))
         #expect(pos.enPassantTarget == Square(row: 6, file: 4), "en passant target d6 must be set immediately after black double-push d7→d5")
     }
+
+    @Test func testCanEnPassant_nonPawnLandingOnTargetSquare_isFalse() throws {
+        let start = try PositionFactory.startingPosition()
+        let pawn = try #require(start.get(atRow: 2, atFile: 5))
+        let doubleMove = try #require(pawn.createMove("e4", type: .double, promoteTo: .queen))
+        let afterDouble = start.applying(doubleMove)
+        #expect(afterDouble.enPassantTarget == Square(row: 3, file: 5))
+
+        let king = try #require(afterDouble.get(atRow: 1, atFile: 5))
+        let kingMove = try #require(king.createMove("e3", type: .normal, promoteTo: .queen))
+        #expect(!EnPassantRules.canEnPassant(kingMove, board: afterDouble))
+    }
 }

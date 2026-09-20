@@ -97,4 +97,11 @@ final class CastlingRulesTests: ChessTestBase {
         loadFen("r3k3/8/8/1q6/8/8/8/R3K2R w KQq - 0 1")
         try moveAndAssert(from: "e1", to: "c1", type: .king, color: .white, moveType: .castle)
     }
+
+    @Test func testKingsideRookCapturedAwayFromHome_queensideRightIsRetained() throws {
+        loadFen("4k3/8/8/5n2/8/8/8/R3K2R w KQ - 0 1")
+        try moveAndAssert(from: "h1", to: "h4", type: .rook, color: .white)
+        try captureAndAssert("f5", to: "h4", type: .knight, color: .black)
+        try moveAndAssert(notation: "O-O-O", toField: "c1", type: .king, color: .white, moveType: .castle)
+    }
 }
