@@ -19,7 +19,7 @@ public enum PgnParser {
                 }
             } catch {
                 logger.error("PGN parse error: \(error)")
-                break
+                continue
             }
         }
         return games

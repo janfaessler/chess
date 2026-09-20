@@ -64,7 +64,9 @@ struct PgnGameParser {
                 remaining.removeFirst()
                 let (varMoves, _) = parseMoves(inVariation: true)
                 if !moves.isEmpty {
-                    moves[moves.count - 1] = moves[moves.count - 1].addingVariation(varMoves)
+                    var last = moves.removeLast()
+                    last.appendVariation(varMoves)
+                    moves.append(last)
                 }
                 continue
             }
@@ -99,7 +101,9 @@ struct PgnGameParser {
             while remaining.first == "(" {
                 remaining.removeFirst()
                 let (varMoves, _) = parseMoves(inVariation: true)
-                moves[moves.count - 1] = moves[moves.count - 1].addingVariation(varMoves)
+                var last = moves.removeLast()
+                last.appendVariation(varMoves)
+                moves.append(last)
                 skipWhitespace()
             }
         }
@@ -173,15 +177,8 @@ struct PgnGameParser {
 }
 
 extension PgnMove {
-    func addingVariation(_ variation: [PgnMove]) -> PgnMove {
-        PgnMove(
-            move: move,
-            annotation: annotation,
-            variations: variations + [variation],
-            comment: comment,
-            highlights: highlights,
-            arrows: arrows
-        )
+    mutating func appendVariation(_ variation: [PgnMove]) {
+        variations.append(variation)
     }
 
     func addingComment(_ text: String) -> PgnMove {

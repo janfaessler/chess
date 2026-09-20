@@ -2,9 +2,7 @@ import Foundation
 
 public struct Move: Identifiable, Equatable, Hashable, Sendable {
 
-    public var id: String {
-        "\(startingSquare.info)-\(destination.info)-\(color)-\(pieceType)-\(type)-\(promoteTo)"
-    }
+    public let id: String
 
     public let destination: Square
     public let startingSquare: Square
@@ -27,6 +25,7 @@ public struct Move: Identifiable, Equatable, Hashable, Sendable {
         self.hasMoved = move.hasMoved
         self.type = .promotion
         self.promoteTo = promoteTo
+        self.id = Move.makeId(destination: destination, startingSquare: startingSquare, color: color, pieceType: pieceType, type: type, promoteTo: promoteTo)
     }
 
     public init?(_ r: Int, _ f: Int, startingSquare: Square, color: PieceColor, pieceType: PieceType, hasMoved: Bool, type: MoveType = .normal, promoteTo: PromotionPiece = .queen) {
@@ -38,6 +37,7 @@ public struct Move: Identifiable, Equatable, Hashable, Sendable {
         self.hasMoved = hasMoved
         self.type = type
         self.promoteTo = promoteTo
+        self.id = Move.makeId(destination: destination, startingSquare: startingSquare, color: color, pieceType: pieceType, type: type, promoteTo: promoteTo)
     }
 
     public init?(_ squareName: any StringProtocol, startingSquare: Square, color: PieceColor, pieceType: PieceType, hasMoved: Bool, type: MoveType, promoteTo: PromotionPiece = .queen) {
@@ -49,6 +49,7 @@ public struct Move: Identifiable, Equatable, Hashable, Sendable {
         self.hasMoved = hasMoved
         self.type = type
         self.promoteTo = promoteTo
+        self.id = Move.makeId(destination: destination, startingSquare: startingSquare, color: color, pieceType: pieceType, type: type, promoteTo: promoteTo)
     }
 
     public static func == (l: Move, r: Move) -> Bool {
@@ -68,5 +69,9 @@ public struct Move: Identifiable, Equatable, Hashable, Sendable {
 
     public var info: String {
         "Move[\(destination.info), (\(color) \(pieceType) \(startingSquare.info)), \(type), \(promoteTo)]"
+    }
+
+    private static func makeId(destination: Square, startingSquare: Square, color: PieceColor, pieceType: PieceType, type: MoveType, promoteTo: PromotionPiece) -> String {
+        "\(startingSquare.info)-\(destination.info)-\(color)-\(pieceType)-\(type)-\(promoteTo)"
     }
 }

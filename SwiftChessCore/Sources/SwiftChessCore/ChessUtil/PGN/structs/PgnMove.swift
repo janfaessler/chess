@@ -4,7 +4,7 @@ public struct PgnMove: Sendable {
     public let id = UUID()
     public let move: String
     public let annotation: MoveAnnotation?
-    public let variations: [[PgnMove]]
+    public internal(set) var variations: [[PgnMove]]
     public let comment: String?
     public let highlights: [SquareHighlight]
     public let arrows: [BoardArrow]

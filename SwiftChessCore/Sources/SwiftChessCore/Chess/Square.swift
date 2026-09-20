@@ -6,11 +6,15 @@ public struct Square: Equatable, Hashable, Sendable {
 
     public let row: Int
     public let file: Int
+    public let info: String
+    public let fileName: String
 
     public init?(row: Int, file: Int) {
         guard 1...BoardConstants.size ~= row && 1...BoardConstants.size ~= file else { return nil }
         self.row = row
         self.file = file
+        self.fileName = Square.fileName(for: file)
+        self.info = "\(self.fileName)\(row)"
     }
     
     public init?(_ square: any StringProtocol) {
@@ -19,23 +23,21 @@ public struct Square: Equatable, Hashable, Sendable {
         guard 1...BoardConstants.size ~= file else { return nil }
         self.file = file
         self.row = row
+        self.fileName = Square.fileName(for: file)
+        self.info = "\(self.fileName)\(row)"
     }
 
     public static func isValid(row: Int, file: Int) -> Bool {
         1...BoardConstants.size ~= row && 1...BoardConstants.size ~= file
     }
 
-    public var info: String {
-        let fileChar = Character(UnicodeScalar(Int(Square.aAscii) + file - 1)!)
-        return "\(fileChar)\(row)"
-    }
-
-    public var fileName: String {
-        String(Character(UnicodeScalar(Int(Square.aAscii) + file - 1)!))
-    }
-
     public static func == (l: Square, r: Square) -> Bool {
         return l.row == r.row && l.file == r.file
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(row)
+        hasher.combine(file)
     }
     
     private static func parseSquare(_ square: any StringProtocol) -> (row:Int?, file:Int?) {
@@ -47,5 +49,9 @@ public struct Square: Equatable, Hashable, Sendable {
               1...BoardConstants.size ~= row else { return (nil, nil) }
         let file = Int(fVal - Square.aAscii) + 1
         return (row: row, file: file)
+    }
+
+    private static func fileName(for file: Int) -> String {
+        String(Character(UnicodeScalar(Int(Square.aAscii) + file - 1)!))
     }
 }

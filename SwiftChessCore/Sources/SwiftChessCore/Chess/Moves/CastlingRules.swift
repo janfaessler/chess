@@ -32,11 +32,7 @@ struct CastlingRules {
     static func canCastle(_ move: Move, board: any BoardQuery) -> Bool {
         guard isCastlingMove(move) else { return false }
         guard board.castlingRights.canCastle(kingside: isKingsideCastling(move), for: move.color) else { return false }
-        guard pathIsClear(move, board: board) else { return false }
-        if let position = board as? Position {
-            guard !pathIsInCheck(move, position: position) else { return false }
-        }
-        return true
+        return pathIsClear(move, board: board)
     }
 
     static func updatedRights(afterMove move: Move, capturedPiece: (any ChessPiece)?, oldPosition: Position) -> CastlingRights {

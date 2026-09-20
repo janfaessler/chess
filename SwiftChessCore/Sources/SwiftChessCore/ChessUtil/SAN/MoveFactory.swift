@@ -151,11 +151,11 @@ enum MoveFactory {
     }
 
     private static func hasFileInfo(_ input: any StringProtocol) -> Bool {
-        return (input.filter({ $0.isLowercase }) as [Character]).count == 2
+        return input.count(where: \.isLowercase) == 2
     }
 
     private static func hasRowInfo(_ input: any StringProtocol) -> Bool {
-        return input.filter({ $0.isNumber }).count == 2
+        return input.count(where: \.isNumber) == 2
     }
 
     private static func getPiecePositionInfo(_ cleanedInput: any StringProtocol) -> String {
