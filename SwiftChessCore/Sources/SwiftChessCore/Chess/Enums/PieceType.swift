@@ -33,4 +33,15 @@ extension PieceType {
         color == .white ? char : Character(String(char).lowercased())
     }
 
+    var zobristTypeIndex: Int {
+        switch self {
+        case .pawn:   return 0
+        case .knight: return 1
+        case .bishop: return 2
+        case .rook:   return 3
+        case .queen:  return 4
+        case .king:   return 5
+        }
+    }
+
 }

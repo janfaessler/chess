@@ -1,17 +1,10 @@
 import Testing
 @testable import SwiftChessCore
 
-// Reference node counts are the standard, cross-engine-verified values from the
-// chess-programming-wiki perft page. Any correct move generator must reproduce them exactly.
-//
-// `.serialized`: Swift Testing runs `@Test` functions in this suite concurrently with each
-// other by default. `perft` below fans work out across a `TaskGroup` internally, so letting the
-// *test runner* also run multiple perft tests at once means several independent TaskGroups (each
-// spawning dozens of tasks) fight over the same cooperative thread pool at once. Measured effect:
-// oversubscribing this way made every test slower than the *unoptimized*, non-concurrent baseline
-// (all four ran together in ~28s unoptimized vs. 100+ seconds each with two uncoordinated layers
-// of parallelism). Serializing the suite removes that layer of contention — each perft call still
-// gets the full thread pool to itself, it just doesn't have to share it with sibling tests.
+extension Tag {
+    @Tag static var slowPerft: Self
+}
+
 @Suite(.serialized)
 struct PerftTests {
 
@@ -23,7 +16,7 @@ struct PerftTests {
         #expect(await perft(position, depth: 4) == 197281)
     }
 
-    @Test(.disabled("slow at this generator's current per-move cost; run manually to validate Board/Position rewrites (Phase 3)"))
+    @Test(.tags(.slowPerft), .disabled("slow at this generator's current per-move cost; run manually to validate Board/Position rewrites (Phase 3)"))
     func testPerft_startPosition_depth5() async throws {
         let position = try PositionFactory.startingPosition()
         #expect(await perft(position, depth: 5) == 4865609)
@@ -37,14 +30,8 @@ struct PerftTests {
         #expect(await perft(position, depth: 3) == 97862)
     }
 
-    @Test(.disabled("slow at this generator's current per-move cost; run manually to validate castling-rights regressions"))
+    @Test(.tags(.slowPerft), .disabled("slow at this generator's current per-move cost; run manually to validate castling-rights regressions"))
     func testPerft_kiwipete_depth4() async throws {
-        // Regression for a bug where capturing a rook away from its home square (e.g. after
-        // it had already moved) revoked BOTH of that color's castling rights instead of just
-        // the one matching the file it happened to be captured on. See CastlingRulesTests
-        // for the isolated single-move reproduction; this depth reliably surfaced it because
-        // it requires "rook moves off its home file, then gets captured elsewhere on that file"
-        // — a three-ply interaction unit tests targeting one FIDE rule at a time do not reach.
         let position = try #require(PositionFactory.loadPosition("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1"))
         #expect(await perft(position, depth: 4) == 4074224)
     }
@@ -58,34 +45,77 @@ struct PerftTests {
         #expect(await perft(position, depth: 4) == 43238)
     }
 
-    @Test(.disabled("slow at this generator's current per-move cost; run manually to validate Board/Position rewrites (Phase 3)"))
+    @Test(.tags(.slowPerft), .disabled("slow at this generator's current per-move cost; run manually to validate Board/Position rewrites (Phase 3)"))
     func testPerft_position3_depth5() async throws {
         let position = try #require(PositionFactory.loadPosition("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1"))
         #expect(await perft(position, depth: 5) == 674624)
     }
 
-    // Root-level branches are independent subtrees, so they're fanned out across the cooperative
-    // thread pool with a TaskGroup rather than walked one at a time — safe to do now that the
-    // suite is `.serialized`, so this is the only perft call using the pool at any moment.
-    // Everything below the root recurses serially through `perftMemoized`, which still drives move
-    // generation and legality entirely through the production `MoveValidator`/`Position.applying`
-    // API — the only thing added is a node-count cache keyed by (position hash, remaining depth).
-    // Many different move orders transpose into the same board + castling-rights + en-passant
-    // state, and `position.hash` already excludes halfmove/fullmove clocks (see
-    // Position.computeHash), so it's exactly the right key for coalescing those transpositions
-    // instead of re-walking them. The cache is created fresh per top-level call (not shared across
-    // tests via a static singleton) since unrelated FENs have no transpositions in common and
-    // sharing would only add actor contention for no benefit.
+    @Test func testPerft_position4_depths1to3() async throws {
+        // CPW "Position 4": asymmetric (white about to promote-with-capture, black to castle) —
+        // catches bugs that a color-symmetric position could hide on only one side's code path.
+        let position = try #require(PositionFactory.loadPosition("r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"))
+        #expect(await perft(position, depth: 1) == 6)
+        #expect(await perft(position, depth: 2) == 264)
+        #expect(await perft(position, depth: 3) == 9467)
+    }
+
+    @Test func testPerft_position5_depths1to3() async throws {
+        // CPW "Position 5": knight giving check adjacent to the king with a pawn one square from
+        // promoting — exercises pin/discovered-check and promotion interacting together.
+        let position = try #require(PositionFactory.loadPosition("rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8"))
+        #expect(await perft(position, depth: 1) == 44)
+        #expect(await perft(position, depth: 2) == 1486)
+        #expect(await perft(position, depth: 3) == 62379)
+    }
+
+    @Test func testPerft_position6_depths1to3() async throws {
+        // CPW "Position 6": no special-rule interactions — a pure raw-branching-factor regression check.
+        let position = try #require(PositionFactory.loadPosition("r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10"))
+        #expect(await perft(position, depth: 1) == 46)
+        #expect(await perft(position, depth: 2) == 2079)
+        #expect(await perft(position, depth: 3) == 89890)
+    }
+
+    @Test func testPerftDivide_matchesPerftTotal() async throws {
+        // `divide` exists to localize a future depth-4+ regression to a single root move instead of
+        // only knowing the aggregate total is wrong. This test just proves divide and perft agree,
+        // since divide has no separate published reference table to compare against.
+        let position = try #require(PositionFactory.loadPosition("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1"))
+        let breakdown = await perftDivide(position, depth: 3)
+        #expect(breakdown.values.reduce(0, +) == 97862)
+        #expect(breakdown.count == 48)
+    }
+
+    /// Breaks perft(depth) down by root move, for isolating which root move's subtree diverges
+    /// from a reference value — the standard chess-programming-wiki debugging technique.
+    private func perftDivide(_ position: Position, depth: Int) async -> [String: Int] {
+        guard depth > 0 else { return [:] }
+        let rootMoves = Self.legalMovesWithResultingPositions(at: position)
+        return await withTaskGroup(of: (String, Int).self) { group in
+            for (move, childPosition) in rootMoves {
+                group.addTask {
+                    var cache: [Self.PerftKey: Int] = [:]
+                    let count = depth == 1 ? 1 : Self.perftMemoized(childPosition, depth: depth - 1, cache: &cache)
+                    return (move.id, count)
+                }
+            }
+            var result: [String: Int] = [:]
+            for await (id, count) in group { result[id] = count }
+            return result
+        }
+    }
+
     private func perft(_ position: Position, depth: Int) async -> Int {
         guard depth > 0 else { return 1 }
-        let moves = Self.legalMoves(at: position)
+        let moves = Self.legalMovesWithResultingPositions(at: position)
         if depth == 1 { return moves.count }
 
-        let cache = PerftCache()
         return await withTaskGroup(of: Int.self) { group in
-            for move in moves {
+            for (_, childPosition) in moves {
                 group.addTask {
-                    await Self.perftMemoized(position.applying(move), depth: depth - 1, cache: cache)
+                    var cache: [Self.PerftKey: Int] = [:]
+                    return Self.perftMemoized(childPosition, depth: depth - 1, cache: &cache)
                 }
             }
             var total = 0
@@ -94,48 +124,38 @@ struct PerftTests {
         }
     }
 
-    private static func perftMemoized(_ position: Position, depth: Int, cache: PerftCache) async -> Int {
-        guard depth > 0 else { return 1 }
-        // Leaf-depth calls (depth == 1) are by far the most frequent — the branching factor
-        // means there are orders of magnitude more of them than of any other depth — and a move
-        // count is already as cheap as a cache lookup would be. Routing them through the
-        // actor-guarded cache anyway would spend an actor hop on the single most common call for
-        // no benefit — measured as a regression on the low-branching-factor Position 3 case
-        // (~2.2s to ~7.2s) before this guard was added. Caching only pays off from depth 2 up,
-        // where the subtree being memoized is actually expensive to redo.
-        if depth == 1 { return legalMoves(at: position).count }
-
-        let key = PerftCache.Key(hash: position.hash, depth: depth)
-        if let cached = await cache.get(key) { return cached }
-
-        var total = 0
-        for move in legalMoves(at: position) {
-            total += await perftMemoized(position.applying(move), depth: depth - 1, cache: cache)
-        }
-        await cache.set(key, total)
-        return total
-    }
-
-    private static func legalMoves(at position: Position) -> [Move] {
-        let validator = MoveValidator(position)
-        return position.figures
-            .filter { $0.color == position.colorToMove }
-            .flatMap { $0.getPossibleMoves() }
-            .filter { validator.isLegalMove($0) }
-    }
-}
-
-/// Node-count cache for a single `PerftTests.perft` call tree, keyed by (position hash,
-/// remaining depth) and guarded by an actor since root-level branches populate it concurrently
-/// from a `TaskGroup`. One instance is created per top-level `perft` call — see the comment there.
-private actor PerftCache {
-    struct Key: Hashable {
+    private struct PerftKey: Hashable {
         let hash: Int
         let depth: Int
     }
 
-    private var table: [Key: Int] = [:]
 
-    func get(_ key: Key) -> Int? { table[key] }
-    func set(_ key: Key, _ value: Int) { table[key] = value }
+    private static func perftMemoized(_ position: Position, depth: Int, cache: inout [PerftKey: Int]) -> Int {
+        guard depth > 0 else { return 1 }
+        if depth == 1 { return legalMovesWithResultingPositions(at: position).count }
+
+        let key = PerftKey(hash: position.hash, depth: depth)
+        if let cached = cache[key] { return cached }
+
+        var total = 0
+        for (_, childPosition) in legalMovesWithResultingPositions(at: position) {
+            total += perftMemoized(childPosition, depth: depth - 1, cache: &cache)
+        }
+        cache[key] = total
+        return total
+    }
+
+    private static func legalMovesWithResultingPositions(at position: Position) -> [(move: Move, position: Position)] {
+        let validator = MoveValidator(position)
+        return position.figures
+            .filter { $0.color == position.colorToMove }
+            .flatMap { $0.getPossibleMoves() }
+            .flatMap(expandPromotions)
+            .compactMap { move in validator.resultingPositionIfLegal(move).map { (move, $0) } }
+    }
+
+    private static func expandPromotions(_ move: Move) -> [Move] {
+        guard move.type == .promotion else { return [move] }
+        return PromotionPiece.allCases.map { Move(move, promoteTo: $0) }
+    }
 }

@@ -70,11 +70,13 @@ public struct Position: BoardQuery, Sendable, Hashable {
     }
     
     private static func computeHash(board: Board, colorToMove: PieceColor, enPassantTarget: Square?, castlingRights: CastlingRights) -> Int {
-        var hasher = Hasher()
-        hasher.combine(board.hash)
-        hasher.combine(colorToMove)
-        hasher.combine(castlingRights)
-        hasher.combine(enPassantTarget)
-        return hasher.finalize()
+        var hash = board.hash
+        if colorToMove == .black { hash ^= BoardConstants.zobristBlackToMove }
+        if castlingRights.whiteKingside  { hash ^= BoardConstants.zobristCastling[0] }
+        if castlingRights.whiteQueenside { hash ^= BoardConstants.zobristCastling[1] }
+        if castlingRights.blackKingside  { hash ^= BoardConstants.zobristCastling[2] }
+        if castlingRights.blackQueenside { hash ^= BoardConstants.zobristCastling[3] }
+        if let enPassantTarget { hash ^= BoardConstants.zobristEnPassant[enPassantTarget.file - 1] }
+        return Int(bitPattern: UInt(hash))
     }
 }
